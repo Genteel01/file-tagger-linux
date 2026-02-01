@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="FileTagger/App.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Views/MainWindow.axaml" value="FileTagger/FileTagger.csproj" />
       </map>
     </option>
