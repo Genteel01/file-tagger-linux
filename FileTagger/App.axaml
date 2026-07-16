@@ -11,5 +11,33 @@
   
     <Application.Styles>
         <FluentTheme />
+        <!--  Some custom Styles  -->
+        <!--  Our header Style  -->
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <!-- ... other styles ... -->
+        <!--  We want our CheckBox to be stretched horizontally (the default is left-aligned)  -->
+        <Style Selector="CheckBox">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+
+        <!--  These styles add some useful feedback for the user  -->
+        <Style Selector="CheckBox:pointerover /template/ Grid#RootGrid">
+            <Setter Property="Background" Value="{DynamicResource SystemAccentColorLight3}" />
+        </Style>
+
+        <!-- This style will make the icon semi-transparent, if a button is disabled -->
+        <Style Selector="Button:disabled PathIcon">
+            <Setter Property="Opacity" Value="0.4" />
+        </Style>
     </Application.Styles>
+
+     <Application.Resources>
+         <!--  These are re-usable Icon data. You can get the path data from svg-files for example  -->
+         <StreamGeometry x:Key="DeleteIconData">The path data</StreamGeometry>
+         <StreamGeometry x:Key="AcceptIconData">The path data</StreamGeometry>
+     </Application.Resources>
 </Application>
