@@ -19,7 +19,7 @@
     </Design.DataContext>
 
     <!-- We give a name to the root grid in order to access it later -->
-    <Grid RowDefinitions="Auto, *, Auto"
+    <Grid RowDefinitions="Auto, *, Auto, Auto, Auto, *"
           x:Name="Root">
 
         <!-- This is our title text block.  -->
@@ -64,5 +64,12 @@
                 <KeyBinding Command="{Binding AddItemCommand}" Gesture="Enter" />
             </TextBox.KeyBindings>
         </TextBox>
+        <Button Grid.Row="3" Command="{Binding OpenFileCommand}">
+            Open File
+        </Button>
+        <TextBox Grid.Row="4" Text="{Binding FileText, Mode=TwoWay}"
+                 AcceptsReturn="True"
+                 AcceptsTab="True" />
+        <ListBox Grid.Row="5" ItemsSource="{Binding ErrorMessages}"/>
     </Grid>
 </Window>
