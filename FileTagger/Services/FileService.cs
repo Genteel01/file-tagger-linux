@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using System.Threading.Tasks;
@@ -18,10 +19,22 @@ public class FileService : IFileService
         var files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
             Title = "Open Text File",
-            AllowMultiple = false
+            AllowMultiple = false,
         });
 
         return files.Count >= 1 ? files[0] : null;
+    }
+
+    public async Task<IReadOnlyList<IStorageFolder>> OpenFoldersAsync()
+    {
+
+        var folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        {
+            Title = "Open Folders",
+            AllowMultiple = true,
+        });
+
+        return folders;
     }
 
     public async Task<IStorageFile?> SaveFileAsync()

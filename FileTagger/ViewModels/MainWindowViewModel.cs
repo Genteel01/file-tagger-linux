@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FileTagger.Models;
@@ -81,6 +82,29 @@ public partial class MainWindowViewModel : ViewModelBase
             else
             {
                 throw new Exception("File exceeded 1MB limit.");
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenFolders(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        try
+        {
+            var filesService = App.Current?.Services?.GetService<IFileService>();
+            if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
+
+            var folders = await filesService.OpenFoldersAsync();
+
+            FileText = "";
+            foreach (IStorageFolder storageFolder in folders)
+            {
+                FileText += storageFolder.Name + " at " + storageFolder.Path + "\n";
             }
         }
         catch (Exception e)
