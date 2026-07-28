@@ -114,6 +114,32 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task OpenMusicFiles(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        try
+        {
+            var filesService = App.Current?.Services?.GetService<IFileService>();
+            if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
+
+            var files = await filesService.OpenFilesRecursivelyAsync();
+
+            FileText = "";
+            foreach (IStorageFile file in files)
+            {
+                if (file.Name.EndsWith(".mp3") ||  file.Name.EndsWith(".wav") || file.Name.EndsWith(".flac"))
+                {
+                    FileText += file.Name + " || " + file.Path + "\n";
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
+        }
+    }
+
+    [RelayCommand]
     private async Task SaveFile()
     {
         ErrorMessages?.Clear();

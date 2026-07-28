@@ -10,6 +10,7 @@
         Title="FileTagger"
         Width="300"
         Height="500"
+        WindowState="Maximized"
         Padding="4">
 
     <Design.DataContext>
@@ -67,8 +68,8 @@
         <Button Grid.Row="3" Command="{Binding OpenFileCommand}">
             Open File
         </Button>
-        <Button Grid.Row="4" Command="{Binding OpenFoldersCommand}">
-            Open Folder
+        <Button Grid.Row="4" Command="{Binding OpenMusicFilesCommand}">
+            Open Music Files
         </Button>
         <TextBox Grid.Row="5" Text="{Binding FileText, Mode=TwoWay}"
                  AcceptsReturn="True"

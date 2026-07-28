@@ -37,6 +37,44 @@ public class FileService : IFileService
         return folders;
     }
 
+    public async Task<IReadOnlyList<IStorageFile>> OpenFilesRecursivelyAsync()
+    {
+        var folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        {
+            Title = "Open Folders",
+            AllowMultiple = true,
+        });
+
+        List<IStorageFile> files = [];
+        foreach (var folder in folders)
+        {
+            files.AddRange(await GetChildFiles(folder));
+        }
+        return files;
+    }
+
+    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder)
+    {
+        var items = folder.GetItemsAsync();
+
+        List<IStorageFile> files = [];
+
+        await foreach (var item in items)
+        {
+            if (item is IStorageFile file)
+            {
+                files.Add(file);
+            }
+            else if (item is IStorageFolder childFolder)
+            {
+                files.AddRange(await GetChildFiles(childFolder));
+            }
+        }
+
+        return files;
+    }
+
+
     public async Task<IStorageFile?> SaveFileAsync()
     {
         return await _target.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
