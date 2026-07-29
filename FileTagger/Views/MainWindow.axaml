@@ -71,9 +71,7 @@
         <Button Grid.Row="4" Command="{Binding OpenMusicFilesCommand}">
             Open Music Files
         </Button>
-        <TextBox Grid.Row="5" Text="{Binding FileText, Mode=TwoWay}"
-                 AcceptsReturn="True"
-                 AcceptsTab="True" />
+        <TextBlock Grid.Row="5" Text="{Binding FileText}"/>
         <ListBox Grid.Row="6" ItemsSource="{Binding ErrorMessages}"/>
     </Grid>
 </Window>
