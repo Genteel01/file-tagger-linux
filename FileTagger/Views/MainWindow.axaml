@@ -20,58 +20,37 @@
     </Design.DataContext>
 
     <!-- We give a name to the root grid in order to access it later -->
-    <Grid RowDefinitions="Auto, *, Auto, Auto, Auto, Auto, *"
+    <Grid RowDefinitions="Auto, *"
           x:Name="Root">
 
-        <!-- This is our title text block.  -->
-        <TextBlock Classes="h1" Text="My ToDo-List" />
+        <Grid ColumnDefinitions="Auto, Auto">
+            <!-- This is our title text block.  -->
+            <TextBlock Grid.Column="0" Classes="h1" Text="My ToDo-List" />
+            <Button Grid.Column="1" Command="{Binding OpenMusicFilesCommand}">
+                Open Music Files
+            </Button>
+        </Grid>
 
         <ScrollViewer Grid.Row="1">
             <!-- This ItemsControl show all added ToDoItems. -->
             <!-- It needs to be placed inside a ScrollViewer because other than a ListBox it has not its own -->
-            <ItemsControl ItemsSource="{Binding ToDoItems}">
+            <ItemsControl ItemsSource="{Binding Tracks}">
                 <ItemsControl.ItemTemplate>
                     <!--  The ItemTemplate defines how each item should be represented  -->
                     <!--  Our Item will be represented by a CheckBox and a Delete-Button  -->
-                    <DataTemplate DataType="vm:ToDoItemViewModel">
-                        <Grid ColumnDefinitions="*, Auto">
-                            <CheckBox Content="{Binding Content}"
-                                      IsChecked="{Binding IsChecked}" />
-
-                            <!--  Note how we use the Root-Grid to get the MainViewModel here. As we use compiled bindings we have to cast the DataContext  -->
-                            <Button Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).RemoveItemCommand}"
-                                    CommandParameter="{Binding .}"
-                                    Grid.Column="1">
-                                Delete
-                            </Button>
+                    <DataTemplate DataType="vm:TrackViewModel">
+                        <Grid ColumnDefinitions="*, Auto, *, Auto, *, Auto, *" ColumnSpacing="1">
+                            <TextBlock Grid.Column="0" Text="{Binding Title}"/>
+                            <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Album}"/>
+                            <GridSplitter Grid.Column="3" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
+                            <TextBlock Grid.Column="4" Text="{Binding Artist}"/>
+                            <GridSplitter Grid.Column="5" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
+                            <TextBlock Grid.Column="6" Text="{Binding Path}"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-
-        <!-- This TextBox can be used to add new ToDoItems -->
-        <TextBox Grid.Row="2"
-                 Text="{Binding NewItemContent}"
-                 Watermark="Add a new Item">
-            <TextBox.InnerRightContent>
-                <Button Command="{Binding AddItemCommand}" >
-                    Add
-                    <!-- <PathIcon Data="{DynamicResource AcceptIconData}" Foreground="Green" /> -->
-                </Button>
-            </TextBox.InnerRightContent>
-            <!--  KeyBindings allow us to define keyboard gestures  -->
-            <TextBox.KeyBindings>
-                <KeyBinding Command="{Binding AddItemCommand}" Gesture="Enter" />
-            </TextBox.KeyBindings>
-        </TextBox>
-        <Button Grid.Row="3" Command="{Binding OpenFileCommand}">
-            Open File
-        </Button>
-        <Button Grid.Row="4" Command="{Binding OpenMusicFilesCommand}">
-            Open Music Files
-        </Button>
-        <TextBlock Grid.Row="5" Text="{Binding FileText}"/>
-        <ListBox Grid.Row="6" ItemsSource="{Binding ErrorMessages}"/>
     </Grid>
 </Window>
