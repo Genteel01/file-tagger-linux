@@ -8,9 +8,8 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="FileTagger"
-        Width="300"
-        Height="500"
-        WindowState="Maximized"
+        Width="1600"
+        Height="900"
         Padding="4">
 
     <Design.DataContext>
@@ -23,34 +22,60 @@
     <Grid RowDefinitions="Auto, *"
           x:Name="Root">
 
-        <Grid ColumnDefinitions="Auto, Auto">
+        <StackPanel Orientation="Horizontal">
             <!-- This is our title text block.  -->
-            <TextBlock Grid.Column="0" Classes="h1" Text="My ToDo-List" />
-            <Button Grid.Column="1" Command="{Binding OpenMusicFilesCommand}">
+            <TextBlock Classes="h1" Text="Music Tagger" />
+            <Button Command="{Binding OpenMusicFilesCommand}">
                 Open Music Files
             </Button>
-        </Grid>
+        </StackPanel>
 
-        <ScrollViewer Grid.Row="1">
-            <!-- This ItemsControl show all added ToDoItems. -->
-            <!-- It needs to be placed inside a ScrollViewer because other than a ListBox it has not its own -->
-            <ItemsControl ItemsSource="{Binding Tracks}">
-                <ItemsControl.ItemTemplate>
-                    <!--  The ItemTemplate defines how each item should be represented  -->
-                    <!--  Our Item will be represented by a CheckBox and a Delete-Button  -->
-                    <DataTemplate DataType="vm:TrackViewModel">
-                        <Grid ColumnDefinitions="*, Auto, *, Auto, *, Auto, *" ColumnSpacing="1">
-                            <TextBlock Grid.Column="0" Text="{Binding Title}"/>
-                            <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
-                            <TextBlock Grid.Column="2" Text="{Binding Album}"/>
-                            <GridSplitter Grid.Column="3" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
-                            <TextBlock Grid.Column="4" Text="{Binding Artist}"/>
-                            <GridSplitter Grid.Column="5" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
-                            <TextBlock Grid.Column="6" Text="{Binding Path}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        <ScrollViewer Grid.Row="1" Name="MyScrollViewer" HorizontalScrollBarVisibility="Auto">
+            <Grid ColumnSpacing="1" ColumnDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <TextBlock Classes="h1" Text="Title" HorizontalAlignment="Center"/>
+                    <ItemsControl ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:TrackViewModel">
+                                <TextBox Text="{Binding Title}" Margin="1 2 1 2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
+                <StackPanel Grid.Column="2" Orientation="Vertical">
+                    <TextBlock Classes="h1" Text="Album" HorizontalAlignment="Center"/>
+                    <ItemsControl ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:TrackViewModel">
+                                <TextBox Text="{Binding Album}" Margin="1 2 1 2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <GridSplitter Grid.Column="3" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
+                <StackPanel Grid.Column="4" Orientation="Vertical">
+                    <TextBlock Classes="h1" Text="Artist" HorizontalAlignment="Center"/>
+                    <ItemsControl ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:TrackViewModel">
+                                <TextBox Text="{Binding Artist}" Margin="1 2 1 2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <GridSplitter Grid.Column="5" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
+                <StackPanel Grid.Column="6" Orientation="Vertical">
+                    <TextBlock Classes="h1" Text="Path" HorizontalAlignment="Center"/>
+                    <ItemsControl ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:TrackViewModel">
+                                <TextBlock Text="{Binding Path}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </Window>
