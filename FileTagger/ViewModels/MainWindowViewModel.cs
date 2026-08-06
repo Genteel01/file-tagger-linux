@@ -23,6 +23,15 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<TrackViewModel> Tracks { get; } = new ObservableCollection<TrackViewModel>();
 
     [RelayCommand]
+    private void SaveMusicFiles()
+    {
+        foreach (TrackViewModel track in Tracks)
+        {
+            track.SaveTrackChanges();
+        }
+    }
+
+    [RelayCommand]
     private async Task OpenMusicFiles(CancellationToken token)
     {
         ConsoleLogger log = new ConsoleLogger();

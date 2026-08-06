@@ -50,11 +50,19 @@ public partial class TrackViewModel : ViewModelBase
     /// <returns>The Track</returns>
     public Track GetTrack()
     {
-        return new Track(Path, load: false)
-        {
-            Title = this.Title,
-            Album = this.Album,
-            Artist = this.Artist
-        };
+        Track thisTrack = new Track(Path);
+        thisTrack.Title = Title;
+        thisTrack.Album = Album;
+        thisTrack.Artist = Artist;
+        return thisTrack;
+    }
+
+
+    /// <summary>
+    /// Saves this track
+    /// </summary>
+    public void SaveTrackChanges()
+    {
+        GetTrack().Save();
     }
 }

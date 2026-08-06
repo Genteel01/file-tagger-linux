@@ -28,6 +28,9 @@
             <Button Command="{Binding OpenMusicFilesCommand}">
                 Open Music Files
             </Button>
+            <Button Command="{Binding SaveMusicFilesCommand}">
+                Save Music Files
+            </Button>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Name="MyScrollViewer" HorizontalScrollBarVisibility="Auto">
