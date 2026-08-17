@@ -48,6 +48,11 @@
             <Setter Property="BorderBrush" Value="Gray" />
         </Style>
 
+        <Style Selector="ScrollViewer#MainPanel TextBox:focus">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
+        </Style>
+
         <!--
         :selected:focus for last selected item
         :selected for other selected items (eg. middle ones selected with shift or old ones selected with control)

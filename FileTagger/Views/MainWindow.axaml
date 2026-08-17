@@ -54,7 +54,9 @@
                     <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
                     <Border Grid.Column="6"><TextBlock Text="Path" Classes="h1" TextAlignment="Center"/></Border>
                 </Grid>
-                <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple">
+                <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple"
+                         SelectedItems="{Binding SelectedTracks}"
+                         SelectionChanged="OnSelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="vm:TrackViewModel">
                             <Grid>
@@ -67,13 +69,13 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="15"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Text="{Binding Title}"/>
+                                <TextBox Grid.Column="0" Text="{Binding Title}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True"/>
                                 <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                                <TextBox Grid.Column="2" Text="{Binding Album}"/>
+                                <TextBox Grid.Column="2" Text="{Binding Album}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True"/>
                                 <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                                <TextBox Grid.Column="4" Text="{Binding Artist}"/>
+                                <TextBox Grid.Column="4" Text="{Binding Artist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True"/>
                                 <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                                <TextBox Grid.Column="6" Text="{Binding Path}" IsReadOnly="True"/>
+                                <TextBox Grid.Column="6" Text="{Binding Path}" IsReadOnly="True" GotFocus="TextBoxFocused" Tapped="TextBoxTapped"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

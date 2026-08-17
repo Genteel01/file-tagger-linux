@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Gets a collection of <see cref="ATL.Track"/>
     /// </summary>
-    public ObservableCollection<TrackViewModel> Tracks { get; } = new ObservableCollection<TrackViewModel>();
+    public ObservableCollection<TrackViewModel> Tracks { get; } = [];
+
+    public ObservableCollection<TrackViewModel> SelectedTracks { get; } = [];
 
     [RelayCommand]
     private void SaveMusicFiles()
