@@ -3,7 +3,7 @@
         xmlns:vm="using:FileTagger.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="500"
+        mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -33,52 +33,31 @@
             </Button>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" Name="MyScrollViewer" HorizontalScrollBarVisibility="Auto">
-            <Grid ColumnSpacing="1" ColumnDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
-                <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Classes="h1" Text="Title" HorizontalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding Tracks}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="vm:TrackViewModel">
-                                <TextBox Text="{Binding Title}" Margin="1 2 1 2"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-                <GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
-                <StackPanel Grid.Column="2" Orientation="Vertical">
-                    <TextBlock Classes="h1" Text="Album" HorizontalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding Tracks}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="vm:TrackViewModel">
-                                <TextBox Text="{Binding Album}" Margin="1 2 1 2"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-                <GridSplitter Grid.Column="3" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
-                <StackPanel Grid.Column="4" Orientation="Vertical">
-                    <TextBlock Classes="h1" Text="Artist" HorizontalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding Tracks}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="vm:TrackViewModel">
-                                <TextBox Text="{Binding Artist}" Margin="1 2 1 2"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-                <GridSplitter Grid.Column="5" ResizeBehavior="PreviousAndNext" ResizeDirection="Columns" Background="LightGray"/>
-                <StackPanel Grid.Column="6" Orientation="Vertical">
-                    <TextBlock Classes="h1" Text="Path" HorizontalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding Tracks}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="vm:TrackViewModel">
-                                <TextBlock Text="{Binding Path}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Grid>
+        <ScrollViewer Grid.Row="1" Name="MyScrollViewer" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True">
+            <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="vm:TrackViewModel">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="1"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="B" MinWidth="1"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="C" MinWidth="1"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="1"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" Text="{Binding Title}"/>
+                            <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
+                            <TextBox Grid.Column="2" Text="{Binding Album}"/>
+                            <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
+                            <TextBox Grid.Column="4" Text="{Binding Artist}"/>
+                            <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
+                            <TextBox Grid.Column="6" Text="{Binding Path}" IsReadOnly="True"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </ScrollViewer>
     </Grid>
 </Window>
