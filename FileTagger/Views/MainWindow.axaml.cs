@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.VisualTree;
 using FileTagger.ViewModels;
 
@@ -8,6 +10,52 @@ namespace FileTagger.Views;
 
 public partial class MainWindow : Window
 {
+
+    private TextBox? _lastSelectedTextBox;
+
+    private bool _leftControlHeld;
+    private bool _rightControlHeld;
+
+    private async void Root_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.LeftCtrl:
+                _leftControlHeld = true;
+                break;
+            case Key.RightCtrl:
+                _rightControlHeld = true;
+                break;
+            case Key.C:
+                if (_leftControlHeld || _rightControlHeld)
+                {
+                    await CopyText();
+                }
+                break;
+        }
+    }
+
+    private void Root_OnKeyUp (object? sender, KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.LeftCtrl:
+                _leftControlHeld = false;
+                break;
+            case Key.RightCtrl:
+                _rightControlHeld = false;
+                break;
+        }
+    }
+
+    private async Task CopyText()
+    {
+        IClipboard? clipboard = GetTopLevel(this)?.Clipboard;
+        if (clipboard != null && _lastSelectedTextBox != null)
+        {
+            await clipboard.SetTextAsync(_lastSelectedTextBox.SelectedText);
+        }
+    }
     public MainWindow()
     {
         InitializeComponent();
@@ -28,6 +76,8 @@ public partial class MainWindow : Window
     {
         if (sender is TextBox textBox)
         {
+            _lastSelectedTextBox?.ClearSelection();
+            _lastSelectedTextBox = textBox;
             ListBoxItem? listBoxItem = textBox.FindAncestorOfType<ListBoxItem>();
             ListBox? listBox = listBoxItem?.FindAncestorOfType<ListBox>();
             //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning
@@ -47,7 +97,10 @@ public partial class MainWindow : Window
     {
         if (sender is TextBox textBox)
         {
-            textBox.ClearSelection();
+            if (!textBox.IsFocused || textBox.IsReadOnly)
+            {
+                textBox.ClearSelection();
+            }
         }
     }
 
@@ -59,7 +112,10 @@ public partial class MainWindow : Window
         if (sender is TextBox textBox)
         {
             textBox.IsReadOnly = false;
-            textBox.ClearSelection();
+            if (!textBox.IsFocused || textBox.IsReadOnly)
+            {
+                textBox.ClearSelection();
+            }
             textBox.Focus();
         }
     }
@@ -72,7 +128,11 @@ public partial class MainWindow : Window
         if (sender is TextBox textBox)
         {
             textBox.IsReadOnly = true;
-            textBox.ClearSelection();
         }
+    }
+
+    private void ScrollViewerFocusLost(object? sender, FocusChangedEventArgs e)
+    {
+        _lastSelectedTextBox?.ClearSelection();
     }
 }

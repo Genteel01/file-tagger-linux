@@ -34,7 +34,8 @@
         </StackPanel>
 
         <Border BorderBrush="Gray" BorderThickness="2" Grid.Row="1">
-        <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True">
+        <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
+                      LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" KeyUp="Root_OnKeyUp">
             <StackPanel Orientation="Vertical">
                 <Grid Name="ListGridTitle">
                     <Grid.ColumnDefinitions>
@@ -69,13 +70,13 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="15"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Text="{Binding Title}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True"/>
+                                <TextBox Grid.Column="0" Text="{Binding Title}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
                                 <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                                <TextBox Grid.Column="2" Text="{Binding Album}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True"/>
+                                <TextBox Grid.Column="2" Text="{Binding Album}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
                                 <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                                <TextBox Grid.Column="4" Text="{Binding Artist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True"/>
+                                <TextBox Grid.Column="4" Text="{Binding Artist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
                                 <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                                <TextBox Grid.Column="6" Text="{Binding Path}" IsReadOnly="True" GotFocus="TextBoxFocused" Tapped="TextBoxTapped"/>
+                                <TextBox Grid.Column="6" Text="{Binding Path}" IsReadOnly="True" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" ClearSelectionOnLostFocus="True"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
