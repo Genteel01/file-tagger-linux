@@ -12,21 +12,84 @@
     <Application.Styles>
         <SimpleTheme />
         <!--  Some custom Styles  -->
-        <!--  Our header Style  -->
         <Style Selector="TextBlock.h1">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Margin" Value="5" />
         </Style>
+        <Style Selector="ListBox, ListBoxItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
         <Style Selector="GridSplitter">
             <Setter Property="Background" Value="LightGray" />
-            <Setter Property="Width" Value="3" />
         </Style>
-        <Style Selector="ScrollViewer#MyScrollViewer TextBox">
-            <Setter Property="BorderThickness" Value="0 1 0 1" />
+        <Style Selector="ListBox TextBox">
             <Setter Property="CornerRadius" Value="0" />
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <!--Borders for the bottom of each row in the main panel-->
+        <Style Selector="ScrollViewer#MainPanel TextBox, ScrollViewer#MainPanel GridSplitter">
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+        <Style Selector="ScrollViewer#MainPanel Border">
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+
+        <!--
+        :selected:focus for last selected item
+        :selected for other selected items (eg. middle ones selected with shift or old ones selected with control)
+        -->
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#ebfaff" />
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="#cfecf8" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="#a0d8f0" />
+        </Style>
+        <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
+            <Setter Property="Background" Value="#a0d8f0" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover:selected:focus /template/ ContentPresenter">
+            <Setter Property="Background" Value="#70c5e9" />
+        </Style>
+
+        <Style Selector="ListBoxItem:pointerover TextBox">
+            <Setter Property="Background" Value="#ebfaff" />
+        </Style>
+        <Style Selector="ListBoxItem:selected TextBox">
+            <Setter Property="Background" Value="#cfecf8" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover:selected TextBox">
+            <Setter Property="Background" Value="#a0d8f0" />
+        </Style>
+        <Style Selector="ListBoxItem:selected:focus TextBox">
+            <Setter Property="Background" Value="#a0d8f0" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover:selected:focus TextBox">
+            <Setter Property="Background" Value="#70c5e9" />
+        </Style>
+
+        <Style Selector="ListBoxItem:pointerover GridSplitter">
+            <Setter Property="Background" Value="#cfecf8" />
+        </Style>
+        <Style Selector="ListBoxItem:selected GridSplitter">
+            <Setter Property="Background" Value="#a0d8f0" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover:selected GridSplitter">
+            <Setter Property="Background" Value="#70c5e9" />
+        </Style>
+        <Style Selector="ListBoxItem:selected:focus GridSplitter">
+            <Setter Property="Background" Value="#70c5e9" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover:selected:focus GridSplitter">
+            <Setter Property="Background" Value="#49b5dc" />
         </Style>
     </Application.Styles>
 </Application>
