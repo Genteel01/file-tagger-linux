@@ -31,9 +31,9 @@ public partial class App : Application
             };
             desktop.ShutdownRequested += DesktopOnShutdownRequested;
 
-            var services = new ServiceCollection();
+            ServiceCollection services = new ServiceCollection();
 
-            services.AddSingleton<IFileService>(x => new FileService(desktop.MainWindow));
+            services.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
 
             Services = services.BuildServiceProvider();
         }

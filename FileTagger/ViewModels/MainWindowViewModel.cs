@@ -34,10 +34,10 @@ public partial class MainWindowViewModel : ViewModelBase
         ErrorMessages?.Clear();
         try
         {
-            var filesService = App.Current?.Services?.GetService<IFileService>();
+            IFileService? filesService = App.Current?.Services?.GetService<IFileService>();
             if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
 
-            var files = await filesService.OpenFilesRecursivelyAsync();
+            IReadOnlyList<IStorageFile> files = await filesService.OpenFilesRecursivelyAsync();
 
             foreach (IStorageFile file in files)
             {

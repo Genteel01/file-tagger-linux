@@ -16,7 +16,7 @@ public class FileService : IFileService
     }
     public async Task<IStorageFile?> OpenFileAsync()
     {
-        var files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        IReadOnlyList<IStorageFile> files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
             Title = "Open Text File",
             AllowMultiple = false,
@@ -28,7 +28,7 @@ public class FileService : IFileService
     public async Task<IReadOnlyList<IStorageFolder>> OpenFoldersAsync()
     {
 
-        var folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        IReadOnlyList<IStorageFolder> folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
         {
             Title = "Open Folders",
             AllowMultiple = true,
@@ -39,7 +39,7 @@ public class FileService : IFileService
 
     public async Task<IReadOnlyList<IStorageFile>> OpenFilesRecursivelyAsync()
     {
-        var folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        IReadOnlyList<IStorageFolder> folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
         {
             Title = "Open Folders",
             AllowMultiple = true,
@@ -55,7 +55,7 @@ public class FileService : IFileService
 
     private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder)
     {
-        var items = folder.GetItemsAsync();
+        IAsyncEnumerable<IStorageItem> items = folder.GetItemsAsync();
 
         List<IStorageFile> files = [];
 

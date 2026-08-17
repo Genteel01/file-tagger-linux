@@ -7,7 +7,7 @@ public partial class ViewModelBase : ObservableObject
 {
     protected ViewModelBase()
     {
-        ErrorMessages = new ObservableCollection<string>();
+        ErrorMessages = [];
     }
 
     [ObservableProperty]
