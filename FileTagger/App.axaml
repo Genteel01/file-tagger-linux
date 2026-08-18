@@ -30,7 +30,7 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
-        <Style Selector="GridSplitter">
+        <Style Selector="ScrollViewer#MainPanel GridSplitter">
             <Setter Property="Background" Value="LightGray" />
         </Style>
         <Style Selector="ListBox TextBox">
