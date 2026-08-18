@@ -125,4 +125,22 @@ public partial class MainWindow : Window
     {
         _lastSelectedTextBox?.ClearSelection();
     }
+
+    private void ValidateNumberOnlyField(object? sender, FocusChangedEventArgs e)
+    {
+        TextBoxFocusLost(sender, e);
+        // Allow only digits
+        if (sender is TextBox textBox)
+        {
+            string newText = textBox.Text ?? "";
+            for (int i = newText.Length - 1; i >= 0; i--)
+            {
+                if (!char.IsDigit(newText[i]))
+                {
+                    newText = newText.Remove(i, 1);
+                }
+            }
+            textBox.Text = newText;
+        }
+    }
 }
