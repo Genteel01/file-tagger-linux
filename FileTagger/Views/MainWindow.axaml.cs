@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Avalonia.Input;
-using Avalonia.Input.Platform;
 using Avalonia.VisualTree;
 using FileTagger.ViewModels;
 
@@ -16,7 +14,7 @@ public partial class MainWindow : Window
     private bool _leftControlHeld;
     private bool _rightControlHeld;
 
-    private async void Root_OnKeyDown(object? sender, KeyEventArgs e)
+    private void Root_OnKeyDown(object? sender, KeyEventArgs e)
     {
         switch (e.Key)
         {
@@ -29,7 +27,7 @@ public partial class MainWindow : Window
             case Key.C:
                 if (_leftControlHeld || _rightControlHeld)
                 {
-                    await CopyText();
+                    _lastSelectedTextBox?.Copy();
                 }
                 break;
         }
@@ -48,14 +46,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private async Task CopyText()
-    {
-        IClipboard? clipboard = GetTopLevel(this)?.Clipboard;
-        if (clipboard != null && _lastSelectedTextBox != null)
-        {
-            await clipboard.SetTextAsync(_lastSelectedTextBox.SelectedText);
-        }
-    }
     public MainWindow()
     {
         InitializeComponent();
