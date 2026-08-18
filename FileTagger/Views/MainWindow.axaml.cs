@@ -1,6 +1,9 @@
+using System;
 using Avalonia.Controls;
 using System.Diagnostics;
+using Avalonia;
 using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using FileTagger.ViewModels;
 
@@ -49,13 +52,32 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        TitleField.TextFilter = (search, item) =>
+        {
+            if (search == MainWindowViewModel.UNCHANGED_FIELD || item == MainWindowViewModel.UNCHANGED_FIELD || string.IsNullOrWhiteSpace(search))
+            {
+                return true;
+            }
+
+            return item?.Contains(search) ?? false;
+        };
+        AlbumField.TextFilter = (search, item) =>
+        {
+            if (search == MainWindowViewModel.UNCHANGED_FIELD || item == MainWindowViewModel.UNCHANGED_FIELD || string.IsNullOrWhiteSpace(search))
+            {
+                return true;
+            }
+
+            return item?.Contains(search) ?? false;
+        };
     }
 
-    private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void OnListBoxSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (DataContext is MainWindowViewModel vm)
         {
-            Debug.Print(vm.SelectedTracks.Count.ToString());
+            vm.SelectionChanged(SidePanel);
         }
     }
 
@@ -64,13 +86,14 @@ public partial class MainWindow : Window
     /// </summary>
     private void TextBoxFocused(object? sender, FocusChangedEventArgs e)
     {
+        //TODO control click to select multiple is broken
         if (sender is TextBox textBox)
         {
             _lastSelectedTextBox?.ClearSelection();
             _lastSelectedTextBox = textBox;
             ListBoxItem? listBoxItem = textBox.FindAncestorOfType<ListBoxItem>();
             ListBox? listBox = listBoxItem?.FindAncestorOfType<ListBox>();
-            //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning
+            //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning with !
             listBox?.UpdateSelectionFromEvent(listBoxItem!, e);
             //Prevent focus on read only fields
             if (textBox.IsReadOnly)
@@ -141,6 +164,78 @@ public partial class MainWindow : Window
                 }
             }
             textBox.Text = newText;
+        }
+    }
+
+    private void AutoCompleteBoxFocusLost(object? sender, FocusChangedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.FieldChanged();
+        }
+    }
+
+    private void AutoCompleteBoxEnterPressed(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter && DataContext is MainWindowViewModel vm)
+        {
+            vm.FieldChanged();
+        }
+    }
+
+    private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
+    {
+        //Open the dropdown if you focused the box via navigation or pointer
+        if (sender is AutoCompleteBox box && e.NavigationMethod != NavigationMethod.Unspecified)
+        {
+            box.IsDropDownOpen = true;
+            Debug.Print("Printing Logical Children _________________________________________________________________________________________________________________");
+            PrintLogicalChildren(box);
+            Debug.Print("Printing Visual Children _________________________________________________________________________________________________________________");
+            PrintVisualChildren(box);
+        }
+    }
+
+    private void PrintLogicalChildren(ILogical root)
+    {
+        Debug.Print(root.ToString());
+
+        foreach (var child in root.GetLogicalChildren())
+        {
+            if (child is TextBlock textBlock)
+            {
+                Debug.Print(child.ToString() + ": " + textBlock.Text);
+            }
+            else
+            {
+                Debug.Print(child.ToString());
+            }
+            PrintLogicalChildren(child);
+        }
+    }
+
+    private void PrintVisualChildren(Visual root)
+    {
+        Debug.Print(root.ToString());
+        foreach (var child in root.GetVisualChildren())
+        {
+            if (child is TextBlock textBlock)
+            {
+                Debug.Print(child.ToString() + ": " + textBlock.Text);
+            }
+            else
+            {
+                Debug.Print(child.ToString());
+            }
+            PrintVisualChildren(child);
+        }
+    }
+
+    private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
+    {
+        if (sender is AutoCompleteBox box)
+        {
+            box.Focus();
         }
     }
 }

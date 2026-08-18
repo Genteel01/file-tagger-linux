@@ -9,17 +9,90 @@ using FileTagger.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ATL;
 using ATL.Logging;
+using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FileTagger.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    public const string UNCHANGED_FIELD = "< keep >";
     /// <summary>
     /// Gets a collection of <see cref="ATL.Track"/>
     /// </summary>
     public ObservableCollection<TrackViewModel> Tracks { get; } = [];
 
     public ObservableCollection<TrackViewModel> SelectedTracks { get; } = [];
+
+    public ObservableCollection<string> TitleOptions { get; } = [];
+    [ObservableProperty]
+    private string? _titleText;
+
+    public ObservableCollection<string> AlbumOptions { get; } = [];
+    [ObservableProperty]
+    private string? _albumText;
+
+    public void SelectionChanged(Panel sidePanel)
+    {
+        TitleOptions.Clear();
+        AlbumOptions.Clear();
+        if (SelectedTracks.Count > 0)
+        {
+            sidePanel.IsEnabled = true;
+            TitleOptions.Add(UNCHANGED_FIELD);
+            AlbumOptions.Add(UNCHANGED_FIELD);
+            bool allSameTitle = true;
+            bool allSameAlbum = true;
+            string previousTitle = SelectedTracks[0].Title;
+            string previousAlbum = SelectedTracks[0].Album;
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                if (track.Title != previousTitle)
+                {
+                    allSameTitle = false;
+                }
+                if (track.Album != previousAlbum)
+                {
+                    allSameAlbum = false;
+                }
+                TitleOptions.Add(track.Title);
+                AlbumOptions.Add(track.Album);
+            }
+            if (SelectedTracks.Count == 1)
+            {
+                TitleText = SelectedTracks[0].Title;
+                AlbumText = SelectedTracks[0].Album;
+            }
+            else if(SelectedTracks.Count > 1)
+            {
+                TitleText = allSameTitle ? SelectedTracks[0].Title : UNCHANGED_FIELD;
+                AlbumText = allSameAlbum ? SelectedTracks[0].Album : UNCHANGED_FIELD;
+            }
+        }
+        else
+        {
+            sidePanel.IsEnabled = false;
+        }
+
+    }
+
+    public void FieldChanged()
+    {
+        if (TitleText != UNCHANGED_FIELD)
+        {
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                track.Title = TitleText;
+            }
+        }
+        if (AlbumText != UNCHANGED_FIELD)
+        {
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                track.Album = AlbumText;
+            }
+        }
+    }
 
     [RelayCommand]
     private void SaveMusicFiles()

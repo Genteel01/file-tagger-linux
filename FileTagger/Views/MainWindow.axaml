@@ -39,9 +39,28 @@
         </StackPanel>
 
         <Grid Grid.Row="1" ColumnDefinitions="*, Auto, 3*">
-            <Panel Grid.Column="0" Background="#f0f0f0">
-                <TextBlock Text="Panel" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            </Panel>
+            <StackPanel Grid.Column="0" Background="#f0f0f0" Name="SidePanel" IsEnabled="False">
+                <StackPanel>
+                    <Label Content="Title" Target="TitleField"></Label>
+                    <AutoCompleteBox
+                        Name="TitleField"
+                        ItemsSource="{Binding TitleOptions}"
+                        Text="{Binding TitleText}"
+                        KeyDown="AutoCompleteBoxEnterPressed" DropDownClosed="AutoCompleteBoxDropdownClosed"
+                        LostFocus="AutoCompleteBoxFocusLost" GotFocus="AutoCompleteBoxFocusGained">
+                    </AutoCompleteBox>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Album" Target="AlbumField"></Label>
+                    <AutoCompleteBox
+                        Name="AlbumField"
+                        ItemsSource="{Binding AlbumOptions}"
+                        Text="{Binding AlbumText}"
+                        KeyDown="AutoCompleteBoxEnterPressed"  DropDownClosed="AutoCompleteBoxDropdownClosed"
+                        LostFocus="AutoCompleteBoxFocusLost" GotFocus="AutoCompleteBoxFocusGained">
+                    </AutoCompleteBox>
+                </StackPanel>
+            </StackPanel>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="Gray" BorderThickness="1.5 0 1.5 0" BorderBrush="Gray"/>
             <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0 2 2 2">
                 <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
@@ -95,7 +114,7 @@
                         </Grid>
                         <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple"
                                  SelectedItems="{Binding SelectedTracks}"
-                                 SelectionChanged="OnSelectionChanged">
+                                 SelectionChanged="OnListBoxSelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="vm:TrackViewModel">
                                     <Border>
