@@ -42,6 +42,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
             IReadOnlyList<IStorageFile> files = await filesService.OpenFilesRecursivelyAsync();
 
+            Tracks.Clear();
+            SelectedTracks.Clear();
             foreach (IStorageFile file in files)
             {
                 string fileName = file.Name.ToLower();
