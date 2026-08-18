@@ -3,6 +3,7 @@
         xmlns:vm="using:FileTagger.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:FileTagger.Converters"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -12,6 +13,10 @@
         Height="900"
         Padding="4">
 
+    <Window.Resources>
+        <converters:RowBorderThicknessConverter x:Key="RowBorderThicknessConverter"/>
+        <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
+    </Window.Resources>
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
@@ -93,6 +98,13 @@
                                  SelectionChanged="OnSelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="vm:TrackViewModel">
+                                    <Border>
+                                        <Border.Styles>
+                                            <Style Selector="Border">
+                                                <Setter Property="BorderThickness" Value="{Binding Changed, Converter={StaticResource RowBorderThicknessConverter}}" />
+                                                <Setter Property="BorderBrush" Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}}" />
+                                            </Style>
+                                        </Border.Styles>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="15"/>
@@ -139,6 +151,7 @@
                                         <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
                                         <TextBox Grid.Column="20" Text="{Binding Path}" IsReadOnly="True" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" ClearSelectionOnLostFocus="True"/>
                                     </Grid>
+                                    </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

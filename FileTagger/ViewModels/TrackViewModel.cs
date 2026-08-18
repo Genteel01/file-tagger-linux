@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ATL;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -75,6 +76,23 @@ public partial class TrackViewModel : ViewModelBase
     private string? _comment;
 
     /// <summary>
+    /// Gets or sets whether the track has changed
+    /// </summary>
+    [ObservableProperty]
+    private bool _changed;
+
+    private bool _finishedSetup;
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (_finishedSetup && e.PropertyName != "Changed")
+        {
+            Changed = true;
+        }
+    }
+
+    /// <summary>
     /// Creates a new TrackViewModel for the given <see cref="ATL.Track"/>
     /// </summary>
     /// <param name="track">The Track to load</param>
@@ -91,6 +109,7 @@ public partial class TrackViewModel : ViewModelBase
         AlbumArtist = track.AlbumArtist;
         Composer = track.Composer;
         Comment = track.Comment;
+        _finishedSetup = true;
     }
 
     /// <summary>
