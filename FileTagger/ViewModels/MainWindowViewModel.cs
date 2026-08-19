@@ -32,48 +32,46 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string? _albumText;
 
-    public void SelectionChanged(Panel sidePanel)
+    [ObservableProperty]
+    private bool _hasSelectedTracks;
+
+    public void SelectionChanged()
     {
         TitleOptions.Clear();
         AlbumOptions.Clear();
-        if (SelectedTracks.Count > 0)
-        {
-            sidePanel.IsEnabled = true;
-            TitleOptions.Add(UNCHANGED_FIELD);
-            AlbumOptions.Add(UNCHANGED_FIELD);
-            bool allSameTitle = true;
-            bool allSameAlbum = true;
-            string previousTitle = SelectedTracks[0].Title;
-            string previousAlbum = SelectedTracks[0].Album;
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                if (track.Title != previousTitle)
-                {
-                    allSameTitle = false;
-                }
-                if (track.Album != previousAlbum)
-                {
-                    allSameAlbum = false;
-                }
-                TitleOptions.Add(track.Title);
-                AlbumOptions.Add(track.Album);
-            }
-            if (SelectedTracks.Count == 1)
-            {
-                TitleText = SelectedTracks[0].Title;
-                AlbumText = SelectedTracks[0].Album;
-            }
-            else if(SelectedTracks.Count > 1)
-            {
-                TitleText = allSameTitle ? SelectedTracks[0].Title : UNCHANGED_FIELD;
-                AlbumText = allSameAlbum ? SelectedTracks[0].Album : UNCHANGED_FIELD;
-            }
-        }
-        else
-        {
-            sidePanel.IsEnabled = false;
-        }
+        HasSelectedTracks = SelectedTracks.Count > 0;
 
+        if (SelectedTracks.Count <= 0) return;
+
+        TitleOptions.Add(UNCHANGED_FIELD);
+        AlbumOptions.Add(UNCHANGED_FIELD);
+        bool allSameTitle = true;
+        bool allSameAlbum = true;
+        string previousTitle = SelectedTracks[0].Title;
+        string previousAlbum = SelectedTracks[0].Album;
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if (track.Title != previousTitle)
+            {
+                allSameTitle = false;
+            }
+            if (track.Album != previousAlbum)
+            {
+                allSameAlbum = false;
+            }
+            TitleOptions.Add(track.Title);
+            AlbumOptions.Add(track.Album);
+        }
+        if (SelectedTracks.Count == 1)
+        {
+            TitleText = SelectedTracks[0].Title;
+            AlbumText = SelectedTracks[0].Album;
+        }
+        else if(SelectedTracks.Count > 1)
+        {
+            TitleText = allSameTitle ? SelectedTracks[0].Title : UNCHANGED_FIELD;
+            AlbumText = allSameAlbum ? SelectedTracks[0].Album : UNCHANGED_FIELD;
+        }
     }
 
     public void FieldChanged()
