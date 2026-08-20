@@ -28,5 +28,15 @@
                 LostFocus="AutoCompleteBoxFocusLost" GotFocus="AutoCompleteBoxFocusGained">
             </AutoCompleteBox>
         </StackPanel>
+        <StackPanel>
+            <Label Content="Artist" Target="ArtistField"></Label>
+            <AutoCompleteBox
+                Name="ArtistField"
+                ItemsSource="{Binding ArtistOptions}"
+                Text="{Binding ArtistText}"
+                KeyDown="AutoCompleteBoxEnterPressed"  DropDownClosed="AutoCompleteBoxDropdownClosed"
+                LostFocus="AutoCompleteBoxFocusLost" GotFocus="AutoCompleteBoxFocusGained">
+            </AutoCompleteBox>
+        </StackPanel>
     </StackPanel>
 </UserControl>

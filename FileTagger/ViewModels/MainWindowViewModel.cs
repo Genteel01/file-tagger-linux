@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
@@ -9,14 +10,13 @@ using FileTagger.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ATL;
 using ATL.Logging;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FileTagger.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public const string UNCHANGED_FIELD = "< keep >";
+    public const string UnchangedField = "< keep >";
     /// <summary>
     /// Gets a collection of <see cref="ATL.Track"/>
     /// </summary>
@@ -26,11 +26,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<string> TitleOptions { get; } = [];
     [ObservableProperty]
-    private string? _titleText;
+    private string _titleText = UnchangedField;
 
     public ObservableCollection<string> AlbumOptions { get; } = [];
     [ObservableProperty]
-    private string? _albumText;
+    private string _albumText = UnchangedField;
+
+    public ObservableCollection<string> ArtistOptions { get; } = [];
+    [ObservableProperty]
+    private string _artistText = UnchangedField;
 
     [ObservableProperty]
     private bool _hasSelectedTracks;
@@ -39,56 +43,45 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         TitleOptions.Clear();
         AlbumOptions.Clear();
+        ArtistOptions.Clear();
         HasSelectedTracks = SelectedTracks.Count > 0;
 
         if (SelectedTracks.Count <= 0) return;
 
-        TitleOptions.Add(UNCHANGED_FIELD);
-        AlbumOptions.Add(UNCHANGED_FIELD);
-        bool allSameTitle = true;
-        bool allSameAlbum = true;
-        string previousTitle = SelectedTracks[0].Title;
-        string previousAlbum = SelectedTracks[0].Album;
         foreach (TrackViewModel track in SelectedTracks)
         {
-            if (track.Title != previousTitle)
-            {
-                allSameTitle = false;
-            }
-            if (track.Album != previousAlbum)
-            {
-                allSameAlbum = false;
-            }
             TitleOptions.Add(track.Title);
             AlbumOptions.Add(track.Album);
+            ArtistOptions.Add(track.Artist);
         }
         if (SelectedTracks.Count == 1)
         {
             TitleText = SelectedTracks[0].Title;
             AlbumText = SelectedTracks[0].Album;
+            ArtistText = SelectedTracks[0].Artist;
         }
-        else if(SelectedTracks.Count > 1)
+        else
         {
-            TitleText = allSameTitle ? SelectedTracks[0].Title : UNCHANGED_FIELD;
-            AlbumText = allSameAlbum ? SelectedTracks[0].Album : UNCHANGED_FIELD;
+            TitleText = TitleOptions.All(title => title == SelectedTracks[0].Title) ? SelectedTracks[0].Title : UnchangedField;
+            AlbumText = AlbumOptions.All(album => album == SelectedTracks[0].Album) ? SelectedTracks[0].Album : UnchangedField;
+            ArtistText = ArtistOptions.All(artist => artist == SelectedTracks[0].Artist) ? SelectedTracks[0].Artist : UnchangedField;
         }
+
+        TitleOptions.Insert(0, UnchangedField);
+        AlbumOptions.Insert(0, UnchangedField);
+        ArtistOptions.Insert(0, UnchangedField);
     }
 
     public void FieldChanged()
     {
-        if (TitleText != UNCHANGED_FIELD)
+        foreach (TrackViewModel track in SelectedTracks)
         {
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                track.Title = TitleText;
-            }
-        }
-        if (AlbumText != UNCHANGED_FIELD)
-        {
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                track.Album = AlbumText;
-            }
+            if (TitleText != UnchangedField) track.Title = TitleText;
+
+            if (AlbumText != UnchangedField) track.Album = AlbumText;
+
+            if (ArtistText != UnchangedField) track.Artist = ArtistText;
+
         }
     }
 

@@ -7,28 +7,22 @@ namespace FileTagger.Views;
 
 public partial class EditPanel : UserControl
 {
+    private readonly AutoCompleteFilterPredicate<string?> _searchFunction = (search, item) =>
+    {
+        if (search == MainWindowViewModel.UnchangedField || item == MainWindowViewModel.UnchangedField || string.IsNullOrWhiteSpace(search))
+        {
+            return true;
+        }
+
+        return item?.Contains(search) ?? false;
+    };
     public EditPanel()
     {
         InitializeComponent();
 
-        TitleField.TextFilter = (search, item) =>
-        {
-            if (search == MainWindowViewModel.UNCHANGED_FIELD || item == MainWindowViewModel.UNCHANGED_FIELD || string.IsNullOrWhiteSpace(search))
-            {
-                return true;
-            }
-
-            return item?.Contains(search) ?? false;
-        };
-        AlbumField.TextFilter = (search, item) =>
-        {
-            if (search == MainWindowViewModel.UNCHANGED_FIELD || item == MainWindowViewModel.UNCHANGED_FIELD || string.IsNullOrWhiteSpace(search))
-            {
-                return true;
-            }
-
-            return item?.Contains(search) ?? false;
-        };
+        TitleField.TextFilter = _searchFunction;
+        AlbumField.TextFilter = _searchFunction;
+        ArtistField.TextFilter = _searchFunction;
     }
 
     private void AutoCompleteBoxFocusLost(object? sender, FocusChangedEventArgs e)

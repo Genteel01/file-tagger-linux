@@ -25,13 +25,13 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets or sets the album
     /// </summary>
     [ObservableProperty]
-    private string? _album;
+    private string _album;
 
     /// <summary>
     /// Gets or sets the artist
     /// </summary>
     [ObservableProperty]
-    private string? _artist;
+    private string _artist;
 
     /// <summary>
     /// Gets or sets the track number
@@ -55,25 +55,25 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets or sets the genre
     /// </summary>
     [ObservableProperty]
-    private string? _genre;
+    private string _genre;
 
     /// <summary>
     /// Gets or sets the album artist
     /// </summary>
     [ObservableProperty]
-    private string? _albumArtist;
+    private string _albumArtist;
 
     /// <summary>
     /// Gets or sets the composer
     /// </summary>
     [ObservableProperty]
-    private string? _composer;
+    private string _composer;
 
     /// <summary>
     /// Gets or sets the comment
     /// </summary>
     [ObservableProperty]
-    private string? _comment;
+    private string _comment;
 
     /// <summary>
     /// Gets or sets whether the track has changed
@@ -116,7 +116,7 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets a Track of this ViewModel
     /// </summary>
     /// <returns>The Track</returns>
-    public Track GetTrack()
+    private Track GetTrack()
     {
         Track thisTrack = new Track(Path);
         thisTrack.Title = Title;
