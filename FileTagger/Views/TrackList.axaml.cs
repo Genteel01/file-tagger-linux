@@ -10,38 +10,11 @@ public partial class TrackList : UserControl
 {
     private TextBox? _lastSelectedTextBox;
 
-    private bool _leftControlHeld;
-    private bool _rightControlHeld;
-
     private void Root_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        switch (e.Key)
+        if (e.Key == Key.C && e.KeyModifiers.HasFlag(KeyModifiers.Control))
         {
-            case Key.LeftCtrl:
-                _leftControlHeld = true;
-                break;
-            case Key.RightCtrl:
-                _rightControlHeld = true;
-                break;
-            case Key.C:
-                if (_leftControlHeld || _rightControlHeld)
-                {
-                    _lastSelectedTextBox?.Copy();
-                }
-                break;
-        }
-    }
-
-    private void Root_OnKeyUp (object? sender, KeyEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case Key.LeftCtrl:
-                _leftControlHeld = false;
-                break;
-            case Key.RightCtrl:
-                _rightControlHeld = false;
-                break;
+            _lastSelectedTextBox?.Copy();
         }
     }
 

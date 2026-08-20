@@ -12,7 +12,7 @@
         <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
     </UserControl.Resources>
     <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
-                  LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" KeyUp="Root_OnKeyUp" Focusable="True">
+                  LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" Focusable="True">
         <StackPanel Orientation="Vertical">
             <!--Title row of list-->
             <Grid Name="ListGridTitle">
