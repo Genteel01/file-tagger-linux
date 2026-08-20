@@ -18,11 +18,20 @@
         <Style Selector="AutoCompleteBox TextBox">
             <Setter Property="LineHeight" Value="32" />
         </Style>
+        <Style Selector="Grid.editControl:focus-within Button">
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+        <Style Selector="Grid.editControl PathIcon">
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+        <Style Selector="Grid.editControl:focus-within PathIcon">
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
     </UserControl.Styles>
     <StackPanel Background="#f0f0f0" Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
         <StackPanel>
             <Label Content="Title" Target="TitleField"></Label>
-            <Grid ColumnDefinitions="*,24">
+            <Grid ColumnDefinitions="*,24" Classes="editControl">
                 <AutoCompleteBox
                     Grid.Column="0"
                     Name="TitleField"
@@ -32,13 +41,13 @@
                     DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
                 </AutoCompleteBox>
                 <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
-                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}" Foreground="Gray"/>
+                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
                 </Button>
             </Grid>
         </StackPanel>
         <StackPanel>
             <Label Content="Album" Target="AlbumField"></Label>
-            <Grid ColumnDefinitions="*,24">
+            <Grid ColumnDefinitions="*,24" Classes="editControl">
                 <AutoCompleteBox
                     Grid.Column="0"
                     Name="AlbumField"
@@ -47,13 +56,13 @@
                     DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
                 </AutoCompleteBox>
                 <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
-                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}" Foreground="Gray"/>
+                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
                 </Button>
             </Grid>
         </StackPanel>
         <StackPanel>
             <Label Content="Artist" Target="ArtistField"></Label>
-            <Grid ColumnDefinitions="*,24">
+            <Grid ColumnDefinitions="*,24" Classes="editControl">
                 <AutoCompleteBox
                     Grid.Column="0"
                     Name="ArtistField"
@@ -62,7 +71,7 @@
                     DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
                 </AutoCompleteBox>
                 <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
-                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}" Foreground="Gray"/>
+                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
                 </Button>
             </Grid>
         </StackPanel>
