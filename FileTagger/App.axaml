@@ -53,8 +53,9 @@
         </Style>
 
         <Style Selector="ScrollViewer#MainPanel TextBox:focus">
-            <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
+            <Setter Property="BorderThickness" Value="2 2" />
+            <Setter Property="Padding" Value="1 0"/>
         </Style>
 
         <Style Selector="TextBox ScrollBar">

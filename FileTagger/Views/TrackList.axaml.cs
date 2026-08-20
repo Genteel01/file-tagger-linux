@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using FileTagger.ViewModels;
 
@@ -59,10 +60,14 @@ public partial class TrackList : UserControl
 
     private void ScrollViewerFocusLost(object? sender, FocusChangedEventArgs e)
     {
-        _lastSelectedTextBox?.ClearSelection();
         if (e.NewFocusedElement == sender)
         {
+            _lastSelectedTextBox?.ClearSelection();
             TrackListBox.UnselectAll();
+        }
+        else if (e.NewFocusedElement is Control c && sender is Control s && !s.IsLogicalAncestorOf(c))
+        {
+            _lastSelectedTextBox?.ClearSelection();
         }
     }
 
@@ -141,7 +146,7 @@ public partial class TrackList : UserControl
     /// </summary>
     private void TextBoxFocusLost(object? sender, FocusChangedEventArgs e)
     {
-        if (sender is TextBox textBox)
+        if (sender is TextBox textBox && e.NewFocusedElement is not MenuItem)
         {
             textBox.IsReadOnly = true;
         }
