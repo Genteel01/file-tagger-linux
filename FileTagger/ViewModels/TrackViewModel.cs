@@ -139,5 +139,6 @@ public partial class TrackViewModel : ViewModelBase
     public void SaveTrackChanges()
     {
         GetTrack().Save();
+        Changed = false;
     }
 }
