@@ -57,17 +57,6 @@
             <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
         </Style>
 
-        <Style Selector="StackPanel#SidePanel StackPanel">
-            <Setter Property="Margin" Value="8 4" />
-        </Style>
-        <Style Selector="AutoCompleteBox">
-            <Setter Property="Height" Value="32" />
-            <Setter Property="Padding" Value="4 0" />
-        </Style>
-        <Style Selector="AutoCompleteBox TextBox">
-            <Setter Property="LineHeight" Value="32" />
-        </Style>
-
         <Style Selector="TextBox ScrollBar">
             <Setter Property="Visibility" Value="Hidden" />
         </Style>

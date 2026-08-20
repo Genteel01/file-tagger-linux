@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.LogicalTree;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
@@ -25,26 +26,10 @@ public partial class EditPanel : UserControl
         ArtistField.TextFilter = _searchFunction;
     }
 
-    private void AutoCompleteBoxFocusLost(object? sender, FocusChangedEventArgs e)
-    {
-        if (DataContext is MainWindowViewModel vm)
-        {
-            vm.FieldChanged();
-        }
-    }
-
-    private void AutoCompleteBoxEnterPressed(object? sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter && DataContext is MainWindowViewModel vm)
-        {
-            vm.FieldChanged();
-        }
-    }
-
     private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
     {
         //Open the dropdown if you focused the box via navigation or pointer
-        if (sender is AutoCompleteBox box && e.NavigationMethod != NavigationMethod.Unspecified)
+        if (sender is AutoCompleteBox box)
         {
             box.IsDropDownOpen = true;
         }
@@ -52,9 +37,29 @@ public partial class EditPanel : UserControl
 
     private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
     {
-        if (sender is AutoCompleteBox box)
+        //The box loses keyboard focus if you select an item from the dropdown, but retains it if it closes otherwise
+        if (sender is AutoCompleteBox { IsKeyboardFocusWithin: false })
         {
-            box.Focus();
+            SidePanel.Focus();
+        }
+    }
+
+    /// <summary>
+    /// When we lose focus on the main panel, register the changes.
+    /// Fires whenever focus is lost on either the panel or a descendant, so we have to check the new focused element.
+    /// Checks to make sure the main panel is not the new focused element or an ancestor of it.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void PanelFocusLost(object? sender, FocusChangedEventArgs e)
+    {
+        //Checking that the new focused element is not our main panel or a descendant
+        if (sender is StackPanel s && e.NewFocusedElement is Control c && s != c && !s.IsLogicalAncestorOf(c))
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.FieldChanged();
+            }
         }
     }
 }
