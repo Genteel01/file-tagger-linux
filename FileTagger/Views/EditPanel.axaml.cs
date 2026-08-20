@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -59,6 +60,21 @@ public partial class EditPanel : UserControl
             if (DataContext is MainWindowViewModel vm)
             {
                 vm.FieldChanged();
+            }
+        }
+    }
+
+    private void ExpandButtonTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Button b)
+        {
+            IEnumerable<ILogical> siblings = b.GetLogicalSiblings();
+            foreach (ILogical sibling in siblings)
+            {
+                if (sibling is AutoCompleteBox box)
+                {
+                    box.Focus();
+                }
             }
         }
     }

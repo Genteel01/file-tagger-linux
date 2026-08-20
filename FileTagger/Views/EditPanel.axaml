@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:MainWindowViewModel"
 >
@@ -22,30 +22,49 @@
     <StackPanel Background="#f0f0f0" Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
         <StackPanel>
             <Label Content="Title" Target="TitleField"></Label>
-            <AutoCompleteBox
-                Name="TitleField"
-                ItemsSource="{Binding TitleOptions}"
-                Text="{Binding TitleText}" ClearSelectionOnLostFocus="True"
-                DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
-            </AutoCompleteBox>
+            <Grid ColumnDefinitions="*,24">
+                <AutoCompleteBox
+                    Grid.Column="0"
+                    Name="TitleField"
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding TitleOptions}"
+                    Text="{Binding TitleText}" ClearSelectionOnLostFocus="True"
+                    DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
+                </AutoCompleteBox>
+                <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
+                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}" Foreground="Gray"/>
+                </Button>
+            </Grid>
         </StackPanel>
         <StackPanel>
             <Label Content="Album" Target="AlbumField"></Label>
-            <AutoCompleteBox
-                Name="AlbumField"
-                ItemsSource="{Binding AlbumOptions}"
-                Text="{Binding AlbumText}" ClearSelectionOnLostFocus="True"
-                DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
-            </AutoCompleteBox>
+            <Grid ColumnDefinitions="*,24">
+                <AutoCompleteBox
+                    Grid.Column="0"
+                    Name="AlbumField"
+                    ItemsSource="{Binding AlbumOptions}"
+                    Text="{Binding AlbumText}" ClearSelectionOnLostFocus="True"
+                    DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
+                </AutoCompleteBox>
+                <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
+                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}" Foreground="Gray"/>
+                </Button>
+            </Grid>
         </StackPanel>
         <StackPanel>
             <Label Content="Artist" Target="ArtistField"></Label>
-            <AutoCompleteBox
-                Name="ArtistField"
-                ItemsSource="{Binding ArtistOptions}"
-                Text="{Binding ArtistText}" ClearSelectionOnLostFocus="True"
-                DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
-            </AutoCompleteBox>
+            <Grid ColumnDefinitions="*,24">
+                <AutoCompleteBox
+                    Grid.Column="0"
+                    Name="ArtistField"
+                    ItemsSource="{Binding ArtistOptions}"
+                    Text="{Binding ArtistText}" ClearSelectionOnLostFocus="True"
+                    DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
+                </AutoCompleteBox>
+                <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
+                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}" Foreground="Gray"/>
+                </Button>
+            </Grid>
         </StackPanel>
     </StackPanel>
 </UserControl>
