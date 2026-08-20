@@ -26,15 +26,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<string> TitleOptions { get; } = [];
     [ObservableProperty]
-    private string _titleText = UnchangedField;
+    private string _titleText = "";
 
     public ObservableCollection<string> AlbumOptions { get; } = [];
     [ObservableProperty]
-    private string _albumText = UnchangedField;
+    private string _albumText = "";
 
     public ObservableCollection<string> ArtistOptions { get; } = [];
     [ObservableProperty]
-    private string _artistText = UnchangedField;
+    private string _artistText = "";
 
     [ObservableProperty]
     private bool _hasSelectedTracks;
@@ -44,9 +44,12 @@ public partial class MainWindowViewModel : ViewModelBase
         TitleOptions.Clear();
         AlbumOptions.Clear();
         ArtistOptions.Clear();
+        TitleText = "";
+        AlbumText = "";
+        ArtistText = "";
         HasSelectedTracks = SelectedTracks.Count > 0;
 
-        if (SelectedTracks.Count <= 0) return;
+        if (!HasSelectedTracks) return;
 
         foreach (TrackViewModel track in SelectedTracks)
         {
@@ -108,6 +111,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
             Tracks.Clear();
             SelectedTracks.Clear();
+            SelectionChanged();
             foreach (IStorageFile file in files)
             {
                 string fileName = file.Name.ToLower();
