@@ -141,5 +141,9 @@ public partial class TrackList : UserControl
         {
             textBox.IsReadOnly = true;
         }
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.SelectionChanged();
+        }
     }
 }
