@@ -60,6 +60,10 @@ public partial class TrackList : UserControl
     private void ScrollViewerFocusLost(object? sender, FocusChangedEventArgs e)
     {
         _lastSelectedTextBox?.ClearSelection();
+        if (e.NewFocusedElement == sender)
+        {
+            TrackListBox.UnselectAll();
+        }
     }
 
     /// <summary>

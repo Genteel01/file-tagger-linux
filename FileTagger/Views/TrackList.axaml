@@ -12,7 +12,7 @@
         <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
     </UserControl.Resources>
     <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
-                  LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" KeyUp="Root_OnKeyUp">
+                  LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" KeyUp="Root_OnKeyUp" Focusable="True">
         <StackPanel Orientation="Vertical">
             <!--Title row of list-->
             <Grid Name="ListGridTitle">
@@ -62,7 +62,7 @@
                 <Border Grid.Column="20"><TextBlock Text="Path" Classes="h1" TextAlignment="Center"/></Border>
             </Grid>
             <!--Items rows of list-->
-            <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple"
+            <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple" Name="TrackListBox"
                      SelectedItems="{Binding SelectedTracks}"
                      SelectionChanged="OnListBoxSelectionChanged">
                 <ListBox.ItemTemplate>
@@ -118,7 +118,7 @@
                             <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
                             <TextBox Grid.Column="18" Text="{Binding Comment}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
                             <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="20" Text="{Binding Path}" IsReadOnly="True" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="20" Text="{Binding Path}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
                         </Grid>
                         </Border>
                     </DataTemplate>
