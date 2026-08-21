@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:FileTagger.Controls"
+             x:DataType="controls:LabelledDropdown"
+             x:Class="FileTagger.Controls.LabelledDropdown">
+    <UserControl.Styles>
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Padding" Value="4 0" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown TextBox">
+            <Setter Property="LineHeight" Value="32" />
+            <Setter Property="Foreground" Value="#484848" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown Label">
+            <Setter Property="Foreground" Value="#484848" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <Style Selector="Button:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown PathIcon">
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown:focus-within Button">
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown:focus-within PathIcon, controls|LabelledDropdown:focus-within TextBox">
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown Label:disabled">
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+        <Style Selector="controls|LabelledDropdown:focus-within Label">
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+        <Style Selector="ListBox">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="4" />
+        </Style>
+    </UserControl.Styles>
+    <UserControl.Template>
+        <ControlTemplate>
+            <StackPanel>
+                <Label Content="{TemplateBinding LabelText}" Target="{Binding #SearchField}"/>
+                <Grid ColumnDefinitions="*,24">
+                    <AutoCompleteBox
+                        Grid.Column="0"
+                        Name="SearchField"
+                        HorizontalAlignment="Stretch"
+                        ItemsSource="{TemplateBinding ItemsSource}"
+                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
+                        GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed"
+                        TextFilter="{TemplateBinding TextFilter}">
+                    </AutoCompleteBox>
+                    <Button Grid.Column="1" Tapped="ExpandButtonTapped" Width="24">
+                        <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </ControlTemplate>
+    </UserControl.Template>
+</UserControl>

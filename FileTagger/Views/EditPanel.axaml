@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
+             xmlns:controls="clr-namespace:FileTagger.Controls"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:MainWindowViewModel"
@@ -11,69 +12,25 @@
         <Style Selector="StackPanel#SidePanel StackPanel">
             <Setter Property="Margin" Value="8 4" />
         </Style>
-        <Style Selector="AutoCompleteBox">
-            <Setter Property="Height" Value="32" />
-            <Setter Property="Padding" Value="4 0" />
-        </Style>
-        <Style Selector="AutoCompleteBox TextBox">
-            <Setter Property="LineHeight" Value="32" />
-        </Style>
-        <Style Selector="Grid.editControl:focus-within Button">
-            <Setter Property="BorderBrush" Value="Black" />
-        </Style>
-        <Style Selector="Grid.editControl PathIcon">
-            <Setter Property="Foreground" Value="Gray" />
-        </Style>
-        <Style Selector="Grid.editControl:focus-within PathIcon">
-            <Setter Property="Foreground" Value="Black" />
-        </Style>
     </UserControl.Styles>
     <StackPanel Background="#f0f0f0" Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
-        <StackPanel>
-            <Label Content="Title" Target="TitleField"></Label>
-            <Grid ColumnDefinitions="*,24" Classes="editControl">
-                <AutoCompleteBox
-                    Grid.Column="0"
-                    Name="TitleField"
-                    HorizontalAlignment="Stretch"
-                    ItemsSource="{Binding TitleOptions}"
-                    Text="{Binding TitleText}" ClearSelectionOnLostFocus="True"
-                    DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
-                </AutoCompleteBox>
-                <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
-                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
-                </Button>
-            </Grid>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="Album" Target="AlbumField"></Label>
-            <Grid ColumnDefinitions="*,24" Classes="editControl">
-                <AutoCompleteBox
-                    Grid.Column="0"
-                    Name="AlbumField"
-                    ItemsSource="{Binding AlbumOptions}"
-                    Text="{Binding AlbumText}" ClearSelectionOnLostFocus="True"
-                    DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
-                </AutoCompleteBox>
-                <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
-                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
-                </Button>
-            </Grid>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="Artist" Target="ArtistField"></Label>
-            <Grid ColumnDefinitions="*,24" Classes="editControl">
-                <AutoCompleteBox
-                    Grid.Column="0"
-                    Name="ArtistField"
-                    ItemsSource="{Binding ArtistOptions}"
-                    Text="{Binding ArtistText}" ClearSelectionOnLostFocus="True"
-                    DropDownClosed="AutoCompleteBoxDropdownClosed" GotFocus="AutoCompleteBoxFocusGained">
-                </AutoCompleteBox>
-                <Button Grid.Column="1" Tapped="ExpandButtonTapped" Background="White" Width="24">
-                    <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
-                </Button>
-            </Grid>
-        </StackPanel>
+        <controls:LabelledDropdown
+            Name="TitleField"
+            LabelText="Title"
+            ItemsSource="{Binding TitleOptions}"
+            Text="{Binding TitleText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        <controls:LabelledDropdown
+            Name="AlbumField"
+            LabelText="Album"
+            ItemsSource="{Binding AlbumOptions}"
+            Text="{Binding AlbumText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        <controls:LabelledDropdown
+            Name="ArtistField"
+            LabelText="Artist"
+            ItemsSource="{Binding ArtistOptions}"
+            Text="{Binding ArtistText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
     </StackPanel>
 </UserControl>

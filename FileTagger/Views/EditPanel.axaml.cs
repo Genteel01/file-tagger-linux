@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -27,15 +26,6 @@ public partial class EditPanel : UserControl
         ArtistField.TextFilter = _searchFunction;
     }
 
-    private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
-    {
-        //Open the dropdown if you focused the box via navigation or pointer
-        if (sender is AutoCompleteBox box)
-        {
-            box.IsDropDownOpen = true;
-        }
-    }
-
     private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
     {
         //The box loses keyboard focus if you select an item from the dropdown, but retains it if it closes otherwise
@@ -60,20 +50,6 @@ public partial class EditPanel : UserControl
             if (DataContext is MainWindowViewModel vm)
             {
                 vm.FieldChanged();
-            }
-        }
-    }
-
-    private void ExpandButtonTapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is not Button b) return;
-
-        IEnumerable<ILogical> siblings = b.GetLogicalSiblings();
-        foreach (ILogical sibling in siblings)
-        {
-            if (sibling is AutoCompleteBox box)
-            {
-                box.Focus();
             }
         }
     }
