@@ -49,32 +49,31 @@ public partial class TrackList : UserControl
     /// </summary>
     private void TextBoxFocused(object? sender, FocusChangedEventArgs e)
     {
-        if (sender is TextBox textBox)
-        {
-            _lastSelectedTextBox?.ClearSelection();
-            _lastSelectedTextBox = textBox;
-            ListBoxItem? listBoxItem = textBox.FindAncestorOfType<ListBoxItem>();
-            ListBox? listBox = listBoxItem?.FindAncestorOfType<ListBox>();
-            //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning with !
-            listBox?.UpdateSelectionFromEvent(listBoxItem!, e);
-            //ListBox doesn't do multi-select with Ctrl when selection is changed by Focus, so we have to handle that ourselves
-            if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
-            {
-                Grid? grid = textBox.FindAncestorOfType<Grid>();
-                if (grid != null)
-                {
-                    if (DataContext is MainWindowViewModel vm)
-                    {
-                        vm.ToggleSelect(grid.Name ?? "");
-                    }
-                }
+        if (sender is not TextBox textBox) return;
 
-            }
-            //Prevent focus on read only fields
-            if (textBox.IsReadOnly)
+        _lastSelectedTextBox?.ClearSelection();
+        _lastSelectedTextBox = textBox;
+        ListBoxItem? listBoxItem = textBox.FindAncestorOfType<ListBoxItem>();
+        ListBox? listBox = listBoxItem?.FindAncestorOfType<ListBox>();
+        //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning with !
+        listBox?.UpdateSelectionFromEvent(listBoxItem!, e);
+        //ListBox doesn't do multi-select with Ctrl when selection is changed by Focus, so we have to handle that ourselves
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            Grid? grid = textBox.FindAncestorOfType<Grid>();
+            if (grid != null)
             {
-                listBoxItem?.Focus();
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.ToggleSelect(grid.Name ?? "");
+                }
             }
+
+        }
+        //Prevent focus on read only fields
+        if (textBox.IsReadOnly)
+        {
+            listBoxItem?.Focus();
         }
     }
 
@@ -83,12 +82,11 @@ public partial class TrackList : UserControl
     /// </summary>
     private void TextBoxTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is TextBox textBox)
+        if (sender is not TextBox textBox) return;
+
+        if (!textBox.IsFocused || textBox.IsReadOnly)
         {
-            if (!textBox.IsFocused || textBox.IsReadOnly)
-            {
-                textBox.ClearSelection();
-            }
+            textBox.ClearSelection();
         }
     }
 
@@ -97,33 +95,31 @@ public partial class TrackList : UserControl
     /// </summary>
     private void TextBoxDoubleTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is TextBox textBox)
+        if (sender is not TextBox textBox) return;
+
+        textBox.IsReadOnly = false;
+        if (!textBox.IsFocused || textBox.IsReadOnly)
         {
-            textBox.IsReadOnly = false;
-            if (!textBox.IsFocused || textBox.IsReadOnly)
-            {
-                textBox.ClearSelection();
-            }
-            textBox.Focus();
+            textBox.ClearSelection();
         }
+        textBox.Focus();
     }
 
     private void ValidateNumberOnlyField(object? sender, FocusChangedEventArgs e)
     {
         TextBoxFocusLost(sender, e);
         // Allow only digits
-        if (sender is TextBox textBox)
+        if (sender is not TextBox textBox) return;
+
+        string newText = textBox.Text ?? "";
+        for (int i = newText.Length - 1; i >= 0; i--)
         {
-            string newText = textBox.Text ?? "";
-            for (int i = newText.Length - 1; i >= 0; i--)
+            if (!char.IsDigit(newText[i]))
             {
-                if (!char.IsDigit(newText[i]))
-                {
-                    newText = newText.Remove(i, 1);
-                }
+                newText = newText.Remove(i, 1);
             }
-            textBox.Text = newText;
         }
+        textBox.Text = newText;
     }
 
     /// <summary>

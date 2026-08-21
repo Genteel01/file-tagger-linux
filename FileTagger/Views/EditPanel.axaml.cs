@@ -66,15 +66,14 @@ public partial class EditPanel : UserControl
 
     private void ExpandButtonTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is Button b)
+        if (sender is not Button b) return;
+
+        IEnumerable<ILogical> siblings = b.GetLogicalSiblings();
+        foreach (ILogical sibling in siblings)
         {
-            IEnumerable<ILogical> siblings = b.GetLogicalSiblings();
-            foreach (ILogical sibling in siblings)
+            if (sibling is AutoCompleteBox box)
             {
-                if (sibling is AutoCompleteBox box)
-                {
-                    box.Focus();
-                }
+                box.Focus();
             }
         }
     }
