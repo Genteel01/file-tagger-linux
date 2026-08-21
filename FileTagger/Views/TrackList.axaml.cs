@@ -31,7 +31,7 @@ public partial class TrackList : UserControl
         }
     }
 
-    private void ScrollViewerFocusLost(object? sender, FocusChangedEventArgs e)
+    private void ScrollViewerFocusGained(object? sender, FocusChangedEventArgs e)
     {
         if (e.NewFocusedElement == sender)
         {
