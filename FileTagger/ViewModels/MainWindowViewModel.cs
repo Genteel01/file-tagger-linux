@@ -67,9 +67,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
         foreach (TrackViewModel track in SelectedTracks)
         {
-            TitleOptions.Add(track.Title);
-            AlbumOptions.Add(track.Album);
-            ArtistOptions.Add(track.Artist);
+            if(!TitleOptions.Contains(track.Title)) TitleOptions.Add(track.Title);
+            if(!AlbumOptions.Contains(track.Album)) AlbumOptions.Add(track.Album);
+            if(!ArtistOptions.Contains(track.Artist)) ArtistOptions.Add(track.Artist);
         }
         if (SelectedTracks.Count == 1)
         {
