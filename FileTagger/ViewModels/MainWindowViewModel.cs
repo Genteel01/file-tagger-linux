@@ -39,6 +39,20 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private bool _hasSelectedTracks;
 
+    public void ToggleSelect(string path)
+    {
+
+        IEnumerable<TrackViewModel> tracksWithPath = Tracks.Where(track => track.Path == path).ToList();
+        IEnumerable<TrackViewModel> selectedTracksWithPath = SelectedTracks.Where(track => track.Path == path).ToList();
+        if (selectedTracksWithPath.Any())
+        {
+            SelectedTracks.Remove(selectedTracksWithPath.First());
+        }
+        else if (tracksWithPath.Any())
+        {
+            SelectedTracks.Add(tracksWithPath.First());
+        }
+    }
     public void SelectionChanged()
     {
         TitleOptions.Clear();

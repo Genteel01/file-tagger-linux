@@ -49,7 +49,6 @@ public partial class TrackList : UserControl
     /// </summary>
     private void TextBoxFocused(object? sender, FocusChangedEventArgs e)
     {
-        //TODO control click to select multiple is broken
         if (sender is TextBox textBox)
         {
             _lastSelectedTextBox?.ClearSelection();
@@ -58,6 +57,19 @@ public partial class TrackList : UserControl
             ListBox? listBox = listBoxItem?.FindAncestorOfType<ListBox>();
             //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning with !
             listBox?.UpdateSelectionFromEvent(listBoxItem!, e);
+            //ListBox doesn't do multi-select with Ctrl when selection is changed by Focus, so we have to handle that ourselves
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            {
+                Grid? grid = textBox.FindAncestorOfType<Grid>();
+                if (grid != null)
+                {
+                    if (DataContext is MainWindowViewModel vm)
+                    {
+                        vm.ToggleSelect(grid.Name ?? "");
+                    }
+                }
+
+            }
             //Prevent focus on read only fields
             if (textBox.IsReadOnly)
             {

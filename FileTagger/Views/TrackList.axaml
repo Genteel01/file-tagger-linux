@@ -74,7 +74,7 @@
                                     <Setter Property="BorderBrush" Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}}" />
                                 </Style>
                             </Border.Styles>
-                        <Grid>
+                        <Grid Name="{Binding Path}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="15"/>
                                 <ColumnDefinition Width="Auto" />
