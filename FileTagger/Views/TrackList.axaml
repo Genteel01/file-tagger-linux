@@ -11,6 +11,38 @@
         <converters:RowBorderThicknessConverter x:Key="RowBorderThicknessConverter"/>
         <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
     </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="ListBox, ListBoxItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="ScrollViewer#MainPanel GridSplitter">
+            <Setter Property="Background" Value="LightGray" />
+        </Style>
+        <Style Selector="ListBox TextBox">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="LineHeight" Value="30"/>
+            <Setter Property="Padding" Value="3 0"/>
+        </Style>
+
+        <!--Borders for the bottom of each row in the main panel-->
+        <Style Selector="ScrollViewer#MainPanel TextBox, ScrollViewer#MainPanel GridSplitter">
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+        <Style Selector="ScrollViewer#MainPanel Border">
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+
+        <Style Selector="ScrollViewer#MainPanel TextBox:focus">
+            <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
+            <Setter Property="BorderThickness" Value="2 2" />
+            <Setter Property="Padding" Value="1 0"/>
+        </Style>
+    </UserControl.Styles>
     <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
                   GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown" Focusable="True">
         <StackPanel Orientation="Vertical">
@@ -98,25 +130,25 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="K" MinWidth="15"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" Text="{Binding Title}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="0" Text="{Binding Title}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="2" Text="{Binding Album}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="2" Text="{Binding Album}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="4" Text="{Binding Artist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="4" Text="{Binding Artist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="6" Text="{Binding AlbumArtist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="6" Text="{Binding AlbumArtist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="8" Text="{Binding TrackNumber}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="8" Text="{Binding TrackNumber}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="10" Text="{Binding DiscNumber}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="10" Text="{Binding DiscNumber}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="12" Text="{Binding Year}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="12" Text="{Binding Year}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="14" Text="{Binding Genre}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="14" Text="{Binding Genre}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="16" Text="{Binding Composer}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="16" Text="{Binding Composer}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="18" Text="{Binding Comment}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
+                            <TextBox Grid.Column="18" Text="{Binding Comment}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
                             <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
                             <TextBox Grid.Column="20" Text="{Binding Path}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
                         </Grid>

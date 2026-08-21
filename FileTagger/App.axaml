@@ -27,36 +27,6 @@
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Margin" Value="5" />
         </Style>
-        <Style Selector="ListBox, ListBoxItem">
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
-        <Style Selector="ScrollViewer#MainPanel GridSplitter">
-            <Setter Property="Background" Value="LightGray" />
-        </Style>
-        <Style Selector="ListBox TextBox">
-            <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="LineHeight" Value="30"/>
-            <Setter Property="Padding" Value="3 0"/>
-        </Style>
-
-        <!--Borders for the bottom of each row in the main panel-->
-        <Style Selector="ScrollViewer#MainPanel TextBox, ScrollViewer#MainPanel GridSplitter">
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
-            <Setter Property="BorderBrush" Value="Gray" />
-        </Style>
-        <Style Selector="ScrollViewer#MainPanel Border">
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
-            <Setter Property="BorderBrush" Value="Gray" />
-        </Style>
-
-        <Style Selector="ScrollViewer#MainPanel TextBox:focus">
-            <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
-            <Setter Property="BorderThickness" Value="2 2" />
-            <Setter Property="Padding" Value="1 0"/>
-        </Style>
 
         <Style Selector="TextBox ScrollBar">
             <Setter Property="Visibility" Value="Hidden" />

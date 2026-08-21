@@ -18,6 +18,13 @@ public partial class TrackList : UserControl
         }
     }
 
+    private void TextBoxEnterPressed(object? sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter || sender is not Control c) return;
+        ListBoxItem? listBoxItem = c.FindAncestorOfType<ListBoxItem>();
+        listBoxItem?.Focus();
+    }
+
     public TrackList()
     {
         InitializeComponent();
