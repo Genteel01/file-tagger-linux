@@ -136,11 +136,13 @@ public partial class TrackList : UserControl
     {
         if (sender is TextBox textBox && e.NewFocusedElement is not MenuItem)
         {
+            //If we finished editing a TextBox and didn't change our selection, fire SelectionChanged to update the dropdowns in the edit panel with our changes
+            bool clickedInSameRow = e.NewFocusedElement is Control c && c.Parent == textBox.Parent;
+            if (clickedInSameRow && DataContext is MainWindowViewModel vm)
+            {
+                vm.SelectionChanged();
+            }
             textBox.IsReadOnly = true;
-        }
-        if (DataContext is MainWindowViewModel vm)
-        {
-            vm.SelectionChanged();
         }
     }
 }
