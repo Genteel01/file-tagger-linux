@@ -14,28 +14,6 @@ public class FileService : IFileService
     {
         _target = target;
     }
-    public async Task<IStorageFile?> OpenFileAsync()
-    {
-        IReadOnlyList<IStorageFile> files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
-        {
-            Title = "Open Text File",
-            AllowMultiple = false,
-        });
-
-        return files.Count >= 1 ? files[0] : null;
-    }
-
-    public async Task<IReadOnlyList<IStorageFolder>> OpenFoldersAsync()
-    {
-
-        IReadOnlyList<IStorageFolder> folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
-        {
-            Title = "Open Folders",
-            AllowMultiple = true,
-        });
-
-        return folders;
-    }
 
     public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync()
     {
@@ -72,14 +50,5 @@ public class FileService : IFileService
         }
 
         return files;
-    }
-
-
-    public async Task<IStorageFile?> SaveFileAsync()
-    {
-        return await _target.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
-        {
-            Title = "Save Text File"
-        });
     }
 }
