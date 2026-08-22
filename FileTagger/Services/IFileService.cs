@@ -9,5 +9,5 @@ public interface IFileService
     public Task<IStorageFile?> OpenFileAsync();
     public Task<IStorageFile?> SaveFileAsync();
     public Task<IReadOnlyList<IStorageFolder>> OpenFoldersAsync();
-    public Task<IReadOnlyList<IStorageFile>> OpenFilesRecursivelyAsync();
+    public Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync();
 }

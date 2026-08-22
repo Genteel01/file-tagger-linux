@@ -37,7 +37,7 @@ public class FileService : IFileService
         return folders;
     }
 
-    public async Task<IReadOnlyList<IStorageFile>> OpenFilesRecursivelyAsync()
+    public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync()
     {
         IReadOnlyList<IStorageFolder> folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
         {
@@ -50,7 +50,7 @@ public class FileService : IFileService
         {
             files.AddRange(await GetChildFiles(folder));
         }
-        return files;
+        return (files, folders.Count == 0);
     }
 
     private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder)

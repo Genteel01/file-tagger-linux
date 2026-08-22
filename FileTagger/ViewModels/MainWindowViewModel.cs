@@ -121,14 +121,17 @@ public partial class MainWindowViewModel : ViewModelBase
             IFileService? filesService = App.Current?.Services?.GetService<IFileService>();
             if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
 
-            IReadOnlyList<IStorageFile> files = await filesService.OpenFilesRecursivelyAsync();
+
+            (IReadOnlyList<IStorageFile>, bool) files = await filesService.OpenFilesRecursivelyAsync();
+            if (files.Item2) return;
 
             Tracks.Clear();
             SelectedTracks.Clear();
             SelectionChanged();
-            foreach (IStorageFile file in files)
+            foreach (IStorageFile file in files.Item1)
             {
                 string fileName = file.Name.ToLower();
+                //TODO do this checking against ATL's supported types
                 if (fileName.EndsWith(".mp3") ||  fileName.EndsWith(".wav") || fileName.EndsWith(".flac"))
                 {
                     Track track = new Track(file.Path.LocalPath);
