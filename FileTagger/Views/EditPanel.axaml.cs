@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -24,6 +25,13 @@ public partial class EditPanel : UserControl
         TitleField.TextFilter = _searchFunction;
         AlbumField.TextFilter = _searchFunction;
         ArtistField.TextFilter = _searchFunction;
+        YearField.TextFilter = _searchFunction;
+        TrackNumberField.TextFilter = _searchFunction;
+        GenreField.TextFilter = _searchFunction;
+        CommentField.TextFilter = _searchFunction;
+        AlbumArtistField.TextFilter = _searchFunction;
+        ComposerField.TextFilter = _searchFunction;
+        DiscNumberField.TextFilter = _searchFunction;
     }
 
     private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
@@ -32,6 +40,17 @@ public partial class EditPanel : UserControl
         if (sender is AutoCompleteBox { IsKeyboardFocusWithin: false })
         {
             SidePanel.Focus();
+        }
+    }
+
+    private void AutoCompleteBoxNumberFieldTextChanged(object? sender, EventArgs e)
+    {
+        if (sender is AutoCompleteBox box)
+        {
+            if (box.Text != MainWindowViewModel.UnchangedField)
+            {
+                box.Text = string.Concat((box.Text ?? "").Where(c => char.IsDigit(c)));
+            }
         }
     }
 

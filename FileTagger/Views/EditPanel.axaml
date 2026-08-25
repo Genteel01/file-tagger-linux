@@ -35,5 +35,52 @@
             ItemsSource="{Binding ArtistOptions}"
             Text="{Binding ArtistText}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        <Grid ColumnDefinitions="*,*,*">
+            <controls:LabelledDropdown Grid.Column="0"
+                Name="YearField"
+                LabelText="Year"
+                ItemsSource="{Binding YearOptions}"
+                Text="{Binding YearText}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"
+                SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+            <controls:LabelledDropdown Grid.Column="1"
+               Name="TrackNumberField"
+               LabelText="Track Number"
+               ItemsSource="{Binding TrackNumberOptions}"
+               Text="{Binding TrackNumberText}"
+               DropDownClosed="AutoCompleteBoxDropdownClosed"
+               SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+            <controls:LabelledDropdown Grid.Column="2"
+                Name="GenreField"
+                LabelText="Genre"
+                ItemsSource="{Binding GenreOptions}"
+                Text="{Binding GenreText}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        </Grid>
+        <controls:LabelledDropdown
+            Name="CommentField"
+            LabelText="Comment"
+            ItemsSource="{Binding CommentOptions}"
+            Text="{Binding CommentText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        <controls:LabelledDropdown
+            Name="AlbumArtistField"
+            LabelText="Album Artist"
+            ItemsSource="{Binding AlbumArtistOptions}"
+            Text="{Binding AlbumArtistText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        <controls:LabelledDropdown
+            Name="ComposerField"
+            LabelText="Composer"
+            ItemsSource="{Binding ComposerOptions}"
+            Text="{Binding ComposerText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+        <controls:LabelledDropdown
+            Name="DiscNumberField"
+            LabelText="Disc Number"
+            ItemsSource="{Binding DiscNumberOptions}"
+            Text="{Binding DiscNumberText}"
+            DropDownClosed="AutoCompleteBoxDropdownClosed"
+            SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
     </StackPanel>
 </UserControl>

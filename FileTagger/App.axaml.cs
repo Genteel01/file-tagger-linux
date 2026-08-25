@@ -19,6 +19,8 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+        //Allow us to save blank values in int? fields (year, track number, disc number)
+        ATL.Settings.NullAbsentValues = true;
     }
 
     public override async void OnFrameworkInitializationCompleted()
