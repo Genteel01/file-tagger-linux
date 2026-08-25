@@ -23,6 +23,10 @@ public partial class TrackList : UserControl
         if (e.Key != Key.Enter || sender is not Control c) return;
         ListBoxItem? listBoxItem = c.FindAncestorOfType<ListBoxItem>();
         listBoxItem?.Focus();
+        if (DataContext is MainWindowViewModel vm)
+        {
+            vm.SelectionChanged();
+        }
     }
 
     public TrackList()
