@@ -57,7 +57,7 @@
                         HorizontalAlignment="Stretch"
                         ItemsSource="{TemplateBinding ItemsSource}"
                         Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
-                        GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed"
+                        GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed" TextChanged="SearchField_OnTextChanged"
                         TextFilter="{TemplateBinding TextFilter}">
                     </AutoCompleteBox>
                     <Button Grid.Column="1" Tapped="ExpandButtonTapped" Width="24">

@@ -51,6 +51,7 @@ public partial class LabelledDropdown : UserControl
     }
 
     public event EventHandler? DropDownClosed;
+    public event EventHandler? SearchFieldChanged;
 
     public LabelledDropdown()
     {
@@ -82,5 +83,10 @@ public partial class LabelledDropdown : UserControl
     private void SearchField_OnDropDownClosed(object? sender, EventArgs e)
     {
         DropDownClosed?.Invoke(sender, e);
+    }
+
+    private void SearchField_OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        SearchFieldChanged?.Invoke(sender, e);
     }
 }
