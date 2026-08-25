@@ -134,7 +134,8 @@ public partial class TrackList : UserControl
     /// </summary>
     private void TextBoxFocusLost(object? sender, FocusChangedEventArgs e)
     {
-        if (sender is TextBox textBox && e.NewFocusedElement is not MenuItem)
+        bool newFocusIsRightClickMenu = e.NewFocusedElement is MenuItem;
+        if (sender is TextBox textBox && !newFocusIsRightClickMenu)
         {
             //If we finished editing a TextBox and didn't change our selection, fire SelectionChanged to update the dropdowns in the edit panel with our changes
             bool clickedInSameRow = e.NewFocusedElement is Control c && c.Parent == textBox.Parent;
