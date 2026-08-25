@@ -44,8 +44,10 @@ public partial class EditPanel : UserControl
     /// <param name="e"></param>
     private void PanelFocusLost(object? sender, FocusChangedEventArgs e)
     {
+        if (sender is not StackPanel s) return;
+        if (e.NewFocusedElement is not Control c) return;
         //Checking that the new focused element is not our main panel or a descendant
-        if (sender is StackPanel s && e.NewFocusedElement is Control c && s != c && !s.IsLogicalAncestorOf(c))
+        if (s != c && !s.IsLogicalAncestorOf(c))
         {
             if (DataContext is MainWindowViewModel vm)
             {
