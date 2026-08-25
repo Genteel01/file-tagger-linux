@@ -9,9 +9,11 @@
              x:DataType="viewModels:MainWindowViewModel"
 >
     <UserControl.Styles>
+        <Style Selector="StackPanel#SidePanel">
+            <Setter Property="Background" Value="#f0f0f0" />
+        </Style>
         <Style Selector="StackPanel#SidePanel StackPanel">
             <Setter Property="Margin" Value="8 4" />
-            <Setter Property="Background" Value="#f0f0f0" />
         </Style>
     </UserControl.Styles>
     <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
