@@ -17,7 +17,7 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
-        <Style Selector="ScrollViewer#MainPanel GridSplitter">
+        <Style Selector="ScrollViewer#ListPanel GridSplitter">
             <Setter Property="Background" Value="LightGray" />
         </Style>
         <Style Selector="ListBox TextBox">
@@ -28,23 +28,23 @@
         </Style>
 
         <!--Borders for the bottom of each row in the main panel-->
-        <Style Selector="ScrollViewer#MainPanel TextBox, ScrollViewer#MainPanel GridSplitter">
+        <Style Selector="ScrollViewer#ListPanel TextBox, ScrollViewer#ListPanel GridSplitter">
             <Setter Property="BorderThickness" Value="0 0 0 1" />
             <Setter Property="BorderBrush" Value="Gray" />
         </Style>
-        <Style Selector="ScrollViewer#MainPanel Border">
+        <Style Selector="ScrollViewer#ListPanel Border">
             <Setter Property="BorderThickness" Value="0 0 0 1" />
             <Setter Property="BorderBrush" Value="Gray" />
         </Style>
 
-        <Style Selector="ScrollViewer#MainPanel TextBox:focus">
+        <Style Selector="ScrollViewer#ListPanel TextBox:focus">
             <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
             <Setter Property="BorderThickness" Value="2 2" />
             <Setter Property="Padding" Value="1 0"/>
         </Style>
     </UserControl.Styles>
-    <ScrollViewer Name="MainPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
-                  GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown" Focusable="True">
+    <ScrollViewer Name="ListPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
+                  GotFocus="ScrollViewerFocusGained" LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" Focusable="True">
         <StackPanel Orientation="Vertical">
             <!--Title row of list-->
             <Grid Name="ListGridTitle">

@@ -55,6 +55,20 @@ public partial class TrackList : UserControl
         }
     }
 
+    private void ScrollViewerFocusLost(object? sender, FocusChangedEventArgs e)
+    {
+        if (sender is not ScrollViewer s) return;
+        if (e.NewFocusedElement is not Control c) return;
+        //Checking that the new focused element is not our main panel or a descendant
+        if (s != c && !s.IsLogicalAncestorOf(c))
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.SelectionChanged();
+            }
+        }
+    }
+
     /// <summary>
     /// When a text box is focused, treat it like selecting the row in the listBox
     /// </summary>
@@ -141,12 +155,6 @@ public partial class TrackList : UserControl
         bool newFocusIsRightClickMenu = e.NewFocusedElement is MenuItem;
         if (sender is TextBox textBox && !newFocusIsRightClickMenu)
         {
-            //If we finished editing a TextBox and didn't change our selection, fire SelectionChanged to update the dropdowns in the edit panel with our changes
-            bool clickedInSameRow = e.NewFocusedElement is Control c && c.Parent == textBox.Parent;
-            if (clickedInSameRow && DataContext is MainWindowViewModel vm)
-            {
-                vm.SelectionChanged();
-            }
             textBox.IsReadOnly = true;
         }
     }
