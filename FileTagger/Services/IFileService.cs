@@ -7,4 +7,5 @@ namespace FileTagger.Services;
 public interface IFileService
 {
     public Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync();
+    public Task<IReadOnlyList<IStorageFile>> OpenImageFiles();
 }

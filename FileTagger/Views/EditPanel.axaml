@@ -82,5 +82,28 @@
             Text="{Binding DiscNumberText}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"
             SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+        <Image Height="250" Margin="8" Source="{Binding CurrentDisplayedImage}">
+            <Image.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add cover"/>
+                    <MenuItem Header="Remove cover"/>
+                    <MenuItem Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
+                    <MenuItem Header="Extract cover"/>
+                    <Separator/>
+                    <MenuItem Header="Set cover type"/>
+                    <MenuItem Header="Set cover description"/>
+                    <Separator/>
+                    <MenuItem Header="Cut cover"/>
+                    <MenuItem Header="Copy cover"/>
+                    <MenuItem Header="Paste cover"/>
+                </ContextMenu>
+            </Image.ContextMenu>
+        </Image>
+        <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal">
+            <TextBlock Text="{Binding SelectedImageIndex}"/>
+            <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
+            <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped">Next</Button>
+        </StackPanel>
+        <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
     </StackPanel>
 </UserControl>

@@ -51,4 +51,16 @@ public class FileService : IFileService
 
         return files;
     }
+
+    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
+    {
+        IReadOnlyList<IStorageFile> files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        {
+            Title = "Open Folders",
+            AllowMultiple = true,
+            FileTypeFilter = [FilePickerFileTypes.ImageAll]
+        });
+
+        return files;
+    }
 }

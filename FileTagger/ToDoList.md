@@ -5,3 +5,10 @@ To Do List
 - When loading files, check file extension using ATL file types, currently uses temporary string checking
 - Add automatic track numbering
 - When closing, save which files are open. When launching, load the previously loaded files
+- Persist whether the window is maximised, and the size if it isn't
+- Have file picker open to the previous folder (doesn't persist between launches currently)
+- Add support for custom fields
+- Allow selecting which fields appear in the list and edit panel (independently)
+- Add support for directly selecting file(s) instead of just whole folders
+- Add support for more embedded picture types
+- Move some picture stuff to a service

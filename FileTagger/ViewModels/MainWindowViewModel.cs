@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +11,10 @@ using CommunityToolkit.Mvvm.Input;
 using FileTagger.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ATL;
+using ATL.AudioData;
 using ATL.Logging;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FileTagger.ViewModels;
@@ -17,6 +22,10 @@ namespace FileTagger.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     public const string UnchangedField = "< keep >";
+
+    private readonly Bitmap _defaultImage =
+        new Bitmap(AssetLoader.Open(new Uri("avares://FileTagger/Assets/placeholder.png", UriKind.Absolute)));
+
     /// <summary>
     /// Gets a collection of <see cref="ATL.Track"/>
     /// </summary>
@@ -70,6 +79,19 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private bool _hasSelectedTracks;
 
+    public MainWindowViewModel()
+    {
+        IEnumerable<string> picTypes = Enum.GetNames<PictureInfo.PIC_TYPE>();
+        foreach (string picType in picTypes)
+        {
+            PictureTypes.Add(picType);
+        }
+
+        SelectedPictureType = Enum.GetName(PictureInfo.PIC_TYPE.Front)!;
+        _selectedImages.Add(_defaultImage);
+        SelectedImageIndex = 0;
+        CurrentDisplayedImage = _selectedImages.First();
+    }
     public void ToggleSelect(string path)
     {
 
@@ -86,6 +108,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public void SelectionChanged()
     {
+        ChooseDisplayedImage();
         TitleOptions.Clear();
         AlbumOptions.Clear();
         ArtistOptions.Clear();
@@ -251,4 +274,156 @@ public partial class MainWindowViewModel : ViewModelBase
             ErrorMessages?.Add(e.Message);
         }
     }
+
+    [RelayCommand]
+    private async Task ReplaceCoverImage(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        try
+        {
+            IFileService? filesService = App.Current?.Services?.GetService<IFileService>();
+            if (filesService is null) throw new NullReferenceException("Missing File Service instance.");
+
+            IReadOnlyList<IStorageFile> files = await filesService.OpenImageFiles();
+
+            List<(Bitmap, PictureInfo)> images = [];
+
+            PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
+            foreach (IStorageFile file in files)
+            {
+                Stream stream = await file.OpenReadAsync();
+                Bitmap bitmap = new Bitmap(stream);
+                stream = await file.OpenReadAsync();
+                PictureInfo picInfo = PictureInfo.fromBinaryData(stream, (int)stream.Length,
+                    pictureType, MetaDataIOFactory.TagType.ANY, 0);
+                images.Add((bitmap, picInfo));
+            }
+
+            if(images.Count == 0) return;
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
+                track.EmbeddedPictures.AddRange(images);
+            }
+            ChooseDisplayedImage();
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
+            Debug.Fail(e.Message);
+        }
+    }
+
+    private void ChooseDisplayedImage()
+    {
+        _selectedImages.Clear();
+        _selectedImages.Add(_defaultImage);
+        SelectedImageIndex = 0;
+        CurrentDisplayedImage = _selectedImages.First();
+        ShowImageNavigationButtons = false;
+        if (SelectedTracks.Count == 0) return;
+
+        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
+
+        //If there's only one track selected, display all its images
+        if (SelectedTracks.Count == 1)
+        {
+            List<(Bitmap, PictureInfo)> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType).ToList();
+            if (validPics.Count == 0) return;
+
+            _selectedImages.Clear();
+            foreach ((Bitmap, PictureInfo) pic in validPics)
+            {
+                _selectedImages.Add(pic.Item1);
+            }
+            CurrentDisplayedImage = _selectedImages.First();
+            ShowImageNavigationButtons = _selectedImages.Count > 1;
+        }
+        //If there is more than one track selected, display its images if they are the same across the entire selection
+        else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.Item2.PicType == pictureType)))
+        {
+            //Get a list of the pics of the correct types for each selected track
+            List<List<(Bitmap, PictureInfo)>> validPicsPerTrack = [];
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                List<(Bitmap, PictureInfo)> trackPics =
+                    [.. track.EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType)];
+                validPicsPerTrack.Add(trackPics);
+            }
+            //If each selected track doesn't have the same number of pics, we already know they don't match and can move on
+            int firstCount = validPicsPerTrack.First().Count;
+            bool matchingSizes = validPicsPerTrack.All(trackPics => trackPics.Count == firstCount);
+            if (!matchingSizes) return;
+
+            //Check whether each pic matches all the other pics of the same index
+            bool picsMatch = true;
+            for (int i = 0; i < firstCount; i++)
+            {
+                (Bitmap, PictureInfo) firstTrackPic = validPicsPerTrack.First()[i];
+                if (!validPicsPerTrack.All(trackPics =>
+                        ArePicturesIdentical(firstTrackPic.Item2.PictureData, trackPics[i].Item2.PictureData)))
+                {
+                    picsMatch = false;
+                    break;
+                }
+            }
+
+            if (!picsMatch) return;
+
+            _selectedImages.Clear();
+            //If all pics match, display them all
+            foreach ((Bitmap, PictureInfo) pic in validPicsPerTrack.First())
+            {
+                _selectedImages.Add(pic.Item1);
+            }
+            CurrentDisplayedImage = _selectedImages.First();
+            ShowImageNavigationButtons = _selectedImages.Count > 1;
+        }
+    }
+
+    /// <summary>
+    /// Determines whether two pictures are identical by examining their Byte data
+    /// </summary>
+    /// <param name="pic1"></param>
+    /// <param name="pic2"></param>
+    /// <returns></returns>
+    private static bool ArePicturesIdentical(byte[] pic1, byte[] pic2)
+    {
+        if(pic1.Length != pic2.Length) return false;
+
+        for (int i = 0; i < pic1.Length; i++)
+        {
+            if (pic1[i] != pic2[i]) return false;
+        }
+        return true;
+    }
+
+    partial void OnSelectedPictureTypeChanged(string value)
+    {
+        ChooseDisplayedImage();
+    }
+
+    [RelayCommand]
+    private void NextImage()
+    {
+        SelectedImageIndex += 1;
+        SelectedImageIndex %= _selectedImages.Count;
+        CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
+    }
+
+    [RelayCommand]
+    private void PreviousImage()
+    {
+        SelectedImageIndex -= 1;
+        if(SelectedImageIndex < 0) SelectedImageIndex = _selectedImages.Count - 1;
+        CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
+    }
+
+    private List<Bitmap> _selectedImages = [];
+    [ObservableProperty] private int _selectedImageIndex;
+    [ObservableProperty] private Bitmap _currentDisplayedImage;
+    [ObservableProperty] private bool _showImageNavigationButtons;
+
+    public ObservableCollection<string> PictureTypes { get; } = [];
+    [ObservableProperty] private string _selectedPictureType;
 }
