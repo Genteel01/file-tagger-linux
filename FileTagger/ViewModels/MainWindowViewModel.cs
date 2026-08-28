@@ -46,12 +46,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _artistText = "";
 
     public ObservableCollection<string> YearOptions { get; } = [];
-    private ObservableCollection<int?> IntYearOptions { get; } = [];
     [ObservableProperty]
     private string _yearText = "";
 
     public ObservableCollection<string> TrackNumberOptions { get; } = [];
-    private ObservableCollection<int?> IntTrackNumberOptions { get; } = [];
     [ObservableProperty]
     private string _trackNumberText = "";
 
@@ -72,7 +70,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _composerText = "";
 
     public ObservableCollection<string> DiscNumberOptions { get; } = [];
-    private ObservableCollection<int?> IntDiscNumberOptions { get; } = [];
     [ObservableProperty]
     private string _discNumberText = "";
 
@@ -109,15 +106,15 @@ public partial class MainWindowViewModel : ViewModelBase
         TitleOptions.Clear();
         AlbumOptions.Clear();
         ArtistOptions.Clear();
-        IntYearOptions.Clear();
+        List<int?> newYearOptions = [];
         YearOptions.Clear();
-        IntTrackNumberOptions.Clear();
+        List<int?> newTrackNumberOptions = [];
         TrackNumberOptions.Clear();
         GenreOptions.Clear();
         CommentOptions.Clear();
         AlbumArtistOptions.Clear();
         ComposerOptions.Clear();
-        IntDiscNumberOptions.Clear();
+        List<int?> newDiscNumberOptions = [];
         DiscNumberOptions.Clear();
         TitleText = "";
         AlbumText = "";
@@ -135,16 +132,16 @@ public partial class MainWindowViewModel : ViewModelBase
 
         foreach (TrackViewModel track in SelectedTracks)
         {
-            if(track.Title != "" && !TitleOptions.Contains(track.Title)) TitleOptions.Add(track.Title);
-            if(track.Album != "" && !AlbumOptions.Contains(track.Album)) AlbumOptions.Add(track.Album);
-            if(track.Artist != "" && !ArtistOptions.Contains(track.Artist)) ArtistOptions.Add(track.Artist);
-            if(!IntYearOptions.Contains(track.Year)) IntYearOptions.Add(track.Year);
-            if(!IntTrackNumberOptions.Contains(track.TrackNumber)) IntTrackNumberOptions.Add(track.TrackNumber);
-            if(track.Genre != "" && !GenreOptions.Contains(track.Genre)) GenreOptions.Add(track.Genre);
-            if(track.Comment != "" && !CommentOptions.Contains(track.Comment)) CommentOptions.Add(track.Comment);
-            if(track.AlbumArtist != "" && !AlbumArtistOptions.Contains(track.AlbumArtist)) AlbumArtistOptions.Add(track.AlbumArtist);
-            if(track.Composer != "" && !ComposerOptions.Contains(track.Composer)) ComposerOptions.Add(track.Composer);
-            if(!IntDiscNumberOptions.Contains(track.DiscNumber)) IntDiscNumberOptions.Add(track.DiscNumber);
+            if(!TitleOptions.Contains(track.Title)) TitleOptions.Add(track.Title);
+            if(!AlbumOptions.Contains(track.Album)) AlbumOptions.Add(track.Album);
+            if(!ArtistOptions.Contains(track.Artist)) ArtistOptions.Add(track.Artist);
+            if(!newYearOptions.Contains(track.Year)) newYearOptions.Add(track.Year);
+            if(!newTrackNumberOptions.Contains(track.TrackNumber)) newTrackNumberOptions.Add(track.TrackNumber);
+            if(!GenreOptions.Contains(track.Genre)) GenreOptions.Add(track.Genre);
+            if(!CommentOptions.Contains(track.Comment)) CommentOptions.Add(track.Comment);
+            if(!AlbumArtistOptions.Contains(track.AlbumArtist)) AlbumArtistOptions.Add(track.AlbumArtist);
+            if(!ComposerOptions.Contains(track.Composer)) ComposerOptions.Add(track.Composer);
+            if(!newDiscNumberOptions.Contains(track.DiscNumber)) newDiscNumberOptions.Add(track.DiscNumber);
         }
         if (SelectedTracks.Count == 1)
         {
@@ -164,33 +161,40 @@ public partial class MainWindowViewModel : ViewModelBase
             TitleText = TitleOptions.All(title => title == SelectedTracks[0].Title) ? SelectedTracks[0].Title : UnchangedField;
             AlbumText = AlbumOptions.All(album => album == SelectedTracks[0].Album) ? SelectedTracks[0].Album : UnchangedField;
             ArtistText = ArtistOptions.All(artist => artist == SelectedTracks[0].Artist) ? SelectedTracks[0].Artist : UnchangedField;
-            YearText = IntYearOptions.All(year => year == SelectedTracks[0].Year) ? SelectedTracks[0].Year.ToString() ?? "" : UnchangedField;
-            TrackNumberText = IntTrackNumberOptions.All(trackNumber => trackNumber == SelectedTracks[0].TrackNumber) ? SelectedTracks[0].TrackNumber.ToString() ?? "" : UnchangedField;
+            YearText = newYearOptions.All(year => year == SelectedTracks[0].Year) ? SelectedTracks[0].Year.ToString() ?? "" : UnchangedField;
+            TrackNumberText = newTrackNumberOptions.All(trackNumber => trackNumber == SelectedTracks[0].TrackNumber) ? SelectedTracks[0].TrackNumber.ToString() ?? "" : UnchangedField;
             GenreText = GenreOptions.All(genre => genre == SelectedTracks[0].Genre) ? SelectedTracks[0].Genre : UnchangedField;
             CommentText = CommentOptions.All(comment => comment == SelectedTracks[0].Comment) ? SelectedTracks[0].Comment : UnchangedField;
             AlbumArtistText = AlbumArtistOptions.All(albumArtist => albumArtist == SelectedTracks[0].AlbumArtist) ? SelectedTracks[0].AlbumArtist : UnchangedField;
             ComposerText = ComposerOptions.All(composer => composer == SelectedTracks[0].Composer) ? SelectedTracks[0].Composer : UnchangedField;
-            DiscNumberText = IntDiscNumberOptions.All(discNumber => discNumber == SelectedTracks[0].DiscNumber) ? SelectedTracks[0].DiscNumber.ToString() ?? "" : UnchangedField;
+            DiscNumberText = newDiscNumberOptions.All(discNumber => discNumber == SelectedTracks[0].DiscNumber) ? SelectedTracks[0].DiscNumber.ToString() ?? "" : UnchangedField;
         }
 
         TitleOptions.Insert(0, UnchangedField);
+        TitleOptions.Remove("");
         AlbumOptions.Insert(0, UnchangedField);
+        AlbumOptions.Remove("");
         ArtistOptions.Insert(0, UnchangedField);
-        foreach (int? intYearOption in IntYearOptions)
+        ArtistOptions.Remove("");
+        foreach (int? intYearOption in newYearOptions)
         {
             if(intYearOption != null) YearOptions.Add(intYearOption.ToString()!);
         }
         YearOptions.Insert(0, UnchangedField);
-        foreach (int? intTrackNumberOption in IntTrackNumberOptions)
+        foreach (int? intTrackNumberOption in newTrackNumberOptions)
         {
             if(intTrackNumberOption != null) TrackNumberOptions.Add(intTrackNumberOption.ToString()!);
         }
         TrackNumberOptions.Insert(0, UnchangedField);
         GenreOptions.Insert(0, UnchangedField);
+        GenreOptions.Remove("");
         CommentOptions.Insert(0, UnchangedField);
+        CommentOptions.Remove("");
         AlbumArtistOptions.Insert(0, UnchangedField);
+        AlbumArtistOptions.Remove("");
         ComposerOptions.Insert(0, UnchangedField);
-        foreach (int? intDiscNumberOption in IntDiscNumberOptions)
+        ComposerOptions.Remove("");
+        foreach (int? intDiscNumberOption in newDiscNumberOptions)
         {
             if(intDiscNumberOption != null) DiscNumberOptions.Add(intDiscNumberOption.ToString()!);
         }
