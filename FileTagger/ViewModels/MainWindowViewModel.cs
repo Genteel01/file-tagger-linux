@@ -82,10 +82,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         IEnumerable<string> picTypes = Enum.GetNames<PictureInfo.PIC_TYPE>();
-        foreach (string picType in picTypes)
-        {
-            PictureTypes.Add(picType);
-        }
+        PictureTypes = new ObservableCollection<string>(picTypes);
 
         SelectedPictureType = Enum.GetName(PictureInfo.PIC_TYPE.Front)!;
         _selectedImages.Add(_defaultImage);
