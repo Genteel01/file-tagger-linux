@@ -16,7 +16,7 @@ public partial class EditPanel : UserControl
             return true;
         }
 
-        return item?.Contains(search) ?? false;
+        return item?.Contains(search, StringComparison.CurrentCultureIgnoreCase) ?? false;
     };
     public EditPanel()
     {
