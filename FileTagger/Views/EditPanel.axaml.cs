@@ -70,7 +70,7 @@ public partial class EditPanel : UserControl
         {
             if (DataContext is MainWindowViewModel vm)
             {
-                vm.FieldChanged();
+                vm.StoreFieldChanges();
             }
         }
     }

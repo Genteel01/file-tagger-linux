@@ -14,10 +14,9 @@ namespace FileTagger.ViewModels;
 public partial class TrackViewModel : ViewModelBase
 {
     /// <summary>
-    /// Gets or sets the path
+    /// Gets the path
     /// </summary>
-    [ObservableProperty]
-    private string _path;
+    public string Path { get; }
 
     /// <summary>
     /// Gets or sets the title

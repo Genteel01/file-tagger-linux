@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
@@ -41,49 +42,28 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public ObservableCollection<TrackViewModel> SelectedTracks { get; } = [];
 
-    public ObservableCollection<string> TitleOptions { get; } = [];
+    /// <summary>
+    /// The value in the edit box for each field
+    /// </summary>
     [ObservableProperty]
-    private string _titleText = "";
+    private Dictionary<string, string> _fieldTexts = new Dictionary<string, string>();
 
-    public ObservableCollection<string> AlbumOptions { get; } = [];
+    /// <summary>
+    /// The options in the edit box dropdown for each field
+    /// </summary>
     [ObservableProperty]
-    private string _albumText = "";
+    private Dictionary<string, List<object?>> _fieldOptions = new Dictionary<string, List<object?>>();
 
-    public ObservableCollection<string> ArtistOptions { get; } = [];
-    [ObservableProperty]
-    private string _artistText = "";
-
-    public ObservableCollection<string> YearOptions { get; } = [];
-    [ObservableProperty]
-    private string _yearText = "";
-
-    public ObservableCollection<string> TrackNumberOptions { get; } = [];
-    [ObservableProperty]
-    private string _trackNumberText = "";
-
-    public ObservableCollection<string> GenreOptions { get; } = [];
-    [ObservableProperty]
-    private string _genreText = "";
-
-    public ObservableCollection<string> CommentOptions { get; } = [];
-    [ObservableProperty]
-    private string _commentText = "";
-
-    public ObservableCollection<string> AlbumArtistOptions { get; } = [];
-    [ObservableProperty]
-    private string _albumArtistText = "";
-
-    public ObservableCollection<string> ComposerOptions { get; } = [];
-    [ObservableProperty]
-    private string _composerText = "";
-
-    public ObservableCollection<string> DiscNumberOptions { get; } = [];
-    [ObservableProperty]
-    private string _discNumberText = "";
-
+    /// <summary>
+    /// Whether SelectedTracks.Count > 0
+    /// </summary>
     [ObservableProperty]
     private bool _hasSelectedTracks;
 
+    /// <summary>
+    /// Array of properties of TrackViewModel that we want to be editable
+    /// </summary>
+    private readonly PropertyInfo[] _trackProperties;
     public MainWindowViewModel()
     {
         IEnumerable<string> picTypes = Enum.GetNames<PictureInfo.PIC_TYPE>();
@@ -93,13 +73,45 @@ public partial class MainWindowViewModel : ViewModelBase
         _selectedImages.Add(_defaultImage);
         SelectedImageIndex = 0;
         CurrentDisplayedImage = _selectedImages.First();
+
+        //Select properties that are writable, and are either string or int?
+        _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
+            (property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?)) )];
+        FieldTexts = SetUpFieldTexts();
+        FieldOptions = SetUpFieldOptions();
     }
+
+    /// <summary>
+    /// Get a Dictionary of each field's text with a default value
+    /// </summary>
+    private Dictionary<string, string> SetUpFieldTexts()
+    {
+        Dictionary<string, string> newFieldTexts = new Dictionary<string, string>();
+        foreach (PropertyInfo propertyInfo in _trackProperties)
+        {
+            newFieldTexts[propertyInfo.Name] = "";
+        }
+        return newFieldTexts;
+    }
+
+    /// <summary>
+    /// Get a Dictionary of each field's options with default empty lists
+    /// </summary>
+    private Dictionary<string, List<object?>> SetUpFieldOptions()
+    {
+        Dictionary<string, List<object?>> newFieldOptions = new Dictionary<string, List<object?>>();
+        foreach (PropertyInfo propertyInfo in _trackProperties)
+        {
+            newFieldOptions[propertyInfo.Name] = [];
+        }
+        return newFieldOptions;
+    }
+
     /// <summary>
     /// Toggle selecting a track with the given path
     /// </summary>
     public void ToggleSelect(string path)
     {
-
         IEnumerable<TrackViewModel> tracksWithPath = Tracks.Where(track => track.Path == path).ToList();
         IEnumerable<TrackViewModel> selectedTracksWithPath = SelectedTracks.Where(track => track.Path == path).ToList();
         if (selectedTracksWithPath.Any())
@@ -118,132 +130,78 @@ public partial class MainWindowViewModel : ViewModelBase
     public void SelectionChanged()
     {
         ChooseDisplayedImage();
-        TitleOptions.Clear();
-        AlbumOptions.Clear();
-        ArtistOptions.Clear();
-        List<int?> newYearOptions = [];
-        YearOptions.Clear();
-        List<int?> newTrackNumberOptions = [];
-        TrackNumberOptions.Clear();
-        GenreOptions.Clear();
-        CommentOptions.Clear();
-        AlbumArtistOptions.Clear();
-        ComposerOptions.Clear();
-        List<int?> newDiscNumberOptions = [];
-        DiscNumberOptions.Clear();
-        TitleText = "";
-        AlbumText = "";
-        ArtistText = "";
-        YearText = "";
-        TrackNumberText = "";
-        GenreText = "";
-        CommentText = "";
-        AlbumArtistText = "";
-        ComposerText = "";
-        DiscNumberText = "";
+        Dictionary<string, string> newFieldTexts = SetUpFieldTexts();
+        Dictionary<string, List<object?>> newFieldOptions = SetUpFieldOptions();
 
         HasSelectedTracks = SelectedTracks.Count > 0;
-        if (!HasSelectedTracks) return;
+        if (!HasSelectedTracks)
+        {
+            FieldTexts = newFieldTexts;
+            FieldOptions = newFieldOptions;
+            return;
+        }
 
+        //For each selected track, add its value of each field to the options for that field
         foreach (TrackViewModel track in SelectedTracks)
         {
-            if(!TitleOptions.Contains(track.Title)) TitleOptions.Add(track.Title);
-            if(!AlbumOptions.Contains(track.Album)) AlbumOptions.Add(track.Album);
-            if(!ArtistOptions.Contains(track.Artist)) ArtistOptions.Add(track.Artist);
-            if(!newYearOptions.Contains(track.Year)) newYearOptions.Add(track.Year);
-            if(!newTrackNumberOptions.Contains(track.TrackNumber)) newTrackNumberOptions.Add(track.TrackNumber);
-            if(!GenreOptions.Contains(track.Genre)) GenreOptions.Add(track.Genre);
-            if(!CommentOptions.Contains(track.Comment)) CommentOptions.Add(track.Comment);
-            if(!AlbumArtistOptions.Contains(track.AlbumArtist)) AlbumArtistOptions.Add(track.AlbumArtist);
-            if(!ComposerOptions.Contains(track.Composer)) ComposerOptions.Add(track.Composer);
-            if(!newDiscNumberOptions.Contains(track.DiscNumber)) newDiscNumberOptions.Add(track.DiscNumber);
+            foreach (PropertyInfo propertyInfo in _trackProperties)
+            {
+                if(!newFieldOptions[propertyInfo.Name].Contains(propertyInfo.GetValue(track)))
+                    newFieldOptions[propertyInfo.Name].Add(propertyInfo.GetValue(track));
+            }
         }
+        //If we only have one selected track, set each field text to the value of that field, or blank if null
         if (SelectedTracks.Count == 1)
         {
-            TitleText = SelectedTracks[0].Title;
-            AlbumText = SelectedTracks[0].Album;
-            ArtistText = SelectedTracks[0].Artist;
-            YearText = SelectedTracks[0].Year.ToString() ?? "";
-            TrackNumberText = SelectedTracks[0].TrackNumber.ToString() ?? "";
-            GenreText = SelectedTracks[0].Genre;
-            CommentText = SelectedTracks[0].Comment;
-            AlbumArtistText = SelectedTracks[0].AlbumArtist;
-            ComposerText = SelectedTracks[0].Composer;
-            DiscNumberText = SelectedTracks[0].DiscNumber.ToString() ?? "";
+            foreach (PropertyInfo propertyInfo in _trackProperties)
+            {
+                newFieldTexts[propertyInfo.Name] = propertyInfo.GetValue(SelectedTracks[0])?.ToString() ?? "";
+            }
         }
+        //If we have more than one selected track, set each field text to the value of that field if it is the same on every track
+        //otherwise set it to UnchangedField
         else
         {
-            TitleText = TitleOptions.All(title => title == SelectedTracks[0].Title) ? SelectedTracks[0].Title : UnchangedField;
-            AlbumText = AlbumOptions.All(album => album == SelectedTracks[0].Album) ? SelectedTracks[0].Album : UnchangedField;
-            ArtistText = ArtistOptions.All(artist => artist == SelectedTracks[0].Artist) ? SelectedTracks[0].Artist : UnchangedField;
-            YearText = newYearOptions.All(year => year == SelectedTracks[0].Year) ? SelectedTracks[0].Year.ToString() ?? "" : UnchangedField;
-            TrackNumberText = newTrackNumberOptions.All(trackNumber => trackNumber == SelectedTracks[0].TrackNumber) ? SelectedTracks[0].TrackNumber.ToString() ?? "" : UnchangedField;
-            GenreText = GenreOptions.All(genre => genre == SelectedTracks[0].Genre) ? SelectedTracks[0].Genre : UnchangedField;
-            CommentText = CommentOptions.All(comment => comment == SelectedTracks[0].Comment) ? SelectedTracks[0].Comment : UnchangedField;
-            AlbumArtistText = AlbumArtistOptions.All(albumArtist => albumArtist == SelectedTracks[0].AlbumArtist) ? SelectedTracks[0].AlbumArtist : UnchangedField;
-            ComposerText = ComposerOptions.All(composer => composer == SelectedTracks[0].Composer) ? SelectedTracks[0].Composer : UnchangedField;
-            DiscNumberText = newDiscNumberOptions.All(discNumber => discNumber == SelectedTracks[0].DiscNumber) ? SelectedTracks[0].DiscNumber.ToString() ?? "" : UnchangedField;
+            foreach (PropertyInfo propertyInfo in _trackProperties)
+            {
+                bool allTracksMatch = newFieldOptions[propertyInfo.Name]
+                    .All(property => property == propertyInfo.GetValue(SelectedTracks[0]));
+                newFieldTexts[propertyInfo.Name] = allTracksMatch ? propertyInfo.GetValue(SelectedTracks[0])?.ToString() ?? "" : UnchangedField;
+            }
         }
 
-        TitleOptions.Insert(0, UnchangedField);
-        TitleOptions.Remove("");
-        AlbumOptions.Insert(0, UnchangedField);
-        AlbumOptions.Remove("");
-        ArtistOptions.Insert(0, UnchangedField);
-        ArtistOptions.Remove("");
-        foreach (int? intYearOption in newYearOptions)
+        //Add UnchangedField as an option for each field, and remove blank options
+        foreach (PropertyInfo propertyInfo in _trackProperties)
         {
-            if(intYearOption != null) YearOptions.Add(intYearOption.ToString()!);
+            newFieldOptions[propertyInfo.Name].Insert(0, UnchangedField);
+            newFieldOptions[propertyInfo.Name].Remove("");
+            newFieldOptions[propertyInfo.Name].Remove(null);
         }
-        YearOptions.Insert(0, UnchangedField);
-        foreach (int? intTrackNumberOption in newTrackNumberOptions)
-        {
-            if(intTrackNumberOption != null) TrackNumberOptions.Add(intTrackNumberOption.ToString()!);
-        }
-        TrackNumberOptions.Insert(0, UnchangedField);
-        GenreOptions.Insert(0, UnchangedField);
-        GenreOptions.Remove("");
-        CommentOptions.Insert(0, UnchangedField);
-        CommentOptions.Remove("");
-        AlbumArtistOptions.Insert(0, UnchangedField);
-        AlbumArtistOptions.Remove("");
-        ComposerOptions.Insert(0, UnchangedField);
-        ComposerOptions.Remove("");
-        foreach (int? intDiscNumberOption in newDiscNumberOptions)
-        {
-            if(intDiscNumberOption != null) DiscNumberOptions.Add(intDiscNumberOption.ToString()!);
-        }
-        DiscNumberOptions.Insert(0, UnchangedField);
+        FieldTexts = newFieldTexts;
+        FieldOptions = newFieldOptions;
     }
 
-    public void FieldChanged()
+    /// <summary>
+    /// Stores the values in the edit fields to each selected track
+    /// </summary>
+    public void StoreFieldChanges()
     {
         foreach (TrackViewModel track in SelectedTracks)
         {
-            if (TitleText != UnchangedField) track.Title = TitleText;
-            if (AlbumText != UnchangedField) track.Album = AlbumText;
-            if (ArtistText != UnchangedField) track.Artist = ArtistText;
-            if (YearText != UnchangedField)
+            foreach (PropertyInfo propertyInfo in _trackProperties)
             {
-                bool parsed = int.TryParse(YearText, out int year);
-                if (parsed) track.Year = year;
-                else track.Year = null;
-            }
-            if (TrackNumberText != UnchangedField)
-            {
-                bool parsed = int.TryParse(TrackNumberText, out int trackNumber);
-                if (parsed) track.TrackNumber = trackNumber;
-                else track.TrackNumber = null;
-            }
-            if (GenreText != UnchangedField) track.Genre = GenreText;
-            if (CommentText != UnchangedField) track.Comment = CommentText;
-            if (AlbumArtistText != UnchangedField) track.AlbumArtist = AlbumArtistText;
-            if (ComposerText != UnchangedField) track.Composer = ComposerText;
-            if (DiscNumberText != UnchangedField)
-            {
-                bool parsed = int.TryParse(DiscNumberText, out int discNumber);
-                if (parsed) track.DiscNumber = discNumber;
-                else track.DiscNumber = null;
+                if (FieldTexts[propertyInfo.Name] == UnchangedField) continue;
+
+                if (propertyInfo.PropertyType == typeof(string))
+                {
+                    propertyInfo.SetValue(track, FieldTexts[propertyInfo.Name]);
+                }
+                else if (propertyInfo.PropertyType == typeof(int?))
+                {
+                    bool parsed = int.TryParse(FieldTexts[propertyInfo.Name], out int parsedInt);
+                    if (parsed) propertyInfo.SetValue(track, parsedInt);
+                    else propertyInfo.SetValue(track, null);
+                }
             }
         }
     }

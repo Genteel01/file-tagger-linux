@@ -20,66 +20,66 @@
         <controls:LabelledDropdown
             Name="TitleField"
             LabelText="Title"
-            ItemsSource="{Binding TitleOptions}"
-            Text="{Binding TitleText}"
+            ItemsSource="{Binding FieldOptions[Title]}"
+            Text="{Binding FieldTexts[Title]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         <controls:LabelledDropdown
             Name="AlbumField"
             LabelText="Album"
-            ItemsSource="{Binding AlbumOptions}"
-            Text="{Binding AlbumText}"
+            ItemsSource="{Binding FieldOptions[Album]}"
+            Text="{Binding FieldTexts[Album]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         <controls:LabelledDropdown
             Name="ArtistField"
             LabelText="Artist"
-            ItemsSource="{Binding ArtistOptions}"
-            Text="{Binding ArtistText}"
+            ItemsSource="{Binding FieldOptions[Artist]}"
+            Text="{Binding FieldTexts[Artist]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         <Grid ColumnDefinitions="*,*,*">
             <controls:LabelledDropdown Grid.Column="0"
                 Name="YearField"
                 LabelText="Year"
-                ItemsSource="{Binding YearOptions}"
-                Text="{Binding YearText}"
+                ItemsSource="{Binding FieldOptions[Year]}"
+                Text="{Binding FieldTexts[Year]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
             <controls:LabelledDropdown Grid.Column="1"
                Name="TrackNumberField"
                LabelText="Track Number"
-               ItemsSource="{Binding TrackNumberOptions}"
-               Text="{Binding TrackNumberText}"
+               ItemsSource="{Binding FieldOptions[TrackNumber]}"
+               Text="{Binding FieldTexts[TrackNumber]}"
                DropDownClosed="AutoCompleteBoxDropdownClosed"
                SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
             <controls:LabelledDropdown Grid.Column="2"
                 Name="GenreField"
                 LabelText="Genre"
-                ItemsSource="{Binding GenreOptions}"
-                Text="{Binding GenreText}"
+                ItemsSource="{Binding FieldOptions[Genre]}"
+                Text="{Binding FieldTexts[Genre]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         </Grid>
         <controls:LabelledDropdown
             Name="CommentField"
             LabelText="Comment"
-            ItemsSource="{Binding CommentOptions}"
-            Text="{Binding CommentText}"
+            ItemsSource="{Binding FieldOptions[Comment]}"
+            Text="{Binding FieldTexts[Comment]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         <controls:LabelledDropdown
             Name="AlbumArtistField"
             LabelText="Album Artist"
-            ItemsSource="{Binding AlbumArtistOptions}"
-            Text="{Binding AlbumArtistText}"
+            ItemsSource="{Binding FieldOptions[AlbumArtist]}"
+            Text="{Binding FieldTexts[AlbumArtist]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         <controls:LabelledDropdown
             Name="ComposerField"
             LabelText="Composer"
-            ItemsSource="{Binding ComposerOptions}"
-            Text="{Binding ComposerText}"
+            ItemsSource="{Binding FieldOptions[Composer]}"
+            Text="{Binding FieldTexts[Composer]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"/>
         <controls:LabelledDropdown
             Name="DiscNumberField"
             LabelText="Disc Number"
-            ItemsSource="{Binding DiscNumberOptions}"
-            Text="{Binding DiscNumberText}"
+            ItemsSource="{Binding FieldOptions[DiscNumber]}"
+            Text="{Binding FieldTexts[DiscNumber]}"
             DropDownClosed="AutoCompleteBoxDropdownClosed"
             SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
         <Image Height="250" Margin="8" Source="{Binding CurrentDisplayedImage}">
