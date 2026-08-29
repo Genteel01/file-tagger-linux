@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:FileTagger.Controls"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
-             x:DataType="viewModels:MainWindowViewModel"
+             x:DataType="viewModels:EditPanelViewModel"
 >
     <UserControl.Styles>
         <Style Selector="StackPanel#SidePanel">

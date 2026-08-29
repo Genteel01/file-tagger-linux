@@ -11,7 +11,7 @@ public partial class EditPanel : UserControl
 {
     private readonly AutoCompleteFilterPredicate<string?> _searchFunction = (search, item) =>
     {
-        if (search == MainWindowViewModel.UnchangedField || item == MainWindowViewModel.UnchangedField || string.IsNullOrWhiteSpace(search))
+        if (search == EditPanelViewModel.UnchangedField || item == EditPanelViewModel.UnchangedField || string.IsNullOrWhiteSpace(search))
         {
             return true;
         }
@@ -47,7 +47,7 @@ public partial class EditPanel : UserControl
     {
         if (sender is AutoCompleteBox box)
         {
-            if (box.Text != MainWindowViewModel.UnchangedField)
+            if (box.Text != EditPanelViewModel.UnchangedField)
             {
                 box.Text = string.Concat((box.Text ?? "").Where(c => char.IsDigit(c)));
             }
@@ -68,7 +68,7 @@ public partial class EditPanel : UserControl
         //Checking that the new focused element is not our main panel or a descendant
         if (s != c && !s.IsLogicalAncestorOf(c))
         {
-            if (DataContext is MainWindowViewModel vm)
+            if (DataContext is EditPanelViewModel vm)
             {
                 vm.StoreFieldChanges();
             }

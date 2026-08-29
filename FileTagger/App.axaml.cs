@@ -10,12 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FileTagger;
 
-public partial class App : Application
+public class App : Application
 {
-    // This is a reference to our MainViewModel which we use to save the list on shutdown. You can also use Dependency Injection
-    // in your App.
-    private readonly MainWindowViewModel _mainViewModel = new MainWindowViewModel();
-
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -23,48 +19,34 @@ public partial class App : Application
         ATL.Settings.NullAbsentValues = true;
     }
 
-    public override async void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = _mainViewModel
-            };
+            desktop.MainWindow = new MainWindow();
             desktop.ShutdownRequested += DesktopOnShutdownRequested;
 
-            ServiceCollection services = new ServiceCollection();
+            ServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
+            serviceCollection.AddSingleton<MainWindowViewModel>();
+            serviceCollection.AddSingleton<EditPanelViewModel>();
 
-            services.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
+            IServiceProvider services = serviceCollection.BuildServiceProvider();
 
-            Services = services.BuildServiceProvider();
+            MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
+            desktop.MainWindow.DataContext =  mainWindowViewModel;
         }
 
         base.OnFrameworkInitializationCompleted();
-
-        // Init the MainViewModel
-        await InitMainViewModelAsync();
     }
 
-    // Optional: Load data from disc
     private async Task InitMainViewModelAsync()
     {
         //TODO load previously loaded files
     }
 
-    // We want to save our ToDoList before we actually shutdown the App. As File I/O is async, we need to wait until file is closed
-    // before we can actually close this window
-
-    private bool _canClose; // This flag is used to check if window is allowed to close
     private async void DesktopOnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
-        //TODO which files are currently open
+        //TODO save which files are currently open, then close when done (uses Bookmarks probably?)
     }
-
-    public new static App? Current => Application.Current as App;
-
-    /// <summary>
-    /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
-    /// </summary>
-    public IServiceProvider? Services { get; private set; }
 }

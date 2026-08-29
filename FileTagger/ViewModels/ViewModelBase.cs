@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FileTagger.ViewModels;
 
-public partial class ViewModelBase : ObservableObject
+public partial class ViewModelBase : ObservableRecipient
 {
     protected ViewModelBase()
     {
