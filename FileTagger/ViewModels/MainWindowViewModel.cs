@@ -21,16 +21,25 @@ namespace FileTagger.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    /// <summary>
+    /// Value for edit fields that we don't want to change
+    /// </summary>
     public const string UnchangedField = "< keep >";
 
+    /// <summary>
+    /// Default image to display with either no or multiple tracks selected
+    /// </summary>
     private readonly Bitmap _defaultImage =
         new Bitmap(AssetLoader.Open(new Uri("avares://FileTagger/Assets/placeholder.png", UriKind.Absolute)));
 
     /// <summary>
-    /// Gets a collection of <see cref="ATL.Track"/>
+    /// All the tracks that have been loaded in
     /// </summary>
     public ObservableCollection<TrackViewModel> Tracks { get; } = [];
 
+    /// <summary>
+    /// All the tracks that are currently selected
+    /// </summary>
     public ObservableCollection<TrackViewModel> SelectedTracks { get; } = [];
 
     public ObservableCollection<string> TitleOptions { get; } = [];
@@ -86,6 +95,9 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectedImageIndex = 0;
         CurrentDisplayedImage = _selectedImages.First();
     }
+    /// <summary>
+    /// Toggle selecting a track with the given path
+    /// </summary>
     public void ToggleSelect(string path)
     {
 
@@ -100,6 +112,10 @@ public partial class MainWindowViewModel : ViewModelBase
             SelectedTracks.Add(tracksWithPath.First());
         }
     }
+
+    /// <summary>
+    /// Handle setting up the edit field texts and options, based on the currently selected tracks
+    /// </summary>
     public void SelectionChanged()
     {
         ChooseDisplayedImage();
@@ -233,6 +249,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Saves all the tracks to disk
+    /// </summary>
     [RelayCommand]
     private void SaveMusicFiles()
     {
@@ -242,6 +261,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Opens the file picker to choose a directory, then loads all music files in that directory as <see cref="TrackViewModel"/>
+    /// </summary>
     [RelayCommand]
     private async Task OpenMusicFiles(CancellationToken token)
     {
@@ -276,6 +298,10 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Opens the file picker for the user to select new images,
+    /// then replaces the cover images of the currently selected type, for the currently selected tracks
+    /// </summary>
     [RelayCommand]
     private async Task ReplaceCoverImage(CancellationToken token)
     {
@@ -315,6 +341,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Chooses which image to display in the edit panel
+    /// </summary>
     private void ChooseDisplayedImage()
     {
         _selectedImages.Clear();
@@ -343,7 +372,7 @@ public partial class MainWindowViewModel : ViewModelBase
         //If there is more than one track selected, display its images if they are the same across the entire selection
         else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.Item2.PicType == pictureType)))
         {
-            //Get a list of the pics of the correct types for each selected track
+            //Get a list of the pics of the correct type for each selected track
             List<List<(Bitmap, PictureInfo)>> validPicsPerTrack = [];
             foreach (TrackViewModel track in SelectedTracks)
             {
@@ -385,8 +414,6 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Determines whether two pictures are identical by examining their Byte data
     /// </summary>
-    /// <param name="pic1"></param>
-    /// <param name="pic2"></param>
     /// <returns></returns>
     private static bool ArePicturesIdentical(byte[] pic1, byte[] pic2)
     {
@@ -399,11 +426,17 @@ public partial class MainWindowViewModel : ViewModelBase
         return true;
     }
 
+    /// <summary>
+    /// Choose the correct image to display when the selected type changes
+    /// </summary>
     partial void OnSelectedPictureTypeChanged(string value)
     {
         ChooseDisplayedImage();
     }
 
+    /// <summary>
+    /// Show the next image for the current selected type, looping around
+    /// </summary>
     [RelayCommand]
     private void NextImage()
     {
@@ -412,6 +445,9 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
     }
 
+    /// <summary>
+    /// Show the previous image for the current selected type, looping around
+    /// </summary>
     [RelayCommand]
     private void PreviousImage()
     {
@@ -425,6 +461,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private Bitmap _currentDisplayedImage;
     [ObservableProperty] private bool _showImageNavigationButtons;
 
-    public ObservableCollection<string> PictureTypes { get; } = [];
+    public ObservableCollection<string> PictureTypes { get; }
     [ObservableProperty] private string _selectedPictureType;
 }
