@@ -10,14 +10,14 @@ public class FileService(Window target) : IFileService
 {
     public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync()
     {
-        IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
             Title = "Open Folders",
             AllowMultiple = true,
         });
 
         List<IStorageFile> files = [];
-        foreach (var folder in folders)
+        foreach (IStorageFolder folder in folders)
         {
             files.AddRange(await GetChildFiles(folder));
         }
@@ -30,7 +30,7 @@ public class FileService(Window target) : IFileService
 
         List<IStorageFile> files = [];
 
-        await foreach (var item in items)
+        await foreach (IStorageItem item in items)
         {
             if (item is IStorageFile file)
             {
@@ -47,7 +47,7 @@ public class FileService(Window target) : IFileService
 
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
     {
-        IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Open Folders",
             AllowMultiple = true,
