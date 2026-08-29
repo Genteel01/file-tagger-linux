@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -331,13 +330,13 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
                 track.EmbeddedPictures.AddRange(images);
+                track.Changed = true;
             }
             ChooseDisplayedImage();
         }
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
-            Debug.Fail(e.Message);
         }
     }
 
