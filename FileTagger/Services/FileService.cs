@@ -6,18 +6,11 @@ using System.Threading.Tasks;
 namespace FileTagger.Services;
 
 
-public class FileService : IFileService
+public class FileService(Window target) : IFileService
 {
-    private readonly Window _target;
-
-    public FileService(Window target)
-    {
-        _target = target;
-    }
-
     public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync()
     {
-        IReadOnlyList<IStorageFolder> folders = await _target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
+        IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
         {
             Title = "Open Folders",
             AllowMultiple = true,
@@ -54,7 +47,7 @@ public class FileService : IFileService
 
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
     {
-        IReadOnlyList<IStorageFile> files = await _target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
             Title = "Open Folders",
             AllowMultiple = true,
