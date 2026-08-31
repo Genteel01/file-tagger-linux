@@ -295,6 +295,36 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             return [];
         }
     }
+
+    /// <summary>
+    /// Removes the visible cover image from the selected tracks, or remove all cover images of the selected type
+    /// from all selected tracks if there are different covers for the selected tracks
+    /// </summary>
+    [RelayCommand]
+    private void RemoveCoverImage()
+    {
+        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
+        if (CurrentDisplayedImage == _defaultImage)
+        {
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                if(track.EmbeddedPictures.Count != 0) track.Changed = true;
+                track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
+            }
+        }
+        else
+        {
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                int oldCount = track.EmbeddedPictures.Count;
+                track.EmbeddedPictures.RemoveAt(SelectedImageIndex);
+                int newCount = track.EmbeddedPictures.Count;
+                if(oldCount != newCount) track.Changed = true;
+            }
+        }
+        ChooseDisplayedImage();
+    }
+
     /// <summary>
     /// Chooses which image to display in the edit panel
     /// </summary>
