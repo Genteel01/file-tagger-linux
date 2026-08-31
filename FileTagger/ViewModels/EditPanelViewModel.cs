@@ -214,12 +214,56 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
     }
 
-        /// <summary>
+    /// <summary>
     /// Opens the file picker for the user to select new images,
     /// then replaces the cover images of the currently selected type, for the currently selected tracks
     /// </summary>
     [RelayCommand]
     private async Task ReplaceCoverImage(CancellationToken token)
+    {
+        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
+        List<(Bitmap, PictureInfo)> images = await SelectImageFiles(pictureType);
+
+        if(images.Count == 0) return;
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
+            track.EmbeddedPictures.AddRange(images);
+            track.Changed = true;
+        }
+        ChooseDisplayedImage();
+    }
+
+    /// <summary>
+    /// Opens the file picker for the user to select new images,
+    /// then adds them to the cover images of the currently selected type, for the currently selected tracks
+    /// </summary>
+    [RelayCommand]
+    private async Task AddCoverImages(CancellationToken token)
+    {
+        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
+        List<(Bitmap, PictureInfo)> images = await SelectImageFiles(pictureType);
+
+        if(images.Count == 0) return;
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            track.EmbeddedPictures.AddRange(images);
+            for (int i = 0; i < track.EmbeddedPictures.Count; i++)
+            {
+                track.EmbeddedPictures[i].Item2.Position = i + 1;
+            }
+            track.Changed = true;
+        }
+
+        ChooseDisplayedImage();
+        SelectedImageIndex = _selectedImages.Count - 1;
+        CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
+    }
+
+    /// <summary>
+    /// Opens the file picker to select image files, and returns a list of (<see cref="Bitmap"/>, <see cref="PictureInfo"/>) for every image
+    /// </summary>
+    private async Task<List<(Bitmap, PictureInfo)>> SelectImageFiles(PictureInfo.PIC_TYPE pictureType)
     {
         ErrorMessages?.Clear();
         try
@@ -230,32 +274,27 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
             List<(Bitmap, PictureInfo)> images = [];
 
-            PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
-            foreach (IStorageFile file in files)
+            for (int i = 0; i < files.Count; i++)
             {
+                IStorageFile file = files[i];
                 Stream stream = await file.OpenReadAsync();
                 Bitmap bitmap = new Bitmap(stream);
+                await stream.DisposeAsync();
                 stream = await file.OpenReadAsync();
                 PictureInfo picInfo = PictureInfo.fromBinaryData(stream, (int)stream.Length,
-                    pictureType, MetaDataIOFactory.TagType.ANY, 0);
+                    pictureType, MetaDataIOFactory.TagType.ANY, 0, i + 1);
+                await stream.DisposeAsync();
                 images.Add((bitmap, picInfo));
             }
 
-            if(images.Count == 0) return;
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
-                track.EmbeddedPictures.AddRange(images);
-                track.Changed = true;
-            }
-            ChooseDisplayedImage();
+            return images;
         }
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
+            return [];
         }
     }
-
     /// <summary>
     /// Chooses which image to display in the edit panel
     /// </summary>
