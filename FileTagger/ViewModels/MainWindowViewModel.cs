@@ -104,7 +104,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenMusicFiles(CancellationToken token)
     {
-        ConsoleLogger log = new ConsoleLogger();
+        #if DEBUG
+        ConsoleLogger dummy = new ConsoleLogger();
+        #endif
         ErrorMessages?.Clear();
         try
         {
