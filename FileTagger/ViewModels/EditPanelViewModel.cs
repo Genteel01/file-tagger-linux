@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -70,12 +69,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         IsActive = true;
         IEnumerable<string> picTypes = Enum.GetNames<PictureInfo.PIC_TYPE>();
-        PictureTypes = new ObservableCollection<string>(picTypes);
+        PictureTypes = [.. picTypes];
 
         SelectedPictureType = Enum.GetName(PictureInfo.PIC_TYPE.Front)!;
-        _selectedImages.Add(_defaultImage);
-        SelectedImageIndex = 0;
-        CurrentDisplayedImage = _selectedImages.First();
 
         //Select properties that are writable, and are either string or int?
         _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
@@ -91,7 +87,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     public EditPanelViewModel()
     {
         _trackProperties = [];
-        _currentDisplayedImage = _defaultImage;
         PictureTypes = [];
         _selectedPictureType = "";
         _fileService = new FileService(new Window());
@@ -256,8 +251,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
 
         ChooseDisplayedImage();
-        SelectedImageIndex = _selectedImages.Count - 1;
-        CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
+        DisplayedImageIndex = SelectedTrackImages.Count - 1;
     }
 
     /// <summary>
@@ -317,7 +311,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             foreach (TrackViewModel track in SelectedTracks)
             {
                 int oldCount = track.EmbeddedPictures.Count;
-                track.EmbeddedPictures.RemoveAt(SelectedImageIndex);
+                track.EmbeddedPictures.RemoveAt(DisplayedImageIndex);
                 int newCount = track.EmbeddedPictures.Count;
                 if(oldCount != newCount) track.Changed = true;
             }
@@ -330,69 +324,57 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private void ChooseDisplayedImage()
     {
-        _selectedImages.Clear();
-        _selectedImages.Add(_defaultImage);
-        SelectedImageIndex = 0;
-        CurrentDisplayedImage = _selectedImages.First();
-        ShowImageNavigationButtons = false;
-        if (SelectedTracks.Count == 0) return;
+        DisplayedImageIndex = 0;
+        List<(Bitmap, PictureInfo)> newSelectedTrackImages = [];
+        if (!HasSelectedTracks)
+        {
+            SelectedTrackImages = newSelectedTrackImages;
+            return;
+        }
 
         PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
 
         //If there's only one track selected, display all its images
         if (SelectedTracks.Count == 1)
         {
-            List<(Bitmap, PictureInfo)> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType).ToList();
-            if (validPics.Count == 0) return;
-
-            _selectedImages.Clear();
-            foreach ((Bitmap, PictureInfo) pic in validPics)
-            {
-                _selectedImages.Add(pic.Item1);
-            }
-            CurrentDisplayedImage = _selectedImages.First();
-            ShowImageNavigationButtons = _selectedImages.Count > 1;
+            IEnumerable<(Bitmap, PictureInfo)> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType);
+            newSelectedTrackImages = [.. validPics];
         }
         //If there is more than one track selected, display its images if they are the same across the entire selection
+        //Only proceed if all selected tracks actually have an image of the current type
         else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.Item2.PicType == pictureType)))
         {
             //Get a list of the pics of the correct type for each selected track
             List<List<(Bitmap, PictureInfo)>> validPicsPerTrack = [];
             foreach (TrackViewModel track in SelectedTracks)
             {
-                List<(Bitmap, PictureInfo)> trackPics =
-                    [.. track.EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType)];
-                validPicsPerTrack.Add(trackPics);
+                validPicsPerTrack.Add([.. track.EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType)]);
             }
             //If each selected track doesn't have the same number of pics, we already know they don't match and can move on
-            int firstCount = validPicsPerTrack.First().Count;
-            bool matchingSizes = validPicsPerTrack.All(trackPics => trackPics.Count == firstCount);
-            if (!matchingSizes) return;
-
-            //Check whether each pic matches all the other pics of the same index
-            bool picsMatch = true;
-            for (int i = 0; i < firstCount; i++)
+            int firstTrackImageCount = validPicsPerTrack.First().Count;
+            bool matchingSizes = validPicsPerTrack.All(trackPics => trackPics.Count== firstTrackImageCount);
+            if (matchingSizes)
             {
-                (Bitmap, PictureInfo) firstTrackPic = validPicsPerTrack.First()[i];
-                if (!validPicsPerTrack.All(trackPics =>
-                        ArePicturesIdentical(firstTrackPic.Item2.PictureData, trackPics[i].Item2.PictureData)))
+                //Loop through each picture, and check whether it is the same on each selected track
+                bool picsMatch = true;
+                for (int i = 0; i < firstTrackImageCount; i++)
                 {
-                    picsMatch = false;
-                    break;
+                    byte[] firstTrackPicData = validPicsPerTrack.First()[i].Item2.PictureData;
+                    if (!validPicsPerTrack.All(trackPics => ArePicturesIdentical(firstTrackPicData, trackPics[i].Item2.PictureData)))
+                    {
+                        picsMatch = false;
+                        break;
+                    }
+                }
+
+                if (picsMatch)
+                {
+                    //If all pics match, display them all
+                    newSelectedTrackImages = [.. validPicsPerTrack.First()];
                 }
             }
-
-            if (!picsMatch) return;
-
-            _selectedImages.Clear();
-            //If all pics match, display them all
-            foreach ((Bitmap, PictureInfo) pic in validPicsPerTrack.First())
-            {
-                _selectedImages.Add(pic.Item1);
-            }
-            CurrentDisplayedImage = _selectedImages.First();
-            ShowImageNavigationButtons = _selectedImages.Count > 1;
         }
+        SelectedTrackImages = newSelectedTrackImages;
     }
 
     /// <summary>
@@ -411,8 +393,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Choose the correct image to display when the selected type changes
+    /// Choose the correct image to display when <see cref="SelectedPictureType"/> changes
     /// </summary>
+    // ReSharper disable once UnusedParameterInPartialMethod
     partial void OnSelectedPictureTypeChanged(string value)
     {
         ChooseDisplayedImage();
@@ -424,9 +407,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void NextImage()
     {
-        SelectedImageIndex += 1;
-        SelectedImageIndex %= _selectedImages.Count;
-        CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
+        DisplayedImageIndex  = (DisplayedImageIndex + 1) % SelectedTrackImages.Count;
     }
 
     /// <summary>
@@ -435,16 +416,43 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void PreviousImage()
     {
-        SelectedImageIndex -= 1;
-        if(SelectedImageIndex < 0) SelectedImageIndex = _selectedImages.Count - 1;
-        CurrentDisplayedImage = _selectedImages[SelectedImageIndex];
+        int newIndex = DisplayedImageIndex - 1;
+        if (newIndex < 0) newIndex = SelectedTrackImages.Count - 1;
+        DisplayedImageIndex = newIndex;
     }
 
-    private List<Bitmap> _selectedImages = [];
-    [ObservableProperty] private int _selectedImageIndex;
-    [ObservableProperty] private Bitmap _currentDisplayedImage;
-    [ObservableProperty] private bool _showImageNavigationButtons;
+    /// <summary>
+    /// List of images for the <see cref="SelectedTracks"/> for the <see cref="SelectedPictureType"/>.
+    /// Will be empty if selected tracks have different images
+    /// </summary>
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))] [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    private List<(Bitmap, PictureInfo)> _selectedTrackImages = [];
 
-    public ObservableCollection<string> PictureTypes { get; }
+    /// <summary>
+    /// The index representing which entry in <see cref="SelectedTrackImages"/> to display
+    /// </summary>
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    private int _displayedImageIndex = 0;
+
+    /// <summary>
+    /// Bitmap of the entry in <see cref="SelectedTrackImages"/> to display based on <see cref="DisplayedImageIndex"/>,
+    /// showing <see cref="_defaultImage"/> if SelectedTrackImages is empty.
+    /// Updates when SelectedTrackImages or DisplayedImageIndex change
+    /// </summary>
+    public Bitmap CurrentDisplayedImage => SelectedTrackImages.Count > 0 ? SelectedTrackImages[DisplayedImageIndex].Item1 : _defaultImage;
+
+    /// <summary>
+    /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes
+    /// </summary>
+    public bool ShowImageNavigationButtons => SelectedTrackImages.Count > 1;
+
+    /// <summary>
+    /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values as strings, for populating a selection dropdown
+    /// </summary>
+    public List<string> PictureTypes { get; }
+
+    /// <summary>
+    /// String of the selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
+    /// </summary>
     [ObservableProperty] private string _selectedPictureType;
 }

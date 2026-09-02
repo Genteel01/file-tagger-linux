@@ -100,7 +100,7 @@
             </Image.ContextMenu>
         </Image>
         <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal">
-            <TextBlock Text="{Binding SelectedImageIndex}"/>
+            <TextBlock Text="{Binding DisplayedImageIndex}"/>
             <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
             <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped">Next</Button>
         </StackPanel>
