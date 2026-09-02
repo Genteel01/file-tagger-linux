@@ -311,7 +311,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             foreach (TrackViewModel track in SelectedTracks)
             {
                 int oldCount = track.EmbeddedPictures.Count;
-                track.EmbeddedPictures.RemoveAt(DisplayedImageIndex);
+                (Bitmap, PictureInfo) displayedImage = SelectedTrackImages[DisplayedImageIndex];
+                (Bitmap, PictureInfo) matchingImage = track.EmbeddedPictures.First(pic => pic.Item2.Equals(displayedImage.Item2));
+                track.EmbeddedPictures.Remove(matchingImage);
                 int newCount = track.EmbeddedPictures.Count;
                 if(oldCount != newCount) track.Changed = true;
             }
