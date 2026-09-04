@@ -10,7 +10,12 @@ To Do List
 - Allow selecting which fields appear in the list and edit panel (independently)
 - Add support for directly selecting file(s) instead of just whole folders
 - Add support for more embedded picture types
-- Move some picture stuff to a service
+- Move some picture stuff to a service (or possibly give it its own ViewModel?)
+- Should probably cache the Bitmaps by storing them on the SelectedImage.EmbeddedPictures
 - Dark mode support
   - Automatically select based on system
   - Support other themes too
+- Add clicking a header to sort by that column
+  - Save default sort based on last active one
+  - Use current culture for sorting title/artist/album etc, use ordinal for sorting path
+    - Remember to ignore case
