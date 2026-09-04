@@ -116,13 +116,39 @@ public partial class MainWindowViewModel : ViewModelBase
             if (files.Item2) return;
 
             List<TrackViewModel> newTracks = [];
+            //Never have more chunks than the number of threads available on the system, but also there's overhead in
+            //creating threads, so we don't want our chunks to be too small, because that means we run more threads
+            //Using 32 as an arbitrary minimum chunk size
+            int chunkSize = (int)MathF.Ceiling((float)files.Item1.Count / Environment.ProcessorCount);
+            IEnumerable<IStorageFile[]> chunkedFiles = files.Item1.Chunk(Math.Max(chunkSize, 32));
+
+            List<Thread> threads = [];
+            object trackLocker = new object();
+
+            foreach (IStorageFile[] fileSubset in chunkedFiles)
+            {
+                Thread t = new Thread(() =>
+                {
+                    foreach (IStorageFile file in fileSubset)
+                    {
+                        Track track = new Track(file.Path.LocalPath);
+                        TrackViewModel trackViewModel = new TrackViewModel(track);
+                        lock (trackLocker)
+                        {
+                            newTracks.Add(trackViewModel);
+                        }
+                    }
+                });
+                threads.Add(t);
+                t.Start();
+            }
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+            newTracks.Sort((x, y) => string.Compare(x.Path, y.Path, StringComparison.OrdinalIgnoreCase));
             SelectedTracks.Clear();
             SelectionChanged();
-            foreach (IStorageFile file in files.Item1)
-            {
-                Track track = new Track(file.Path.LocalPath);
-                newTracks.Add(new TrackViewModel(track));
-            }
             Tracks = newTracks;
         }
         catch (Exception e)
