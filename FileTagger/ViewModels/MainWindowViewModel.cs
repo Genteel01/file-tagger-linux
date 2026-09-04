@@ -8,6 +8,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using FileTagger.Services;
 using ATL;
+using ATL.AudioData;
 using ATL.Logging;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -44,10 +45,27 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private readonly IFileService _fileService;
 
+    /// <summary>
+    /// List of supported file extensions to fetch from folders
+    /// </summary>
+    private readonly List<string> _supportedFileExtensions;
+
     public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _supportedFileExtensions = [];
+
+        foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
+        {
+            if (f.Readable)
+            {
+                foreach (string extension in f)
+                {
+                    _supportedFileExtensions.Add(extension);
+                }
+            }
+        }
     }
 
     #if DEBUG
@@ -58,6 +76,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(new Window());
+        _supportedFileExtensions = [];
     }
     #endif
 
@@ -93,7 +112,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ErrorMessages?.Clear();
         try
         {
-            (IReadOnlyList<IStorageFile>, bool) files = await _fileService.OpenFilesRecursivelyAsync();
+            (IReadOnlyList<IStorageFile>, bool) files = await _fileService.OpenFilesRecursivelyAsync(_supportedFileExtensions);
             if (files.Item2) return;
 
             List<TrackViewModel> newTracks = [];

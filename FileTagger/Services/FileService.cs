@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace FileTagger.Services;
 
 public class FileService(Window target) : IFileService
 {
-    public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync()
+    public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions)
     {
         IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
@@ -19,12 +20,12 @@ public class FileService(Window target) : IFileService
         List<IStorageFile> files = [];
         foreach (IStorageFolder folder in folders)
         {
-            files.AddRange(await GetChildFiles(folder));
+            files.AddRange(await GetChildFiles(folder, extensions));
         }
         return (files, folders.Count == 0);
     }
 
-    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder)
+    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder, List<string> extensions)
     {
         IAsyncEnumerable<IStorageItem> items = folder.GetItemsAsync();
 
@@ -36,14 +37,15 @@ public class FileService(Window target) : IFileService
             {
                 string fileName = file.Name.ToLower();
                 //TODO do this checking against ATL's supported types
-                if (fileName.EndsWith(".mp3") || fileName.EndsWith(".wav") || fileName.EndsWith(".flac"))
+                string extension = "." + fileName.Split(".").Last();
+                if (extensions.Contains(extension))
                 {
                     files.Add(file);
                 }
             }
             else if (item is IStorageFolder childFolder)
             {
-                files.AddRange(await GetChildFiles(childFolder));
+                files.AddRange(await GetChildFiles(childFolder, extensions));
             }
         }
 
