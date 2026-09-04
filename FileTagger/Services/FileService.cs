@@ -34,7 +34,12 @@ public class FileService(Window target) : IFileService
         {
             if (item is IStorageFile file)
             {
-                files.Add(file);
+                string fileName = file.Name.ToLower();
+                //TODO do this checking against ATL's supported types
+                if (fileName.EndsWith(".mp3") || fileName.EndsWith(".wav") || fileName.EndsWith(".flac"))
+                {
+                    files.Add(file);
+                }
             }
             else if (item is IStorageFolder childFolder)
             {

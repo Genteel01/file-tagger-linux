@@ -101,13 +101,8 @@ public partial class MainWindowViewModel : ViewModelBase
             SelectionChanged();
             foreach (IStorageFile file in files.Item1)
             {
-                string fileName = file.Name.ToLower();
-                //TODO do this checking against ATL's supported types
-                if (fileName.EndsWith(".mp3") ||  fileName.EndsWith(".wav") || fileName.EndsWith(".flac"))
-                {
-                    Track track = new Track(file.Path.LocalPath);
-                    newTracks.Add(new TrackViewModel(track));
-                }
+                Track track = new Track(file.Path.LocalPath);
+                newTracks.Add(new TrackViewModel(track));
             }
             Tracks = newTracks;
         }
