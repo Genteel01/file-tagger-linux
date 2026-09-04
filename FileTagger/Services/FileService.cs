@@ -36,7 +36,7 @@ public class FileService(Window target) : IFileService
             if (item is IStorageFile file)
             {
                 string fileName = file.Name.ToLower();
-                string extension = "." + fileName.Split(".").Last();
+                string extension = "." + fileName.Split(".").Last().ToLower();
                 if (extensions.Contains(extension))
                 {
                     files.Add(file);

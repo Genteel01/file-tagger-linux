@@ -62,7 +62,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 foreach (string extension in f)
                 {
-                    _supportedFileExtensions.Add(extension);
+                    _supportedFileExtensions.Add(extension.ToLower());
                 }
             }
         }
