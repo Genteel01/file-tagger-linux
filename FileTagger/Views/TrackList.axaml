@@ -17,7 +17,7 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
-        <Style Selector="ScrollViewer#ListPanel GridSplitter">
+        <Style Selector="Grid#ListPanel GridSplitter">
             <Setter Property="Background" Value="LightGray" />
         </Style>
         <Style Selector="ListBox TextBox">
@@ -28,71 +28,71 @@
         </Style>
 
         <!--Borders for the bottom of each row in the main panel-->
-        <Style Selector="ScrollViewer#ListPanel TextBox, ScrollViewer#ListPanel GridSplitter">
+        <Style Selector="Grid#ListPanel TextBox, Grid#ListPanel GridSplitter">
             <Setter Property="BorderThickness" Value="0 0 0 1" />
             <Setter Property="BorderBrush" Value="Gray" />
         </Style>
-        <Style Selector="ScrollViewer#ListPanel Border">
+        <Style Selector="Grid#ListPanel Border">
             <Setter Property="BorderThickness" Value="0 0 0 1" />
             <Setter Property="BorderBrush" Value="Gray" />
         </Style>
 
-        <Style Selector="ScrollViewer#ListPanel TextBox:focus">
+        <Style Selector="Grid#ListPanel TextBox:focus">
             <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
             <Setter Property="BorderThickness" Value="2 2" />
             <Setter Property="Padding" Value="1 0"/>
         </Style>
     </UserControl.Styles>
-    <ScrollViewer Name="ListPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
-                  GotFocus="ScrollViewerFocusGained" LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" Focusable="True">
-        <StackPanel Orientation="Vertical">
-            <!--Title row of list-->
-            <Grid Name="ListGridTitle">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="B" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="C" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="E" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="F" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="G" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="H" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="I" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="J" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="K" MinWidth="15"/>
-                </Grid.ColumnDefinitions>
-                <Border Grid.Column="0"><TextBlock Text="Title" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                <Border Grid.Column="2"><TextBlock Text="Album" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                <Border Grid.Column="4"><TextBlock Text="Artist" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                <Border Grid.Column="6"><TextBlock Text="Album Artist" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
-                <Border Grid.Column="8"><TextBlock Text="Track" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
-                <Border Grid.Column="10"><TextBlock Text="Disc" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
-                <Border Grid.Column="12"><TextBlock Text="Year" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
-                <Border Grid.Column="14"><TextBlock Text="Genre" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
-                <Border Grid.Column="16"><TextBlock Text="Composer" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
-                <Border Grid.Column="18"><TextBlock Text="Comment" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
-                <Border Grid.Column="20"><TextBlock Text="Path" Classes="h1" TextAlignment="Center"/></Border>
-            </Grid>
+    <Grid Name="ListPanel" RowDefinitions="Auto, *" Grid.IsSharedSizeScope="True">
+        <!--Title row of list-->
+        <Grid Grid.Row="0" Name="ListGridTitle">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="B" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="C" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="E" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="F" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="G" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="H" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="I" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="J" MinWidth="15"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="K" MinWidth="15"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0"><TextBlock Text="Title" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
+            <Border Grid.Column="2"><TextBlock Text="Album" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
+            <Border Grid.Column="4"><TextBlock Text="Artist" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
+            <Border Grid.Column="6"><TextBlock Text="Album Artist" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
+            <Border Grid.Column="8"><TextBlock Text="Track" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
+            <Border Grid.Column="10"><TextBlock Text="Disc" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
+            <Border Grid.Column="12"><TextBlock Text="Year" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
+            <Border Grid.Column="14"><TextBlock Text="Genre" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
+            <Border Grid.Column="16"><TextBlock Text="Composer" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
+            <Border Grid.Column="18"><TextBlock Text="Comment" Classes="h1" TextAlignment="Center"/></Border>
+            <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
+            <Border Grid.Column="20"><TextBlock Text="Path" Classes="h1" TextAlignment="Center"/></Border>
+        </Grid>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto"
+                      GotFocus="ScrollViewerFocusGained" LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" Focusable="True">
             <!--Items rows of list-->
             <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple" Name="TrackListBox"
                      SelectedItems="{Binding SelectedTracks}"
@@ -156,6 +156,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
