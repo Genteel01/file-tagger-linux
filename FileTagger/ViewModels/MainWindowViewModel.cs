@@ -62,23 +62,6 @@ public partial class MainWindowViewModel : ViewModelBase
     #endif
 
     /// <summary>
-    /// Toggle selecting a track with the given path
-    /// </summary>
-    public void ToggleSelect(string path)
-    {
-        IEnumerable<TrackViewModel> tracksWithPath = Tracks.Where(track => track.Path == path).ToList();
-        IEnumerable<TrackViewModel> selectedTracksWithPath = SelectedTracks.Where(track => track.Path == path).ToList();
-        if (selectedTracksWithPath.Any())
-        {
-            SelectedTracks.Remove(selectedTracksWithPath.First());
-        }
-        else if (tracksWithPath.Any())
-        {
-            SelectedTracks.Add(tracksWithPath.First());
-        }
-    }
-
-    /// <summary>
     /// Send the SelectedTracks message when the selection changes
     /// </summary>
     public void SelectionChanged()

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -8,25 +9,29 @@ namespace FileTagger.Views;
 
 public partial class TrackList : UserControl
 {
-    private TextBox? _lastSelectedTextBox;
-
+    /// <summary>
+    /// Unselect everything in the list when we hit escape,
+    /// so long as we aren't editing a TextBox, per <see cref="TextBoxEnterPressed"/>
+    /// </summary>
     private void Root_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key == Key.C && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        if (e.Key == Key.Escape)
         {
-            _lastSelectedTextBox?.Copy();
+            TrackListBox.UnselectAll();
         }
     }
 
+    /// <summary>
+    /// When we hit Enter or Escape on a TextBox, stop editing it and update the ViewModel
+    /// Stops the even propagating so we don't unselect the list with <see cref="Root_OnKeyDown"/>
+    /// </summary>
     private void TextBoxEnterPressed(object? sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter || sender is not Control c) return;
+        if (e.Key is not (Key.Enter or Key.Escape) || sender is not Control c) return;
+        //Prevent the event from going further, so we don't trigger Root_OnKeyDown
+        e.Handled = true;
         ListBoxItem? listBoxItem = c.FindAncestorOfType<ListBoxItem>();
         listBoxItem?.Focus();
-        if (DataContext is MainWindowViewModel vm)
-        {
-            vm.SelectionChanged();
-        }
     }
 
     public TrackList()
@@ -46,88 +51,8 @@ public partial class TrackList : UserControl
     {
         if (e.NewFocusedElement == sender)
         {
-            _lastSelectedTextBox?.ClearSelection();
             TrackListBox.UnselectAll();
         }
-        else if (e.NewFocusedElement is Control c && sender is Control s && !s.IsLogicalAncestorOf(c))
-        {
-            _lastSelectedTextBox?.ClearSelection();
-        }
-    }
-
-    private void ScrollViewerFocusLost(object? sender, FocusChangedEventArgs e)
-    {
-        if (sender is not ScrollViewer s) return;
-        if (e.NewFocusedElement is not Control c) return;
-        //Checking that the new focused element is not our main panel or a descendant
-        if (s != c && !s.IsLogicalAncestorOf(c))
-        {
-            if (DataContext is MainWindowViewModel vm)
-            {
-                vm.SelectionChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// When a text box is focused, treat it like selecting the row in the listBox
-    /// </summary>
-    private void TextBoxFocused(object? sender, FocusChangedEventArgs e)
-    {
-        if (sender is not TextBox textBox) return;
-
-        _lastSelectedTextBox?.ClearSelection();
-        _lastSelectedTextBox = textBox;
-        ListBoxItem? listBoxItem = textBox.FindAncestorOfType<ListBoxItem>();
-        ListBox? listBox = listBoxItem?.FindAncestorOfType<ListBox>();
-        //Pretty sure all the ?s means that listBoxItem can't be null, so we're suppressing the warning with !
-        listBox?.UpdateSelectionFromEvent(listBoxItem!, e);
-        //ListBox doesn't do multi-select with Ctrl when selection is changed by Focus, so we have to handle that ourselves
-        if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
-        {
-            Grid? grid = textBox.FindAncestorOfType<Grid>();
-            if (grid != null)
-            {
-                if (DataContext is MainWindowViewModel vm)
-                {
-                    vm.ToggleSelect(grid.Name ?? "");
-                }
-            }
-
-        }
-        //Prevent focus on read only fields
-        if (textBox.IsReadOnly)
-        {
-            listBoxItem?.Focus();
-        }
-    }
-
-    /// <summary>
-    /// When a text box is tapped, clear the selection, to prevent selections when shift-clicking to select multiple rows
-    /// </summary>
-    private void TextBoxTapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is not TextBox textBox) return;
-
-        if (!textBox.IsFocused || textBox.IsReadOnly)
-        {
-            textBox.ClearSelection();
-        }
-    }
-
-    /// <summary>
-    /// When a text box is double-tapped, allow editing and assign focus
-    /// </summary>
-    private void TextBoxDoubleTapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is not TextBox textBox) return;
-
-        textBox.IsReadOnly = false;
-        if (!textBox.IsFocused || textBox.IsReadOnly)
-        {
-            textBox.ClearSelection();
-        }
-        textBox.Focus();
     }
 
     private void ValidateNumberOnlyField(object? sender, FocusChangedEventArgs e)
@@ -148,14 +73,67 @@ public partial class TrackList : UserControl
     }
 
     /// <summary>
-    /// When a text box loses focus, make it read-only again
+    /// When a <see cref="TextBox"/> loses focus, switch to the associated <see cref="TextBlock"/>
     /// </summary>
     private void TextBoxFocusLost(object? sender, FocusChangedEventArgs e)
     {
         bool newFocusIsRightClickMenu = e.NewFocusedElement is MenuItem;
         if (sender is TextBox textBox && !newFocusIsRightClickMenu)
         {
-            textBox.IsReadOnly = true;
+            string searchName = textBox.Name?.Replace("Box", "Block") ?? "";
+
+            IEnumerable<ILogical> siblings = textBox.GetLogicalSiblings();
+            TextBlock? siblingBlock = null;
+            foreach (ILogical sibling in siblings)
+            {
+                if (sibling is TextBlock block && block.Name == searchName)
+                {
+                    siblingBlock = block;
+                }
+            }
+
+            if (siblingBlock != null)
+            {
+                siblingBlock.IsVisible = true;
+                siblingBlock.IsEnabled = true;
+                textBox.IsVisible = false;
+                textBox.IsEnabled = false;
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.SelectionChanged();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// When a <see cref="TextBlock"/> is double-tapped, switch to the associated <see cref="TextBox"/>
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TextBlockDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is not TextBlock textBlock) return;
+
+        string searchName = textBlock.Name?.Replace("Block", "Box") ?? "";
+        IEnumerable<ILogical> siblings = textBlock.GetLogicalSiblings();
+        TextBox? siblingBox = null;
+        foreach (ILogical sibling in siblings)
+        {
+            if (sibling is TextBox box && box.Name == searchName)
+            {
+                siblingBox = box;
+            }
+        }
+
+        if (siblingBox != null)
+        {
+            textBlock.IsVisible = false;
+            textBlock.IsEnabled = false;
+            siblingBox.IsVisible = true;
+            siblingBox.IsEnabled = true;
+            siblingBox.SelectAll();
+            siblingBox.Focus();
         }
     }
 }
