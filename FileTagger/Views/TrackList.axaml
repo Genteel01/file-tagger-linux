@@ -156,25 +156,25 @@
             <Grid Grid.Row="0" Name="ListGridTitle">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" SharedSizeGroup="Title" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="Album" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="Artist" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="50" SharedSizeGroup="Track" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="50" SharedSizeGroup="Disc" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="50" SharedSizeGroup="Year" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="Composer" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="150" SharedSizeGroup="Comment" MinWidth="15"/>
-                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="15"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Title" Classes="h1" TextAlignment="Center"/>
