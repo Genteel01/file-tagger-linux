@@ -12,3 +12,6 @@ To Do List
 - Add support for directly selecting file(s) instead of just whole folders
 - Add support for more embedded picture types
 - Move some picture stuff to a service
+- Dark mode support
+  - Automatically select based on system
+  - Support other themes too
