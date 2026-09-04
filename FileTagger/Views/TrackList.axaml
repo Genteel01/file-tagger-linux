@@ -155,13 +155,13 @@
             <!--Title row of list-->
             <Grid Grid.Row="0" Name="ListGridTitle">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" SharedSizeGroup="Title" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Title" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="150" SharedSizeGroup="Album" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Album" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="150" SharedSizeGroup="Artist" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Artist" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="150" SharedSizeGroup="AlbumArtist" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
                     <ColumnDefinition Width="50" SharedSizeGroup="Track" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
@@ -169,13 +169,13 @@
                     <ColumnDefinition Width="2" />
                     <ColumnDefinition Width="50" SharedSizeGroup="Year" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="75" SharedSizeGroup="Genre" MinWidth="15"/>
+                    <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="150" SharedSizeGroup="Composer" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Composer" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="100" SharedSizeGroup="Comment" MinWidth="15"/>
+                    <ColumnDefinition Width="150" SharedSizeGroup="Comment" MinWidth="15"/>
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="100" SharedSizeGroup="Path" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="15"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Title" Classes="h1" TextAlignment="Center"/>
                 <TextBlock Grid.Column="2" Text="Album" Classes="h1" TextAlignment="Center"/>
