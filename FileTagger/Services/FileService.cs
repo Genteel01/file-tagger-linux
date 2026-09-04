@@ -36,7 +36,6 @@ public class FileService(Window target) : IFileService
             if (item is IStorageFile file)
             {
                 string fileName = file.Name.ToLower();
-                //TODO do this checking against ATL's supported types
                 string extension = "." + fileName.Split(".").Last();
                 if (extensions.Contains(extension))
                 {
