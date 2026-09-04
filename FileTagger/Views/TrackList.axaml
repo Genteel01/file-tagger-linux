@@ -141,7 +141,11 @@
                                              LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
                                              KeyDown="TextBoxEnterPressed" Name="CommentBox"/>
                                     <!--Path-->
-                                    <TextBlock Grid.Column="10" Text="{Binding Path}"/>
+                                    <TextBlock Grid.Column="10" Text="{Binding Path}" Name="PathBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                                             KeyDown="TextBoxEnterPressed" Name="PathBox"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>
