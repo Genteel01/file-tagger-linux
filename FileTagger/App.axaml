@@ -51,37 +51,5 @@
         <Style Selector="ListBoxItem:pointerover:selected:focus /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource Selection4}" />
         </Style>
-
-        <Style Selector="ListBoxItem:pointerover TextBox">
-            <Setter Property="Background" Value="{DynamicResource Selection1}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected TextBox">
-            <Setter Property="Background" Value="{DynamicResource Selection2}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected TextBox">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected:focus TextBox">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected:focus TextBox">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
-        </Style>
-
-        <Style Selector="ListBoxItem:pointerover GridSplitter, ListBoxItem:pointerover TextBox:focus">
-            <Setter Property="Background" Value="{DynamicResource Selection2}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected GridSplitter, ListBoxItem:selected TextBox:focus">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected GridSplitter, ListBoxItem:pointerover:selected TextBox:focus">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected:focus GridSplitter">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected:focus GridSplitter">
-            <Setter Property="Background" Value="{DynamicResource Selection5}" />
-        </Style>
     </Application.Styles>
 </Application>

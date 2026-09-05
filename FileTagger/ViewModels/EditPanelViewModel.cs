@@ -222,8 +222,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         if(images.Count == 0) return;
         foreach (TrackViewModel track in SelectedTracks)
         {
-            track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
-            track.EmbeddedPictures.AddRange(images);
+            track.EmbeddedPictures.RemoveAll(pic => pic.PicType == pictureType);
+            track.EmbeddedPictures.AddRange(images.Select(pic => pic.Item2));
             track.Changed = true;
         }
         ChooseDisplayedImage();
@@ -242,10 +242,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         if(images.Count == 0) return;
         foreach (TrackViewModel track in SelectedTracks)
         {
-            track.EmbeddedPictures.AddRange(images);
+            track.EmbeddedPictures.AddRange(images.Select(pic => pic.Item2));
             for (int i = 0; i < track.EmbeddedPictures.Count; i++)
             {
-                track.EmbeddedPictures[i].Item2.Position = i + 1;
+                track.EmbeddedPictures[i].Position = i + 1;
             }
             track.Changed = true;
         }
@@ -303,7 +303,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             foreach (TrackViewModel track in SelectedTracks)
             {
                 if(track.EmbeddedPictures.Count != 0) track.Changed = true;
-                track.EmbeddedPictures.RemoveAll(pic => pic.Item2.PicType == pictureType);
+                track.EmbeddedPictures.RemoveAll(pic => pic.PicType == pictureType);
             }
         }
         else
@@ -312,7 +312,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             {
                 int oldCount = track.EmbeddedPictures.Count;
                 (Bitmap, PictureInfo) displayedImage = SelectedTrackImages[DisplayedImageIndex];
-                (Bitmap, PictureInfo) matchingImage = track.EmbeddedPictures.First(pic => pic.Item2.Equals(displayedImage.Item2));
+                PictureInfo matchingImage = track.EmbeddedPictures.First(pic => ArePicturesIdentical(displayedImage.Item2.PictureData, pic.PictureData) && pic.Equals(displayedImage.Item2));
                 track.EmbeddedPictures.Remove(matchingImage);
                 int newCount = track.EmbeddedPictures.Count;
                 if(oldCount != newCount) track.Changed = true;
@@ -327,30 +327,30 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private void ChooseDisplayedImage()
     {
         DisplayedImageIndex = 0;
-        List<(Bitmap, PictureInfo)> newSelectedTrackImages = [];
         if (!HasSelectedTracks)
         {
-            SelectedTrackImages = newSelectedTrackImages;
+            SelectedTrackImages = [];
             return;
         }
+        List<PictureInfo> newSelectedTrackImages = [];
 
         PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
 
         //If there's only one track selected, display all its images
         if (SelectedTracks.Count == 1)
         {
-            IEnumerable<(Bitmap, PictureInfo)> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType);
+            IEnumerable<PictureInfo> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.PicType == pictureType);
             newSelectedTrackImages = [.. validPics];
         }
         //If there is more than one track selected, display its images if they are the same across the entire selection
         //Only proceed if all selected tracks actually have an image of the current type
-        else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.Item2.PicType == pictureType)))
+        else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.PicType == pictureType)))
         {
             //Get a list of the pics of the correct type for each selected track
-            List<List<(Bitmap, PictureInfo)>> validPicsPerTrack = [];
+            List<List<PictureInfo>> validPicsPerTrack = [];
             foreach (TrackViewModel track in SelectedTracks)
             {
-                validPicsPerTrack.Add([.. track.EmbeddedPictures.Where(pic => pic.Item2.PicType == pictureType)]);
+                validPicsPerTrack.Add([.. track.EmbeddedPictures.Where(pic => pic.PicType == pictureType)]);
             }
             //If each selected track doesn't have the same number of pics, we already know they don't match and can move on
             int firstTrackImageCount = validPicsPerTrack.First().Count;
@@ -361,8 +361,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
                 bool picsMatch = true;
                 for (int i = 0; i < firstTrackImageCount; i++)
                 {
-                    byte[] firstTrackPicData = validPicsPerTrack.First()[i].Item2.PictureData;
-                    if (!validPicsPerTrack.All(trackPics => ArePicturesIdentical(firstTrackPicData, trackPics[i].Item2.PictureData)))
+                    byte[] firstTrackPicData = validPicsPerTrack.First()[i].PictureData;
+                    if (!validPicsPerTrack.All(trackPics => ArePicturesIdentical(firstTrackPicData, trackPics[i].PictureData)))
                     {
                         picsMatch = false;
                         break;
@@ -376,7 +376,14 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
                 }
             }
         }
-        SelectedTrackImages = newSelectedTrackImages;
+
+        List<(Bitmap, PictureInfo)> newResolvedImages = [];
+        foreach (PictureInfo picInfo in newSelectedTrackImages)
+        {
+            //TODO Should probably cache the Bitmaps by storing them on the SelectedImage.EmbeddedPictures
+            newResolvedImages.Add((new Bitmap(new MemoryStream(picInfo.PictureData)), picInfo));
+        }
+        SelectedTrackImages = newResolvedImages;
     }
 
     /// <summary>

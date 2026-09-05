@@ -17,145 +17,188 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
-        <Style Selector="ScrollViewer#ListPanel GridSplitter">
-            <Setter Property="Background" Value="LightGray" />
+        <Style Selector="Grid#ListGridTitle TextBlock, TextBlock.titleTextBlock">
+            <Setter Property="Height" Value="32" />
+            <Setter Property="VerticalAlignment" Value="Top"/>
         </Style>
-        <Style Selector="ListBox TextBox">
+        <Style Selector="GridSplitter">
+            <Setter Property="Background" Value="#13000000" />
+        </Style>
+        <Style Selector="ListBox TextBlock">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="LineHeight" Value="30" />
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TextBox">
             <Setter Property="CornerRadius" Value="0" />
             <Setter Property="Height" Value="30"/>
-            <Setter Property="LineHeight" Value="30"/>
-            <Setter Property="Padding" Value="3 0"/>
+            <Setter Property="LineHeight" Value="29"/>
+            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
         </Style>
-
-        <!--Borders for the bottom of each row in the main panel-->
-        <Style Selector="ScrollViewer#ListPanel TextBox, ScrollViewer#ListPanel GridSplitter">
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
-            <Setter Property="BorderBrush" Value="Gray" />
-        </Style>
-        <Style Selector="ScrollViewer#ListPanel Border">
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
-            <Setter Property="BorderBrush" Value="Gray" />
-        </Style>
-
-        <Style Selector="ScrollViewer#ListPanel TextBox:focus">
+        <Style Selector="TextBox:focus">
             <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
-            <Setter Property="BorderThickness" Value="2 2" />
+            <Setter Property="BorderThickness" Value="2" />
             <Setter Property="Padding" Value="1 0"/>
         </Style>
     </UserControl.Styles>
-    <ScrollViewer Name="ListPanel" HorizontalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True"
-                  GotFocus="ScrollViewerFocusGained" LostFocus="ScrollViewerFocusLost" KeyDown="Root_OnKeyDown" Focusable="True">
-        <StackPanel Orientation="Vertical">
-            <!--Title row of list-->
-            <Grid Name="ListGridTitle">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="B" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="C" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="E" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="F" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="G" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="H" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="I" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="J" MinWidth="15"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="K" MinWidth="15"/>
-                </Grid.ColumnDefinitions>
-                <Border Grid.Column="0"><TextBlock Text="Title" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                <Border Grid.Column="2"><TextBlock Text="Album" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                <Border Grid.Column="4"><TextBlock Text="Artist" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                <Border Grid.Column="6"><TextBlock Text="Album Artist" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
-                <Border Grid.Column="8"><TextBlock Text="Track" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
-                <Border Grid.Column="10"><TextBlock Text="Disc" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
-                <Border Grid.Column="12"><TextBlock Text="Year" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
-                <Border Grid.Column="14"><TextBlock Text="Genre" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
-                <Border Grid.Column="16"><TextBlock Text="Composer" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
-                <Border Grid.Column="18"><TextBlock Text="Comment" Classes="h1" TextAlignment="Center"/></Border>
-                <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
-                <Border Grid.Column="20"><TextBlock Text="Path" Classes="h1" TextAlignment="Center"/></Border>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True"
+                  GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown">
+        <Grid RowDefinitions="*" Grid.IsSharedSizeScope="True">
+            <Grid Grid.Row="0" RowDefinitions="Auto, *">
+                <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->
+                <TextBlock Grid.Row="0" Classes="titleTextBlock"/>
+                <!--Items rows of list-->
+                <ListBox Grid.Row="1" ItemsSource="{Binding Tracks}" SelectionMode="Multiple"
+                         SelectedItems="{Binding SelectedTracks}"
+                         SelectionChanged="OnListBoxSelectionChanged" Name="TrackListBox">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="viewModels:TrackViewModel">
+                            <Border>
+                                <Border.Styles>
+                                    <Style Selector="Border">
+                                        <Setter Property="BorderThickness"
+                                                Value="{Binding Changed, Converter={StaticResource RowBorderThicknessConverter}}" />
+                                        <Setter Property="BorderBrush"
+                                                Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}}" />
+                                    </Style>
+                                </Border.Styles>
+                                <Grid Name="{Binding Path}" ColumnSpacing="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Track" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Year" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="15" />
+                                    </Grid.ColumnDefinitions>
+                                    <!--Title-->
+                                    <TextBlock Grid.Column="0" Text="{Binding Title}" Name="TitleBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="0" Text="{Binding Title, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="TitleBox"/>
+                                    <!--Album-->
+                                    <TextBlock Grid.Column="1" Text="{Binding Album}" Name="AlbumBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="1" Text="{Binding Album, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="AlbumBox"/>
+                                     <!--Artist-->
+                                    <TextBlock Grid.Column="2" Text="{Binding Artist}" Name="ArtistBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="2" Text="{Binding Artist, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="ArtistBox"/>
+                                     <!--AlbumArtist-->
+                                    <TextBlock Grid.Column="3" Text="{Binding AlbumArtist}" Name="AlbumArtistBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="3" Text="{Binding AlbumArtist, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="AlbumArtistBox"/>
+                                     <!--TrackNumber-->
+                                    <TextBlock Grid.Column="4" Text="{Binding TrackNumber}" Name="TrackNumberBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="4" Text="{Binding TrackNumber, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="ValidateNumberOnlyField" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="TrackNumberBox"/>
+                                     <!--DiscNumber-->
+                                    <TextBlock Grid.Column="5" Text="{Binding DiscNumber}" Name="DiscNumberBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="5" Text="{Binding DiscNumber, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="ValidateNumberOnlyField" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="DiscNumberBox"/>
+                                     <!--Year-->
+                                    <TextBlock Grid.Column="6" Text="{Binding Year}" Name="YearBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="6" Text="{Binding Year, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="ValidateNumberOnlyField" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="YearBox"/>
+                                     <!--Genre-->
+                                    <TextBlock Grid.Column="7" Text="{Binding Genre}" Name="GenreBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="7" Text="{Binding Genre, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="GenreBox"/>
+                                     <!--Composer-->
+                                    <TextBlock Grid.Column="8" Text="{Binding Composer}" Name="ComposerBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="8" Text="{Binding Composer, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="ComposerBox"/>
+                                     <!--Comment-->
+                                    <TextBlock Grid.Column="9" Text="{Binding Comment}" Name="CommentBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="9" Text="{Binding Comment, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                                             KeyDown="TextBoxEnterPressed" Name="CommentBox"/>
+                                    <!--Path-->
+                                    <TextBlock Grid.Column="10" Text="{Binding Path}" Name="PathBlock"
+                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+                                    <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
+                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                                             KeyDown="TextBoxEnterPressed" Name="PathBox"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
-            <!--Items rows of list-->
-            <ListBox ItemsSource="{Binding Tracks}" SelectionMode="Multiple" Name="TrackListBox"
-                     SelectedItems="{Binding SelectedTracks}"
-                     SelectionChanged="OnListBoxSelectionChanged">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="viewModels:TrackViewModel">
-                        <Border>
-                            <Border.Styles>
-                                <Style Selector="Border">
-                                    <Setter Property="BorderThickness" Value="{Binding Changed, Converter={StaticResource RowBorderThicknessConverter}}" />
-                                    <Setter Property="BorderBrush" Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}}" />
-                                </Style>
-                            </Border.Styles>
-                        <Grid Name="{Binding Path}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="A" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="B" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="C" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="D" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="E" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="F" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="G" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="H" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="I" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="J" MinWidth="15"/>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="K" MinWidth="15"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" Text="{Binding Title}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="2" Text="{Binding Album}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="4" Text="{Binding Artist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="6" Text="{Binding AlbumArtist}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="8" Text="{Binding TrackNumber}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="10" Text="{Binding DiscNumber}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="12" Text="{Binding Year}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="ValidateNumberOnlyField" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="14" Text="{Binding Genre}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="16" Text="{Binding Composer}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="18" Text="{Binding Comment}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" DoubleTapped="TextBoxDoubleTapped" LostFocus="TextBoxFocusLost" IsReadOnly="True" ClearSelectionOnLostFocus="True" KeyDown="TextBoxEnterPressed"/>
-                            <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
-                            <TextBox Grid.Column="20" Text="{Binding Path}" GotFocus="TextBoxFocused" Tapped="TextBoxTapped" IsReadOnly="True" ClearSelectionOnLostFocus="True"/>
-                        </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+            <!--Title row of list-->
+            <Grid Grid.Row="0" Name="ListGridTitle">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Title" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="Album" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="Artist" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="50" SharedSizeGroup="Track" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="50" SharedSizeGroup="Disc" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="50" SharedSizeGroup="Year" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="Composer" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="150" SharedSizeGroup="Comment" MinWidth="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="15"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Title" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="Album" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="4" Text="Artist" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="6" Text="Album Artist" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="8" Text="Track" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="10" Text="Disc" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="12" Text="Year" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="14" Text="Genre" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="16" Text="Composer" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="18" Text="Comment" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="20" Text="Path" Classes="h1" TextAlignment="Center"/>
+                <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
+            </Grid>
+        </Grid>
     </ScrollViewer>
 </UserControl>

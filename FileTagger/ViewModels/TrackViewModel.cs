@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
+using System.Linq;
 using ATL;
-using Avalonia.Media.Imaging;
 using Commons;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -79,7 +78,7 @@ public partial class TrackViewModel : ViewModelBase
     private string _comment;
 
     [ObservableProperty]
-    private List<(Bitmap, PictureInfo)> _embeddedPictures;
+    private List<PictureInfo> _embeddedPictures;
 
     /// <summary>
     /// Gets or sets whether the track has changed
@@ -115,13 +114,7 @@ public partial class TrackViewModel : ViewModelBase
         AlbumArtist = track.AlbumArtist;
         Composer = track.Composer;
         Comment = track.Comment;
-
-        EmbeddedPictures = [];
-        IList<PictureInfo> embeddedPictures = track.EmbeddedPictures;
-        foreach (PictureInfo pic in embeddedPictures)
-        {
-            if(pic.NativeFormat != ImageFormat.Unsupported) EmbeddedPictures.Add((new Bitmap(new MemoryStream(pic.PictureData)), pic));
-        }
+        EmbeddedPictures = track.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported).ToList();
         _finishedSetup = true;
     }
 
@@ -143,9 +136,9 @@ public partial class TrackViewModel : ViewModelBase
         thisTrack.Composer = Composer;
         thisTrack.Comment = Comment;
         thisTrack.EmbeddedPictures.Clear();
-        foreach ((Bitmap, PictureInfo) picture in EmbeddedPictures)
+        foreach (PictureInfo picture in EmbeddedPictures)
         {
-            thisTrack.EmbeddedPictures.Add(picture.Item2);
+            thisTrack.EmbeddedPictures.Add(picture);
         }
         return thisTrack;
     }

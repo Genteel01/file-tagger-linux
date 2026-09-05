@@ -11,17 +11,17 @@ namespace FileTagger.Converters;
 /// </summary>
 public class RowBorderThicknessConverter : IValueConverter
 {
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is true)
         {
             return new Thickness(0, 1);
         }
 
-        return new Thickness(0);
+        return new Thickness(0, 1, 0, 0);
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }
@@ -32,16 +32,16 @@ public class RowBorderThicknessConverter : IValueConverter
 /// </summary>
 public class RowBorderBrushConverter : IValueConverter
 {
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is true)
         {
             return new SolidColorBrush(Colors.Red);
         }
-        return new SolidColorBrush(Colors.Transparent);
+        return new SolidColorBrush(Colors.LightGray);
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }

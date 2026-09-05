@@ -8,6 +8,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using FileTagger.Services;
 using ATL;
+using ATL.AudioData;
 using ATL.Logging;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -44,10 +45,27 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private readonly IFileService _fileService;
 
+    /// <summary>
+    /// List of supported file extensions to fetch from folders
+    /// </summary>
+    private readonly List<string> _supportedFileExtensions;
+
     public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _supportedFileExtensions = [];
+
+        foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
+        {
+            if (f.Readable)
+            {
+                foreach (string extension in f)
+                {
+                    _supportedFileExtensions.Add(extension.ToLower());
+                }
+            }
+        }
     }
 
     #if DEBUG
@@ -58,25 +76,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(new Window());
+        _supportedFileExtensions = [];
     }
     #endif
-
-    /// <summary>
-    /// Toggle selecting a track with the given path
-    /// </summary>
-    public void ToggleSelect(string path)
-    {
-        IEnumerable<TrackViewModel> tracksWithPath = Tracks.Where(track => track.Path == path).ToList();
-        IEnumerable<TrackViewModel> selectedTracksWithPath = SelectedTracks.Where(track => track.Path == path).ToList();
-        if (selectedTracksWithPath.Any())
-        {
-            SelectedTracks.Remove(selectedTracksWithPath.First());
-        }
-        else if (tracksWithPath.Any())
-        {
-            SelectedTracks.Add(tracksWithPath.First());
-        }
-    }
 
     /// <summary>
     /// Send the SelectedTracks message when the selection changes
@@ -110,22 +112,43 @@ public partial class MainWindowViewModel : ViewModelBase
         ErrorMessages?.Clear();
         try
         {
-            (IReadOnlyList<IStorageFile>, bool) files = await _fileService.OpenFilesRecursivelyAsync();
+            (IReadOnlyList<IStorageFile>, bool) files = await _fileService.OpenFilesRecursivelyAsync(_supportedFileExtensions);
             if (files.Item2) return;
 
             List<TrackViewModel> newTracks = [];
+            //Never have more chunks than the number of threads available on the system, but also there's overhead in
+            //creating threads, so we don't want our chunks to be too small, because that means we run more threads
+            //Using 32 as an arbitrary minimum chunk size
+            int chunkSize = (int)MathF.Ceiling((float)files.Item1.Count / Environment.ProcessorCount);
+            IEnumerable<IStorageFile[]> chunkedFiles = files.Item1.Chunk(Math.Max(chunkSize, 32));
+
+            List<Thread> threads = [];
+            object trackLocker = new object();
+
+            foreach (IStorageFile[] fileSubset in chunkedFiles)
+            {
+                Thread t = new Thread(() =>
+                {
+                    foreach (IStorageFile file in fileSubset)
+                    {
+                        Track track = new Track(file.Path.LocalPath);
+                        TrackViewModel trackViewModel = new TrackViewModel(track);
+                        lock (trackLocker)
+                        {
+                            newTracks.Add(trackViewModel);
+                        }
+                    }
+                });
+                threads.Add(t);
+                t.Start();
+            }
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+            newTracks.Sort((x, y) => string.Compare(x.Path, y.Path, StringComparison.OrdinalIgnoreCase));
             SelectedTracks.Clear();
             SelectionChanged();
-            foreach (IStorageFile file in files.Item1)
-            {
-                string fileName = file.Name.ToLower();
-                //TODO do this checking against ATL's supported types
-                if (fileName.EndsWith(".mp3") ||  fileName.EndsWith(".wav") || fileName.EndsWith(".flac"))
-                {
-                    Track track = new Track(file.Path.LocalPath);
-                    newTracks.Add(new TrackViewModel(track));
-                }
-            }
             Tracks = newTracks;
         }
         catch (Exception e)
