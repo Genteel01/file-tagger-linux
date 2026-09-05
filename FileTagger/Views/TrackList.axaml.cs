@@ -136,4 +136,21 @@ public partial class TrackList : UserControl
             siblingBox.Focus();
         }
     }
+
+    /// <summary>
+    /// Sorts the list when a column header is tapped, using the sort order laid out in the axaml
+    /// </summary>
+    private void ColumnHeaderTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is not TextBlock textBlock) return;
+
+        string? fieldName = textBlock.Name;
+        if (fieldName != null)
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.SortTracks(fieldName);
+            }
+        }
+    }
 }

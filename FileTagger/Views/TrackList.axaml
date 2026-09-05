@@ -20,6 +20,7 @@
         <Style Selector="Grid#ListGridTitle TextBlock, TextBlock.titleTextBlock">
             <Setter Property="Height" Value="32" />
             <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="GridSplitter">
             <Setter Property="Background" Value="#13000000" />
@@ -163,11 +164,11 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="15"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="50" SharedSizeGroup="Track" MinWidth="15"/>
+                    <ColumnDefinition Width="60" SharedSizeGroup="Track" MinWidth="15"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="50" SharedSizeGroup="Disc" MinWidth="15"/>
+                    <ColumnDefinition Width="60" SharedSizeGroup="Disc" MinWidth="15"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="50" SharedSizeGroup="Year" MinWidth="15"/>
+                    <ColumnDefinition Width="60" SharedSizeGroup="Year" MinWidth="15"/>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="15"/>
                     <ColumnDefinition Width="Auto" />
@@ -177,17 +178,17 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="15"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Title" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="Album" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="4" Text="Artist" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="6" Text="Album Artist" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="8" Text="Track" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="10" Text="Disc" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="12" Text="Year" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="14" Text="Genre" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="16" Text="Composer" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="18" Text="Comment" Classes="h1" TextAlignment="Center"/>
-                <TextBlock Grid.Column="20" Text="Path" Classes="h1" TextAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="Title" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Title_Path"/>
+                <TextBlock Grid.Column="2" Text="Album" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Album_DiscNumber_TrackNumber_Title_Path"/>
+                <TextBlock Grid.Column="4" Text="Artist" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Artist_Album_DiscNumber_TrackNumber_Title_Path"/>
+                <TextBlock Grid.Column="6" Text="Album Artist" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="AlbumArtist_Album_DiscNumber_TrackNumber_Title_Path"/>
+                <TextBlock Grid.Column="8" Text="Track" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="TrackNumber_Path"/>
+                <TextBlock Grid.Column="10" Text="Disc" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="DiscNumber_TrackNumber_Path"/>
+                <TextBlock Grid.Column="12" Text="Year" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Year_Path"/>
+                <TextBlock Grid.Column="14" Text="Genre" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Genre_Path"/>
+                <TextBlock Grid.Column="16" Text="Composer" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Composer_Path"/>
+                <TextBlock Grid.Column="18" Text="Comment" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Comment_Path"/>
+                <TextBlock Grid.Column="20" Text="Path" Classes="h1" TextAlignment="Center" Tapped="ColumnHeaderTapped" Name="Path"/>
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>

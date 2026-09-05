@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
@@ -49,6 +50,16 @@ public partial class MainWindowViewModel : ViewModelBase
     /// List of supported file extensions to fetch from folders
     /// </summary>
     private readonly List<string> _supportedFileExtensions;
+
+    /// <summary>
+    /// The current sorting options for Tracks
+    /// </summary>
+    private string _currentSort = nameof(TrackViewModel.Path);
+
+    /// <summary>
+    /// Keeps track of whether sorting is ascending or descending
+    /// </summary>
+    private bool _sortDescending = false;
 
     public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel)
     {
@@ -146,14 +157,72 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 thread.Join();
             }
-            newTracks.Sort((x, y) => string.Compare(x.Path, y.Path, StringComparison.OrdinalIgnoreCase));
             SelectedTracks.Clear();
             SelectionChanged();
             Tracks = newTracks;
+            SortTracks(_currentSort, forceDescending: false);
         }
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Sorts tracks by the fields in the order given
+    /// </summary>
+    /// <param name="fields">String of fields separated by "_", e.g. Album_TrackNumber_Path</param>
+    /// <param name="forceDescending">Whether to force sorting in Ascending (false) or Descending (true) order, or follow normal behaviour (null)</param>
+    public void SortTracks(string fields, bool? forceDescending = null)
+    {
+        string[] sortOrder = fields.Split("_");
+        List<PropertyInfo> properties = [];
+
+        foreach (string so in sortOrder)
+        {
+            PropertyInfo? property = typeof(TrackViewModel).GetProperty(so);
+            if (property != null)
+            {
+                properties.Add(property);
+            }
+        }
+        if (properties.Count == 0)
+        {
+            ErrorMessages?.Add("Sorting by input " + fields + ", which has no valid fields");
+            return;
+        }
+
+        IOrderedEnumerable<TrackViewModel>? sortedTracks = null;
+        foreach (PropertyInfo property in properties)
+        {
+            object? stringComparer = null;
+            if (property.PropertyType == typeof(string))
+            {
+                stringComparer = property.Name == nameof(TrackViewModel.Path) ?StringComparer.OrdinalIgnoreCase : StringComparer.CurrentCultureIgnoreCase;
+            }
+            if (sortedTracks == null)
+            {
+                sortedTracks = Tracks.OrderBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
+            }
+            else
+            {
+                sortedTracks = sortedTracks.ThenBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
+            }
+        }
+
+        if (forceDescending != null)
+        {
+            _sortDescending = (bool) forceDescending;
+        }
+        else if (_currentSort != fields)
+        {
+            _sortDescending = false;
+        }
+        else
+        {
+            _sortDescending = !_sortDescending;
+        }
+        _currentSort = fields;
+        Tracks = (_sortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }
