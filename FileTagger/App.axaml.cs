@@ -30,6 +30,7 @@ public class App : Application
             serviceCollection.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
+            serviceCollection.AddSingleton<TrackList>();
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 

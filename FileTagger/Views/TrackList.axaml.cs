@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -7,17 +7,23 @@ using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using FileTagger.Controls;
 using FileTagger.Extensions;
+using FileTagger.Models;
+using FileTagger.Services;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
 
 public partial class TrackList : UserControl
 {
+    /// <summary>
+    /// The <see cref="IFileService"/> used for storing and retrieving <see cref="Preferences"/>
+    /// </summary>
+    private IFileService _fileService;
 
     /// <summary>
     /// All the panels in the title row
     /// </summary>
-    private List<ListColumnHeader> _headerPanels = [];
+    private readonly List<ListColumnHeader> _headerPanels = [];
 
     /// <summary>
     /// Unselect everything in the list when we hit escape,
@@ -44,13 +50,26 @@ public partial class TrackList : UserControl
         listBoxItem?.Focus();
     }
 
-    public TrackList()
+    public TrackList(IFileService fileService)
     {
+        _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         InitializeComponent();
-
+        //Get initial sort values
+        Preferences preferences = _fileService.PreferenceData;
+        string initialSort = preferences.SortOrder.Item1;
+        bool initialDescending = preferences.SortOrder.Item2;
         foreach (Control control in ListGridTitle.Children)
         {
-            if(control is ListColumnHeader columnHeader) _headerPanels.Add(columnHeader);
+            if(control is ListColumnHeader columnHeader)
+            {
+                _headerPanels.Add(columnHeader);
+                //For each column header, set up its sorting arrows when it loads
+                bool isCorrectPanel = columnHeader.Name == initialSort;
+                columnHeader.Loaded += (_, _) =>
+                {
+                    DisplaySortIndicator(columnHeader, isCorrectPanel && !initialDescending, isCorrectPanel && initialDescending);
+                };
+            }
         }
     }
 
@@ -164,34 +183,39 @@ public partial class TrackList : UserControl
         {
             if (DataContext is MainWindowViewModel vm)
             {
-                vm.SortTracks(fieldName);
+                vm.SortTracks(fieldName, true);
+                DisplaySortIndicators(vm.CurrentSort, vm.SortDescending);
             }
-            DisplaySortIndicator();
         }
     }
 
     /// <summary>
     /// Goes through each header panel and displays the correct arrow icons
     /// </summary>
-    private void DisplaySortIndicator()
+    private void DisplaySortIndicators(string currentSort, bool isDescending)
     {
-        if (DataContext is MainWindowViewModel vm)
+        foreach (ListColumnHeader header in _headerPanels)
         {
-            foreach (ListColumnHeader header in _headerPanels)
+            bool isCorrectPanel = header.Name == currentSort;
+            DisplaySortIndicator(header, isCorrectPanel && !isDescending, isCorrectPanel && isDescending);
+        }
+    }
+
+    /// <summary>
+    /// Displays the arrow icons for a single header
+    /// </summary>
+    private void DisplaySortIndicator(ListColumnHeader header, bool showAscending, bool showDescending)
+    {
+        List<PathIcon> arrows = header.GetVisualDescendants<PathIcon>().ToList();
+        foreach (PathIcon arrow in arrows)
+        {
+            if (arrow.Tag is "Up")
             {
-                bool isCorrectPanel = header.Name == vm.CurrentSort;
-                List<PathIcon> arrows = header.GetVisualDescendants<PathIcon>().ToList();
-                foreach (PathIcon arrow in arrows)
-                {
-                    if (arrow.Tag is "Up")
-                    {
-                        arrow.IsVisible = isCorrectPanel && !vm.SortDescending;
-                    }
-                    else if (arrow.Tag is "Down")
-                    {
-                        arrow.IsVisible = isCorrectPanel && vm.SortDescending;
-                    }
-                }
+                arrow.IsVisible = showAscending;
+            }
+            else if (arrow.Tag is "Down")
+            {
+                arrow.IsVisible = showDescending;
             }
         }
     }
