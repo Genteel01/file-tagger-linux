@@ -55,6 +55,12 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IFileService _fileService;
 
     /// <summary>
+    /// <see cref="IPreferenceService"/> received through Dependency Injection
+    /// used for storing and retrieving <see cref="Preferences"/> data
+    /// </summary>
+    private readonly IPreferenceService _preferenceService;
+
+    /// <summary>
     /// List of supported file extensions to fetch from folders
     /// </summary>
     private readonly List<string> _supportedFileExtensions;
@@ -69,11 +75,12 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public bool SortDescending { get; set; }
 
-    public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel, TrackList trackList)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, TrackList trackList)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         MyTrackList = trackList ?? throw new ArgumentNullException(nameof(trackList));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
         _supportedFileExtensions = [];
 
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
@@ -90,6 +97,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Preferences preferences = _fileService.PreferenceData;
         CurrentSort = preferences.SortOrder.Item1;
         SortDescending = preferences.SortOrder.Item2;
+        Preferences preferences = _preferenceService.PreferenceData;
     }
 
     #if DEBUG
@@ -100,7 +108,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(new Window());
-        MyTrackList = new TrackList(_fileService);
+        _preferenceService = new PreferenceService(_fileService);
+        MyTrackList = new TrackList(_preferenceService);
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
     }
@@ -237,7 +246,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         CurrentSort = fields;
-        _fileService.StorePreferenceItem(typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!, (CurrentSort, SortDescending));
+        _preferenceService.StorePreferenceItem(typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }

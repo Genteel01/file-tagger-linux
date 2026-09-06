@@ -10,8 +10,6 @@ public interface IFileService
 {
     public Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions);
     public Task<IReadOnlyList<IStorageFile>> OpenImageFiles();
-    public Preferences PreferenceData { get; protected set; }
-    public void StorePreferenceItem(PropertyInfo property, object value);
-    public Task<bool> LoadPreferenceData();
-    public Task<bool> SavePreferenceData();
+    public Task<T?> LoadObjectData<T>() where T : class?;
+    public Task SaveJsonData(object data);
 }

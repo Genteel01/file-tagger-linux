@@ -16,9 +16,9 @@ namespace FileTagger.Views;
 public partial class TrackList : UserControl
 {
     /// <summary>
-    /// The <see cref="IFileService"/> used for storing and retrieving <see cref="Preferences"/>
+    /// The <see cref="IPreferenceService"/> loaded with Dependency Injected used for storing and retrieving <see cref="Preferences"/>
     /// </summary>
-    private IFileService _fileService;
+    private IPreferenceService _preferenceService;
 
     /// <summary>
     /// All the panels in the title row
@@ -50,14 +50,15 @@ public partial class TrackList : UserControl
         listBoxItem?.Focus();
     }
 
-    public TrackList(IFileService fileService)
+    public TrackList(IPreferenceService preferenceService)
     {
-        _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
         InitializeComponent();
         //Get initial sort values
         Preferences preferences = _fileService.PreferenceData;
         string initialSort = preferences.SortOrder.Item1;
         bool initialDescending = preferences.SortOrder.Item2;
+        Preferences preferences = _preferenceService.PreferenceData;
         foreach (Control control in ListGridTitle.Children)
         {
             if(control is ListColumnHeader columnHeader)

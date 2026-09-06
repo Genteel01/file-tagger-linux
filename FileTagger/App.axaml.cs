@@ -11,7 +11,7 @@ namespace FileTagger;
 
 public class App : Application
 {
-    private IFileService? _fileService = null;
+    private IPreferenceService? _preferenceService = null;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -28,14 +28,15 @@ public class App : Application
 
             ServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
+            serviceCollection.AddSingleton<IPreferenceService, PreferenceService>();
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
             serviceCollection.AddSingleton<TrackList>();
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 
-            _fileService = services.GetRequiredService<IFileService>();
-            await _fileService.LoadPreferenceData();
+            _preferenceService = services.GetRequiredService<IPreferenceService>();
+            await _preferenceService.LoadPreferenceData();
 
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow.DataContext =  mainWindowViewModel;
@@ -49,9 +50,9 @@ public class App : Application
     private async void DesktopOnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
         e.Cancel = !_canClose;
-        if (!_canClose && _fileService != null)
+        if (!_canClose && _preferenceService != null)
         {
-            await _fileService.SavePreferenceData();
+            await _preferenceService.SavePreferenceData();
             _canClose = true;
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
