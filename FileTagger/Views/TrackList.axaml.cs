@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
+using FileTagger.Controls;
+using FileTagger.Extensions;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
@@ -14,7 +17,7 @@ public partial class TrackList : UserControl
     /// <summary>
     /// All the panels in the title row
     /// </summary>
-    private List<StackPanel> headerPanels = [];
+    private List<ListColumnHeader> _headerPanels = [];
 
     /// <summary>
     /// Unselect everything in the list when we hit escape,
@@ -47,7 +50,7 @@ public partial class TrackList : UserControl
 
         foreach (Control control in ListGridTitle.Children)
         {
-            if(control is StackPanel stackPanel) headerPanels.Add(stackPanel);
+            if(control is ListColumnHeader columnHeader) _headerPanels.Add(columnHeader);
         }
     }
 
@@ -154,9 +157,9 @@ public partial class TrackList : UserControl
     /// </summary>
     private void ColumnHeaderTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is not StackPanel stackPanel) return;
+        if (sender is not ListColumnHeader header) return;
 
-        string? fieldName = stackPanel.Name;
+        string? fieldName = header.Name;
         if (fieldName != null)
         {
             if (DataContext is MainWindowViewModel vm)
@@ -174,11 +177,10 @@ public partial class TrackList : UserControl
     {
         if (DataContext is MainWindowViewModel vm)
         {
-            foreach (StackPanel stackPanel in headerPanels)
+            foreach (ListColumnHeader header in _headerPanels)
             {
-                bool isCorrectPanel = stackPanel.Name == vm.CurrentSort;
-                Panel? panel = stackPanel.Children.First(p => p is Panel) as Panel;
-                List<PathIcon> arrows = panel?.GetVisualChildren().OfType<PathIcon>().ToList() ?? [];
+                bool isCorrectPanel = header.Name == vm.CurrentSort;
+                List<PathIcon> arrows = header.GetVisualDescendants<PathIcon>().ToList();
                 foreach (PathIcon arrow in arrows)
                 {
                     if (arrow.Tag is "Up")
