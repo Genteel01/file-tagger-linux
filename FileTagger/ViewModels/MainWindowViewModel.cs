@@ -94,10 +94,9 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         //Load initial sort settings
-        Preferences preferences = _fileService.PreferenceData;
-        CurrentSort = preferences.SortOrder.Item1;
-        SortDescending = preferences.SortOrder.Item2;
         Preferences preferences = _preferenceService.PreferenceData;
+        CurrentSort = preferences.SortOrder;
+        SortDescending = preferences.SortDescending;
     }
 
     #if DEBUG
@@ -246,7 +245,10 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         CurrentSort = fields;
-        _preferenceService.StorePreferenceItem(typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!, (CurrentSort, SortDescending));
+        PropertyInfo sortOrderProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
+        PropertyInfo sortDescendingProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
+        _preferenceService.StorePreferenceItem(sortOrderProperty, CurrentSort);
+        _preferenceService.StorePreferenceItem(sortDescendingProperty, SortDescending);
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }

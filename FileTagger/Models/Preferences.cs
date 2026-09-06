@@ -7,5 +7,7 @@ public class Preferences
     /// <summary>
     /// How the track list is sorted
     /// </summary>
-    public (string, bool) SortOrder { get; set; } = (nameof(TrackViewModel.Path), false);
+    public string SortOrder { get; set; } = nameof(TrackViewModel.Path);
+
+    public bool SortDescending { get; set; } = false;
 }
