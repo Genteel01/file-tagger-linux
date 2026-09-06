@@ -54,12 +54,12 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// The current sorting options for Tracks
     /// </summary>
-    private string _currentSort = nameof(TrackViewModel.Path);
+    public string CurrentSort = nameof(TrackViewModel.Path);
 
     /// <summary>
     /// Keeps track of whether sorting is ascending or descending
     /// </summary>
-    private bool _sortDescending = false;
+    public bool SortDescending = false;
 
     public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel)
     {
@@ -160,7 +160,7 @@ public partial class MainWindowViewModel : ViewModelBase
             SelectedTracks.Clear();
             SelectionChanged();
             Tracks = newTracks;
-            SortTracks(_currentSort, forceDescending: false);
+            SortTracks(CurrentSort, forceDescending: false);
         }
         catch (Exception e)
         {
@@ -212,17 +212,17 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (forceDescending != null)
         {
-            _sortDescending = (bool) forceDescending;
+            SortDescending = (bool) forceDescending;
         }
-        else if (_currentSort != fields)
+        else if (CurrentSort != fields)
         {
-            _sortDescending = false;
+            SortDescending = false;
         }
         else
         {
-            _sortDescending = !_sortDescending;
+            SortDescending = !SortDescending;
         }
-        _currentSort = fields;
-        Tracks = (_sortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
+        CurrentSort = fields;
+        Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }

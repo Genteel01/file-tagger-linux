@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -9,6 +10,12 @@ namespace FileTagger.Views;
 
 public partial class TrackList : UserControl
 {
+
+    /// <summary>
+    /// All the panels in the title row
+    /// </summary>
+    private List<StackPanel> headerPanels = [];
+
     /// <summary>
     /// Unselect everything in the list when we hit escape,
     /// so long as we aren't editing a TextBox, per <see cref="TextBoxEnterPressed"/>
@@ -37,6 +44,11 @@ public partial class TrackList : UserControl
     public TrackList()
     {
         InitializeComponent();
+
+        foreach (Control control in ListGridTitle.Children)
+        {
+            if(control is StackPanel stackPanel) headerPanels.Add(stackPanel);
+        }
     }
 
     private void OnListBoxSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -142,14 +154,42 @@ public partial class TrackList : UserControl
     /// </summary>
     private void ColumnHeaderTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is not TextBlock textBlock) return;
+        if (sender is not StackPanel stackPanel) return;
 
-        string? fieldName = textBlock.Name;
+        string? fieldName = stackPanel.Name;
         if (fieldName != null)
         {
             if (DataContext is MainWindowViewModel vm)
             {
                 vm.SortTracks(fieldName);
+            }
+            DisplaySortIndicator();
+        }
+    }
+
+    /// <summary>
+    /// Goes through each header panel and displays the correct arrow icons
+    /// </summary>
+    private void DisplaySortIndicator()
+    {
+        if (DataContext is MainWindowViewModel vm)
+        {
+            foreach (StackPanel stackPanel in headerPanels)
+            {
+                bool isCorrectPanel = stackPanel.Name == vm.CurrentSort;
+                Panel? panel = stackPanel.Children.First(p => p is Panel) as Panel;
+                List<PathIcon> arrows = panel?.GetVisualChildren().OfType<PathIcon>().ToList() ?? [];
+                foreach (PathIcon arrow in arrows)
+                {
+                    if (arrow.Tag is "Up")
+                    {
+                        arrow.IsVisible = isCorrectPanel && !vm.SortDescending;
+                    }
+                    else if (arrow.Tag is "Down")
+                    {
+                        arrow.IsVisible = isCorrectPanel && vm.SortDescending;
+                    }
+                }
             }
         }
     }
