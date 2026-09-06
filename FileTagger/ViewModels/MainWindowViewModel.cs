@@ -14,6 +14,7 @@ using ATL.Logging;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using FileTagger.Models;
 
 namespace FileTagger.ViewModels;
 
@@ -54,12 +55,12 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// The current sorting options for Tracks
     /// </summary>
-    public string CurrentSort = nameof(TrackViewModel.Path);
+    public string CurrentSort { get; set; }
 
     /// <summary>
     /// Keeps track of whether sorting is ascending or descending
     /// </summary>
-    public bool SortDescending = false;
+    public bool SortDescending { get; set; }
 
     public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel)
     {
@@ -77,6 +78,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
         }
+        //Load initial sort settings
+        Preferences preferences = _fileService.PreferenceData;
+        CurrentSort = preferences.SortOrder.Item1;
+        SortDescending = preferences.SortOrder.Item2;
     }
 
     #if DEBUG
@@ -88,6 +93,7 @@ public partial class MainWindowViewModel : ViewModelBase
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(new Window());
         _supportedFileExtensions = [];
+        CurrentSort = nameof(TrackViewModel.Path);
     }
     #endif
 
@@ -160,7 +166,7 @@ public partial class MainWindowViewModel : ViewModelBase
             SelectedTracks.Clear();
             SelectionChanged();
             Tracks = newTracks;
-            SortTracks(CurrentSort, forceDescending: false);
+            SortTracks(CurrentSort, false);
         }
         catch (Exception e)
         {
@@ -172,8 +178,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// Sorts tracks by the fields in the order given
     /// </summary>
     /// <param name="fields">String of fields separated by "_", e.g. Album_TrackNumber_Path</param>
-    /// <param name="forceDescending">Whether to force sorting in Ascending (false) or Descending (true) order, or follow normal behaviour (null)</param>
-    public void SortTracks(string fields, bool? forceDescending = null)
+    /// <param name="swapDirection">Whether to swap the direction between ascending and descending</param>
+    public void SortTracks(string fields, bool swapDirection)
     {
         string[] sortOrder = fields.Split("_");
         List<PropertyInfo> properties = [];
@@ -210,19 +216,19 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
 
-        if (forceDescending != null)
+        if (swapDirection)
         {
-            SortDescending = (bool) forceDescending;
-        }
-        else if (CurrentSort != fields)
-        {
-            SortDescending = false;
-        }
-        else
-        {
-            SortDescending = !SortDescending;
+            if (CurrentSort != fields)
+            {
+                SortDescending = false;
+            }
+            else
+            {
+                SortDescending = !SortDescending;
+            }
         }
         CurrentSort = fields;
+        _fileService.StorePreferenceItem(typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }
