@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using System.Threading.Tasks;
 using Avalonia.Markup.Xaml;
 using FileTagger.ViewModels;
 using FileTagger.Views;
@@ -12,6 +11,7 @@ namespace FileTagger;
 
 public class App : Application
 {
+    private IFileService? _fileService = null;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -19,7 +19,7 @@ public class App : Application
         ATL.Settings.NullAbsentValues = true;
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -33,20 +33,29 @@ public class App : Application
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 
+            _fileService = services.GetRequiredService<IFileService>();
+            await _fileService.LoadPreferenceData();
+
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow.DataContext =  mainWindowViewModel;
+            desktop.ShutdownRequested += DesktopOnShutdownRequested;
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private async Task InitMainViewModelAsync()
-    {
-        //TODO load previously loaded files
-    }
-
+    private bool _canClose = false;
     private async void DesktopOnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
-        //TODO save which files are currently open, then close when done (uses Bookmarks probably?)
+        e.Cancel = !_canClose;
+        if (!_canClose && _fileService != null)
+        {
+            await _fileService.SavePreferenceData();
+            _canClose = true;
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.Shutdown();
+            }
+        }
     }
 }

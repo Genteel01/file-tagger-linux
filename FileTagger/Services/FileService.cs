@@ -1,14 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using System.Threading.Tasks;
+using FileTagger.Models;
+using FileTagger.ViewModels;
 
 namespace FileTagger.Services;
 
 
 public class FileService(Window target) : IFileService
 {
+    private Preferences? _preferenceData = null;
     public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions)
     {
         IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
@@ -61,5 +65,36 @@ public class FileService(Window target) : IFileService
         });
 
         return files;
+    }
+
+    public Preferences GetPreferenceData()
+    {
+        if (_preferenceData == null)
+        {
+            _preferenceData = new Preferences();
+        }
+        return _preferenceData;
+    }
+
+    public void StorePreferenceItem(PropertyInfo property, object value)
+    {
+        if (_preferenceData == null)
+        {
+            _preferenceData = new Preferences();
+        }
+        bool correctType = property.PropertyType == value.GetType();
+        if(correctType) property.SetValue(_preferenceData, value);
+    }
+
+    public async Task<bool> LoadPreferenceData()
+    {
+        //TODO unimplemented
+        return true;
+    }
+
+    public async Task<bool> SavePreferenceData()
+    {
+        //TODO unimplemented
+        return true;
     }
 }
