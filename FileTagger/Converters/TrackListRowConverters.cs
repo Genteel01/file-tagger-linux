@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 
 namespace FileTagger.Converters;
 
@@ -18,7 +19,7 @@ public class RowBorderThicknessConverter : IValueConverter
             return new Thickness(0, 1);
         }
 
-        return new Thickness(0, 1, 0, 0);
+        return new Thickness(0, 0, 0, 1);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -37,6 +38,11 @@ public class RowBorderBrushConverter : IValueConverter
         if (value is true)
         {
             return new SolidColorBrush(Colors.Red);
+        }
+
+        if (parameter is ImmutableSolidColorBrush brush)
+        {
+            return brush;
         }
         return new SolidColorBrush(Colors.LightGray);
     }

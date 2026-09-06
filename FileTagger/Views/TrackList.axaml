@@ -19,14 +19,15 @@
             <Setter Property="BorderThickness" Value="0" />
         </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
-            <Setter Property="Height" Value="38"/>
+            <Setter Property="Height" Value="40"/>
         </Style>
         <Style Selector="controls|ListColumnHeader">
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Cursor" Value="Hand" />
         </Style>
         <Style Selector="GridSplitter">
-            <Setter Property="Background" Value="#13000000" />
+            <Setter Property="Background" Value="{DynamicResource ListSeparatorColour}" />
+            <Setter Property="Width" Value="3" />
         </Style>
         <Style Selector="ListBox TextBlock">
             <Setter Property="Height" Value="30" />
@@ -67,22 +68,22 @@
                                         <Setter Property="BorderThickness"
                                                 Value="{Binding Changed, Converter={StaticResource RowBorderThicknessConverter}}" />
                                         <Setter Property="BorderBrush"
-                                                Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}}" />
+                                                Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}, ConverterParameter={StaticResource ListSeparatorColour}}" />
                                     </Style>
                                 </Border.Styles>
-                                <Grid Name="{Binding Path}" ColumnSpacing="2">
+                                <Grid Name="{Binding Path}" ColumnSpacing="4">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Track" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Year" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="15" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="15" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Track" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Year" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
                                     </Grid.ColumnDefinitions>
                                     <!--Title-->
                                     <TextBlock Grid.Column="0" Text="{Binding Title}" Name="TitleBlock"
@@ -159,27 +160,27 @@
             <!--Title row of list-->
             <Grid Grid.Row="0" Name="ListGridTitle">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" SharedSizeGroup="Title" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Title" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Album" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Album" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Artist" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Artist" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="Track" MinWidth="15"/>
+                    <ColumnDefinition Width="60" SharedSizeGroup="Track" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="Disc" MinWidth="15"/>
+                    <ColumnDefinition Width="60" SharedSizeGroup="Disc" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="Year" MinWidth="15"/>
+                    <ColumnDefinition Width="60" SharedSizeGroup="Year" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="15"/>
+                    <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Composer" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Composer" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="150" SharedSizeGroup="Comment" MinWidth="15"/>
+                    <ColumnDefinition Width="150" SharedSizeGroup="Comment" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="15"/>
+                    <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="19"/>
                 </Grid.ColumnDefinitions>
                 <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="Title_Path"/>
                 <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="Album_DiscNumber_TrackNumber_Title_Path"/>

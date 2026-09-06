@@ -19,15 +19,17 @@
     </UserControl.Styles>
     <UserControl.Template>
         <ControlTemplate>
-            <StackPanel>
-                <TextBlock
-                    Text="{TemplateBinding Text}"
-                    Classes="h1" TextAlignment="Center"/>
-                <Panel>
-                    <PathIcon Tag="Up" Data="{DynamicResource UpArrowIconData}"/>
-                    <PathIcon Tag="Down" Data="{DynamicResource DownArrowIconData}"/>
-                </Panel>
-            </StackPanel>
+            <Border BorderThickness="0 0 0 2" BorderBrush="{DynamicResource ListSeparatorColour}">
+                <StackPanel>
+                    <TextBlock
+                        Text="{TemplateBinding Text}"
+                        Classes="h1" TextAlignment="Center"/>
+                    <Panel>
+                        <PathIcon Tag="Up" Data="{DynamicResource UpArrowIconData}"/>
+                        <PathIcon Tag="Down" Data="{DynamicResource DownArrowIconData}"/>
+                    </Panel>
+                </StackPanel>
+            </Border>
         </ControlTemplate>
     </UserControl.Template>
 </UserControl>
