@@ -70,5 +70,5 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
-    -name: Publish
+    - name: Publish
       run: dotnet publish FileTagger.sln -c Release -p:PublishSingleFile=true
