@@ -4,13 +4,16 @@ on:
   pull_request:
     types: [closed]
     branches: [ "master" ]
+    push:
+      branches: [ "workflow-testing" ]
 
 permissions:
   contents: write
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true ||
+        github.event_name == 'push'
     name: Build ${{ matrix.runtimes }}
 
     strategy:
@@ -85,7 +88,8 @@ jobs:
         path: ./publish/FileTagger-${{ matrix.runtimes }}*
 
   release:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true ||
+        github.event_name == 'push'
     name: Create GitHub Release
     needs: build
     runs-on: windows-latest
