@@ -1,0 +1,123 @@
+name: Generate Linux and Windows Releases
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [ "master" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    name: Build ${{ matrix.runtimes }}
+
+    strategy:
+      matrix:
+        configuration: [Release]
+        runtimes: [linux-x64, win-x64]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: FileTagger.sln
+      Project_Path: FileTagger/FileTagger.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: dotnet build $env:Solution_Name -c $env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    - name: Publish
+      run: dotnet publish $env:Project_Path -c $env:Configuration -r $env:Runtimes --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
+      env:
+        Configuration: ${{ matrix.configuration }}
+        Runtimes: ${{ matrix.runtimes }}
+
+    - name: Rename executable
+      shell: pwsh
+      run: |
+        $runtime = "${{ matrix.runtimes }}"
+
+        if ($runtime -eq "linux-x64") {
+         $source = "./publish/FileTagger"
+         $destination = "./publish/FileTagger-linux-x64"
+        }
+        elseif ($runtime -eq "win-x64") {
+         $source = "./publish/FileTagger.exe"
+         $destination = "./publish/FileTagger-win-x64.exe"
+        }
+        else {
+         Write-Error "Unsupported runtime: $runtime"
+         exit 1
+        }
+
+        if (-not (Test-Path $source -PathType Leaf)) {
+         Write-Error "Executable not found: $source"
+         Write-Host "Contents of publish directory:"
+         Get-ChildItem "./publish" | Format-Table Name, Length
+         exit 1
+        }
+
+        Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
+
+        Write-Host "Created: $destination"
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: FileTagger-${{ matrix.runtimes }}
+        path: ./publish/FileTagger-${{ matrix.runtimes }}*
+
+  release:
+    if: github.event.pull_request.merged == true
+    name: Create GitHub Release
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          merge-multiple: true
+
+      - name: Get next release number
+        id: release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $count = gh release list --repo "${{ github.repository }}" --limit 1000 --json name --jq 'length'
+          $next = [int]$count + 1
+          
+          Write-Host "Previous releases: $count"
+          Write-Host "Next release number: $next"
+          
+          "number=$next" >> $env:GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./artifacts/*
+          tag_name: AutomatedRelease${{ steps.release.outputs.number }}
+          name: FileTagger ${{ steps.release.outputs.number }}
+          body: |
+            ## ${{ github.event.pull_request.title }}
+
+            ${{ github.event.pull_request.body }}
