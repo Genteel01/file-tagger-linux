@@ -24,8 +24,9 @@ name: .NET Core Desktop
 on:
   push:
     branches: [ "master", "workflow-testing" ]
-  pull_request:
-    branches: [ "master" ]
+
+permissions:
+  contents: write
 
 jobs:
 
