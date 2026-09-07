@@ -76,7 +76,7 @@ public class FileService(Window target) : IFileService
             string typeName = typeof(T).Name;
             string filePath = Path.Combine(_folderPath, $"{typeName}.txt");
             await using FileStream fs = File.OpenRead(filePath);
-            T? loadedData = await JsonSerializer.DeserializeAsync<T>(fs);
+            T? loadedData = JsonSerializer.Deserialize<T>(fs);
             return loadedData;
         }
         catch
