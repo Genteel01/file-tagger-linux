@@ -4,16 +4,13 @@ on:
   pull_request:
     types: [closed]
     branches: [ "master" ]
-  push:
-    branches: [ "workflow-testing" ]
 
 permissions:
   contents: write
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true ||
-        github.event_name == 'push'
+    if: github.event.pull_request.merged == true
     name: Build ${{ matrix.runtimes }}
 
     strategy:
@@ -59,11 +56,11 @@ jobs:
 
         if ($runtime -eq "linux-x64") {
          $source = "./publish/FileTagger"
-         $destination = "./publish/FileTagger-${{ github.ref_name }}-linux-x64"
+         $destination = "./publish/FileTagger-linux-x64"
         }
         elseif ($runtime -eq "win-x64") {
          $source = "./publish/FileTagger.exe"
-         $destination = "./publish/FileTagger-${{ github.ref_name }}-win-x64.exe"
+         $destination = "./publish/FileTagger-win-x64.exe"
         }
         else {
          Write-Error "Unsupported runtime: $runtime"
@@ -85,11 +82,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: FileTagger-${{ matrix.runtimes }}
-        path: ./publish/FileTagger-${{ github.ref_name }}-${{ matrix.runtimes }}*
+        path: ./publish/FileTagger-${{ matrix.runtimes }}*
 
   release:
-    if: github.event.pull_request.merged == true ||
-        github.event_name == 'push'
+    if: github.event.pull_request.merged == true
     name: Create GitHub Release
     needs: build
     runs-on: windows-latest
