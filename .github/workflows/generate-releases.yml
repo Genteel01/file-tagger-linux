@@ -12,7 +12,8 @@ permissions:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true ||
+        github.event_name == 'push'
     name: Build ${{ matrix.runtimes }}
 
     strategy:
@@ -87,7 +88,8 @@ jobs:
         path: ./publish/FileTagger-${{ github.ref_name }}-${{ matrix.runtimes }}*
 
   release:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true ||
+        github.event_name == 'push'
     name: Create GitHub Release
     needs: build
     runs-on: windows-latest
