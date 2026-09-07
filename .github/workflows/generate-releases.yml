@@ -119,6 +119,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*
-          generate_release_notes: true
-          tag_name: AutomatedRelease
+          body: |
+            ## ${{ github.event.pull_request.title }}
+
+            ${{ github.event.pull_request.body }}
+          tag_name: AutomatedRelease ${{ steps.release.outputs.number }}
           name: FileTagger ${{ steps.release.outputs.number }}
