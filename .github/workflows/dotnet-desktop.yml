@@ -124,3 +124,5 @@ jobs:
         with:
           files: ./artifacts/*
           generate_release_notes: true
+          tag_name: ${{ github.ref_name }}
+          name: FileTagger ${{ github.ref_name }}
