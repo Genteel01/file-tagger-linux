@@ -107,7 +107,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $count = gh release list --limit 1000 --json name --jq 'length'
+          $count = gh release list --repo "${{ github.repository }}" --limit 1000 --json name --jq 'length'
           $next = [int]$count + 1
           
           Write-Host "Previous releases: $count"
