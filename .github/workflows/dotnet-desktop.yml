@@ -73,39 +73,39 @@ jobs:
         Runtimes: ${{ matrix.runtimes }}
 
     - name: Rename executable
-        shell: pwsh
-        run: |
-          $runtime = "${{ matrix.runtimes }}"
+      shell: pwsh
+      run: |
+        $runtime = "${{ matrix.runtimes }}"
 
-          if ($runtime -eq "linux-x64") {
-           $source = "./publish/FileTagger"
-           $destination = "./publish/FileTagger-${{ github.ref_name }}-linux-x64"
-          }
-          elseif ($runtime -eq "win-x64") {
-           $source = "./publish/FileTagger.exe"
-           $destination = "./publish/FileTagger-${{ github.ref_name }}-win-x64.exe"
-          }
-          else {
-           Write-Error "Unsupported runtime: $runtime"
-           exit 1
-          }
+        if ($runtime -eq "linux-x64") {
+         $source = "./publish/FileTagger"
+         $destination = "./publish/FileTagger-${{ github.ref_name }}-linux-x64"
+        }
+        elseif ($runtime -eq "win-x64") {
+         $source = "./publish/FileTagger.exe"
+         $destination = "./publish/FileTagger-${{ github.ref_name }}-win-x64.exe"
+        }
+        else {
+         Write-Error "Unsupported runtime: $runtime"
+         exit 1
+        }
 
-          if (-not (Test-Path $source -PathType Leaf)) {
-           Write-Error "Executable not found: $source"
-           Write-Host "Contents of publish directory:"
-           Get-ChildItem "./publish" | Format-Table Name, Length
-           exit 1
-          }
+        if (-not (Test-Path $source -PathType Leaf)) {
+         Write-Error "Executable not found: $source"
+         Write-Host "Contents of publish directory:"
+         Get-ChildItem "./publish" | Format-Table Name, Length
+         exit 1
+        }
 
-          Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
+        Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
 
-          Write-Host "Created: $destination"
+        Write-Host "Created: $destination"
 
-          - name: Upload build artifact
-            uses: actions/upload-artifact@v4
-            with:
-              name: FileTagger-${{ matrix.runtimes }}
-              path: ./publish/FileTagger-${{ github.ref_name }}-${{ matrix.runtimes }}*
+        - name: Upload build artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: FileTagger-${{ matrix.runtimes }}
+            path: ./publish/FileTagger-${{ github.ref_name }}-${{ matrix.runtimes }}*
 
   release:
     name: Create GitHub Release
