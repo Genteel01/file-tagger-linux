@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using System.Threading.Tasks;
 using Avalonia.Markup.Xaml;
 using FileTagger.ViewModels;
 using FileTagger.Views;
@@ -12,6 +11,7 @@ namespace FileTagger;
 
 public class App : Application
 {
+    private IPreferenceService? _preferenceService = null;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -19,7 +19,7 @@ public class App : Application
         ATL.Settings.NullAbsentValues = true;
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -28,25 +28,36 @@ public class App : Application
 
             ServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
+            serviceCollection.AddSingleton<IPreferenceService, PreferenceService>();
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
+            serviceCollection.AddSingleton<TrackList>();
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 
+            _preferenceService = services.GetRequiredService<IPreferenceService>();
+            await _preferenceService.LoadPreferenceData();
+
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow.DataContext =  mainWindowViewModel;
+            desktop.ShutdownRequested += DesktopOnShutdownRequested;
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private async Task InitMainViewModelAsync()
-    {
-        //TODO load previously loaded files
-    }
-
+    private bool _canClose = false;
     private async void DesktopOnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
-        //TODO save which files are currently open, then close when done (uses Bookmarks probably?)
+        e.Cancel = !_canClose;
+        if (!_canClose && _preferenceService != null)
+        {
+            await _preferenceService.SavePreferenceData();
+            _canClose = true;
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.Shutdown();
+            }
+        }
     }
 }

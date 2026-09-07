@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
@@ -13,6 +14,8 @@ using ATL.Logging;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using FileTagger.Models;
+using FileTagger.Views;
 
 namespace FileTagger.ViewModels;
 
@@ -41,19 +44,43 @@ public partial class MainWindowViewModel : ViewModelBase
     public EditPanelViewModel MyEditPanel { get; }
 
     /// <summary>
+    /// Reference to our TrackList so we can bind it in our view
+    /// The view needs to be here in code instead of just in the xml because it gets an IFileService via Dependency Injection
+    /// </summary>
+    public TrackList MyTrackList { get; }
+
+    /// <summary>
     /// <see cref="IFileService"/> received through Dependency Injection used for opening file dialog
     /// </summary>
     private readonly IFileService _fileService;
+
+    /// <summary>
+    /// <see cref="IPreferenceService"/> received through Dependency Injection
+    /// used for storing and retrieving <see cref="Preferences"/> data
+    /// </summary>
+    private readonly IPreferenceService _preferenceService;
 
     /// <summary>
     /// List of supported file extensions to fetch from folders
     /// </summary>
     private readonly List<string> _supportedFileExtensions;
 
-    public MainWindowViewModel(IFileService fileService, EditPanelViewModel editPanelViewModel)
+    /// <summary>
+    /// The current sorting options for Tracks
+    /// </summary>
+    public string CurrentSort { get; set; }
+
+    /// <summary>
+    /// Keeps track of whether sorting is ascending or descending
+    /// </summary>
+    public bool SortDescending { get; set; }
+
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, TrackList trackList)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
+        MyTrackList = trackList ?? throw new ArgumentNullException(nameof(trackList));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
         _supportedFileExtensions = [];
 
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
@@ -66,6 +93,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
         }
+        //Load initial sort settings
+        Preferences preferences = _preferenceService.PreferenceData;
+        CurrentSort = preferences.SortOrder;
+        SortDescending = preferences.SortDescending;
     }
 
     #if DEBUG
@@ -76,7 +107,10 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(new Window());
+        _preferenceService = new PreferenceService(_fileService);
+        MyTrackList = new TrackList(_preferenceService);
         _supportedFileExtensions = [];
+        CurrentSort = nameof(TrackViewModel.Path);
     }
     #endif
 
@@ -146,14 +180,75 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 thread.Join();
             }
-            newTracks.Sort((x, y) => string.Compare(x.Path, y.Path, StringComparison.OrdinalIgnoreCase));
             SelectedTracks.Clear();
             SelectionChanged();
             Tracks = newTracks;
+            SortTracks(CurrentSort, false);
         }
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Sorts tracks by the fields in the order given
+    /// </summary>
+    /// <param name="fields">String of fields separated by "_", e.g. Album_TrackNumber_Path</param>
+    /// <param name="swapDirection">Whether to swap the direction between ascending and descending</param>
+    public void SortTracks(string fields, bool swapDirection)
+    {
+        string[] sortOrder = fields.Split("_");
+        List<PropertyInfo> properties = [];
+
+        foreach (string so in sortOrder)
+        {
+            PropertyInfo? property = typeof(TrackViewModel).GetProperty(so);
+            if (property != null)
+            {
+                properties.Add(property);
+            }
+        }
+        if (properties.Count == 0)
+        {
+            ErrorMessages?.Add("Sorting by input " + fields + ", which has no valid fields");
+            return;
+        }
+
+        IOrderedEnumerable<TrackViewModel>? sortedTracks = null;
+        foreach (PropertyInfo property in properties)
+        {
+            object? stringComparer = null;
+            if (property.PropertyType == typeof(string))
+            {
+                stringComparer = property.Name == nameof(TrackViewModel.Path) ?StringComparer.OrdinalIgnoreCase : StringComparer.CurrentCultureIgnoreCase;
+            }
+            if (sortedTracks == null)
+            {
+                sortedTracks = Tracks.OrderBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
+            }
+            else
+            {
+                sortedTracks = sortedTracks.ThenBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
+            }
+        }
+
+        if (swapDirection)
+        {
+            if (CurrentSort != fields)
+            {
+                SortDescending = false;
+            }
+            else
+            {
+                SortDescending = !SortDescending;
+            }
+        }
+        CurrentSort = fields;
+        PropertyInfo sortOrderProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
+        PropertyInfo sortDescendingProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
+        _preferenceService.StorePreferenceItem(sortOrderProperty, CurrentSort);
+        _preferenceService.StorePreferenceItem(sortDescendingProperty, SortDescending);
+        Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }
