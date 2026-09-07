@@ -1,36 +1,18 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will build, test, sign and package a WPF or Windows Forms desktop application
-# built on .NET Core.
-# To learn how to migrate your existing application to .NET Core,
-# refer to https://docs.microsoft.com/en-us/dotnet/desktop-wpf/migration/convert-project-from-net-framework
-#
-# To configure this workflow:
-#
-# 1. Configure environment variables
-# GitHub sets default environment variables for every workflow run.
-# Replace the variables relative to your project in the "env" section below.
-#
-#
-# For more information on GitHub Actions, refer to https://github.com/features/actions
-# For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
-# refer to https://github.com/microsoft/github-actions-for-desktop-apps
-
-name: .NET Core Desktop
+name: Generate Linux and Windows Releases
 
 on:
+  pull_request:
+    types: [closed]
+    branches: [ "master" ]
   push:
-    branches: [ "master", "workflow-testing" ]
+    branches: [ "workflow-testing" ]
 
 permissions:
   contents: write
 
 jobs:
-
   build:
+    if: github.event.pull_request.merged == true
     name: Build ${{ matrix.runtimes }}
 
     strategy:
@@ -42,7 +24,7 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: FileTagger.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
+      Solution_Name: FileTagger.sln
       Project_Path: FileTagger/FileTagger.csproj
 
     steps:
@@ -56,10 +38,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
-
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
@@ -109,6 +87,7 @@ jobs:
         path: ./publish/FileTagger-${{ github.ref_name }}-${{ matrix.runtimes }}*
 
   release:
+    if: github.event.pull_request.merged == true
     name: Create GitHub Release
     needs: build
     runs-on: windows-latest

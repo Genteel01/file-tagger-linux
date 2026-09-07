@@ -1,0 +1,32 @@
+name: Run Tests on Pull Request
+
+on:
+  pull_request:
+    branches: [ "master" ]
+  push:
+    branches: [ "master", "workflow-testing" ]
+
+jobs:
+  build:
+    runs-on: windows-latest  # For a list of available runner types, refer to
+    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: FileTagger.sln
+      Project_Path: FileTagger/FileTagger.csproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Install the .NET Core workload
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      # Execute all unit tests in the solution
+      - name: Execute unit tests
+        run: dotnet test
