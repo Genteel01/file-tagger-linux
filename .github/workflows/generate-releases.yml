@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [closed]
     branches: [ "master" ]
-    push:
-      branches: [ "workflow-testing" ]
+  push:
+    branches: [ "workflow-testing" ]
 
 permissions:
   contents: write
