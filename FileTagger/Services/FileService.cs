@@ -15,6 +15,8 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
     private readonly string _folderPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify),
             "Genteel01.FileTagger");
+
+    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { IncludeFields = true };
     public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions)
     {
         TopLevel? target = getTarget();
@@ -80,7 +82,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
             string typeName = typeof(T).Name;
             string filePath = Path.Combine(_folderPath, $"{typeName}.txt");
             await using FileStream fs = File.OpenRead(filePath);
-            T? loadedData = JsonSerializer.Deserialize<T>(fs);
+            T? loadedData = JsonSerializer.Deserialize<T>(fs, _jsonOptions);
             return loadedData;
         }
         catch
@@ -98,6 +100,6 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
         // We use a FileStream to write all items to disc
         await using FileStream fs = File.Create(filePath);
-        await JsonSerializer.SerializeAsync(fs, data);
+        await JsonSerializer.SerializeAsync(fs, data, _jsonOptions);
     }
 }
