@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Avalonia.Controls;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Models;
@@ -27,6 +28,11 @@ public class Preferences
     /// Widths of each column in the track list
     /// </summary>
     public Dictionary<string, double> ListColumnWidths { get; set; } = new Dictionary<string, double>();
+
+    /// <summary>
+    /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
+    /// </summary>
+    public double EditPanelWidth { get; set; } = double.PositiveInfinity;
 
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>

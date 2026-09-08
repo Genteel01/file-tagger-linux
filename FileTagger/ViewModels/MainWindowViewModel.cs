@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -12,6 +13,7 @@ using ATL;
 using ATL.AudioData;
 using ATL.Logging;
 using Avalonia.Collections;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Models;
@@ -80,6 +82,12 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public AvaloniaDictionary<string, double> ListColumnWidths { get; set; }
 
+    /// <summary>
+    /// Width for the Edit Panel
+    /// </summary>
+    [ObservableProperty]
+    private GridLength _editPanelWidth;
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, TrackList trackList)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
@@ -114,6 +122,20 @@ public partial class MainWindowViewModel : ViewModelBase
                 _preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newItem.Key, newItem.Value);
             }
         };
+        //Load initial EditPanel width
+        EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(EditPanelWidth))
+        {
+            //Store EditPanelWidth when it changes
+            PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+            double newValue = EditPanelWidth is { IsStar: true, Value: 1 } ? double.PositiveInfinity : EditPanelWidth.Value;
+            _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
+        }
     }
 
     #if DEBUG
