@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using System.Reflection;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.VisualTree;
+using FileTagger.Models;
+using FileTagger.Services;
 
 namespace FileTagger.Extensions;
 
@@ -29,6 +33,28 @@ public static class MyExtensions
                 }
             }
             return children;
+        }
+    }
+
+    /// <summary>
+    /// Extensions for Window
+    /// </summary>
+    extension(Window window)
+    {
+        /// <summary>
+        /// Stores the state of the window into the given <see cref="IPreferenceService"/>.
+        /// Stores whether the given window is maximised, and if it isn't, stores its size
+        /// </summary>
+        public void StoreWindowState(IPreferenceService preferenceService)
+        {
+            bool isMaximised = window.WindowState == WindowState.Maximized;
+            PropertyInfo maximisedProperty = typeof(Preferences).GetProperty(nameof(Preferences.IsMaximised))!;
+            preferenceService.StorePreferenceItem(maximisedProperty, isMaximised);
+            if (!isMaximised)
+            {
+                PropertyInfo sizeProperty = typeof(Preferences).GetProperty(nameof(Preferences.WindowSize))!;
+                preferenceService.StorePreferenceItem(sizeProperty, (window.Width, window.Height));
+            }
         }
     }
 }
