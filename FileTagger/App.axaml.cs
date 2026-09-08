@@ -56,6 +56,9 @@ public class App : Application
                 Width = preferences.WindowSize.Item1,
                 Height = preferences.WindowSize.Item2
             };
+            //Fix an error when the window width and height are 0
+            if (mainWindow.Width == 0) mainWindow.Width = mainWindow.ClientSize.Width;
+            if (mainWindow.Height == 0) mainWindow.Height = mainWindow.ClientSize.Height;
             //Add a callback so we can store the size of the window when it changes
             mainWindow.Resized += (sender, _) => { if (sender is Window window) window.StoreWindowState(_preferenceService); };
 
