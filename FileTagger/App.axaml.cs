@@ -1,5 +1,6 @@
 using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using FileTagger.ViewModels;
@@ -27,11 +28,12 @@ public class App : Application
             desktop.ShutdownRequested += DesktopOnShutdownRequested;
 
             ServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
+            serviceCollection.AddTransient<IFileService, FileService>();
             serviceCollection.AddSingleton<IPreferenceService, PreferenceService>();
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
             serviceCollection.AddSingleton<TrackList>();
+            serviceCollection.AddSingleton<Func<TopLevel?>>(_ => () => TopLevel.GetTopLevel(desktop.MainWindow));
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 

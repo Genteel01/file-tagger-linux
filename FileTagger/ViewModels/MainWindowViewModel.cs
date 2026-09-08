@@ -11,7 +11,6 @@ using FileTagger.Services;
 using ATL;
 using ATL.AudioData;
 using ATL.Logging;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Models;
@@ -106,7 +105,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         MyEditPanel = new EditPanelViewModel();
-        _fileService = new FileService(new Window());
+        _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
         MyTrackList = new TrackList(_preferenceService);
         _supportedFileExtensions = [];

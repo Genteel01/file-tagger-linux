@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using ATL;
 using ATL.AudioData;
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
@@ -89,7 +88,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _trackProperties = [];
         PictureTypes = [];
         _selectedPictureType = "";
-        _fileService = new FileService(new Window());
+        _fileService = new FileService(() => null);
     }
     #endif
 
