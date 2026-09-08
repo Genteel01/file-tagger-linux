@@ -5,11 +5,10 @@ namespace FileTagger.Models;
 public class Preferences
 {
     /// <summary>
-    /// How the track list is sorted
+    /// String defining which fields the track list is sorted by,
+    /// and a bool defining whether they are sorted in descending order
     /// </summary>
-    public string SortOrder { get; set; } = nameof(TrackViewModel.Path);
-
-    public bool SortDescending { get; set; } = false;
+    public (string, bool) SortOrder { get; set; } = (nameof(TrackViewModel.Path), false);
 
     /// <summary>
     /// Width and height of the main window

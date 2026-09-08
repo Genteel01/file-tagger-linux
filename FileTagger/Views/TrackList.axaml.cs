@@ -56,8 +56,8 @@ public partial class TrackList : UserControl
         InitializeComponent();
         //Get initial sort values
         Preferences preferences = _preferenceService.PreferenceData;
-        string initialSort = preferences.SortOrder;
-        bool initialDescending = preferences.SortDescending;
+        string initialSort = preferences.SortOrder.Item1;
+        bool initialDescending = preferences.SortOrder.Item2;
         foreach (Control control in ListGridTitle.Children)
         {
             if(control is ListColumnHeader columnHeader)
