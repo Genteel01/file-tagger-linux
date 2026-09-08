@@ -32,7 +32,7 @@
             </Button>
         </StackPanel>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*, Auto, 3*">
+        <Grid Grid.Row="1" ColumnDefinitions="*, Auto, 4*">
             <ContentControl Grid.Column="0" Content="{Binding MyEditPanel}"/>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="Gray" BorderThickness="1.5 0 1.5 0" BorderBrush="Gray"/>
             <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0 2 2 2">
