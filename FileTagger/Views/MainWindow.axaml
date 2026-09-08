@@ -3,7 +3,6 @@
         xmlns:vm="using:FileTagger.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:FileTagger.Views"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
