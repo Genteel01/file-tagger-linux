@@ -182,6 +182,7 @@
                     <ColumnDefinition Width="{Binding ListColumnWidths[Comment], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Comment" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Path], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Path" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="Title_Path"/>
                 <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="Album_DiscNumber_TrackNumber_Title_Path"/>
@@ -194,16 +195,17 @@
                 <controls:ListColumnHeader Grid.Column="16" Text="Composer" Tapped="ColumnHeaderTapped" Name="Composer_Path"/>
                 <controls:ListColumnHeader Grid.Column="18" Text="Comment" Tapped="ColumnHeaderTapped" Name="Comment_Path"/>
                 <controls:ListColumnHeader Grid.Column="20" Text="Path" Tapped="ColumnHeaderTapped" Name="Path"/>
-                <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="3" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="7" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="9" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="11" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="13" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="15" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="17" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="19" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
+                <GridSplitter Grid.Column="21" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
             </Grid>
         </Grid>
     </ScrollViewer>
