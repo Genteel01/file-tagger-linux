@@ -44,7 +44,7 @@ public class App : Application
             #if DEBUG
             WindowState startingWindowState = WindowState.Normal;
             #else
-            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal
+            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal;
             #endif
 
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
