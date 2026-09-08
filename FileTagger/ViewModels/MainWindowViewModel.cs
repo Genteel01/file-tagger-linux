@@ -102,7 +102,18 @@ public partial class MainWindowViewModel : ViewModelBase
         Preferences preferences = _preferenceService.PreferenceData;
         CurrentSort = preferences.SortOrder.Item1;
         SortDescending = preferences.SortOrder.Item2;
+        //Load initial column widths
         ListColumnWidths = new AvaloniaDictionary<string, double>(preferences.ListColumnWidths);
+        //Set up event handler to update preferences whenever column widths change
+        ListColumnWidths.CollectionChanged += (_, args) =>
+        {
+            if (args.NewItems == null) return;
+            PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+            foreach (KeyValuePair<string, double> newItem in args.NewItems)
+            {
+                _preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newItem.Key, newItem.Value);
+            }
+        };
     }
 
     #if DEBUG
