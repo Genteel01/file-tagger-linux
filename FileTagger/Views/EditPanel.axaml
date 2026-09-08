@@ -16,94 +16,96 @@
             <Setter Property="Margin" Value="8 4" />
         </Style>
     </UserControl.Styles>
-    <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
-        <controls:LabelledDropdown
-            Name="TitleField"
-            LabelText="Title"
-            ItemsSource="{Binding FieldOptions[Title]}"
-            Text="{Binding FieldTexts[Title]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        <controls:LabelledDropdown
-            Name="AlbumField"
-            LabelText="Album"
-            ItemsSource="{Binding FieldOptions[Album]}"
-            Text="{Binding FieldTexts[Album]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        <controls:LabelledDropdown
-            Name="ArtistField"
-            LabelText="Artist"
-            ItemsSource="{Binding FieldOptions[Artist]}"
-            Text="{Binding FieldTexts[Artist]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        <Grid ColumnDefinitions="*,*,*">
-            <controls:LabelledDropdown Grid.Column="0"
-                Name="YearField"
-                LabelText="Year"
-                ItemsSource="{Binding FieldOptions[Year]}"
-                Text="{Binding FieldTexts[Year]}"
+    <ScrollViewer>
+        <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
+            <controls:LabelledDropdown
+                Name="TitleField"
+                LabelText="Title"
+                ItemsSource="{Binding FieldOptions[Title]}"
+                Text="{Binding FieldTexts[Title]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="AlbumField"
+                LabelText="Album"
+                ItemsSource="{Binding FieldOptions[Album]}"
+                Text="{Binding FieldTexts[Album]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="ArtistField"
+                LabelText="Artist"
+                ItemsSource="{Binding FieldOptions[Artist]}"
+                Text="{Binding FieldTexts[Artist]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <Grid ColumnDefinitions="*,*,*">
+                <controls:LabelledDropdown Grid.Column="0"
+                    Name="YearField"
+                    LabelText="Year"
+                    ItemsSource="{Binding FieldOptions[Year]}"
+                    Text="{Binding FieldTexts[Year]}"
+                    DropDownClosed="AutoCompleteBoxDropdownClosed"
+                    SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                <controls:LabelledDropdown Grid.Column="1"
+                   Name="TrackNumberField"
+                   LabelText="Track Number"
+                   ItemsSource="{Binding FieldOptions[TrackNumber]}"
+                   Text="{Binding FieldTexts[TrackNumber]}"
+                   DropDownClosed="AutoCompleteBoxDropdownClosed"
+                   SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                <controls:LabelledDropdown Grid.Column="2"
+                    Name="GenreField"
+                    LabelText="Genre"
+                    ItemsSource="{Binding FieldOptions[Genre]}"
+                    Text="{Binding FieldTexts[Genre]}"
+                    DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            </Grid>
+            <controls:LabelledDropdown
+                Name="CommentField"
+                LabelText="Comment"
+                ItemsSource="{Binding FieldOptions[Comment]}"
+                Text="{Binding FieldTexts[Comment]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="AlbumArtistField"
+                LabelText="Album Artist"
+                ItemsSource="{Binding FieldOptions[AlbumArtist]}"
+                Text="{Binding FieldTexts[AlbumArtist]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="ComposerField"
+                LabelText="Composer"
+                ItemsSource="{Binding FieldOptions[Composer]}"
+                Text="{Binding FieldTexts[Composer]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="DiscNumberField"
+                LabelText="Disc Number"
+                ItemsSource="{Binding FieldOptions[DiscNumber]}"
+                Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
-            <controls:LabelledDropdown Grid.Column="1"
-               Name="TrackNumberField"
-               LabelText="Track Number"
-               ItemsSource="{Binding FieldOptions[TrackNumber]}"
-               Text="{Binding FieldTexts[TrackNumber]}"
-               DropDownClosed="AutoCompleteBoxDropdownClosed"
-               SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
-            <controls:LabelledDropdown Grid.Column="2"
-                Name="GenreField"
-                LabelText="Genre"
-                ItemsSource="{Binding FieldOptions[Genre]}"
-                Text="{Binding FieldTexts[Genre]}"
-                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        </Grid>
-        <controls:LabelledDropdown
-            Name="CommentField"
-            LabelText="Comment"
-            ItemsSource="{Binding FieldOptions[Comment]}"
-            Text="{Binding FieldTexts[Comment]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        <controls:LabelledDropdown
-            Name="AlbumArtistField"
-            LabelText="Album Artist"
-            ItemsSource="{Binding FieldOptions[AlbumArtist]}"
-            Text="{Binding FieldTexts[AlbumArtist]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        <controls:LabelledDropdown
-            Name="ComposerField"
-            LabelText="Composer"
-            ItemsSource="{Binding FieldOptions[Composer]}"
-            Text="{Binding FieldTexts[Composer]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-        <controls:LabelledDropdown
-            Name="DiscNumberField"
-            LabelText="Disc Number"
-            ItemsSource="{Binding FieldOptions[DiscNumber]}"
-            Text="{Binding FieldTexts[DiscNumber]}"
-            DropDownClosed="AutoCompleteBoxDropdownClosed"
-            SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
-        <Image Height="250" Margin="8" Source="{Binding CurrentDisplayedImage}">
-            <Image.ContextMenu>
-                <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
-                    <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
-                    <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
-                    <MenuItem Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
-                    <MenuItem Header="Extract cover"/>
-                    <Separator/>
-                    <MenuItem Header="Set cover type"/>
-                    <MenuItem Header="Set cover description"/>
-                    <Separator/>
-                    <MenuItem Header="Cut cover"/>
-                    <MenuItem Header="Copy cover"/>
-                    <MenuItem Header="Paste cover"/>
-                </ContextMenu>
-            </Image.ContextMenu>
-        </Image>
-        <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal">
-            <TextBlock Text="{Binding DisplayedImageIndex}"/>
-            <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
-            <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped">Next</Button>
+            <Image Height="250" Margin="8" Source="{Binding CurrentDisplayedImage}">
+                <Image.ContextMenu>
+                    <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
+                        <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
+                        <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
+                        <MenuItem Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
+                        <MenuItem Header="Extract cover"/>
+                        <Separator/>
+                        <MenuItem Header="Set cover type"/>
+                        <MenuItem Header="Set cover description"/>
+                        <Separator/>
+                        <MenuItem Header="Cut cover"/>
+                        <MenuItem Header="Copy cover"/>
+                        <MenuItem Header="Paste cover"/>
+                    </ContextMenu>
+                </Image.ContextMenu>
+            </Image>
+            <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal">
+                <TextBlock Text="{Binding DisplayedImageIndex}"/>
+                <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
+                <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped">Next</Button>
+            </StackPanel>
+            <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
         </StackPanel>
-        <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using System.Threading.Tasks;
@@ -10,13 +11,17 @@ using System.Threading.Tasks;
 namespace FileTagger.Services;
 
 
-public class FileService(Window target) : IFileService
+public class FileService(Func<TopLevel?> getTarget) : IFileService
 {
     private readonly string _folderPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify),
             "Genteel01.FileTagger");
+
+    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { IncludeFields = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals };
     public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions)
     {
+        TopLevel? target = getTarget();
+        if (target == null) return ([], true);
         IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
             Title = "Open Folders",
@@ -59,6 +64,8 @@ public class FileService(Window target) : IFileService
 
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
     {
+        TopLevel? target = getTarget();
+        if (target == null) return [];
         IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Open Folders",
@@ -75,8 +82,9 @@ public class FileService(Window target) : IFileService
         {
             string typeName = typeof(T).Name;
             string filePath = Path.Combine(_folderPath, $"{typeName}.txt");
+            if (!File.Exists(filePath)) return null;
             await using FileStream fs = File.OpenRead(filePath);
-            T? loadedData = await JsonSerializer.DeserializeAsync<T>(fs);
+            T? loadedData = JsonSerializer.Deserialize<T>(fs, _jsonOptions);
             return loadedData;
         }
         catch
@@ -94,6 +102,6 @@ public class FileService(Window target) : IFileService
 
         // We use a FileStream to write all items to disc
         await using FileStream fs = File.Create(filePath);
-        await JsonSerializer.SerializeAsync(fs, data);
+        await JsonSerializer.SerializeAsync(fs, data, _jsonOptions);
     }
 }

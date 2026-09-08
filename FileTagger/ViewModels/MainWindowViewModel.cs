@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -11,6 +12,7 @@ using FileTagger.Services;
 using ATL;
 using ATL.AudioData;
 using ATL.Logging;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -75,6 +77,17 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public bool SortDescending { get; set; }
 
+    /// <summary>
+    /// Widths for each column in the track list
+    /// </summary>
+    public AvaloniaDictionary<string, double> ListColumnWidths { get; set; }
+
+    /// <summary>
+    /// Width for the Edit Panel
+    /// </summary>
+    [ObservableProperty]
+    private GridLength _editPanelWidth;
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, TrackList trackList)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
@@ -94,9 +107,35 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         //Load initial sort settings
-        Preferences preferences = _preferenceService.PreferenceData;
-        CurrentSort = preferences.SortOrder;
-        SortDescending = preferences.SortDescending;
+        Preferences preferences = _preferenceService.GetPreferenceData();
+        CurrentSort = preferences.SortOrder.Item1;
+        SortDescending = preferences.SortOrder.Item2;
+        //Load initial column widths
+        ListColumnWidths = new AvaloniaDictionary<string, double>(preferences.ListColumnWidths);
+        //Set up event handler to update preferences whenever column widths change
+        ListColumnWidths.CollectionChanged += (_, args) =>
+        {
+            if (args.NewItems == null) return;
+            PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+            foreach (KeyValuePair<string, double> newItem in args.NewItems)
+            {
+                _preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newItem.Key, newItem.Value);
+            }
+        };
+        //Load initial EditPanel width
+        EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(EditPanelWidth))
+        {
+            //Store EditPanelWidth when it changes
+            PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+            double newValue = EditPanelWidth is { IsStar: true, Value: 1 } ? double.PositiveInfinity : EditPanelWidth.Value;
+            _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
+        }
     }
 
     #if DEBUG
@@ -106,11 +145,12 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         MyEditPanel = new EditPanelViewModel();
-        _fileService = new FileService(new Window());
+        _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
         MyTrackList = new TrackList(_preferenceService);
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
+        ListColumnWidths = new AvaloniaDictionary<string, double>();
     }
     #endif
 
@@ -246,9 +286,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         CurrentSort = fields;
         PropertyInfo sortOrderProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
-        PropertyInfo sortDescendingProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
-        _preferenceService.StorePreferenceItem(sortOrderProperty, CurrentSort);
-        _preferenceService.StorePreferenceItem(sortDescendingProperty, SortDescending);
+        _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 }

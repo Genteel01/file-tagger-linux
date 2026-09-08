@@ -1,7 +1,10 @@
 using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using FileTagger.Models;
+using FileTagger.Extensions;
 using FileTagger.ViewModels;
 using FileTagger.Views;
 using FileTagger.Services;
@@ -23,23 +26,43 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow();
-            desktop.ShutdownRequested += DesktopOnShutdownRequested;
-
             ServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IFileService>(_ => new FileService(desktop.MainWindow));
+            serviceCollection.AddTransient<IFileService, FileService>();
             serviceCollection.AddSingleton<IPreferenceService, PreferenceService>();
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
             serviceCollection.AddSingleton<TrackList>();
+            serviceCollection.AddSingleton<Func<TopLevel?>>(_ => () => TopLevel.GetTopLevel(desktop.MainWindow));
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 
             _preferenceService = services.GetRequiredService<IPreferenceService>();
             await _preferenceService.LoadPreferenceData();
 
+            Preferences preferences = _preferenceService.GetPreferenceData();
+            //For convenience, we don't want to start maximised in Debug
+            #if DEBUG
+            WindowState startingWindowState = WindowState.Normal;
+            #else
+            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal
+            #endif
+
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
-            desktop.MainWindow.DataContext =  mainWindowViewModel;
+
+            MainWindow mainWindow = new MainWindow
+            {
+                DataContext = mainWindowViewModel,
+                WindowState = startingWindowState,
+                Width = preferences.WindowSize.Item1,
+                Height = preferences.WindowSize.Item2
+            };
+            //Fix an error when the window width and height are 0
+            if (mainWindow.Width == 0) mainWindow.Width = mainWindow.ClientSize.Width;
+            if (mainWindow.Height == 0) mainWindow.Height = mainWindow.ClientSize.Height;
+            //Add a callback so we can store the size of the window when it changes
+            mainWindow.Resized += (sender, _) => { if (sender is Window window) window.StoreWindowState(_preferenceService); };
+
+            desktop.MainWindow = mainWindow;
             desktop.ShutdownRequested += DesktopOnShutdownRequested;
         }
 

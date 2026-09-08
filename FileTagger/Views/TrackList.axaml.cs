@@ -16,11 +16,6 @@ namespace FileTagger.Views;
 public partial class TrackList : UserControl
 {
     /// <summary>
-    /// The <see cref="IPreferenceService"/> loaded with Dependency Injected used for storing and retrieving <see cref="Preferences"/>
-    /// </summary>
-    private IPreferenceService _preferenceService;
-
-    /// <summary>
     /// All the panels in the title row
     /// </summary>
     private readonly List<ListColumnHeader> _headerPanels = [];
@@ -52,12 +47,12 @@ public partial class TrackList : UserControl
 
     public TrackList(IPreferenceService preferenceService)
     {
-        _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
+        ArgumentNullException.ThrowIfNull(preferenceService);
         InitializeComponent();
         //Get initial sort values
-        Preferences preferences = _preferenceService.PreferenceData;
-        string initialSort = preferences.SortOrder;
-        bool initialDescending = preferences.SortDescending;
+        Preferences preferences = preferenceService.GetPreferenceData();
+        string initialSort = preferences.SortOrder.Item1;
+        bool initialDescending = preferences.SortOrder.Item2;
         foreach (Control control in ListGridTitle.Children)
         {
             if(control is ListColumnHeader columnHeader)

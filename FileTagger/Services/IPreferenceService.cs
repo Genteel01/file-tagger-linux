@@ -6,8 +6,9 @@ namespace FileTagger.Services;
 
 public interface IPreferenceService
 {
-    public Preferences PreferenceData { get; protected set; }
+    public Preferences GetPreferenceData();
     public void StorePreferenceItem(PropertyInfo property, object value);
+    public void StorePreferenceDictionaryValue<TK, TV>(PropertyInfo property, TK key, TV value) where TK : notnull;
     public Task LoadPreferenceData();
     public Task SavePreferenceData();
 }
