@@ -81,6 +81,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         {
             string typeName = typeof(T).Name;
             string filePath = Path.Combine(_folderPath, $"{typeName}.txt");
+            if (!File.Exists(filePath)) return null;
             await using FileStream fs = File.OpenRead(filePath);
             T? loadedData = JsonSerializer.Deserialize<T>(fs, _jsonOptions);
             return loadedData;
