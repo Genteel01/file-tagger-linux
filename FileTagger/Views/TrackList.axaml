@@ -53,8 +53,8 @@
     </UserControl.Styles>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True"
                   GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown">
-        <Grid RowDefinitions="*" Grid.IsSharedSizeScope="True">
-            <Grid Grid.Row="0" RowDefinitions="Auto, *">
+        <Panel Grid.IsSharedSizeScope="True">
+            <Grid RowDefinitions="Auto, *">
                 <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->
                 <TextBlock Grid.Row="0" Classes="titleTextBlock"/>
                 <!--Items rows of list-->
@@ -159,7 +159,7 @@
                 </ListBox>
             </Grid>
             <!--Title row of list-->
-            <Grid Grid.Row="0" Name="ListGridTitle">
+            <Grid Name="ListGridTitle">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding ListColumnWidths[Title], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Title" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
@@ -207,6 +207,6 @@
                 <GridSplitter Grid.Column="19" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
                 <GridSplitter Grid.Column="21" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent"/>
             </Grid>
-        </Grid>
+        </Panel>
     </ScrollViewer>
 </UserControl>
