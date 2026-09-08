@@ -11,6 +11,7 @@ using FileTagger.Services;
 using ATL;
 using ATL.AudioData;
 using ATL.Logging;
+using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Models;
@@ -74,6 +75,11 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public bool SortDescending { get; set; }
 
+    /// <summary>
+    /// Widths for each column in the track list
+    /// </summary>
+    public AvaloniaDictionary<string, double> ListColumnWidths { get; set; }
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, TrackList trackList)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
@@ -96,6 +102,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Preferences preferences = _preferenceService.PreferenceData;
         CurrentSort = preferences.SortOrder.Item1;
         SortDescending = preferences.SortOrder.Item2;
+        ListColumnWidths = new AvaloniaDictionary<string, double>(preferences.ListColumnWidths);
     }
 
     #if DEBUG
@@ -110,6 +117,7 @@ public partial class MainWindowViewModel : ViewModelBase
         MyTrackList = new TrackList(_preferenceService);
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
+        ListColumnWidths = new AvaloniaDictionary<string, double>();
     }
     #endif
 

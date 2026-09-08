@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <converters:RowBorderThicknessConverter x:Key="RowBorderThicknessConverter"/>
         <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
+        <converters:GridSizeConverter x:Key="GridSizeConverter"/>
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="ListBox, ListBoxItem">
@@ -160,27 +161,27 @@
             <!--Title row of list-->
             <Grid Grid.Row="0" Name="ListGridTitle">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" SharedSizeGroup="Title" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Title], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Title" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Album" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Album], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Album" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Artist" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Artist], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Artist" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="AlbumArtist" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[AlbumArtist], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="AlbumArtist" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="Track" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[TrackNumber], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Track" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="Disc" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[DiscNumber], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Disc" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="Year" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Year], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Year" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="100" SharedSizeGroup="Genre" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Genre], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Genre" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Composer" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Composer], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Composer" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="150" SharedSizeGroup="Comment" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Comment], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Comment" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="Path" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Path], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Path" MinWidth="19"/>
                 </Grid.ColumnDefinitions>
                 <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="Title_Path"/>
                 <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="Album_DiscNumber_TrackNumber_Title_Path"/>

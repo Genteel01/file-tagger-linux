@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Models;
@@ -19,4 +22,29 @@ public class Preferences
     /// Whether the main window is maximised
     /// </summary>
     public bool IsMaximised { get; set; } = false;
+
+    /// <summary>
+    /// Widths of each column in the track list
+    /// </summary>
+    public Dictionary<string, double> ListColumnWidths { get; set; } = new Dictionary<string, double>();
+
+    /// <summary>
+    /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>
+    /// </summary>
+    public void AddMissingColumnWidths()
+    {
+        List<PropertyInfo> trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?) )];
+        foreach (PropertyInfo trackProperty in trackProperties)
+        {
+            if (!ListColumnWidths.ContainsKey(trackProperty.Name))
+            {
+                double columnWidth = trackProperty.PropertyType == typeof(string) ? 200 : 60;
+                if (trackProperty.Name == nameof(TrackViewModel.Genre))
+                {
+                    columnWidth = 100;
+                }
+                ListColumnWidths[trackProperty.Name] = columnWidth;
+            }
+        }
+    }
 }

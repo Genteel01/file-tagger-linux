@@ -17,6 +17,7 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
     public async Task LoadPreferenceData()
     {
         PreferenceData = await fileService.LoadObjectData<Preferences>() ??  new Preferences();
+        PreferenceData.AddMissingColumnWidths();
     }
 
     public async Task SavePreferenceData()
