@@ -50,7 +50,7 @@ public partial class TrackList : UserControl
         ArgumentNullException.ThrowIfNull(preferenceService);
         InitializeComponent();
         //Get initial sort values
-        Preferences preferences = preferenceService.PreferenceData;
+        Preferences preferences = preferenceService.GetPreferenceData();
         string initialSort = preferences.SortOrder.Item1;
         bool initialDescending = preferences.SortOrder.Item2;
         foreach (Control control in ListGridTitle.Children)

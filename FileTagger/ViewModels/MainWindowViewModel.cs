@@ -99,7 +99,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         //Load initial sort settings
-        Preferences preferences = _preferenceService.PreferenceData;
+        Preferences preferences = _preferenceService.GetPreferenceData();
         CurrentSort = preferences.SortOrder.Item1;
         SortDescending = preferences.SortOrder.Item2;
         //Load initial column widths
