@@ -1,19 +1,49 @@
-name: Run Tests on Pull Request
+name: Run Tests
+
+#Runs all tests on Pull Request, or when pushing to Master, or when pushing changes to the FileTaggerTests project
 
 on:
   pull_request:
     branches: [ "master" ]
   push:
-    branches: [ "master" ]
 
 jobs:
+  #Need a job to check changes, because we can't check for pushes to Master OR pushes in FileTaggerTests/ in the on: push: section
+  changes:
+    runs-on: windows-latest
+    env:
+      Test_Project_Path: FileTaggerTests
+    outputs:
+      run_tests: ${{ steps.filter.outputs.run_tests }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changed files
+        id: filter
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+          REF: ${{ github.ref }}
+        run: |
+          if [ "$REF" = "refs/heads/master" ] ||
+             [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ] ||
+             git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -q "^${Test_Project_Path}/"; then
+            echo "run_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_tests=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: changes
+    if: github.event_name == 'pull_request' || needs.changes.outputs.run_tests == 'true'
     runs-on: windows-latest  # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
       Solution_Name: FileTagger.sln
-      Project_Path: FileTagger/FileTagger.csproj
 
     steps:
       - name: Checkout
