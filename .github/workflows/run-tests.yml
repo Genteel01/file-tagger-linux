@@ -35,7 +35,8 @@ jobs:
               $env:REF -eq "refs/heads/unit-test-setup" -or
               $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000") {
             $runTests = $true
-          else
+          }
+          else {
             $changedFiles = git diff --name-only $env:BEFORE_SHA $env:AFTER_SHA
             $runTests = @($changedFiles | Where-Object {
               $_ -like "$env:Test_Project_Path/*"
