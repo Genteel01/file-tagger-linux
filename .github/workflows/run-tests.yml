@@ -32,7 +32,6 @@ jobs:
           $runTests = $false
 
           if ($env:REF -eq "refs/heads/master" -or
-              $env:REF -eq "refs/heads/unit-test-setup" -or
               $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000") {
             $runTests = $true
           }
@@ -45,7 +44,7 @@ jobs:
 
           Add-Content -Path $env:GITHUB_OUTPUT -Value "run_tests=$($runTests.ToString().ToLowerInvariant())"
 
-  build:
+  test:
     needs: changes
     if: github.event_name == 'pull_request' || needs.changes.outputs.run_tests == 'true'
     runs-on: windows-latest  # For a list of available runner types, refer to
