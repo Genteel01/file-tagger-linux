@@ -21,4 +21,14 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="ATL">
+        <HintPath>..\..\..\.nuget\packages\z440.atl.core\7.15.3\lib\net6.0\ATL.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FileTagger\FileTagger.csproj" />
+    </ItemGroup>
+
 </Project>
