@@ -27,14 +27,22 @@ jobs:
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.event.after }}
           REF: ${{ github.ref }}
+        shell: pwsh
         run: |
-          if [ "$REF" = "refs/heads/master" ] ||
-             [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ] ||
-             git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -q "^${Test_Project_Path}/"; then
-            echo "run_tests=true" >> "$GITHUB_OUTPUT"
+          $runTests = $false
+
+          if ($env:REF -eq "refs/heads/master" -or
+              $env:REF -eq "refs/heads/unit-test-setup" -or
+              $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000") {
+            $runTests = $true
           else
-            echo "run_tests=false" >> "$GITHUB_OUTPUT"
-          fi
+            $changedFiles = git diff --name-only $env:BEFORE_SHA $env:AFTER_SHA
+            $runTests = @($changedFiles | Where-Object {
+              $_ -like "$env:Test_Project_Path/*"
+            }).Count -gt 0
+          }
+
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "run_tests=$($runTests.ToString().ToLowerInvariant())"
 
   build:
     needs: changes
