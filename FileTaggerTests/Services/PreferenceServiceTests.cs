@@ -28,7 +28,7 @@ public class PreferenceServiceTests
     }
 
     [Fact]
-    public void StorePreferenceItem_WrongType_Fails()
+    public void StorePreferenceItem_WrongType_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
         PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
@@ -40,7 +40,7 @@ public class PreferenceServiceTests
     }
 
     [Fact]
-    public void StorePreferenceItem_InvalidProperty_Fails()
+    public void StorePreferenceItem_InvalidProperty_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
         PropertyInfo incorrectTypeProperty = typeof(string).GetProperty(nameof(string.Length))!;
