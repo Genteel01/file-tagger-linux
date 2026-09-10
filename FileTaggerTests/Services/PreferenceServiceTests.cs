@@ -36,7 +36,8 @@ public class PreferenceServiceTests
 
         Action call = () => preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
 
-        Assert.ThrowsAny<Exception>(call);
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
     }
 
     [Fact]
