@@ -51,4 +51,74 @@ public class PreferenceServiceTests
 
         Assert.ThrowsAny<Exception>(call);
     }
+
+
+    [Fact]
+    public void StorePreferenceDictionaryValue_RightTypes_Succeeds()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+        const string newKey = "TestKey";
+        const double newValue = 0;
+
+        preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newKey, newValue);
+
+        Preferences preferences = preferenceService.GetPreferenceData();
+        Assert.Equal(newValue, preferences.ListColumnWidths[newKey]);
+    }
+
+    [Fact]
+    public void StorePreferenceDictionaryValue_WrongKeyType_Throws()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+        const double newKey = 0;
+        const string newValue = "0";
+
+        Action call = () => preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newKey, newValue);
+
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
+    }
+
+    [Fact]
+    public void StorePreferenceDictionaryValue_WrongValueType_Throws()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+        const string newKey = "TestKey";
+        const string newValue = "0";
+
+        Action call = () => preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newKey, newValue);
+
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
+    }
+
+    [Fact]
+    public void StorePreferenceDictionaryValue_NotDictionary_Throws()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo incorrectTypeProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        const string newKey = "TestKey";
+        const double newValue = 0;
+
+        Action call = () => preferenceService.StorePreferenceDictionaryValue(incorrectTypeProperty, newKey, newValue);
+
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
+    }
+
+    [Fact]
+    public void StorePreferenceDictionaryValue_IncorrectObjectProperty_Throws()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo incorrectObjectProperty = typeof(string).GetProperty(nameof(string.Length))!;
+        const string newKey = "TestKey";
+        const double newValue = 0;
+
+        Action call = () => preferenceService.StorePreferenceDictionaryValue(incorrectObjectProperty, newKey, newValue);
+
+        Assert.ThrowsAny<Exception>(call);
+    }
 }
