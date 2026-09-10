@@ -10,6 +10,7 @@ namespace FileTagger.Services;
 
 public class PreferenceService(IFileService fileService) : IPreferenceService
 {
+    public const int PreferenceErrorCode = 123456789;
     private Preferences _preferenceData = new Preferences();
 
     public Preferences GetPreferenceData()  => _preferenceData;
@@ -23,7 +24,7 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
         }
         else
         {
-            throw new InvalidCastException($"Property {property.Name} of Type {property.PropertyType} cannot be cast to type {value.GetType()}");
+            throw new InvalidCastException($"Property {property.Name} of Type {property.PropertyType} cannot be cast to type {value.GetType()}", PreferenceErrorCode);
         }
     }
 
@@ -47,7 +48,7 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
         }
         else
         {
-            throw new InvalidCastException($"Property {property.Name} of Type {property.PropertyType} is not a Dictionary<{typeof(TK).Name},{typeof(TV).Name}>");
+            throw new InvalidCastException($"Property {property.Name} of Type {property.PropertyType} is not a Dictionary<{typeof(TK).Name},{typeof(TV).Name}>", PreferenceErrorCode);
         }
     }
 
