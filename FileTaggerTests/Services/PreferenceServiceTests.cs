@@ -121,4 +121,41 @@ public class PreferenceServiceTests
 
         Assert.ThrowsAny<Exception>(call);
     }
+
+    [Fact]
+    public void Preferences_ListColumnWidths_StartEmpty()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        Preferences preferences = preferenceService.GetPreferenceData();
+
+        Assert.Empty(preferences.ListColumnWidths);
+    }
+
+    [Fact]
+    public async Task LoadPreferenceData_NoSavedData_FillsListColumnWidths()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+
+        await preferenceService.LoadPreferenceData();
+
+        Preferences preferences = preferenceService.GetPreferenceData();
+        Assert.NotEmpty(preferences.ListColumnWidths);
+    }
+
+    [Fact]
+    public async Task LoadPreferenceData_WithSavedData_LoadsValues()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        const double newFieldValue = 0;
+        const double changedFieldValue = 1;
+        preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
+        await preferenceService.SavePreferenceData();
+        preferenceService.StorePreferenceItem(editPanelWidthProperty, changedFieldValue);
+
+        await preferenceService.LoadPreferenceData();
+
+        Preferences preferences = preferenceService.GetPreferenceData();
+        Assert.Equal(newFieldValue, preferences.EditPanelWidth);
+    }
 }
