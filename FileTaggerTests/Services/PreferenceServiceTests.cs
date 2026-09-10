@@ -1,0 +1,53 @@
+using System.Reflection;
+using FileTagger.Models;
+using FileTagger.Services;
+using FileTaggerTests.Fakers;
+
+namespace FileTaggerTests.Services;
+
+public class PreferenceServiceTests
+{
+    private static PreferenceService CreateMockPreferenceService()
+    {
+        IFileService fileService = new FakeFileService();
+        PreferenceService preferenceService = new PreferenceService(fileService);
+        return preferenceService;
+    }
+
+    [Fact]
+    public void StorePreferenceItem_RightType_Succeeds()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        const double newFieldValue = 0;
+
+        preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
+
+        Preferences preferences = preferenceService.GetPreferenceData();
+        Assert.Equal(newFieldValue, preferences.EditPanelWidth);
+    }
+
+    [Fact]
+    public void StorePreferenceItem_WrongType_Fails()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        const string newFieldValue = "0";
+
+        Action call = () => preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
+
+        Assert.ThrowsAny<Exception>(call);
+    }
+
+    [Fact]
+    public void StorePreferenceItem_InvalidProperty_Fails()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo incorrectTypeProperty = typeof(string).GetProperty(nameof(string.Length))!;
+        const int newFieldValue = 0;
+
+        Action call = () => preferenceService.StorePreferenceItem(incorrectTypeProperty, newFieldValue);
+
+        Assert.ThrowsAny<Exception>(call);
+    }
+}
