@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,7 +15,14 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
     public void StorePreferenceItem(PropertyInfo property, object value)
     {
         bool correctType = property.PropertyType == value.GetType();
-        if(correctType) property.SetValue(_preferenceData, value);
+        if(correctType)
+        {
+            property.SetValue(_preferenceData, value);
+        }
+        else
+        {
+            throw new InvalidCastException($"Property {property.Name} of Type {property.PropertyType} cannot be cast to type {value.GetType()}");
+        }
     }
 
     public void StorePreferenceDictionaryValue<TK, TV>(PropertyInfo property, TK key, TV value) where TK : notnull
