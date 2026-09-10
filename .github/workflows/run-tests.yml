@@ -31,7 +31,7 @@ jobs:
         run: |
           $runTests = $false
 
-          if ($env:REF -eq "refs/heads/master" -or $env:REF -eq "refs/heads/unit-test-setup" -or
+          if ($env:REF -eq "refs/heads/master" -or
               $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000") {
             $runTests = $true
           }
