@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
     name: Build ${{ matrix.runtimes }}
 
     strategy:
@@ -87,7 +86,6 @@ jobs:
         path: ./publish/FileTagger-${{ matrix.runtimes }}*
 
   release:
-    if: github.event.pull_request.merged == true
     name: Create GitHub Release
     needs: build
     runs-on: windows-latest
@@ -123,3 +121,5 @@ jobs:
             ## ${{ github.event.pull_request.title }}
 
             ${{ github.event.pull_request.body }}
+
+            [View full changelog](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/commits)
