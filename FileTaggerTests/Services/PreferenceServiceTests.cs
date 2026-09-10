@@ -40,13 +40,13 @@ public class PreferenceServiceTests
     }
 
     [Fact]
-    public void StorePreferenceItem_InvalidProperty_Throws()
+    public void StorePreferenceItem_IncorrectObjectProperty_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo incorrectTypeProperty = typeof(string).GetProperty(nameof(string.Length))!;
+        PropertyInfo incorrectObjectProperty = typeof(string).GetProperty(nameof(string.Length))!;
         const int newFieldValue = 0;
 
-        Action call = () => preferenceService.StorePreferenceItem(incorrectTypeProperty, newFieldValue);
+        Action call = () => preferenceService.StorePreferenceItem(incorrectObjectProperty, newFieldValue);
 
         Assert.ThrowsAny<Exception>(call);
     }
