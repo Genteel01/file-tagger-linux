@@ -4,14 +4,13 @@ on:
   pull_request:
     types: [closed]
     branches: [ "master" ]
-  push:
-    branches: ["unit-test-setup"]
 
 permissions:
   contents: write
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     name: Build ${{ matrix.runtimes }}
 
     strategy:
@@ -86,6 +85,7 @@ jobs:
         path: ./publish/FileTagger-${{ matrix.runtimes }}*
 
   release:
+    if: github.event.pull_request.merged == true
     name: Create GitHub Release
     needs: build
     runs-on: windows-latest
