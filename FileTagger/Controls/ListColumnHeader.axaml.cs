@@ -1,10 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 
 namespace FileTagger.Controls;
 
-public partial class ListColumnHeader : UserControl
+public class ListColumnHeader : TemplatedControl
 {
     public static readonly StyledProperty<string?> TextProperty =
         TextBlock.TextProperty.AddOwner<ListColumnHeader>(new StyledPropertyMetadata<string?>(string.Empty, BindingMode.TwoWay, enableDataValidation: true));
@@ -14,8 +16,46 @@ public partial class ListColumnHeader : UserControl
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
-    public ListColumnHeader()
+
+    public static readonly StyledProperty<bool> ShowDownArrowProperty =
+        AvaloniaProperty.Register<ListColumnHeader, bool>(
+            nameof(ShowDownArrow),
+            defaultBindingMode: BindingMode.OneWay);
+
+    public bool ShowDownArrow
     {
-        InitializeComponent();
+        get => GetValue(ShowDownArrowProperty);
+        set => SetValue(ShowDownArrowProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> ShowUpArrowProperty =
+        AvaloniaProperty.Register<ListColumnHeader, bool>(
+            nameof(ShowUpArrow),
+            defaultBindingMode: BindingMode.OneWay);
+
+    public bool ShowUpArrow
+    {
+        get => GetValue(ShowUpArrowProperty);
+        set => SetValue(ShowUpArrowProperty, value);
+    }
+
+    public static readonly StyledProperty<Orientation> OrientationProperty =
+        StackPanel.OrientationProperty.AddOwner<ListColumnHeader>(new StyledPropertyMetadata<Orientation>(Orientation.Vertical));
+
+    public Orientation Orientation
+    {
+        get => GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> ShowArrowsProperty =
+        AvaloniaProperty.Register<ListColumnHeader, bool>(
+            nameof(ShowArrows),
+            defaultBindingMode: BindingMode.OneWay);
+
+    public bool ShowArrows
+    {
+        get => GetValue(ShowArrowsProperty);
+        set => SetValue(ShowArrowsProperty, value);
     }
 }
