@@ -32,12 +32,16 @@
         </Setter>
     </ControlTheme>
     <Design.PreviewWith>
-        <Border Padding="20" Width="150">
+        <Border Width="100" Padding="5">
             <StackPanel Spacing="20">
-                <controls:ListColumnHeader ShowArrows="False" ShowDownArrow="True" ShowUpArrow="False" Text="Title"/>
-                <controls:ListColumnHeader ShowArrows="True" ShowDownArrow="True" ShowUpArrow="False" Text="Title"/>
-                <controls:ListColumnHeader ShowArrows="True" ShowDownArrow="False" ShowUpArrow="True" Text="Title"/>
-                <controls:ListColumnHeader ShowArrows="True" ShowDownArrow="True" ShowUpArrow="True" Text="Title"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="False" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="True" ShowDownArrow="False" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="False" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="True" ShowDownArrow="False" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
