@@ -31,11 +31,15 @@ jobs:
         run: |
           $runTests = $false
 
-          if ($env:REF -eq "refs/heads/master" -or
-              $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000") {
+          $commitParents = @(git rev-list --parents -n 1 $env:AFTER_SHA) -split " "
+          $isMergeCommit = $commitParents.Count -gt 2
+
+          if (-not $isMergeCommit -and
+              ($env:REF -eq "refs/heads/master" -or
+               $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000")) {
             $runTests = $true
           }
-          else {
+          elseif (-not $isMergeCommit) {
             $changedFiles = git diff --name-only $env:BEFORE_SHA $env:AFTER_SHA
             $runTests = @($changedFiles | Where-Object {
               $_ -like "$env:Test_Project_Path/*"
