@@ -274,4 +274,83 @@ public class EditPanelViewModelTests
             new object?[] { EditPanelViewModel.UnchangedField },
             viewModel.FieldOptions[fieldName]);
     }
+
+    [Fact]
+    public void StoreFieldChanges_StringFieldWithValue_StoresValue()
+    {
+        EditPanelViewModel viewModel = CreateMockViewModel();
+        const string fieldName = nameof(TrackViewModel.Artist);
+        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        const string updatedString = "Updated";
+        track.Artist = "Original";
+        viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
+        viewModel.FieldTexts[fieldName] = updatedString;
+
+        viewModel.StoreFieldChanges();
+
+        Assert.Equal(updatedString, track.Artist);
+    }
+
+    [Fact]
+    public void StoreFieldChanges_StringFieldWithUnchangedField_KeepsValue()
+    {
+        EditPanelViewModel viewModel = CreateMockViewModel();
+        const string fieldName = nameof(TrackViewModel.Artist);
+        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        const string fieldValue = "Original";
+        track.Artist = fieldValue;
+        viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
+        viewModel.FieldTexts[fieldName] = EditPanelViewModel.UnchangedField;
+
+        viewModel.StoreFieldChanges();
+
+        Assert.Equal(fieldValue, track.Artist);
+    }
+
+    [Fact]
+    public void StoreFieldChanges_IntFieldWithValue_StoresValue()
+    {
+        EditPanelViewModel viewModel = CreateMockViewModel();
+        const string fieldName = nameof(TrackViewModel.TrackNumber);
+        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        track.TrackNumber = 1;
+        const int updatedValue = 7;
+        viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
+        viewModel.FieldTexts[fieldName] = updatedValue.ToString();
+
+        viewModel.StoreFieldChanges();
+
+        Assert.Equal(updatedValue, track.TrackNumber);
+    }
+
+    [Fact]
+    public void StoreFieldChanges_IntFieldWithNullValue_ClearsValue()
+    {
+        EditPanelViewModel viewModel = CreateMockViewModel();
+        const string fieldName = nameof(TrackViewModel.TrackNumber);
+        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        track.TrackNumber = 1;
+        viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
+        viewModel.FieldTexts[fieldName] = "";
+
+        viewModel.StoreFieldChanges();
+
+        Assert.Null(track.TrackNumber);
+    }
+
+    [Fact]
+    public void StoreFieldChanges_IntFieldWithUnchangedField_KeepsValue()
+    {
+        EditPanelViewModel viewModel = CreateMockViewModel();
+        const string fieldName = nameof(TrackViewModel.TrackNumber);
+        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        const int fieldValue = 1;
+        track.TrackNumber = fieldValue;
+        viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
+        viewModel.FieldTexts[fieldName] = EditPanelViewModel.UnchangedField;
+
+        viewModel.StoreFieldChanges();
+
+        Assert.Equal(fieldValue, track.TrackNumber);
+    }
 }
