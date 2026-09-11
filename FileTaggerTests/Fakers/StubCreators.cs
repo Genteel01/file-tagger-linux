@@ -1,4 +1,5 @@
 using ATL;
+using FileTagger.ViewModels;
 
 namespace FileTaggerTests.Fakers;
 
@@ -8,5 +9,12 @@ public static class StubCreators
     {
         Track track = new Track();
         return track;
+    }
+
+    public static TrackViewModel CreateStubTrackViewModel()
+    {
+        Track track = CreateStubTrack();
+        TrackViewModel trackViewModel = new TrackViewModel(track);
+        return trackViewModel;
     }
 }
