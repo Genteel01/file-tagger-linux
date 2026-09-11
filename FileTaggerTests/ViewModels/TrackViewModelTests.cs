@@ -1,20 +1,15 @@
 ﻿using ATL;
 using FileTagger.ViewModels;
+using FileTaggerTests.Fakers;
 
 namespace FileTaggerTests.ViewModels;
 
 public class TrackViewModelTests
 {
-    private static Track CreateStubTrack()
-    {
-        Track track = new Track();
-        return track;
-    }
-
     [Fact]
     public void OnPropertyChanged_EditField_ChangedChanges()
     {
-        Track track = CreateStubTrack();
+        Track track = StubCreators.CreateStubTrack();
         TrackViewModel viewModel =  new TrackViewModel(track);
         Assert.False(viewModel.Changed);
         viewModel.Title = "changed";
@@ -24,7 +19,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditChanged_ChangedDoesntChange()
     {
-        Track track = CreateStubTrack();
+        Track track = StubCreators.CreateStubTrack();
         TrackViewModel viewModel = new TrackViewModel(track)
         {
             Changed = true
