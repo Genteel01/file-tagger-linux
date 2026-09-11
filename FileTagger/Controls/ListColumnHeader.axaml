@@ -1,35 +1,49 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:controls="clr-namespace:FileTagger.Controls"
-             x:DataType="controls:ListColumnHeader"
-             x:Class="FileTagger.Controls.ListColumnHeader">
-    <UserControl.Styles>
-        <Style Selector="StackPanel">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Spacing" Value="-4" />
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:FileTagger.Controls">
+    <ControlTheme x:Key="{x:Type controls:ListColumnHeader}" TargetType="controls:ListColumnHeader">
+        <Style Selector="^">
+            <Style Selector="^ PathIcon">
+                <Setter Property="Foreground" Value="#30000000" />
+                <Setter Property="Height" Value="9" />
+            </Style>
+            <Style Selector="^ Panel">
+                <Setter Property="Height" Value="13" />
+            </Style>
         </Style>
-        <Style Selector="PathIcon">
-            <Setter Property="Height" Value="8" />
-            <Setter Property="Foreground" Value="#30000000" />
-            <Setter Property="IsVisible" Value="False" />
-        </Style>
-    </UserControl.Styles>
-    <UserControl.Template>
-        <ControlTemplate>
-            <Border BorderThickness="0 0 0 2" BorderBrush="{DynamicResource ListSeparatorColour}">
-                <StackPanel>
-                    <TextBlock
-                        Text="{TemplateBinding Text}"
-                        Classes="h1" TextAlignment="Center"/>
-                    <Panel>
-                        <PathIcon Tag="Up" Data="{DynamicResource UpArrowIconData}"/>
-                        <PathIcon Tag="Down" Data="{DynamicResource DownArrowIconData}"/>
-                    </Panel>
-                </StackPanel>
-            </Border>
-        </ControlTemplate>
-    </UserControl.Template>
-</UserControl>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                    <StackPanel Orientation="{TemplateBinding Orientation}" Spacing="-5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock
+                            Text="{TemplateBinding Text}"
+                            Classes="h1" TextAlignment="Center"/>
+                        <!--Extra panel ensures the height remains when arrows are hidden,
+                        so the text doesn't move vertically in vertical orientation. Margins are to counteract the
+                        Spacing on horizontal orientation. Split across panels to ensure text is centered horizontally-->
+                        <Panel Margin="5 0 0 0" VerticalAlignment="Center">
+                        <Panel IsVisible="{TemplateBinding ShowArrows}" Margin="0 0 5 0">
+                            <PathIcon Data="{DynamicResource UpArrowIconData}" IsVisible="{TemplateBinding ShowUpArrow}"/>
+                            <PathIcon Data="{DynamicResource DownArrowIconData}" IsVisible="{TemplateBinding ShowDownArrow}"/>
+                        </Panel>
+                        </Panel>
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <Design.PreviewWith>
+        <Border Width="100" Padding="5">
+            <StackPanel Spacing="20">
+                <controls:ListColumnHeader Height="40" ShowArrows="False" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="True" ShowDownArrow="False" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="40" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Vertical"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="False" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="False" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="True" ShowDownArrow="False" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+                <controls:ListColumnHeader Height="34" ShowArrows="True" ShowDownArrow="True" ShowUpArrow="True" Text="Title" BorderBrush="DeepSkyBlue" BorderThickness="1" Orientation="Horizontal"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+</ResourceDictionary>
