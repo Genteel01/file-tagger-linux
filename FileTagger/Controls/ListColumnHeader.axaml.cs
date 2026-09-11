@@ -1,10 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Controls.Primitives;
 
 namespace FileTagger.Controls;
 
-public partial class ListColumnHeader : UserControl
+public class ListColumnHeader : TemplatedControl
 {
     public static readonly StyledProperty<string?> TextProperty =
         TextBlock.TextProperty.AddOwner<ListColumnHeader>(new StyledPropertyMetadata<string?>(string.Empty, BindingMode.TwoWay, enableDataValidation: true));
@@ -46,10 +47,5 @@ public partial class ListColumnHeader : UserControl
     {
         get => GetValue(ShowArrowsProperty);
         set => SetValue(ShowArrowsProperty, value);
-    }
-
-    public ListColumnHeader()
-    {
-        InitializeComponent();
     }
 }
