@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 
 namespace FileTagger.Controls;
 
@@ -36,6 +37,15 @@ public class ListColumnHeader : TemplatedControl
     {
         get => GetValue(ShowUpArrowProperty);
         set => SetValue(ShowUpArrowProperty, value);
+    }
+
+    public static readonly StyledProperty<Orientation> OrientationProperty =
+        StackPanel.OrientationProperty.AddOwner<ListColumnHeader>(new StyledPropertyMetadata<Orientation>(Orientation.Vertical));
+
+    public Orientation Orientation
+    {
+        get => GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
     }
 
     public static readonly StyledProperty<bool> ShowArrowsProperty =
