@@ -26,6 +26,7 @@
         <Style Selector="controls|ListColumnHeader">
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Orientation" Value="Vertical"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorColour}"/>
             <Setter Property="BorderThickness" Value="0 0 0 2"/>
             <Setter Property="Background" Value="Transparent"/>
