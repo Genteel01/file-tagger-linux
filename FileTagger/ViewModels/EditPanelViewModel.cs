@@ -167,7 +167,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             foreach (PropertyInfo propertyInfo in _trackProperties)
             {
                 bool allTracksMatch = newFieldOptions[propertyInfo.Name]
-                    .All(property => property == propertyInfo.GetValue(SelectedTracks[0]));
+                    .All(property => Equals(property, propertyInfo.GetValue(SelectedTracks[0])));
                 newFieldTexts[propertyInfo.Name] = allTracksMatch ? propertyInfo.GetValue(SelectedTracks[0])?.ToString() ?? "" : UnchangedField;
             }
         }
