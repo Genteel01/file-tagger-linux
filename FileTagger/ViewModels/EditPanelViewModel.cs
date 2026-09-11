@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using ATL;
 using ATL.AudioData;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -23,12 +22,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Value for edit fields that we don't want to change
     /// </summary>
     public const string UnchangedField = "< keep >";
-
-    /// <summary>
-    /// Default image to display with either no or multiple tracks selected
-    /// </summary>
-    private readonly Bitmap _defaultImage =
-        new Bitmap(AssetLoader.Open(new Uri("avares://FileTagger/Assets/placeholder.png", UriKind.Absolute)));
 
     /// <summary>
     /// All the tracks that are currently selected
@@ -59,13 +52,19 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private readonly IFileService _fileService;
 
     /// <summary>
+    /// <see cref="IImageService"/> received through Dependency Injection used for handling images
+    /// </summary>
+    private readonly IImageService _imageService;
+
+    /// <summary>
     /// Array of properties of TrackViewModel that we want to be editable
     /// </summary>
     private readonly PropertyInfo[] _trackProperties;
 
-    public EditPanelViewModel(IFileService fileService)
+    public EditPanelViewModel(IFileService fileService, IImageService imageService)
     {
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
         IsActive = true;
         IEnumerable<string> picTypes = Enum.GetNames<PictureInfo.PIC_TYPE>();
         PictureTypes = [.. picTypes];
@@ -89,6 +88,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         PictureTypes = [];
         _selectedPictureType = "";
         _fileService = new FileService(() => null);
+        _imageService = new ImageService();
     }
     #endif
 
@@ -297,7 +297,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private void RemoveCoverImage()
     {
         PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
-        if (CurrentDisplayedImage == _defaultImage)
+        if (CurrentDisplayedImage == _imageService.GetDefaultImage())
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
@@ -444,10 +444,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
     /// <summary>
     /// Bitmap of the entry in <see cref="SelectedTrackImages"/> to display based on <see cref="DisplayedImageIndex"/>,
-    /// showing <see cref="_defaultImage"/> if SelectedTrackImages is empty.
+    /// showing <see cref="_imageService"/>.GetDefaultImage() if SelectedTrackImages is empty.
     /// Updates when SelectedTrackImages or DisplayedImageIndex change
     /// </summary>
-    public Bitmap CurrentDisplayedImage => SelectedTrackImages.Count > 0 ? SelectedTrackImages[DisplayedImageIndex].Item1 : _defaultImage;
+    public Bitmap CurrentDisplayedImage => SelectedTrackImages.Count > 0 ? SelectedTrackImages[DisplayedImageIndex].Item1 : _imageService.GetDefaultImage();
 
     /// <summary>
     /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes

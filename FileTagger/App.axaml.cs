@@ -29,6 +29,7 @@ public class App : Application
             ServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddTransient<IFileService, FileService>();
             serviceCollection.AddSingleton<IPreferenceService, PreferenceService>();
+            serviceCollection.AddSingleton<IImageService, ImageService>();
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
             serviceCollection.AddSingleton<TrackList>();
