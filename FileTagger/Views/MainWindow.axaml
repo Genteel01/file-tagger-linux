@@ -3,6 +3,7 @@
         xmlns:vm="using:FileTagger.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:FileTagger.Views"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -41,7 +42,7 @@
             <ContentControl Grid.Column="0" Content="{Binding MyEditPanel}"/>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="Gray" BorderThickness="1.5 0 1.5 0" BorderBrush="Gray"/>
             <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0 2 2 2">
-                <ContentControl Content="{Binding MyTrackList}"/>
+                <views:TrackList/>
             </Border>
         </Grid>
     </Grid>

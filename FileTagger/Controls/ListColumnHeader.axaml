@@ -24,9 +24,9 @@
                     <TextBlock
                         Text="{TemplateBinding Text}"
                         Classes="h1" TextAlignment="Center"/>
-                    <Panel>
-                        <PathIcon Tag="Up" Data="{DynamicResource UpArrowIconData}"/>
-                        <PathIcon Tag="Down" Data="{DynamicResource DownArrowIconData}"/>
+                    <Panel IsVisible="{TemplateBinding ShowArrows}">
+                        <PathIcon Data="{DynamicResource UpArrowIconData}" IsVisible="{TemplateBinding ShowUpArrow}"/>
+                        <PathIcon Data="{DynamicResource DownArrowIconData}" IsVisible="{TemplateBinding ShowDownArrow}"/>
                     </Panel>
                 </StackPanel>
             </Border>

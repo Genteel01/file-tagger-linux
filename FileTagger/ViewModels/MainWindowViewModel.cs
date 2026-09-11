@@ -46,12 +46,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public EditPanelViewModel MyEditPanel { get; }
 
     /// <summary>
-    /// Reference to our TrackList so we can bind it in our view
-    /// The view needs to be here in code instead of just in the xml because it gets an IFileService via Dependency Injection
-    /// </summary>
-    public TrackList MyTrackList { get; }
-
-    /// <summary>
     /// <see cref="IFileService"/> received through Dependency Injection used for opening file dialog
     /// </summary>
     private readonly IFileService _fileService;
@@ -70,12 +64,14 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// The current sorting options for Tracks
     /// </summary>
-    public string CurrentSort { get; set; }
+    [ObservableProperty]
+    private string _currentSort;
 
     /// <summary>
     /// Keeps track of whether sorting is ascending or descending
     /// </summary>
-    public bool SortDescending { get; set; }
+    [ObservableProperty]
+    private bool _sortDescending;
 
     /// <summary>
     /// Widths for each column in the track list
@@ -88,10 +84,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private GridLength _editPanelWidth;
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, TrackList trackList)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
-        MyTrackList = trackList ?? throw new ArgumentNullException(nameof(trackList));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
         _supportedFileExtensions = [];
@@ -147,7 +142,6 @@ public partial class MainWindowViewModel : ViewModelBase
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
-        MyTrackList = new TrackList(_preferenceService);
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
         ListColumnWidths = new AvaloniaDictionary<string, double>();
