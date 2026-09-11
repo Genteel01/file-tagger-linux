@@ -21,7 +21,7 @@
             <Setter Property="BorderThickness" Value="0" />
         </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="42"/>
         </Style>
         <Style Selector="controls|ListColumnHeader">
             <Setter Property="VerticalAlignment" Value="Top"/>
