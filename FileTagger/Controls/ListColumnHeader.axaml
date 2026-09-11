@@ -5,9 +5,10 @@
         <Style Selector="^">
             <Style Selector="^ PathIcon">
                 <Setter Property="Foreground" Value="#30000000" />
+                <Setter Property="Height" Value="9" />
             </Style>
-            <Style Selector="^ Panel, ^ PathIcon">
-                <Setter Property="Height" Value="8" />
+            <Style Selector="^ Panel">
+                <Setter Property="Height" Value="13" />
             </Style>
         </Style>
         <Setter Property="Template">
