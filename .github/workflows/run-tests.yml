@@ -1,29 +1,72 @@
-name: Run Tests on Pull Request
+name: Run Tests
+
+#Runs all tests on Pull Request, or when pushing to Master, or when pushing changes to the FileTaggerTests project
 
 on:
   pull_request:
     branches: [ "master" ]
   push:
-    branches: [ "master" ]
 
 jobs:
-  build:
+  #Need a job to check changes, because we can't check for pushes to Master OR pushes in FileTaggerTests/ in the on: push: section
+  changes:
+    if: github.event_name != 'pull_request'
+    runs-on: windows-latest
+    env:
+      Test_Project_Path: FileTaggerTests
+    outputs:
+      run_tests: ${{ steps.filter.outputs.run_tests }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Check changed files
+        id: filter
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+          REF: ${{ github.ref }}
+        shell: pwsh
+        run: |
+          $runTests = $false
+
+          $commitParents = @(git rev-list --parents -n 1 $env:AFTER_SHA) -split " "
+          $isMergeCommit = $commitParents.Count -gt 2
+
+          if (-not $isMergeCommit -and
+              ($env:REF -eq "refs/heads/master" -or
+               $env:BEFORE_SHA -eq "0000000000000000000000000000000000000000")) {
+            $runTests = $true
+          }
+          elseif (-not $isMergeCommit) {
+            $changedFiles = git diff --name-only $env:BEFORE_SHA $env:AFTER_SHA
+            $runTests = @($changedFiles | Where-Object {
+              $_ -like "$env:Test_Project_Path/*"
+            }).Count -gt 0
+          }
+
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "run_tests=$($runTests.ToString().ToLowerInvariant())"
+
+  test:
+    needs: changes
+    if: always() && (github.event_name == 'pull_request' || needs.changes.outputs.run_tests == 'true')
     runs-on: windows-latest  # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
       Solution_Name: FileTagger.sln
-      Project_Path: FileTagger/FileTagger.csproj
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
 
       # Install the .NET Core workload
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: 10.0.x
 
