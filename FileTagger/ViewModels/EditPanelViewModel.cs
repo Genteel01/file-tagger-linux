@@ -215,7 +215,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         foreach (TrackViewModel track in SelectedTracks)
         {
             track.EmbeddedPictures.RemoveAll(pic => pic.PicType == SelectedPictureType);
-            track.EmbeddedPictures.AddRange(images.Select(pic => pic.Item2));
+            track.EmbeddedPictures.AddRange(images);
             track.Changed = true;
         }
         ChooseDisplayedImage();
@@ -233,7 +233,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         if(images.Count == 0) return;
         foreach (TrackViewModel track in SelectedTracks)
         {
-            track.EmbeddedPictures.AddRange(images.Select(pic => pic.Item2));
+            track.EmbeddedPictures.AddRange(images);
             for (int i = 0; i < track.EmbeddedPictures.Count; i++)
             {
                 track.EmbeddedPictures[i].Position = i + 1;
@@ -246,9 +246,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Opens the file picker to select image files, and returns a list of (<see cref="Bitmap"/>, <see cref="PictureInfo"/>) for every image
+    /// Opens the file picker to select image files and returns a list of <see cref="PictureInfo"/> for every image
     /// </summary>
-    private async Task<List<(Bitmap, PictureInfo)>> SelectImageFiles(PictureInfo.PIC_TYPE pictureType)
+    private async Task<List<PictureInfo>> SelectImageFiles(PictureInfo.PIC_TYPE pictureType)
     {
         ErrorMessages?.Clear();
         try
@@ -257,18 +257,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
             IReadOnlyList<IStorageFile> files = await _fileService.OpenImageFiles();
 
-            List<(Bitmap, PictureInfo)> images = [];
+            List<PictureInfo> images = [];
 
             for (int i = 0; i < files.Count; i++)
             {
                 IStorageFile file = files[i];
                 await using Stream stream = await file.OpenReadAsync();
-                Bitmap bitmap = new Bitmap(stream);
-                stream.Seek(0, SeekOrigin.Begin);
                 PictureInfo picInfo = PictureInfo.fromBinaryData(stream, (int)stream.Length,
                     pictureType, MetaDataIOFactory.TagType.ANY, 0, i + 1);
                 picInfo.ComputePicHash();
-                images.Add((bitmap, picInfo));
+                images.Add(picInfo);
             }
 
             return images;
