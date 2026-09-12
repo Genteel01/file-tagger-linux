@@ -289,13 +289,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
             List<PictureInfo> images = [];
 
-            for (int i = 0; i < files.Count; i++)
+            foreach (IStorageFile file in files)
             {
-                IStorageFile file = files[i];
                 await using Stream stream = await file.OpenReadAsync();
-                PictureInfo picInfo = PictureInfo.fromBinaryData(stream, (int)stream.Length,
-                    pictureType, MetaDataIOFactory.TagType.ANY, 0, i + 1);
-                picInfo.ComputePicHash();
+                PictureInfo picInfo = _imageService.CreatePictureInfoFromStream(stream, pictureType);
                 images.Add(picInfo);
             }
 
