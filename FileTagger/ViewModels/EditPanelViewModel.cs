@@ -322,56 +322,44 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private void ChooseDisplayedImage()
     {
         DisplayedImageIndex = 0;
-        if (!HasSelectedTracks)
-        {
-            SelectedTrackImages = [];
-            return;
-        }
-        List<PictureInfo> newSelectedTrackImages = [];
+        SelectedTrackImages = [];
+        if (!HasSelectedTracks) return;
 
-        //If there's only one track selected, display all its images
+        List<PictureInfo> referencePics = SelectedTracks[0].EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
+        if (referencePics.Count == 0) return;
+        //If there's only one track selected, display its images
         if (SelectedTracks.Count == 1)
         {
-            IEnumerable<PictureInfo> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.PicType == SelectedPictureType);
-            newSelectedTrackImages = [.. validPics];
+            SelectedTrackImages = GetPicturePairs(referencePics);
+            return;
         }
         //If there is more than one track selected, display its images if they are the same across the entire selection
-        //Only proceed if all selected tracks actually have an image of the current type
-        else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.PicType == SelectedPictureType)))
+        List<List<PictureInfo>> picsPerTrack = [];
+        //Skip the first track, since its images are in referencePics
+        foreach (TrackViewModel track in SelectedTracks.Skip(1))
         {
-            //Get a list of the pics of the correct type for each selected track
-            List<List<PictureInfo>> validPicsPerTrack = [];
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                validPicsPerTrack.Add([.. track.EmbeddedPictures.Where(pic => pic.PicType == SelectedPictureType)]);
-            }
-            //If each selected track doesn't have the same number of pics, we already know they don't match and can move on
-            int firstTrackImageCount = validPicsPerTrack.First().Count;
-            bool matchingSizes = validPicsPerTrack.All(trackPics => trackPics.Count== firstTrackImageCount);
-            if (matchingSizes)
-            {
-                //Loop through each picture and check whether it is the same on each selected track
-                bool picsMatch = true;
-                for (int i = 0; i < firstTrackImageCount; i++)
-                {
-                    PictureInfo firstTrackPic = validPicsPerTrack.First()[i];
-                    if (!validPicsPerTrack.All(trackPics => _imageService.ArePicturesIdentical(firstTrackPic, trackPics[i])))
-                    {
-                        picsMatch = false;
-                        break;
-                    }
-                }
-
-                if (picsMatch)
-                {
-                    //If all pics match, display them all
-                    newSelectedTrackImages = [.. validPicsPerTrack.First()];
-                }
-            }
+            List<PictureInfo> relevantPics = track.EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
+            if (relevantPics.Count != referencePics.Count) return;
+            picsPerTrack.Add(relevantPics);
         }
 
+        for (int i = 0; i < referencePics.Count; i++)
+        {
+            bool allTracksMatch = picsPerTrack.All(pics => _imageService.ArePicturesIdentical(referencePics[i], pics[i]));
+            if(!allTracksMatch) return;
+        }
+        SelectedTrackImages = GetPicturePairs(referencePics);
+    }
+
+    /// <summary>
+    /// Gets a list of the paired <see cref="Bitmap"/> for each given <see cref="PictureInfo"/>
+    /// </summary>
+    /// <param name="pictures"></param>
+    /// <returns></returns>
+    private List<(Bitmap, PictureInfo)> GetPicturePairs(IEnumerable<PictureInfo> pictures)
+    {
         List<(Bitmap, PictureInfo)> newResolvedImages = [];
-        foreach (PictureInfo picInfo in newSelectedTrackImages)
+        foreach (PictureInfo picInfo in pictures)
         {
             _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
             if (bitmap == null)
@@ -381,7 +369,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             }
             newResolvedImages.Add((bitmap, picInfo));
         }
-        SelectedTrackImages = newResolvedImages;
+        return newResolvedImages;
     }
 
     /// <summary>
