@@ -7,6 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using ATL;
 using ATL.AudioData;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -52,6 +55,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private readonly IFileService _fileService;
 
     /// <summary>
+    /// Function to get the <see cref="TopLevel"/>, which we use to get the <see cref="IClipboard"/> for Cut/Copy/Paste of images
+    /// </summary>
+    private readonly Func<TopLevel?> _getTopLevel;
+
+    /// <summary>
     /// <see cref="IImageService"/> received through Dependency Injection used for handling images
     /// </summary>
     private readonly IImageService _imageService;
@@ -61,10 +69,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private readonly PropertyInfo[] _trackProperties;
 
-    public EditPanelViewModel(IFileService fileService, IImageService imageService)
+    public EditPanelViewModel(IFileService fileService, IImageService imageService, Func<TopLevel?> getTopLevel)
     {
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
+        _getTopLevel = getTopLevel;
         IsActive = true;
 
         //Select properties that are writable, and are either string or int?
@@ -305,15 +314,41 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
         else
         {
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
-                PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
-                track.EmbeddedPictures.Remove(matchingImage);
-                track.Changed = true;
-            }
+            RemoveCurrentlyDisplayedImage();
         }
         ChooseDisplayedImage();
+    }
+
+    /// <summary>
+    /// Removes the currently displayed image from the selected tracks
+    /// </summary>
+    private void RemoveCurrentlyDisplayedImage()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
+            PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
+            track.EmbeddedPictures.Remove(matchingImage);
+            track.Changed = true;
+        }
+    }
+
+    [RelayCommand]
+    private async Task CutCoverImage()
+    {
+        await CopyCoverImage();
+        RemoveCurrentlyDisplayedImage();
+    }
+
+    [RelayCommand]
+    private async Task CopyCoverImage()
+    {
+        IClipboard? clipboard = _getTopLevel.Invoke()?.Clipboard;
+        if (clipboard == null) return;
+        Bitmap bitmap = CurrentDisplayedImage;
+        DataTransfer data = new DataTransfer();
+        data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
+        await clipboard.SetDataAsync(data);
     }
 
     /// <summary>

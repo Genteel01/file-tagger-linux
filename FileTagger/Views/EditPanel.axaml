@@ -94,8 +94,8 @@
                         <MenuItem Header="Set cover type"/>
                         <MenuItem Header="Set cover description"/>
                         <Separator/>
-                        <MenuItem Header="Cut cover"/>
-                        <MenuItem Header="Copy cover"/>
+                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Cut cover" Command="{Binding CutCoverImageCommand}"/>
+                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Copy cover" Command="{Binding CopyCoverImageCommand}"/>
                         <MenuItem Header="Paste cover"/>
                     </ContextMenu>
                 </Image.ContextMenu>
