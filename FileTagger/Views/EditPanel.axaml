@@ -88,8 +88,8 @@
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
                         <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
-                        <MenuItem Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
-                        <MenuItem Header="Extract cover"/>
+                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
+                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Extract cover"/>
                         <Separator/>
                         <MenuItem Header="Set cover type"/>
                         <MenuItem Header="Set cover description"/>
