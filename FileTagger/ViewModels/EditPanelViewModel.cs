@@ -270,10 +270,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             for (int i = 0; i < files.Count; i++)
             {
                 IStorageFile file = files[i];
-                Stream stream = await file.OpenReadAsync();
+                await using Stream stream = await file.OpenReadAsync();
                 Bitmap bitmap = new Bitmap(stream);
-                await stream.DisposeAsync();
-                stream = await file.OpenReadAsync();
+                stream.Seek(0, SeekOrigin.Begin);
                 PictureInfo picInfo = PictureInfo.fromBinaryData(stream, (int)stream.Length,
                     pictureType, MetaDataIOFactory.TagType.ANY, 0, i + 1);
                 await stream.DisposeAsync();
