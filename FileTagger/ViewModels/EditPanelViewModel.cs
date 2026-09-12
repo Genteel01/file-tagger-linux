@@ -245,7 +245,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             {
                 track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
                 track.EmbeddedPictures.AddRange(images);
-                track.Changed = true;
             }
         }
         ChooseDisplayedImage();
@@ -264,11 +263,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         foreach (TrackViewModel track in SelectedTracks)
         {
             track.EmbeddedPictures.AddRange(images);
-            for (int i = 0; i < track.EmbeddedPictures.Count; i++)
-            {
-                track.EmbeddedPictures[i].Position = i + 1;
-            }
-            track.Changed = true;
         }
 
         ChooseDisplayedImage();
@@ -320,9 +314,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
-                int oldCount = track.EmbeddedPictures.Count;
                 track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
-                if(track.EmbeddedPictures.Count != oldCount) track.Changed = true;
             }
         }
         ChooseDisplayedImage();
@@ -350,7 +342,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         if (index != -1)
         {
             track.EmbeddedPictures.RemoveAt(index);
-            track.Changed = true;
         }
         return index;
     }

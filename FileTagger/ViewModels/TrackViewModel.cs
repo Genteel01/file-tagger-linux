@@ -114,6 +114,14 @@ public partial class TrackViewModel : ViewModelBase
         Composer = track.Composer;
         Comment = track.Comment;
         EmbeddedPictures = [.. track.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported)];
+        EmbeddedPictures.CollectionChanged += (_, _) =>
+        {
+            for (int i = 0; i < EmbeddedPictures.Count; i++)
+            {
+                EmbeddedPictures[i].Position = i + 1;
+            }
+            Changed = true;
+        };
         _finishedSetup = true;
     }
 
