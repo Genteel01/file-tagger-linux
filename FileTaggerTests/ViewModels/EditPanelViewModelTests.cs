@@ -10,7 +10,7 @@ public class EditPanelViewModelTests
     {
         IFileService fileService = new FakeFileService();
         IImageService imageService = new FakeImageService();
-        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService);
+        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService, () => null);
         return editPanelViewModel;
     }
 
