@@ -275,7 +275,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
                 stream.Seek(0, SeekOrigin.Begin);
                 PictureInfo picInfo = PictureInfo.fromBinaryData(stream, (int)stream.Length,
                     pictureType, MetaDataIOFactory.TagType.ANY, 0, i + 1);
-                await stream.DisposeAsync();
+                picInfo.ComputePicHash();
                 images.Add((bitmap, picInfo));
             }
 
@@ -310,7 +310,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             {
                 int oldCount = track.EmbeddedPictures.Count;
                 (Bitmap, PictureInfo) displayedImage = SelectedTrackImages[DisplayedImageIndex];
-                PictureInfo matchingImage = track.EmbeddedPictures.First(pic => ArePicturesIdentical(displayedImage.Item2.PictureData, pic.PictureData) && pic.Equals(displayedImage.Item2));
+                PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage.Item2, pic) && pic.Equals(displayedImage.Item2));
                 track.EmbeddedPictures.Remove(matchingImage);
                 int newCount = track.EmbeddedPictures.Count;
                 if(oldCount != newCount) track.Changed = true;
@@ -355,12 +355,12 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             bool matchingSizes = validPicsPerTrack.All(trackPics => trackPics.Count== firstTrackImageCount);
             if (matchingSizes)
             {
-                //Loop through each picture, and check whether it is the same on each selected track
+                //Loop through each picture and check whether it is the same on each selected track
                 bool picsMatch = true;
                 for (int i = 0; i < firstTrackImageCount; i++)
                 {
-                    byte[] firstTrackPicData = validPicsPerTrack.First()[i].PictureData;
-                    if (!validPicsPerTrack.All(trackPics => ArePicturesIdentical(firstTrackPicData, trackPics[i].PictureData)))
+                    PictureInfo firstTrackPic = validPicsPerTrack.First()[i];
+                    if (!validPicsPerTrack.All(trackPics => _imageService.ArePicturesIdentical(firstTrackPic, trackPics[i])))
                     {
                         picsMatch = false;
                         break;
@@ -382,21 +382,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             newResolvedImages.Add((new Bitmap(new MemoryStream(picInfo.PictureData)), picInfo));
         }
         SelectedTrackImages = newResolvedImages;
-    }
-
-    /// <summary>
-    /// Determines whether two pictures are identical by examining their Byte data
-    /// </summary>
-    /// <returns></returns>
-    private static bool ArePicturesIdentical(byte[] pic1, byte[] pic2)
-    {
-        if(pic1.Length != pic2.Length) return false;
-
-        for (int i = 0; i < pic1.Length; i++)
-        {
-            if (pic1[i] != pic2[i]) return false;
-        }
-        return true;
     }
 
     /// <summary>
