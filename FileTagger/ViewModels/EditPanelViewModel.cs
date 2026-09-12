@@ -92,6 +92,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _trackProperties = [];
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
+        _getTopLevel = () => null;
     }
     #endif
 
