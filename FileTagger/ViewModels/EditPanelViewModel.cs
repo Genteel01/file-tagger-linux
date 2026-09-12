@@ -289,20 +289,19 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
-                if(track.EmbeddedPictures.Count != 0) track.Changed = true;
+                int oldCount = track.EmbeddedPictures.Count;
                 track.EmbeddedPictures.RemoveAll(pic => pic.PicType == SelectedPictureType);
+                if(track.EmbeddedPictures.Count != oldCount) track.Changed = true;
             }
         }
         else
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
-                int oldCount = track.EmbeddedPictures.Count;
-                (Bitmap, PictureInfo) displayedImage = SelectedTrackImages[DisplayedImageIndex];
-                PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage.Item2, pic) && pic.Equals(displayedImage.Item2));
+                PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex].Item2;
+                PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
                 track.EmbeddedPictures.Remove(matchingImage);
-                int newCount = track.EmbeddedPictures.Count;
-                if(oldCount != newCount) track.Changed = true;
+                track.Changed = true;
             }
         }
         ChooseDisplayedImage();
