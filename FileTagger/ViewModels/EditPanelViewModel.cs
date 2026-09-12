@@ -303,7 +303,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void RemoveCoverImage()
     {
-        if (IsShowingTrackImages)
+        if (!IsShowingTrackImages)
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
