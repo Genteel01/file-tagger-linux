@@ -203,6 +203,15 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
+    /// Predicate for <see cref="IEnumerable&lt;PictureInfo>"/> LINQ expressions to check
+    /// if <see cref="PictureInfo.PicType"/> matches <see cref="SelectedPictureType"/>
+    /// <![CDATA[ IEnumerable<PictureInfo> ]]>
+    /// </summary>
+    private bool MatchesSelectedPicType(PictureInfo pic)
+    {
+        return pic.PicType == SelectedPictureType;
+    }
+    /// <summary>
     /// Opens the file picker for the user to select new images,
     /// then replaces the cover images of the currently selected type, for the currently selected tracks
     /// </summary>
@@ -214,7 +223,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         if(images.Count == 0) return;
         foreach (TrackViewModel track in SelectedTracks)
         {
-            track.EmbeddedPictures.RemoveAll(pic => pic.PicType == SelectedPictureType);
+            track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
             track.EmbeddedPictures.AddRange(images);
             track.Changed = true;
         }
@@ -290,7 +299,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             foreach (TrackViewModel track in SelectedTracks)
             {
                 int oldCount = track.EmbeddedPictures.Count;
-                track.EmbeddedPictures.RemoveAll(pic => pic.PicType == SelectedPictureType);
+                track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
                 if(track.EmbeddedPictures.Count != oldCount) track.Changed = true;
             }
         }
