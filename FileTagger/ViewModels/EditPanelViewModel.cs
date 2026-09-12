@@ -340,7 +340,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Removes the currently displayed image from the given track
+    /// Removes the currently displayed image from the given track.
     /// Returns the index of the removed image in the given track's EmbeddedPictures
     /// </summary>
     private int RemoveCurrentlyDisplayedImage(TrackViewModel track)
@@ -348,8 +348,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
         int index = track.EmbeddedPictures.FindIndex(pic =>
             _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
-        track.EmbeddedPictures.RemoveAt(index);
-        track.Changed = true;
+        if (index != -1)
+        {
+            track.EmbeddedPictures.RemoveAt(index);
+            track.Changed = true;
+        }
         return index;
     }
 
