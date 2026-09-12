@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using ATL;
@@ -77,8 +77,7 @@ public partial class TrackViewModel : ViewModelBase
     [ObservableProperty]
     private string _comment;
 
-    [ObservableProperty]
-    private List<PictureInfo> _embeddedPictures;
+    public ObservableCollection<PictureInfo> EmbeddedPictures { get; }
 
     /// <summary>
     /// Gets or sets whether the track has changed
@@ -114,7 +113,7 @@ public partial class TrackViewModel : ViewModelBase
         AlbumArtist = track.AlbumArtist;
         Composer = track.Composer;
         Comment = track.Comment;
-        EmbeddedPictures = track.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported).ToList();
+        EmbeddedPictures = [.. track.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported)];
         _finishedSetup = true;
     }
 
