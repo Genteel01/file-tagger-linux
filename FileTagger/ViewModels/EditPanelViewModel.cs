@@ -232,7 +232,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
         if (IsShowingTrackImages)
         {
-            List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
             foreach (TrackViewModel track in SelectedTracks)
             {
                 int index = RemoveCurrentlyDisplayedImage(track);
