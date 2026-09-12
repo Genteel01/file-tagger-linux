@@ -294,7 +294,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void RemoveCoverImage()
     {
-        if (CurrentDisplayedImage == _imageService.GetDefaultImage())
+        if (IsShowingTrackImages)
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
@@ -398,7 +398,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// List of images for the <see cref="SelectedTracks"/> for the <see cref="SelectedPictureType"/>.
     /// Will be empty if selected tracks have different images
     /// </summary>
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))] [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))]
+    [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    [NotifyPropertyChangedFor(nameof(IsShowingTrackImages))]
+    [ObservableProperty]
     private List<PictureInfo> _selectedTrackImages = [];
 
     /// <summary>
@@ -412,12 +415,17 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// showing <see cref="_imageService"/>.GetDefaultImage() if SelectedTrackImages is empty.
     /// Updates when SelectedTrackImages or DisplayedImageIndex change
     /// </summary>
-    public Bitmap CurrentDisplayedImage => SelectedTrackImages.Count > 0 ? GetAndCacheBitmap(SelectedTrackImages[DisplayedImageIndex]) : _imageService.GetDefaultImage();
+    public Bitmap CurrentDisplayedImage => IsShowingTrackImages ? GetAndCacheBitmap(SelectedTrackImages[DisplayedImageIndex]) : _imageService.GetDefaultImage();
 
     /// <summary>
     /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes
     /// </summary>
     public bool ShowImageNavigationButtons => SelectedTrackImages.Count > 1;
+
+    /// <summary>
+    /// Whether we are showing the images of the selected tracks, or the default image
+    /// </summary>
+    public bool IsShowingTrackImages => SelectedTrackImages.Count > 0;
 
     /// <summary>
     /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values as strings, for populating a selection dropdown
