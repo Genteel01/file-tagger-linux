@@ -66,10 +66,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
         IsActive = true;
-        IEnumerable<string> picTypes = Enum.GetNames<PictureInfo.PIC_TYPE>();
-        PictureTypes = [.. picTypes];
-
-        SelectedPictureType = Enum.GetName(PictureInfo.PIC_TYPE.Front)!;
 
         //Select properties that are writable, and are either string or int?
         _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
@@ -85,8 +81,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     public EditPanelViewModel()
     {
         _trackProperties = [];
-        PictureTypes = [];
-        _selectedPictureType = "";
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
     }
@@ -215,13 +209,12 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private async Task ReplaceCoverImage(CancellationToken token)
     {
-        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
-        List<(Bitmap, PictureInfo)> images = await SelectImageFiles(pictureType);
+        List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
 
         if(images.Count == 0) return;
         foreach (TrackViewModel track in SelectedTracks)
         {
-            track.EmbeddedPictures.RemoveAll(pic => pic.PicType == pictureType);
+            track.EmbeddedPictures.RemoveAll(pic => pic.PicType == SelectedPictureType);
             track.EmbeddedPictures.AddRange(images.Select(pic => pic.Item2));
             track.Changed = true;
         }
@@ -235,8 +228,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private async Task AddCoverImages(CancellationToken token)
     {
-        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
-        List<(Bitmap, PictureInfo)> images = await SelectImageFiles(pictureType);
+        List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
 
         if(images.Count == 0) return;
         foreach (TrackViewModel track in SelectedTracks)
@@ -295,13 +287,12 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void RemoveCoverImage()
     {
-        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
         if (CurrentDisplayedImage == _imageService.GetDefaultImage())
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
                 if(track.EmbeddedPictures.Count != 0) track.Changed = true;
-                track.EmbeddedPictures.RemoveAll(pic => pic.PicType == pictureType);
+                track.EmbeddedPictures.RemoveAll(pic => pic.PicType == SelectedPictureType);
             }
         }
         else
@@ -332,23 +323,21 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
         List<PictureInfo> newSelectedTrackImages = [];
 
-        PictureInfo.PIC_TYPE pictureType = Enum.Parse<PictureInfo.PIC_TYPE>(SelectedPictureType);
-
         //If there's only one track selected, display all its images
         if (SelectedTracks.Count == 1)
         {
-            IEnumerable<PictureInfo> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.PicType == pictureType);
+            IEnumerable<PictureInfo> validPics = SelectedTracks.First().EmbeddedPictures.Where(pic => pic.PicType == SelectedPictureType);
             newSelectedTrackImages = [.. validPics];
         }
         //If there is more than one track selected, display its images if they are the same across the entire selection
         //Only proceed if all selected tracks actually have an image of the current type
-        else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.PicType == pictureType)))
+        else if (SelectedTracks.All(track => track.EmbeddedPictures.Any(pic => pic.PicType == SelectedPictureType)))
         {
             //Get a list of the pics of the correct type for each selected track
             List<List<PictureInfo>> validPicsPerTrack = [];
             foreach (TrackViewModel track in SelectedTracks)
             {
-                validPicsPerTrack.Add([.. track.EmbeddedPictures.Where(pic => pic.PicType == pictureType)]);
+                validPicsPerTrack.Add([.. track.EmbeddedPictures.Where(pic => pic.PicType == SelectedPictureType)]);
             }
             //If each selected track doesn't have the same number of pics, we already know they don't match and can move on
             int firstTrackImageCount = validPicsPerTrack.First().Count;
@@ -393,7 +382,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Choose the correct image to display when <see cref="SelectedPictureType"/> changes
     /// </summary>
     // ReSharper disable once UnusedParameterInPartialMethod
-    partial void OnSelectedPictureTypeChanged(string value)
+    partial void OnSelectedPictureTypeChanged(PictureInfo.PIC_TYPE value)
     {
         ChooseDisplayedImage();
     }
@@ -446,12 +435,13 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values as strings, for populating a selection dropdown
     /// </summary>
-    public List<string> PictureTypes { get; }
+    public PictureInfo.PIC_TYPE[] PictureTypes { get; } = Enum.GetValues<PictureInfo.PIC_TYPE>();
 
     /// <summary>
     /// String of the selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
     /// </summary>
-    [ObservableProperty] private string _selectedPictureType;
+    [ObservableProperty]
+    private PictureInfo.PIC_TYPE _selectedPictureType = PictureInfo.PIC_TYPE.Front;
 
     /// <summary>
     /// Dictionary of Bitmaps mapped to the corresponding <see cref="PictureInfo.PictureHash"/>,
