@@ -221,20 +221,32 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         return pic.PicType == SelectedPictureType;
     }
     /// <summary>
-    /// Opens the file picker for the user to select new images,
-    /// then replaces the cover images of the currently selected type, for the currently selected tracks
+    /// Opens the file picker for the user to select new images, then replaces the currently displayed image,
+    /// or replaces all images of the current <see cref="SelectedPictureType"/> is we aren't showing individual images
     /// </summary>
     [RelayCommand]
     private async Task ReplaceCoverImage(CancellationToken token)
     {
-        List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
-
-        if(images.Count == 0) return;
-        foreach (TrackViewModel track in SelectedTracks)
+        if (IsShowingTrackImages)
         {
-            track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
-            track.EmbeddedPictures.AddRange(images);
-            track.Changed = true;
+            List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                int index = RemoveCurrentlyDisplayedImage(track);
+                track.EmbeddedPictures.InsertRange(index, images);
+            }
+        }
+        else
+        {
+            List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
+
+            if(images.Count == 0) return;
+            foreach (TrackViewModel track in SelectedTracks)
+            {
+                track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
+                track.EmbeddedPictures.AddRange(images);
+                track.Changed = true;
+            }
         }
         ChooseDisplayedImage();
     }
