@@ -303,7 +303,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void RemoveCoverImage()
     {
-        if (!IsShowingTrackImages)
+        if (IsShowingTrackImages)
+        {
+            RemoveCurrentlyDisplayedImage();
+        }
+        else
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
@@ -311,10 +315,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
                 track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
                 if(track.EmbeddedPictures.Count != oldCount) track.Changed = true;
             }
-        }
-        else
-        {
-            RemoveCurrentlyDisplayedImage();
         }
         ChooseDisplayedImage();
     }
