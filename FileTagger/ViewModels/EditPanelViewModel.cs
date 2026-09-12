@@ -305,7 +305,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         if (IsShowingTrackImages)
         {
-            RemoveCurrentlyDisplayedImage();
+            RemoveCurrentlyDisplayedImages(SelectedTracks);
         }
         else
         {
@@ -320,24 +320,35 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Removes the currently displayed image from the selected tracks
+    /// Removes the currently displayed image from the given tracks
     /// </summary>
-    private void RemoveCurrentlyDisplayedImage()
+    private void RemoveCurrentlyDisplayedImages(List<TrackViewModel> tracks)
     {
-        foreach (TrackViewModel track in SelectedTracks)
+        foreach (TrackViewModel track in tracks)
         {
-            PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
-            PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
-            track.EmbeddedPictures.Remove(matchingImage);
-            track.Changed = true;
+            RemoveCurrentlyDisplayedImage(track);
         }
+    }
+
+    /// <summary>
+    /// Removes the currently displayed image from the given track
+    /// Returns the index of the removed image in the given track's EmbeddedPictures
+    /// </summary>
+    private int RemoveCurrentlyDisplayedImage(TrackViewModel track)
+    {
+        PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
+        int index = track.EmbeddedPictures.FindIndex(pic =>
+            _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
+        track.EmbeddedPictures.RemoveAt(index);
+        track.Changed = true;
+        return index;
     }
 
     [RelayCommand]
     private async Task CutCoverImage()
     {
         await CopyCoverImage();
-        RemoveCurrentlyDisplayedImage();
+        RemoveCurrentlyDisplayedImages(SelectedTracks);
     }
 
     [RelayCommand]
