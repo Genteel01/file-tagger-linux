@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using ATL;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
@@ -55,6 +56,31 @@ public static class MyExtensions
                 PropertyInfo sizeProperty = typeof(Preferences).GetProperty(nameof(Preferences.WindowSize))!;
                 preferenceService.StorePreferenceItem(sizeProperty, (window.Width, window.Height));
             }
+        }
+    }
+
+    /// <summary>
+    /// Extensions for PictureInfo
+    /// </summary>
+    extension(PictureInfo pictureInfo)
+    {
+        /// <summary>
+        /// Test the equality of the images in two PictureInfo
+        /// </summary>
+        public bool PicturesEqual(PictureInfo other)
+        {
+            if(pictureInfo.PictureHash == 0) pictureInfo.ComputePicHash();
+            if(other.PictureHash == 0) other.ComputePicHash();
+            return pictureInfo.PictureHash == other.PictureHash;
+        }
+
+        /// <summary>
+        /// Test the equality of two PictureInfo regardless of how they're represented internally (native codes or generic enum)
+        /// , while also testing the equality of their images
+        /// </summary>
+        public bool TrueEqual(PictureInfo other)
+        {
+            return pictureInfo.PicturesEqual(other) && pictureInfo.EqualsProper(other);
         }
     }
 }

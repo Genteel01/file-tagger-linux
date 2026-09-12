@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using ATL;
-using ATL.AudioData;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
@@ -15,6 +14,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FileTagger.Extensions;
 using FileTagger.Services;
 
 namespace FileTagger.ViewModels;
@@ -346,8 +346,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private int RemoveCurrentlyDisplayedImage(TrackViewModel track)
     {
         PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
-        int index = track.EmbeddedPictures.FindIndex(pic =>
-            _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
+        int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(displayedImage));
         if (index != -1)
         {
             track.EmbeddedPictures.RemoveAt(index);
@@ -403,7 +402,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
         for (int i = 0; i < referencePics.Count; i++)
         {
-            bool allTracksMatch = picsPerTrack.All(pics => _imageService.ArePicturesIdentical(referencePics[i], pics[i]));
+            bool allTracksMatch = picsPerTrack.All(pics => pics[i].PicturesEqual(referencePics[i]));
             if(!allTracksMatch) return;
         }
         SelectedTrackImages = referencePics;
