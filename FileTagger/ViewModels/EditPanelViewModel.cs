@@ -307,7 +307,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         {
             foreach (TrackViewModel track in SelectedTracks)
             {
-                PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex].Item2;
+                PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
                 PictureInfo matchingImage = track.EmbeddedPictures.First(pic => _imageService.ArePicturesIdentical(displayedImage, pic) && pic.Equals(displayedImage));
                 track.EmbeddedPictures.Remove(matchingImage);
                 track.Changed = true;
@@ -330,7 +330,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         //If there's only one track selected, display its images
         if (SelectedTracks.Count == 1)
         {
-            SelectedTrackImages = GetPicturePairs(referencePics);
+            SelectedTrackImages = referencePics;
             return;
         }
         //If there is more than one track selected, display its images if they are the same across the entire selection
@@ -348,28 +348,21 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             bool allTracksMatch = picsPerTrack.All(pics => _imageService.ArePicturesIdentical(referencePics[i], pics[i]));
             if(!allTracksMatch) return;
         }
-        SelectedTrackImages = GetPicturePairs(referencePics);
+        SelectedTrackImages = referencePics;
     }
 
     /// <summary>
-    /// Gets a list of the paired <see cref="Bitmap"/> for each given <see cref="PictureInfo"/>
+    /// Gets a <see cref="Bitmap"/> of the given <see cref="PictureInfo"/>
     /// </summary>
-    /// <param name="pictures"></param>
-    /// <returns></returns>
-    private List<(Bitmap, PictureInfo)> GetPicturePairs(IEnumerable<PictureInfo> pictures)
+    private Bitmap GetAndCacheBitmap(PictureInfo picInfo)
     {
-        List<(Bitmap, PictureInfo)> newResolvedImages = [];
-        foreach (PictureInfo picInfo in pictures)
+        _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
+        if (bitmap == null)
         {
-            _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
-            if (bitmap == null)
-            {
-                bitmap = new Bitmap(new MemoryStream(picInfo.PictureData));
-                _cachedImages[picInfo.PictureHash] = bitmap;
-            }
-            newResolvedImages.Add((bitmap, picInfo));
+            bitmap = new Bitmap(new MemoryStream(picInfo.PictureData));
+            _cachedImages[picInfo.PictureHash] = bitmap;
         }
-        return newResolvedImages;
+        return bitmap;
     }
 
     /// <summary>
@@ -406,7 +399,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Will be empty if selected tracks have different images
     /// </summary>
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))] [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
-    private List<(Bitmap, PictureInfo)> _selectedTrackImages = [];
+    private List<PictureInfo> _selectedTrackImages = [];
 
     /// <summary>
     /// The index representing which entry in <see cref="SelectedTrackImages"/> to display
@@ -419,7 +412,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// showing <see cref="_imageService"/>.GetDefaultImage() if SelectedTrackImages is empty.
     /// Updates when SelectedTrackImages or DisplayedImageIndex change
     /// </summary>
-    public Bitmap CurrentDisplayedImage => SelectedTrackImages.Count > 0 ? SelectedTrackImages[DisplayedImageIndex].Item1 : _imageService.GetDefaultImage();
+    public Bitmap CurrentDisplayedImage => SelectedTrackImages.Count > 0 ? GetAndCacheBitmap(SelectedTrackImages[DisplayedImageIndex]) : _imageService.GetDefaultImage();
 
     /// <summary>
     /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes
