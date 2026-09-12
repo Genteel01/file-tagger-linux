@@ -227,6 +227,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private async Task ReplaceCoverImage(CancellationToken token)
     {
+        List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
+        if(images.Count == 0) return;
+
         if (IsShowingTrackImages)
         {
             List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
@@ -238,9 +241,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
         else
         {
-            List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
-
-            if(images.Count == 0) return;
             foreach (TrackViewModel track in SelectedTracks)
             {
                 track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
