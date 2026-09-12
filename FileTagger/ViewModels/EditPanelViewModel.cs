@@ -378,8 +378,13 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         List<(Bitmap, PictureInfo)> newResolvedImages = [];
         foreach (PictureInfo picInfo in newSelectedTrackImages)
         {
-            //TODO Should probably cache the Bitmaps by storing them on the SelectedImage.EmbeddedPictures
-            newResolvedImages.Add((new Bitmap(new MemoryStream(picInfo.PictureData)), picInfo));
+            _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
+            if (bitmap == null)
+            {
+                bitmap = new Bitmap(new MemoryStream(picInfo.PictureData));
+                _cachedImages[picInfo.PictureHash] = bitmap;
+            }
+            newResolvedImages.Add((bitmap, picInfo));
         }
         SelectedTrackImages = newResolvedImages;
     }
@@ -447,4 +452,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// String of the selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
     /// </summary>
     [ObservableProperty] private string _selectedPictureType;
+
+    /// <summary>
+    /// Dictionary of Bitmaps mapped to the corresponding <see cref="PictureInfo.PictureHash"/>,
+    /// so we don't have to re-decode the same image multiple times
+    /// </summary>
+    private readonly Dictionary<uint, Bitmap> _cachedImages = new Dictionary<uint, Bitmap>();
 }
