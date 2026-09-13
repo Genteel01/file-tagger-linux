@@ -13,12 +13,9 @@
         Height="900"
         Padding="4">
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <!-- We give a name to the root grid in order to access it later -->
     <Grid RowDefinitions="Auto, *"
           x:Name="Root">
 
