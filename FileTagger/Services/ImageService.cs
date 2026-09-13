@@ -21,6 +21,7 @@ public class ImageService : IImageService
         BitmapEncoderOptions picOptions = new PngBitmapEncoderOptions();
         using MemoryStream ms = new MemoryStream();
         bitmap.Save(ms, picOptions);
+        ms.Seek(0, SeekOrigin.Begin);
         return CreatePictureInfoFromStream(ms, pictureType);
     }
 
