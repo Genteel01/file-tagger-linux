@@ -393,11 +393,38 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         HasImageClipboardData = item != null;
     }
 
+    /// <summary>
+    /// List of images that we are cutting from and the index of the image on the track's EmbeddedPictures
+    /// </summary>
+    private List<(TrackViewModel, int)> _imagesToCut = [];
+
     [RelayCommand]
     private async Task CutCoverImage()
     {
         await CopyCoverImage();
-        RemoveCurrentlyDisplayedImages(SelectedTracks);
+        //TODO should also show a visual indicator that you are cutting that image
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
+            int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(displayedImage));
+            if (index != -1)
+            {
+                _imagesToCut.Add((track, index));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removed the images that were cut from the tracks they were cut from
+    /// </summary>
+    private void FinishCutting()
+    {
+        if (_imagesToCut.Count == 0) return;
+        foreach ((TrackViewModel track, int index) in _imagesToCut)
+        {
+            track.EmbeddedPictures.RemoveAt(index);
+        }
+        _imagesToCut = [];
     }
 
     [RelayCommand]
@@ -409,6 +436,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         DataTransfer data = new DataTransfer();
         data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
         await clipboard.SetDataAsync(data);
+        _imagesToCut = [];
     }
 
     [RelayCommand]
@@ -416,6 +444,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         Bitmap? pastedData = await GetCopiedImage();
         if (pastedData == null) return;
+        FinishCutting();
         List<PictureInfo> images = [_imageService.CreatePictureInfoFromBitmap(pastedData, SelectedPictureType)];
         if (IsShowingTrackImages)
         {
@@ -433,6 +462,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         Bitmap? pastedData = await GetCopiedImage();
         if (pastedData == null) return;
+        FinishCutting();
         AddImagesToTracks(SelectedTracks, [_imageService.CreatePictureInfoFromBitmap(pastedData, SelectedPictureType)]);
 
         ChooseDisplayedImage();
