@@ -86,18 +86,18 @@
             <Panel Margin="8" Height="250" MaxWidth="250">
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
-                        <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
-                        <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
-                        <MenuItem Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
-                        <MenuItem Header="Extract cover" IsEnabled="{Binding IsShowingTrackImages}"/>
-                        <Separator/>
-                        <MenuItem Header="Set cover type"/>
-                        <MenuItem Header="Set cover description"/>
-                        <Separator/>
-                        <MenuItem Header="Cut cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}"/>
-                        <MenuItem Header="Copy cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CopyCoverImageCommand}"/>
-                        <MenuItem Header="Paste cover as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}"/>
-                        <MenuItem Header="Paste cover as new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}"/>
+                        <MenuItem Header="_Add cover" Command="{Binding AddCoverImagesCommand}" />
+                        <MenuItem Header="_Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
+                        <MenuItem Header="Replace c_over" Command="{Binding ReplaceCoverImageCommand}"/>
+                        <MenuItem Header="_Extract cover" IsEnabled="{Binding IsShowingTrackImages}"/>
+                        <Separator Background="Black"/>
+                        <MenuItem Header="Set cover _type"/>
+                        <MenuItem Header="Set cover _description"/>
+                        <Separator Background="Black"/>
+                        <MenuItem Header="C_ut cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}"/>
+                        <MenuItem Header="_Copy cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CopyCoverImageCommand}"/>
+                        <MenuItem Header="_Paste cover as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}"/>
+                        <MenuItem Header="Paste cover as _new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}"/>
                     </ContextMenu>
                 </Panel.ContextMenu>
                 <Image Source="{Binding CurrentDisplayedImage}" Name="CoverImage"/>
