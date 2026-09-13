@@ -85,7 +85,7 @@
                 SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
             <Image Height="250" Margin="8" Source="{Binding CurrentDisplayedImage}">
                 <Image.ContextMenu>
-                    <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
+                    <ContextMenu IsEnabled="{Binding HasSelectedTracks}" Opening="OpeningContextMenu">
                         <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
                         <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
                         <MenuItem Header="Replace cover" IsEnabled="{Binding HasSelectedTracks}" Command="{Binding ReplaceCoverImageCommand}"/>

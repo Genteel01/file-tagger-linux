@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -84,5 +85,16 @@ public partial class EditPanel : UserControl
     private void ImageButtonTapped(object? sender, TappedEventArgs e)
     {
         SidePanel.Focus();
+    }
+
+    /// <summary>
+    /// When we open the context menu, update whether we can paste
+    /// </summary>
+    private async void OpeningContextMenu(object? sender, CancelEventArgs e)
+    {
+        if (DataContext is EditPanelViewModel vm)
+        {
+            await vm.UpdatePasteVisibility();
+        }
     }
 }

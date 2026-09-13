@@ -380,17 +380,24 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
     /// <summary>
     /// Whether the current clipboard data is an image
-    /// //TODO should probably update this whenever we open the context menu, instead of whenever we manually copy/cut
     /// </summary>
     [ObservableProperty]
     private bool _hasImageClipboardData = false;
+
+    /// <summary>
+    /// Checks the clipboard for an image, to determine whether we can paste
+    /// </summary>
+    public async Task UpdatePasteVisibility()
+    {
+        IAsyncDataTransferItem? item = await GetClipboardImageItem();
+        HasImageClipboardData = item != null;
+    }
 
     [RelayCommand]
     private async Task CutCoverImage()
     {
         await CopyCoverImage();
         RemoveCurrentlyDisplayedImages(SelectedTracks);
-        HasImageClipboardData = true;
     }
 
     [RelayCommand]
@@ -402,7 +409,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         DataTransfer data = new DataTransfer();
         data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
         await clipboard.SetDataAsync(data);
-        HasImageClipboardData = true;
     }
 
     [RelayCommand]
@@ -434,9 +440,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Gets the copied image from the clipboard, or null if the clipboard item isn't an image
+    /// Returns the clipboard item if it is an image, or null if there is no clipboard data, or it isn't an image
     /// </summary>
-    private async Task<Bitmap?> GetCopiedImage()
+    /// <returns></returns>
+    private async Task<IAsyncDataTransferItem?> GetClipboardImageItem()
     {
         IClipboard? clipboard = _getTopLevel()?.Clipboard;
         if (clipboard == null) return null;
@@ -444,6 +451,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         if (data == null || data.Items.Count == 0) return null;
         IAsyncDataTransferItem dataItem = data.Items[0];
         if (dataItem.Formats.Count == 0 || dataItem.Formats[0] != DataFormat.Bitmap) return null;
+        return dataItem;
+    }
+
+    /// <summary>
+    /// Gets the copied image from the clipboard, or null if the clipboard item isn't an image
+    /// </summary>
+    private async Task<Bitmap?> GetCopiedImage()
+    {
+        IAsyncDataTransferItem? dataItem = await GetClipboardImageItem();
+        if(dataItem == null) return null;
         Bitmap? pastedData = await dataItem.TryGetBitmapAsync();
         return pastedData;
     }
