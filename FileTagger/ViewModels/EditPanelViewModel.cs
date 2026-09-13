@@ -355,7 +355,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private async Task CopyCoverImage()
     {
-        IClipboard? clipboard = _getTopLevel.Invoke()?.Clipboard;
+        IClipboard? clipboard = _getTopLevel()?.Clipboard;
         if (clipboard == null) return;
         Bitmap bitmap = CurrentDisplayedImage;
         DataTransfer data = new DataTransfer();
