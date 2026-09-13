@@ -215,7 +215,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// Predicate for <see cref="IEnumerable&lt;PictureInfo>"/> LINQ expressions to check
     /// if <see cref="PictureInfo.PicType"/> matches <see cref="SelectedPictureType"/>
-    /// <![CDATA[ IEnumerable<PictureInfo> ]]>
     /// </summary>
     private bool MatchesSelectedPicType(PictureInfo pic)
     {
