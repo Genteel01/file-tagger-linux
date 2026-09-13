@@ -6,9 +6,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using ATL;
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Input.Platform;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -55,11 +52,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private readonly IFileService _fileService;
 
     /// <summary>
-    /// Function to get the <see cref="TopLevel"/>, which we use to get the <see cref="IClipboard"/> for Cut/Copy/Paste of images
-    /// </summary>
-    private readonly Func<TopLevel?> _getTopLevel;
-
-    /// <summary>
     /// <see cref="IImageService"/> received through Dependency Injection used for handling images
     /// </summary>
     private readonly IImageService _imageService;
@@ -69,11 +61,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private readonly PropertyInfo[] _trackProperties;
 
-    public EditPanelViewModel(IFileService fileService, IImageService imageService, Func<TopLevel?> getTopLevel)
+    public EditPanelViewModel(IFileService fileService, IImageService imageService)
     {
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
-        _getTopLevel = getTopLevel;
         IsActive = true;
 
         //Select properties that are writable, and are either string or int?
@@ -92,7 +83,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _trackProperties = [];
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
-        _getTopLevel = () => null;
     }
     #endif
 
@@ -379,51 +369,44 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Whether the current clipboard data is an image
+    /// Whether we have a copied image
     /// </summary>
-    [ObservableProperty]
-    private bool _hasImageClipboardData = false;
+    public bool HasImageClipboardData => CopiedPic != null;
 
     /// <summary>
     /// Decides whether to show the display image as being cut.
-    /// Is true if <see cref="StoredCutData"/> contains all of <see cref="SelectedTracks"/> and the displayed image
+    /// Is true if <see cref="TracksToCutFrom"/> contains all of <see cref="SelectedTracks"/> and the displayed image is <see cref="CopiedPic"/>
     /// </summary>
     public bool DisplayedImageIsBeingCut
     {
         get
         {
             if (!HasSelectedTracks || !IsShowingTrackImages) return false;
-            if(StoredCutData == null) return false;
-            if(StoredCutData.Value.tracks.Count < SelectedTracks.Count) return false;
+            if(CopiedPic == null) return false;
+            if(TracksToCutFrom.Count < SelectedTracks.Count) return false;
             PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
-            if (!StoredCutData.Value.pic.TrueEqual(displayedImage)) return false;
-            return SelectedTracks.All(track => StoredCutData.Value.tracks.Any(cutTrack => cutTrack == track));
+            if (!CopiedPic.TrueEqual(displayedImage)) return false;
+            return SelectedTracks.All(track => TracksToCutFrom.Any(cutTrack => cutTrack == track));
         }
     }
 
     /// <summary>
-    /// Checks the clipboard for an image, to determine whether we can paste
-    /// </summary>
-    public async Task UpdatePasteVisibility()
-    {
-        IAsyncDataTransferItem? item = await GetClipboardImageItem();
-        HasImageClipboardData = item != null;
-        if (!HasImageClipboardData) StoredCutData = null;
-    }
-
-    /// <summary>
-    /// List of tracks we are cutting images from, and the image we are cutting
+    /// List of tracks we are cutting images from
     /// </summary>
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
-    private (List<TrackViewModel> tracks, PictureInfo pic)? _storedCutData = null;
+    private List<TrackViewModel> _tracksToCutFrom = [];
+
+    /// <summary>
+    /// The currently copied image, if there is one
+    /// </summary>
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(HasImageClipboardData))]
+    private PictureInfo? _copiedPic = null;
 
     [RelayCommand]
-    private async Task CutCoverImage()
+    private void CutCoverImage()
     {
-        await CopyCoverImage();
-        List<TrackViewModel> tracksToCut = [.. SelectedTracks];
-        PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
-        StoredCutData = (tracksToCut, displayedImage);
+        CopyCoverImage();
+        TracksToCutFrom = [.. SelectedTracks];
     }
 
     /// <summary>
@@ -431,34 +414,29 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private void FinishCutting()
     {
-        if (StoredCutData == null) return;
-        if (StoredCutData.Value.tracks.Count == 0) return;
-        foreach (TrackViewModel track in StoredCutData.Value.tracks)
+        if (TracksToCutFrom.Count == 0) return;
+        if (CopiedPic == null) return;
+        foreach (TrackViewModel track in TracksToCutFrom)
         {
-            track.EmbeddedPictures.RemoveAll(trackPic => trackPic.TrueEqual(StoredCutData.Value.pic));
+            track.EmbeddedPictures.RemoveAll(trackPic => trackPic.TrueEqual(CopiedPic));
         }
-        StoredCutData = null;
+        TracksToCutFrom = [];
     }
 
     [RelayCommand]
-    private async Task CopyCoverImage()
+    private void CopyCoverImage()
     {
-        IClipboard? clipboard = _getTopLevel()?.Clipboard;
-        if (clipboard == null) return;
-        Bitmap bitmap = CurrentDisplayedImage;
-        DataTransfer data = new DataTransfer();
-        data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
-        await clipboard.SetDataAsync(data);
-        StoredCutData = null;
+        CopiedPic = SelectedTrackImages[DisplayedImageIndex];
+        TracksToCutFrom = [];
     }
 
     [RelayCommand]
-    private async Task PasteCoverImageAsReplacement()
+    private void PasteCoverImageAsReplacement()
     {
-        Bitmap? pastedData = await GetCopiedImage();
-        if (pastedData == null) return;
+        if(CopiedPic == null) return;
         FinishCutting();
-        List<PictureInfo> images = [_imageService.CreatePictureInfoFromBitmap(pastedData, SelectedPictureType)];
+        CopiedPic.PicType = SelectedPictureType;
+        List<PictureInfo> images = [CopiedPic];
         if (IsShowingTrackImages)
         {
             ReplaceDisplayedImage(SelectedTracks, images);
@@ -471,41 +449,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     [RelayCommand]
-    private async Task PasteCoverImageAsNew()
+    private void PasteCoverImageAsNew()
     {
-        Bitmap? pastedData = await GetCopiedImage();
-        if (pastedData == null) return;
+        if(CopiedPic == null) return;
         FinishCutting();
-        AddImagesToTracks(SelectedTracks, [_imageService.CreatePictureInfoFromBitmap(pastedData, SelectedPictureType)]);
+        CopiedPic.PicType = SelectedPictureType;
+        List<PictureInfo> images = [CopiedPic];
+        AddImagesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
         DisplayedImageIndex = SelectedTrackImages.Count - 1;
-    }
-
-    /// <summary>
-    /// Returns the clipboard item if it is an image, or null if there is no clipboard data, or it isn't an image
-    /// </summary>
-    /// <returns></returns>
-    private async Task<IAsyncDataTransferItem?> GetClipboardImageItem()
-    {
-        IClipboard? clipboard = _getTopLevel()?.Clipboard;
-        if (clipboard == null) return null;
-        using IAsyncDataTransfer? data = await clipboard.TryGetDataAsync();
-        if (data == null || data.Items.Count == 0) return null;
-        IAsyncDataTransferItem dataItem = data.Items[0];
-        if (dataItem.Formats.Count == 0 || dataItem.Formats[0] != DataFormat.Bitmap) return null;
-        return dataItem;
-    }
-
-    /// <summary>
-    /// Gets the copied image from the clipboard, or null if the clipboard item isn't an image
-    /// </summary>
-    private async Task<Bitmap?> GetCopiedImage()
-    {
-        IAsyncDataTransferItem? dataItem = await GetClipboardImageItem();
-        if(dataItem == null) return null;
-        Bitmap? pastedData = await dataItem.TryGetBitmapAsync();
-        return pastedData;
     }
 
     /// <summary>

@@ -86,15 +86,4 @@ public partial class EditPanel : UserControl
     {
         SidePanel.Focus();
     }
-
-    /// <summary>
-    /// When we open the context menu, update whether we can paste
-    /// </summary>
-    private async void OpeningContextMenu(object? sender, CancelEventArgs e)
-    {
-        if (DataContext is EditPanelViewModel vm)
-        {
-            await vm.UpdatePasteVisibility();
-        }
-    }
 }
