@@ -88,15 +88,15 @@
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
                         <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
-                        <MenuItem IsEnabled="{Binding HasSelectedTracks}" Header="Replace cover" Command="{Binding ReplaceCoverImageCommand}"/>
-                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Extract cover"/>
+                        <MenuItem Header="Replace cover" IsEnabled="{Binding HasSelectedTracks}" Command="{Binding ReplaceCoverImageCommand}"/>
+                        <MenuItem Header="Extract cover" IsEnabled="{Binding IsShowingTrackImages}"/>
                         <Separator/>
                         <MenuItem Header="Set cover type"/>
                         <MenuItem Header="Set cover description"/>
                         <Separator/>
-                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Cut cover" Command="{Binding CutCoverImageCommand}"/>
-                        <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Copy cover" Command="{Binding CopyCoverImageCommand}"/>
-                        <MenuItem IsEnabled="{Binding HasImageClipboardData}" Header="Paste cover as new" Command="{Binding PasteCoverImageAsNewCommand}"/>
+                        <MenuItem Header="Cut cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}"/>
+                        <MenuItem Header="Copy cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CopyCoverImageCommand}"/>
+                        <MenuItem Header="Paste cover as new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}"/>
                     </ContextMenu>
                 </Image.ContextMenu>
             </Image>
