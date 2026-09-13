@@ -96,7 +96,7 @@
                         <Separator/>
                         <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Cut cover" Command="{Binding CutCoverImageCommand}"/>
                         <MenuItem IsEnabled="{Binding IsShowingTrackImages}" Header="Copy cover" Command="{Binding CopyCoverImageCommand}"/>
-                        <MenuItem Header="Paste cover"/>
+                        <MenuItem IsEnabled="{Binding HasImageClipboardData}" Header="Paste cover as new" Command="{Binding PasteCoverImageAsNewCommand}"/>
                     </ContextMenu>
                 </Image.ContextMenu>
             </Image>

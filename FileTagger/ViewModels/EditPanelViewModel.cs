@@ -259,13 +259,21 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
 
         if(images.Count == 0) return;
-        foreach (TrackViewModel track in SelectedTracks)
-        {
-            track.EmbeddedPictures.AddRange(images);
-        }
+        AddImagesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
         DisplayedImageIndex = SelectedTrackImages.Count - 1;
+    }
+
+    /// <summary>
+    /// Adds the given images to the given tracks
+    /// </summary>
+    private void AddImagesToTracks(List<TrackViewModel> tracks, List<PictureInfo> images)
+    {
+        foreach (TrackViewModel track in tracks)
+        {
+            track.EmbeddedPictures.AddRange(images);
+        }
     }
 
     /// <summary>
@@ -345,11 +353,19 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         return index;
     }
 
+    /// <summary>
+    /// Whether the current clipboard data is an image
+    /// //TODO should probably update this whenever we open the context menu, instead of whenever we manually copy/cut
+    /// </summary>
+    [ObservableProperty]
+    private bool _hasImageClipboardData = false;
+
     [RelayCommand]
     private async Task CutCoverImage()
     {
         await CopyCoverImage();
         RemoveCurrentlyDisplayedImages(SelectedTracks);
+        HasImageClipboardData = true;
     }
 
     [RelayCommand]
@@ -361,6 +377,33 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         DataTransfer data = new DataTransfer();
         data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
         await clipboard.SetDataAsync(data);
+        HasImageClipboardData = true;
+    }
+
+    [RelayCommand]
+    private async Task PasteCoverImageAsNew()
+    {
+        Bitmap? pastedData = await GetCopiedImage();
+        if (pastedData == null) return;
+        AddImagesToTracks(SelectedTracks, [_imageService.CreatePictureInfoFromBitmap(pastedData, SelectedPictureType)]);
+
+        ChooseDisplayedImage();
+        DisplayedImageIndex = SelectedTrackImages.Count - 1;
+    }
+
+    /// <summary>
+    /// Gets the copied image from the clipboard, or null if the clipboard item isn't an image
+    /// </summary>
+    private async Task<Bitmap?> GetCopiedImage()
+    {
+        IClipboard? clipboard = _getTopLevel()?.Clipboard;
+        if (clipboard == null) return null;
+        using IAsyncDataTransfer? data = await clipboard.TryGetDataAsync();
+        if (data == null || data.Items.Count == 0) return null;
+        IAsyncDataTransferItem dataItem = data.Items[0];
+        if (dataItem.Formats.Count == 0 || dataItem.Formats[0] != DataFormat.Bitmap) return null;
+        Bitmap? pastedData = await dataItem.TryGetBitmapAsync();
+        return pastedData;
     }
 
     /// <summary>
