@@ -391,40 +391,39 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         IAsyncDataTransferItem? item = await GetClipboardImageItem();
         HasImageClipboardData = item != null;
+        if (!HasImageClipboardData) ImagesToCut = [];
     }
 
     /// <summary>
     /// List of images that we are cutting from and the index of the image on the track's EmbeddedPictures
     /// </summary>
-    private List<(TrackViewModel, int)> _imagesToCut = [];
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    private List<(TrackViewModel track, PictureInfo pic)> _imagesToCut = [];
 
     [RelayCommand]
     private async Task CutCoverImage()
     {
         await CopyCoverImage();
-        //TODO should also show a visual indicator that you are cutting that image
+        List<(TrackViewModel, PictureInfo)> newImagesToCut = [];
         foreach (TrackViewModel track in SelectedTracks)
         {
             PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
-            int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(displayedImage));
-            if (index != -1)
-            {
-                _imagesToCut.Add((track, index));
-            }
+            newImagesToCut.Add((track, displayedImage));
         }
+        ImagesToCut = newImagesToCut;
     }
 
     /// <summary>
-    /// Removed the images that were cut from the tracks they were cut from
+    /// Removes the images that were cut from the tracks they were cut from
     /// </summary>
     private void FinishCutting()
     {
-        if (_imagesToCut.Count == 0) return;
-        foreach ((TrackViewModel track, int index) in _imagesToCut)
+        if (ImagesToCut.Count == 0) return;
+        foreach ((TrackViewModel track, PictureInfo pic) in ImagesToCut)
         {
-            track.EmbeddedPictures.RemoveAt(index);
+            track.EmbeddedPictures.RemoveAll(trackPic => trackPic.TrueEqual(pic));
         }
-        _imagesToCut = [];
+        ImagesToCut = [];
     }
 
     [RelayCommand]
@@ -436,7 +435,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         DataTransfer data = new DataTransfer();
         data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
         await clipboard.SetDataAsync(data);
-        _imagesToCut = [];
+        ImagesToCut = [];
     }
 
     [RelayCommand]
