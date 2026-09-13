@@ -232,21 +232,46 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
         if (IsShowingTrackImages)
         {
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                int index = RemoveCurrentlyDisplayedImage(track);
-                track.EmbeddedPictures.InsertRange(index, images);
-            }
+            ReplaceDisplayedImage(SelectedTracks, images);
         }
         else
         {
-            foreach (TrackViewModel track in SelectedTracks)
-            {
-                track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
-                track.EmbeddedPictures.AddRange(images);
-            }
+            ReplaceAllImages(SelectedTracks, images);
         }
         ChooseDisplayedImage();
+    }
+
+    /// <summary>
+    /// Replaces the currently displayed image on the given tracks, then adds the new images
+    /// </summary>
+    private void ReplaceDisplayedImage(List<TrackViewModel> tracks, List<PictureInfo> newImages)
+    {
+        foreach (TrackViewModel track in tracks)
+        {
+            int index = RemoveCurrentlyDisplayedImage(track);
+            if (index == -1)
+            {
+                track.EmbeddedPictures.AddRange(newImages);
+            }
+            else
+            {
+                track.EmbeddedPictures.InsertRange(index, newImages);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Replaces the images on the given tracks with the new images
+    /// </summary>
+    private void ReplaceAllImages(List<TrackViewModel> tracks, List<PictureInfo> newImages)
+    {
+        foreach (TrackViewModel track in tracks)
+        {
+            SelectedTracks.AddRange();
+            track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
+            track.EmbeddedPictures.AddRange(newImages);
+        }
     }
 
     /// <summary>
@@ -378,6 +403,23 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         data.Add(DataTransferItem.Create(DataFormat.Bitmap, bitmap));
         await clipboard.SetDataAsync(data);
         HasImageClipboardData = true;
+    }
+
+    [RelayCommand]
+    private async Task PasteCoverImageAsReplacement()
+    {
+        Bitmap? pastedData = await GetCopiedImage();
+        if (pastedData == null) return;
+        List<PictureInfo> images = [_imageService.CreatePictureInfoFromBitmap(pastedData, SelectedPictureType)];
+        if (IsShowingTrackImages)
+        {
+            ReplaceDisplayedImage(SelectedTracks, images);
+        }
+        else
+        {
+            ReplaceAllImages(SelectedTracks, images);
+        }
+        ChooseDisplayedImage();
     }
 
     [RelayCommand]
