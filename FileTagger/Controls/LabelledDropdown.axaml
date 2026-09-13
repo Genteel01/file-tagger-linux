@@ -61,7 +61,7 @@
                         TextFilter="{TemplateBinding TextFilter}">
                     </AutoCompleteBox>
                     <Button Grid.Column="1" Tapped="ExpandButtonTapped" Width="24">
-                        <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
+                        <PathIcon Width="12" Data="{StaticResource DownChevronIcon}"/>
                     </Button>
                 </Grid>
             </StackPanel>
