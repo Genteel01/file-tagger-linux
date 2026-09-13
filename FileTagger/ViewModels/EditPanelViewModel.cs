@@ -385,6 +385,23 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private bool _hasImageClipboardData = false;
 
     /// <summary>
+    /// Decides whether to show the display image as being cut.
+    /// Is true if <see cref="StoredCutData"/> contains all of <see cref="SelectedTracks"/> and the displayed image
+    /// </summary>
+    public bool DisplayedImageIsBeingCut
+    {
+        get
+        {
+            if (!HasSelectedTracks || !IsShowingTrackImages) return false;
+            if(StoredCutData == null) return false;
+            if(StoredCutData.Value.tracks.Count < SelectedTracks.Count) return false;
+            PictureInfo displayedImage = SelectedTrackImages[DisplayedImageIndex];
+            if (!StoredCutData.Value.pic.TrueEqual(displayedImage)) return false;
+            return SelectedTracks.All(track => StoredCutData.Value.tracks.Any(cutTrack => cutTrack == track));
+        }
+    }
+
+    /// <summary>
     /// Checks the clipboard for an image, to determine whether we can paste
     /// </summary>
     public async Task UpdatePasteVisibility()
@@ -576,13 +593,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))]
     [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
     [NotifyPropertyChangedFor(nameof(IsShowingTrackImages))]
+    [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     [ObservableProperty]
     private List<PictureInfo> _selectedTrackImages = [];
 
     /// <summary>
     /// The index representing which entry in <see cref="SelectedTrackImages"/> to display
     /// </summary>
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     private int _displayedImageIndex = 0;
 
     /// <summary>

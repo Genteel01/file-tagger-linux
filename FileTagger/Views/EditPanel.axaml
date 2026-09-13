@@ -83,8 +83,8 @@
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
-            <Image Height="250" Margin="8" Source="{Binding CurrentDisplayedImage}">
-                <Image.ContextMenu>
+            <Panel Margin="8" Height="250" MaxWidth="250">
+                <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}" Opening="OpeningContextMenu">
                         <MenuItem Header="Add cover" Command="{Binding AddCoverImagesCommand}"/>
                         <MenuItem Header="Remove cover" Command="{Binding RemoveCoverImageCommand}"/>
@@ -99,8 +99,10 @@
                         <MenuItem Header="Paste cover as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}"/>
                         <MenuItem Header="Paste cover as new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}"/>
                     </ContextMenu>
-                </Image.ContextMenu>
-            </Image>
+                </Panel.ContextMenu>
+                <Image Source="{Binding CurrentDisplayedImage}"/>
+                <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="#80FFFFFF"/>
+            </Panel>
             <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal">
                 <TextBlock Text="{Binding DisplayedImageIndex}"/>
                 <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
