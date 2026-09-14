@@ -74,15 +74,4 @@ public partial class EditPanel : UserControl
             }
         }
     }
-
-    /// <summary>
-    /// Manually focusing the panel when we tap one of our image buttons.
-    /// Without this there was a bug when clicking the button when the previous focus was on the TrackList
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ImageButtonTapped(object? sender, TappedEventArgs e)
-    {
-        SidePanel.Focus();
-    }
 }

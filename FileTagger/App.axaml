@@ -13,13 +13,11 @@
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
                  <MergeResourceInclude Source="/Assets/Colours.axaml" />
+                 <MergeResourceInclude Source="/Assets/Icons.axaml" />
+                 <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
-         <!--https://www.svgrepo.com/svg/509899/down-chevron, MIT license-->
-         <StreamGeometry x:Key="DownArrowIconData">M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z</StreamGeometry>
-         <!--https://www.svgrepo.com/svg/510303/up-chevron, MIT license-->
-         <StreamGeometry x:Key="UpArrowIconData">M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z</StreamGeometry>
      </Application.Resources>
 
     <Application.Styles>
@@ -56,6 +54,34 @@
         </Style>
         <Style Selector="ListBoxItem:pointerover:selected:focus /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource Selection4}" />
+        </Style>
+
+        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection1}" />
+        </Style>
+        <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection2}" />
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        </Style>
+        <Style Selector="ComboBoxItem:selected:focus /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover:selected:focus /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection4}" />
+        </Style>
+
+        <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Content" Value="" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <Style Selector="Button:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection3}" />
         </Style>
     </Application.Styles>
 </Application>

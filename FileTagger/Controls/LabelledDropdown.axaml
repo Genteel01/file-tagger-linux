@@ -8,36 +8,19 @@
              x:Class="FileTagger.Controls.LabelledDropdown">
     <UserControl.Styles>
         <Style Selector="AutoCompleteBox">
-            <Setter Property="Height" Value="32" />
+            <Setter Property="Height" Value="{StaticResource EditControlHeight}" />
             <Setter Property="Padding" Value="4 0" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown TextBox">
-            <Setter Property="LineHeight" Value="32" />
-            <Setter Property="Foreground" Value="#484848" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown Label">
-            <Setter Property="Foreground" Value="#484848" />
+            <Setter Property="BorderThickness" Value="1 1 0 1" />
         </Style>
         <Style Selector="Button">
-            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderThickness" Value="0 1 1 1" />
+            <Setter Property="Padding" Value="4 0" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="LineHeight" Value="{StaticResource EditControlHeight}" />
         </Style>
         <Style Selector="Button:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown PathIcon">
-            <Setter Property="Foreground" Value="Gray" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown:focus-within Button">
-            <Setter Property="BorderBrush" Value="Black" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown:focus-within PathIcon, controls|LabelledDropdown:focus-within TextBox">
-            <Setter Property="Foreground" Value="Black" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown Label:disabled">
-            <Setter Property="Foreground" Value="Gray" />
-        </Style>
-        <Style Selector="controls|LabelledDropdown:focus-within Label">
-            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Background" Value="White" />
         </Style>
         <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />
@@ -45,12 +28,43 @@
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="4" />
         </Style>
+        <!--Setting Border and Foreground colours depending on the state of the control-->
+        <Style Selector="Label:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
+        </Style>
+        <Style Selector="Label, TextBox">
+            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
+        </Style>
+        <Style Selector="PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
+        </Style>
+        <Style Selector="Button, AutoCompleteBox">
+            <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:pointerover TextBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:pointerover Button ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:pointerover PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within TextBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within Button ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox, #LabelledDropdown:focus-within Label">
+            <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
+        </Style>
     </UserControl.Styles>
     <UserControl.Template>
         <ControlTemplate>
-            <StackPanel>
+            <StackPanel Name="LabelledDropdown">
                 <Label Content="{TemplateBinding LabelText}" Target="{Binding #SearchField}"/>
-                <Grid ColumnDefinitions="*,24">
+                <Grid ColumnDefinitions="*,Auto">
                     <AutoCompleteBox
                         Grid.Column="0"
                         Name="SearchField"
@@ -61,7 +75,7 @@
                         TextFilter="{TemplateBinding TextFilter}">
                     </AutoCompleteBox>
                     <Button Grid.Column="1" Tapped="ExpandButtonTapped" Width="24">
-                        <PathIcon Width="12" Data="{DynamicResource DownArrowIconData}"/>
+                        <PathIcon Width="12" Data="{StaticResource DownChevronIcon}"/>
                     </Button>
                 </Grid>
             </StackPanel>
