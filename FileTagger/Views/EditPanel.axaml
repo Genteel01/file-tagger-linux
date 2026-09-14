@@ -12,7 +12,7 @@
         <Style Selector="StackPanel#SidePanel">
             <Setter Property="Background" Value="#f0f0f0" />
         </Style>
-        <Style Selector="StackPanel#SidePanel StackPanel">
+        <Style Selector="StackPanel#SidePanel > :is(Control)">
             <Setter Property="Margin" Value="8 4" />
         </Style>
     </UserControl.Styles>
@@ -36,7 +36,7 @@
                 ItemsSource="{Binding FieldOptions[Artist]}"
                 Text="{Binding FieldTexts[Artist]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-            <Grid ColumnDefinitions="*,*,*">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                 <controls:LabelledDropdown Grid.Column="0"
                     Name="YearField"
                     LabelText="Year"
@@ -83,7 +83,7 @@
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
-            <Panel Margin="8" Height="250" MaxWidth="250">
+            <Panel Height="250" MaxWidth="250">
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="_Add cover" Command="{Binding AddCoverImagesCommand}">
