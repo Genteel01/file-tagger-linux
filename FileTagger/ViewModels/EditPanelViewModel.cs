@@ -573,6 +573,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
     [NotifyPropertyChangedFor(nameof(IsShowingTrackImages))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    [NotifyPropertyChangedFor(nameof(PicCountString))]
     [ObservableProperty]
     private List<PictureInfo> _selectedTrackImages = [];
 
@@ -582,7 +583,13 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    [NotifyPropertyChangedFor(nameof(PicCountString))]
     private int _displayedImageIndex = 0;
+
+    /// <summary>
+    /// String to indicate how many covers there are, and which one is being viewed
+    /// </summary>
+    public string PicCountString => $"{DisplayedImageIndex + 1}/{SelectedTrackImages.Count}";
 
     /// <summary>
     /// Bitmap of the entry in <see cref="SelectedTrackImages"/> to display based on <see cref="DisplayedImageIndex"/>,

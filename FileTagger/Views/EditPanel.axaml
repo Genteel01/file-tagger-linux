@@ -112,7 +112,7 @@
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
-            <Panel Name="ImagePanel" Height="250" MaxWidth="250">
+            <Panel Name="ImagePanel" Height="250" MaxWidth="250" Margin="8 32 8 4">
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="_Add cover" Command="{Binding AddCoverImagesCommand}">
@@ -152,12 +152,14 @@
                 <Image Source="{Binding CurrentDisplayedImage}" Name="CoverImage"/>
                 <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="#80FFFFFF" Height="{Binding #CoverImage.Bounds.Height}" Width="{Binding #CoverImage.Bounds.Width}"/>
             </Panel>
-            <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal">
-                <TextBlock Text="{Binding DisplayedImageIndex}"/>
-                <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
-                <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped">Next</Button>
-            </StackPanel>
-            <Grid Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
+            <Panel Margin="8 0" Height="16">
+                <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal" Spacing="4">
+                    <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped" Padding="0"><PathIcon Height="8" Data="{StaticResource LeftChevronIcon}"/></Button>
+                    <TextBlock Text="{Binding PicCountString}"/>
+                    <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
+                </StackPanel>
+            </Panel>
+            <Grid Margin="8 2 8 4" Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
                 <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Height="12" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
                 <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Height="12" Data="{StaticResource RightChevronIcon}"/></Button>
