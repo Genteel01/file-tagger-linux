@@ -154,9 +154,9 @@
             </Panel>
             <Panel Margin="8 0" Height="16">
                 <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal" Spacing="4">
-                    <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped" Padding="0"><PathIcon Height="8" Data="{StaticResource LeftChevronIcon}"/></Button>
+                    <Button Command="{Binding PreviousImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource LeftChevronIcon}"/></Button>
                     <TextBlock Text="{Binding PicCountString}"/>
-                    <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
+                    <Button Command="{Binding NextImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
                 </StackPanel>
             </Panel>
             <Grid Margin="8 2 8 4" Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
