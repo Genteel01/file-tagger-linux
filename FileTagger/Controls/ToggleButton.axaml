@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Template x:Key="ToggleButtonContent">
+        <PathIcon Width="10" Data="{StaticResource DownChevronIcon}">
+            <PathIcon.Styles>
+                <Style Selector="ToggleButton:checked PathIcon">
+                    <Setter Property="Foreground" Value="Black" />
+                </Style>
+                <Style Selector="ToggleButton:unchecked PathIcon">
+                    <Setter Property="Foreground" Value="Gray" />
+                </Style>
+            </PathIcon.Styles>
+        </PathIcon>
+    </Template>
+</ResourceDictionary>

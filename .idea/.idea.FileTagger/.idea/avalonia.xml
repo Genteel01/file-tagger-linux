@@ -8,6 +8,7 @@
         <entry key="FileTagger/Assets/Icons.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Controls/LabelledDropdown.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Controls/ListColumnHeader.axaml" value="FileTagger/FileTagger.csproj" />
+        <entry key="FileTagger/Controls/ToggleButton.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Views/EditPanel.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Views/MainWindow.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Views/TrackList.axaml" value="FileTagger/FileTagger.csproj" />

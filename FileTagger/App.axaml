@@ -15,6 +15,7 @@
                  <MergeResourceInclude Source="/Assets/Colours.axaml" />
                  <MergeResourceInclude Source="/Assets/Icons.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
+                 <MergeResourceInclude Source="/Controls/ToggleButton.axaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
      </Application.Resources>
@@ -75,8 +76,9 @@
         </Style>
         <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Content" Value="{StaticResource ToggleButtonContent}" />
         </Style>
-        
+
         <Style Selector="Button">
             <Setter Property="Background" Value="White" />
         </Style>
