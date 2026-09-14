@@ -15,6 +15,34 @@
         <Style Selector="StackPanel#SidePanel > :is(Control)">
             <Setter Property="Margin" Value="8 4" />
         </Style>
+        <Style Selector="Grid#PicTypeControl PathIcon">
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+        <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
+        <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
+        </Style>
+        <Style Selector="Grid#PicTypeControl:pointerover ComboBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
+        </Style>
+        <Style Selector="Grid#PicTypeControl:pointerover Button ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
+        </Style>
+        <Style Selector="Grid#PicTypeControl:focus-within PathIcon">
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+        <Style Selector="ComboBox:dropdownopen Border, Grid#PicTypeControl:focus-within ComboBox Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+        <Style Selector="Grid#PicTypeControl:focus-within Button ContentPresenter">
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+        <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
     </UserControl.Styles>
     <ScrollViewer>
         <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
@@ -128,10 +156,10 @@
                 <Button Command="{Binding PreviousImageCommand}" Tapped="ImageButtonTapped">Prev</Button>
                 <Button Command="{Binding NextImageCommand}" Tapped="ImageButtonTapped">Next</Button>
             </StackPanel>
-            <Grid ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
-                <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}"><PathIcon Height="12" Data="{StaticResource LeftChevronIcon}"/></Button>
+            <Grid Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
+                <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Height="12" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
-                <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}"><PathIcon Height="12" Data="{StaticResource RightChevronIcon}"/></Button>
+                <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Height="12" Data="{StaticResource RightChevronIcon}"/></Button>
             </Grid>
         </StackPanel>
     </ScrollViewer>

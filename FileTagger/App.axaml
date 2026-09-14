@@ -72,19 +72,10 @@
         <Style Selector="ComboBoxItem:pointerover:selected:focus /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource Selection4}" />
         </Style>
-        <Style Selector="ComboBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-        </Style>
-        <Style Selector="ComboBox:pointerover Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
-        </Style>
-        <Style Selector="ComboBox:dropdownopen Border, ComboBox:focus-within Border">
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
+
         <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Content" Value="{StaticResource ToggleButtonContent}" />
+            <Setter Property="Content" Value="" />
         </Style>
 
         <Style Selector="Button">
