@@ -67,6 +67,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
         IsActive = true;
 
+        PictureTypes = Enum.GetValues<PictureInfo.PIC_TYPE>();
         //Select properties that are writable, and are either string or int?
         _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
             (property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?)) )];
@@ -83,6 +84,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _trackProperties = [];
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
+        PictureTypes = Enum.GetValues<PictureInfo.PIC_TYPE>();
     }
     #endif
 
@@ -540,6 +542,30 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
+    /// Switch to the next picture type, looping around
+    /// </summary>
+    [RelayCommand]
+    private void NextPicType()
+    {
+        int currentIndex = PictureTypes.IndexOf(SelectedPictureType);
+        if (currentIndex == -1) return;
+        SelectedPictureType = PictureTypes[(currentIndex + 1) % PictureTypes.Length];
+    }
+
+    /// <summary>
+    /// Switch to the previous picture type, looping around
+    /// </summary>
+    [RelayCommand]
+    private void PreviousPicType()
+    {
+        int currentIndex = PictureTypes.IndexOf(SelectedPictureType);
+        if (currentIndex == -1) return;
+        int newIndex = currentIndex - 1;
+        if (newIndex < 0) newIndex = PictureTypes.Length - 1;
+        SelectedPictureType = PictureTypes[newIndex];
+    }
+
+    /// <summary>
     /// List of images for the <see cref="SelectedTracks"/> for the <see cref="SelectedPictureType"/>.
     /// Will be empty if selected tracks have different images
     /// </summary>
@@ -578,7 +604,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values as strings, for populating a selection dropdown
     /// </summary>
-    public PictureInfo.PIC_TYPE[] PictureTypes { get; } = Enum.GetValues<PictureInfo.PIC_TYPE>();
+    public PictureInfo.PIC_TYPE[] PictureTypes { get; }
 
     /// <summary>
     /// String of the selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
