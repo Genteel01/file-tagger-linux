@@ -4,13 +4,13 @@
         <PathIcon Width="10" Data="{StaticResource DownChevronIcon}">
             <PathIcon.Styles>
                 <Style Selector="ToggleButton:checked PathIcon">
-                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
                 </Style>
                 <Style Selector="ToggleButton:unchecked PathIcon">
-                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
                 </Style>
                 <Style Selector="ComboBox:pointerover ToggleButton:unchecked PathIcon">
-                    <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
+                    <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
                 </Style>
             </PathIcon.Styles>
         </PathIcon>

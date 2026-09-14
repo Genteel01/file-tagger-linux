@@ -15,30 +15,31 @@
         <Style Selector="StackPanel#SidePanel > :is(Control)">
             <Setter Property="Margin" Value="8 4" />
         </Style>
+        <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
         <Style Selector="Grid#PicTypeControl PathIcon">
-            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
+            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within PathIcon">
-            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
         </Style>
-        <Style Selector="ComboBox:dropdownopen Border, Grid#PicTypeControl:focus-within ComboBox Border">
-            <Setter Property="BorderBrush" Value="Black"/>
+        <Style Selector="Grid#PicTypeControl:focus-within ComboBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
             <Setter Property="TextAlignment" Value="Center" />

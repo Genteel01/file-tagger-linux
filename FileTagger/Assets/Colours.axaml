@@ -7,5 +7,8 @@
     <SolidColorBrush x:Key='Selection4'>#70c5e9</SolidColorBrush>
     <SolidColorBrush x:Key='Selection5'>#49b5dc</SolidColorBrush>
     <SolidColorBrush x:Key='ListSeparatorColour'>#13000000</SolidColorBrush>
-    <SolidColorBrush x:Key='BlackGrayMidPoint'>#484848</SolidColorBrush>
+
+    <SolidColorBrush x:Key='IdleColour'>Gray</SolidColorBrush>
+    <SolidColorBrush x:Key='HoverColour'>#484848</SolidColorBrush>
+    <SolidColorBrush x:Key='FocusColour'>Black</SolidColorBrush>
 </ResourceDictionary>
