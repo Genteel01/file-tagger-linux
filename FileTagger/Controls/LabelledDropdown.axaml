@@ -18,12 +18,6 @@
         <Style Selector="controls|LabelledDropdown Label">
             <Setter Property="Foreground" Value="#484848" />
         </Style>
-        <Style Selector="Button">
-            <Setter Property="Background" Value="White" />
-        </Style>
-        <Style Selector="Button:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
         <Style Selector="controls|LabelledDropdown PathIcon">
             <Setter Property="Foreground" Value="Gray" />
         </Style>
