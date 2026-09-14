@@ -14,6 +14,7 @@
              <ResourceDictionary.MergedDictionaries>
                  <MergeResourceInclude Source="/Assets/Colours.axaml" />
                  <MergeResourceInclude Source="/Assets/Icons.axaml" />
+                 <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
                  <MergeResourceInclude Source="/Controls/ToggleButton.axaml" />
              </ResourceDictionary.MergedDictionaries>

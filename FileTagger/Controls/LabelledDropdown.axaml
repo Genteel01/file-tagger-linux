@@ -8,7 +8,7 @@
              x:Class="FileTagger.Controls.LabelledDropdown">
     <UserControl.Styles>
         <Style Selector="AutoCompleteBox">
-            <Setter Property="Height" Value="32" />
+            <Setter Property="Height" Value="{StaticResource EditControlHeight}" />
             <Setter Property="Padding" Value="4 0" />
             <Setter Property="BorderThickness" Value="1 1 0 1" />
         </Style>
@@ -17,7 +17,7 @@
             <Setter Property="Padding" Value="4 0" />
         </Style>
         <Style Selector="TextBox">
-            <Setter Property="LineHeight" Value="32" />
+            <Setter Property="LineHeight" Value="{StaticResource EditControlHeight}" />
             <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
         </Style>
         <Style Selector="Label">
