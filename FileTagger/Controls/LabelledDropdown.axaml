@@ -10,37 +10,55 @@
         <Style Selector="AutoCompleteBox">
             <Setter Property="Height" Value="32" />
             <Setter Property="Padding" Value="4 0" />
+            <Setter Property="BorderThickness" Value="1 1 0 1" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="BorderThickness" Value="0 1 1 1" />
+            <Setter Property="Padding" Value="4 0" />
         </Style>
         <Style Selector="TextBox">
             <Setter Property="LineHeight" Value="32" />
-            <Setter Property="Foreground" Value="#484848" />
+            <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
         </Style>
         <Style Selector="Label">
-            <Setter Property="Foreground" Value="#484848" />
+            <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
         </Style>
         <Style Selector="PathIcon">
             <Setter Property="Foreground" Value="Gray" />
         </Style>
-        <Style Selector="#LabelledDropdown:focus-within Button">
-            <Setter Property="BorderBrush" Value="Black" />
-        </Style>
         <Style Selector="Button:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="White" />
         </Style>
-        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox">
-            <Setter Property="Foreground" Value="Black" />
-        </Style>
         <Style Selector="Label:disabled">
             <Setter Property="Foreground" Value="Gray" />
-        </Style>
-        <Style Selector="#LabelledDropdown:focus-within Label">
-            <Setter Property="Foreground" Value="Black" />
         </Style>
         <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="4" />
+        </Style>
+        <!--Setting Border and Foreground colours depending on the state of the control-->
+        <Style Selector="Button, AutoCompleteBox">
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+        <Style Selector="#LabelledDropdown:pointerover TextBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:pointerover Button ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource BlackGrayMidPoint}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:pointerover PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource BlackGrayMidPoint}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within TextBox Border">
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within Button ContentPresenter">
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox, #LabelledDropdown:focus-within Label">
+            <Setter Property="Foreground" Value="Black" />
         </Style>
     </UserControl.Styles>
     <UserControl.Template>
