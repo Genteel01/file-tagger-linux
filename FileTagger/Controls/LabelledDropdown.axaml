@@ -11,26 +11,29 @@
             <Setter Property="Height" Value="32" />
             <Setter Property="Padding" Value="4 0" />
         </Style>
-        <Style Selector="controls|LabelledDropdown TextBox">
+        <Style Selector="TextBox">
             <Setter Property="LineHeight" Value="32" />
             <Setter Property="Foreground" Value="#484848" />
         </Style>
-        <Style Selector="controls|LabelledDropdown Label">
+        <Style Selector="Label">
             <Setter Property="Foreground" Value="#484848" />
         </Style>
-        <Style Selector="controls|LabelledDropdown PathIcon">
+        <Style Selector="PathIcon">
             <Setter Property="Foreground" Value="Gray" />
         </Style>
-        <Style Selector="controls|LabelledDropdown:focus-within Button">
+        <Style Selector="#LabelledDropdown:focus-within Button">
             <Setter Property="BorderBrush" Value="Black" />
         </Style>
-        <Style Selector="controls|LabelledDropdown:focus-within PathIcon, controls|LabelledDropdown:focus-within TextBox">
+        <Style Selector="Button:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox">
             <Setter Property="Foreground" Value="Black" />
         </Style>
-        <Style Selector="controls|LabelledDropdown Label:disabled">
+        <Style Selector="Label:disabled">
             <Setter Property="Foreground" Value="Gray" />
         </Style>
-        <Style Selector="controls|LabelledDropdown:focus-within Label">
+        <Style Selector="#LabelledDropdown:focus-within Label">
             <Setter Property="Foreground" Value="Black" />
         </Style>
         <Style Selector="ListBox">
@@ -42,9 +45,9 @@
     </UserControl.Styles>
     <UserControl.Template>
         <ControlTemplate>
-            <StackPanel>
+            <StackPanel Name="LabelledDropdown">
                 <Label Content="{TemplateBinding LabelText}" Target="{Binding #SearchField}"/>
-                <Grid ColumnDefinitions="*,24">
+                <Grid ColumnDefinitions="*,Auto">
                     <AutoCompleteBox
                         Grid.Column="0"
                         Name="SearchField"
