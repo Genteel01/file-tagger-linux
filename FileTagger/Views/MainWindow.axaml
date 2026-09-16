@@ -8,10 +8,7 @@
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="FileTagger"
-        Width="1600"
-        Height="900"
-        Padding="4">
+        Title="FileTagger">
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
