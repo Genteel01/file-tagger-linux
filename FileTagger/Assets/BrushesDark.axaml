@@ -8,4 +8,7 @@
     <SolidColorBrush x:Key='ThemeBorderMidBrush'>#A0A0A0</SolidColorBrush>
     <SolidColorBrush x:Key='ThemeBorderHighBrush'>#BFBFBF</SolidColorBrush>
     <SolidColorBrush x:Key='ThemeForegroundBrush'>#DEDEDE</SolidColorBrush>
+
+    <!--Text Highlight-->
+    <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource SelectionDarkColour}"/>
 </ResourceDictionary>
