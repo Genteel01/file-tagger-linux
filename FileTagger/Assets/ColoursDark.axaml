@@ -3,7 +3,8 @@
     <SolidColorBrush x:Key='ThemeBackgroundBrush'>#FF0F0F0F</SolidColorBrush>
     <SolidColorBrush x:Key='EditPanelBackground'>#FF1E1E1E</SolidColorBrush>
 
-    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#ff505050</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeBorderMidBrush'>#ff808080</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeForegroundBrush'>#FFDEDEDE</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#808080</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderMidBrush'>#A0A0A0</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderHighBrush'>#BFBFBF</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeForegroundBrush'>#DEDEDE</SolidColorBrush>
 </ResourceDictionary>

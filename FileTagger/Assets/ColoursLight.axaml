@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key='EditPanelBackground'>#FFF0F0F0</SolidColorBrush>
 
-    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#ffAAAAAA</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeBorderMidBrush'>#ff888888</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeForegroundBrush'>Black</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#888888</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderMidBrush'>#363636</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderHighBrush'>#212121</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeForegroundBrush'>#000000</SolidColorBrush>
 </ResourceDictionary>
