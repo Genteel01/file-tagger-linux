@@ -17,7 +17,7 @@ public class Preferences
     /// <summary>
     /// Width and height of the main window
     /// </summary>
-    public (double, double) WindowSize { get; set; } = (0, 0);
+    public (double Width, double Height) WindowSize { get; set; } = (0, 0);
 
     /// <summary>
     /// Whether the main window is maximised

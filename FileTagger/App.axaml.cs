@@ -56,8 +56,8 @@ public class App : Application
             {
                 DataContext = mainWindowViewModel,
                 WindowState = startingWindowState,
-                Width = preferences.WindowSize.Item1,
-                Height = preferences.WindowSize.Item2
+                Width = preferences.WindowSize.Width,
+                Height = preferences.WindowSize.Height
             };
             //Fix an error when the window width and height are 0
             if (mainWindow.Width == 0) mainWindow.Width = mainWindow.ClientSize.Width;
