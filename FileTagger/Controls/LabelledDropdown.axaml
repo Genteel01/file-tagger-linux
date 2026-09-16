@@ -30,16 +30,16 @@
         </Style>
         <!--Setting Border and Foreground colours depending on the state of the control-->
         <Style Selector="Label:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="Label, TextBox">
             <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
         </Style>
         <Style Selector="PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="AutoCompleteBox">
-            <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="#LabelledDropdown:pointerover TextBox Border">
             <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />

@@ -17,11 +17,11 @@
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
         <Style Selector="Grid#PicTypeControl PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />

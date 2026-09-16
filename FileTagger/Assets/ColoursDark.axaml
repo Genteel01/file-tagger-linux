@@ -3,7 +3,7 @@
     <SolidColorBrush x:Key='ThemeBackgroundBrush'>#FF0F0F0F</SolidColorBrush>
     <SolidColorBrush x:Key='EditPanelBackground'>#FF1E1E1E</SolidColorBrush>
 
-    <SolidColorBrush x:Key='IdleColour'>Gray</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#ff505050</SolidColorBrush>
     <SolidColorBrush x:Key='HoverColour'>#FFB8B8B8</SolidColorBrush>
     <SolidColorBrush x:Key='ThemeForegroundBrush'>#FFDEDEDE</SolidColorBrush>
 </ResourceDictionary>
