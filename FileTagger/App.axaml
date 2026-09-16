@@ -11,12 +11,26 @@
 
      <Application.Resources>
          <ResourceDictionary>
-             <ResourceDictionary.MergedDictionaries>
-                 <MergeResourceInclude Source="/Assets/Colours.axaml" />
-                 <MergeResourceInclude Source="/Assets/Icons.axaml" />
-                 <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
-                 <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
-             </ResourceDictionary.MergedDictionaries>
+             <ResourceDictionary.ThemeDictionaries>
+                 <ResourceDictionary x:Key="Default">
+                     <ResourceDictionary.MergedDictionaries>
+                         <MergeResourceInclude Source="/Assets/Colours.axaml" />
+                         <MergeResourceInclude Source="/Assets/Icons.axaml" />
+                         <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
+                         <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
+                     </ResourceDictionary.MergedDictionaries>
+                 </ResourceDictionary>
+                 <ResourceDictionary x:Key="Light">
+                     <ResourceDictionary.MergedDictionaries>
+                         <MergeResourceInclude Source="/Assets/ColoursLight.axaml" />
+                     </ResourceDictionary.MergedDictionaries>
+                 </ResourceDictionary>
+                 <ResourceDictionary x:Key="Dark">
+                     <ResourceDictionary.MergedDictionaries>
+                         <MergeResourceInclude Source="/Assets/ColoursDark.axaml" />
+                     </ResourceDictionary.MergedDictionaries>
+                 </ResourceDictionary>
+             </ResourceDictionary.ThemeDictionaries>
          </ResourceDictionary>
      </Application.Resources>
 

@@ -10,7 +10,7 @@
 >
     <UserControl.Styles>
         <Style Selector="StackPanel#SidePanel">
-            <Setter Property="Background" Value="#f0f0f0" />
+            <Setter Property="Background" Value="{DynamicResource EditPanelBackground}" />
         </Style>
         <Style Selector="StackPanel#SidePanel > :is(Control)">
             <Setter Property="Margin" Value="8 4" />
