@@ -16,14 +16,14 @@
             <Setter Property="Margin" Value="8 4" />
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
-        <Style Selector="Grid#PicTypeControl PathIcon">
+        <Style Selector="Grid#PicTypeControl PathIcon, Grid#PicTypeControl ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
+        <Style Selector="Grid#PicTypeControl:pointerover PathIcon, Grid#PicTypeControl:pointerover ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover ComboBox Border">
@@ -32,7 +32,7 @@
         <Style Selector="Grid#PicTypeControl:pointerover Button ContentPresenter">
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within PathIcon">
+        <Style Selector="Grid#PicTypeControl:focus-within PathIcon, Grid#PicTypeControl:focus-within ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within ComboBox Border">
