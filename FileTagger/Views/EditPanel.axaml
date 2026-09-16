@@ -36,10 +36,10 @@
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
             <Setter Property="TextAlignment" Value="Center" />

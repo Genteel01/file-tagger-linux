@@ -48,9 +48,12 @@
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="#LabelledDropdown:focus-within TextBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}" />
         </Style>
-        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox, #LabelledDropdown:focus-within Label">
+        <Style Selector="#LabelledDropdown:focus-within Label">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderHighBrush}" />
+        </Style>
+        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
     </UserControl.Styles>
