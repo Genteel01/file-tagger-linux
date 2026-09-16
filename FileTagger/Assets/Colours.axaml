@@ -1,9 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key='Selection1'>#1531ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection2'>#4131ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection3'>#7831ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection4'>#AF31ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection5'>#FF31ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='ListSeparatorColour'>#13000000</SolidColorBrush>
+    <Color x:Key='Selection1'>#1531ace1</Color>
+    <Color x:Key='Selection2'>#4131ace1</Color>
+    <Color x:Key='Selection3'>#7831ace1</Color>
+    <Color x:Key='Selection4'>#AF31ace1</Color>
+    <Color x:Key='Selection5'>#FF31ace1</Color>
 </ResourceDictionary>
