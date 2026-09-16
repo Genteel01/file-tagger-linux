@@ -55,7 +55,7 @@
             <Setter Property="Padding" Value="1 0"/>
         </Style>
         <Style Selector="TextBox:focus Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush}" />
         </Style>
     </UserControl.Styles>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True"

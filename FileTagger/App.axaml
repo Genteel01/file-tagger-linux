@@ -55,30 +55,15 @@
         :selected:focus for last selected item
         :selected for other selected items (eg. middle ones selected with shift or old ones selected with control)
         -->
-        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection1}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection2}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
-        </Style>
 
         <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection2}" />
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
         <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
         </Style>
         <Style Selector="ComboBoxItem:pointerover:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
         </Style>
 
         <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
@@ -88,9 +73,6 @@
 
         <Style Selector="Button">
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
-        </Style>
-        <Style Selector="Button:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
         </Style>
     </Application.Styles>
 </Application>

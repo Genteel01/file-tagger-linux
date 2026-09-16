@@ -1,8 +1,20 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key='Selection1'>#1531ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection2'>#4131ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection3'>#7831ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection4'>#AF31ace1</SolidColorBrush>
-    <SolidColorBrush x:Key='Selection5'>#FF31ace1</SolidColorBrush>
+    <!--pointerover on selection-->
+    <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{StaticResource PointerOverColour}"/>
+    <!--ListBoxItem:selected, ComboBoxItem:selected-->
+    <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{StaticResource SelectionLightColour}"/>
+    <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
+    <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{StaticResource SelectionMidColour}"/>
+    <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
+    <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource SelectionDarkColour}"/>
+
+    <SolidColorBrush x:Key='ButtonPressedBrush' Color="{StaticResource SelectionMidColour}"/>
+
+    <!--ScrollBar arrow pressed-->
+    <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource AccentColour}"/>
+    <!--ScrollBar:pointerover, Button:pressed-->
+    <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource SelectionDarkColour}"/>
+    <!--ScrollBar:pressed-->
+    <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource AccentColour}"/>
 </ResourceDictionary>
