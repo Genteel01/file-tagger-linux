@@ -2,4 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key='ThemeBackgroundBrush'>#FF0F0F0F</SolidColorBrush>
     <SolidColorBrush x:Key='EditPanelBackground'>#FF1E1E1E</SolidColorBrush>
+
+    <SolidColorBrush x:Key='IdleColour'>Gray</SolidColorBrush>
+    <SolidColorBrush x:Key='HoverColour'>#FFB8B8B8</SolidColorBrush>
+    <SolidColorBrush x:Key='FocusColour'>#FFDEDEDE</SolidColorBrush>
 </ResourceDictionary>

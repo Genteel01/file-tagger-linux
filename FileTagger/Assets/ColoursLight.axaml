@@ -1,4 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key='EditPanelBackground'>#FFF0F0F0</SolidColorBrush>
+
+    <SolidColorBrush x:Key='IdleColour'>Gray</SolidColorBrush>
+    <SolidColorBrush x:Key='HoverColour'>#484848</SolidColorBrush>
+    <SolidColorBrush x:Key='FocusColour'>Black</SolidColorBrush>
 </ResourceDictionary>
