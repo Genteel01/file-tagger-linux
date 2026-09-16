@@ -24,13 +24,13 @@
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />

@@ -33,7 +33,7 @@
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="Label, TextBox">
-            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
@@ -42,10 +42,10 @@
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
         <Style Selector="#LabelledDropdown:pointerover TextBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="#LabelledDropdown:pointerover PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="#LabelledDropdown:focus-within TextBox Border">
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
