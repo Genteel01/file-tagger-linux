@@ -20,7 +20,7 @@
             <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
