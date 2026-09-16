@@ -44,6 +44,9 @@
         <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
+        <Style Selector="Grid#PicTypeControl ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        </Style>
     </UserControl.Styles>
     <ScrollViewer>
         <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">

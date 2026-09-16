@@ -71,18 +71,12 @@
         </Style>
 
         <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection1}" />
-        </Style>
-        <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource Selection2}" />
         </Style>
+        <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        </Style>
         <Style Selector="ComboBoxItem:pointerover:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ComboBoxItem:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ComboBoxItem:pointerover:selected:focus /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource Selection4}" />
         </Style>
 
