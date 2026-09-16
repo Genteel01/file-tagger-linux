@@ -4,5 +4,5 @@
 
     <SolidColorBrush x:Key='IdleColour'>Gray</SolidColorBrush>
     <SolidColorBrush x:Key='HoverColour'>#484848</SolidColorBrush>
-    <SolidColorBrush x:Key='FocusColour'>Black</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeForegroundBrush'>Black</SolidColorBrush>
 </ResourceDictionary>

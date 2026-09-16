@@ -48,10 +48,10 @@
             <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
         </Style>
         <Style Selector="#LabelledDropdown:focus-within TextBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
         <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox, #LabelledDropdown:focus-within Label">
-            <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
     </UserControl.Styles>
     <UserControl.Template>

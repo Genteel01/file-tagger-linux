@@ -33,13 +33,13 @@
             <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
+            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}"/>
         </Style>
         <Style Selector="Grid#PicTypeControl:focus-within Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
         <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
