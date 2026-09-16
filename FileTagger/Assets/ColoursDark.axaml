@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key='ThemeBackgroundBrush'>#FF0F0F0F</SolidColorBrush>
-    <SolidColorBrush x:Key='EditPanelBackground'>#FF1E1E1E</SolidColorBrush>
+    <SolidColorBrush x:Key='ThemeBackgroundBrush'>#0F0F0F</SolidColorBrush>
+    <SolidColorBrush x:Key='EditPanelBackground'>#1E1E1E</SolidColorBrush>
 
     <SolidColorBrush x:Key='ThemeBorderLowBrush'>#808080</SolidColorBrush>
     <SolidColorBrush x:Key='ThemeBorderMidBrush'>#A0A0A0</SolidColorBrush>
