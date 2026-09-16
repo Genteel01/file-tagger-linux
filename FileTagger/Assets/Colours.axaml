@@ -1,9 +1,9 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Color x:Key='PointerOverColour'>#2831ace1</Color>
-    <Color x:Key='SelectionLightColour'>#5331ace1</Color>
-    <Color x:Key='SelectionMidColour'>#7E31ace1</Color>
-    <Color x:Key='SelectionDarkColour'>#A931ace1</Color>
-    <Color x:Key='AccentColour'>#D431ace1</Color>
-    <Color x:Key='SolidAccentColour'>#FF31ace1</Color>
+    <Color x:Key='PointerOverColour'>#2800bfff</Color>
+    <Color x:Key='SelectionLightColour'>#5300bfff</Color>
+    <Color x:Key='SelectionMidColour'>#7E00bfff</Color>
+    <Color x:Key='SelectionDarkColour'>#A900bfff</Color>
+    <Color x:Key='AccentColour'>#D400bfff</Color>
+    <Color x:Key='SolidAccentColour'>#FF00bfff</Color>
 </ResourceDictionary>
