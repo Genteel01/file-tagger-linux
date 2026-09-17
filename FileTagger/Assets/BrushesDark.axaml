@@ -1,17 +1,21 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key='ThemeBackgroundBrush'>#0F0F0F</SolidColorBrush>
-    <SolidColorBrush x:Key='EditPanelBackground'>#1E1E1E</SolidColorBrush>
-    <SolidColorBrush x:Key='ListSeparatorBrush'>#13FFFFFF</SolidColorBrush>
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key='ThemeBackgroundBrush'>#0F0F0F</SolidColorBrush>
+            <SolidColorBrush x:Key='EditPanelBackground'>#1E1E1E</SolidColorBrush>
+            <SolidColorBrush x:Key='ListSeparatorBrush'>#13FFFFFF</SolidColorBrush>
 
-    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#808080</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeBorderMidBrush'>#A0A0A0</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeBorderHighBrush'>#BFBFBF</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeForegroundBrush'>#DEDEDE</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeBorderLowBrush'>#808080</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeBorderMidBrush'>#A0A0A0</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeBorderHighBrush'>#BFBFBF</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeForegroundBrush'>#DEDEDE</SolidColorBrush>
 
-    <!--Text Highlight-->
-    <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource SelectionDarkColour}"/>
+            <!--Text Highlight-->
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource SelectionDarkColour}"/>
 
-    <SolidColorBrush x:Key='MenuBorderBrush' Color="#2C2C2C"/>
-    <SolidColorBrush x:Key='SectionBorderBrush' Color="#787878"/>
+            <SolidColorBrush x:Key='MenuBorderBrush' Color="#2C2C2C"/>
+            <SolidColorBrush x:Key='SectionBorderBrush' Color="#787878"/>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

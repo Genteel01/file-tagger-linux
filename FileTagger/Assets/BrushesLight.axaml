@@ -1,16 +1,20 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key='EditPanelBackground'>#F0F0F0</SolidColorBrush>
-    <SolidColorBrush x:Key='ListSeparatorBrush'>#13000000</SolidColorBrush>
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key='EditPanelBackground'>#F0F0F0</SolidColorBrush>
+            <SolidColorBrush x:Key='ListSeparatorBrush'>#13000000</SolidColorBrush>
 
-    <SolidColorBrush x:Key='ThemeBorderLowBrush'>#888888</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeBorderMidBrush'>#363636</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeBorderHighBrush'>#212121</SolidColorBrush>
-    <SolidColorBrush x:Key='ThemeForegroundBrush'>#000000</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeBorderLowBrush'>#888888</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeBorderMidBrush'>#363636</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeBorderHighBrush'>#212121</SolidColorBrush>
+            <SolidColorBrush x:Key='ThemeForegroundBrush'>#000000</SolidColorBrush>
 
-    <!--Text Highlight-->
-    <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource AccentColour}"/>
+            <!--Text Highlight-->
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource AccentColour}"/>
 
-    <SolidColorBrush x:Key='MenuBorderBrush' Color="#D3D3D3"/>
-    <SolidColorBrush x:Key='SectionBorderBrush' Color="#888888"/>
+            <SolidColorBrush x:Key='MenuBorderBrush' Color="#D3D3D3"/>
+            <SolidColorBrush x:Key='SectionBorderBrush' Color="#888888"/>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

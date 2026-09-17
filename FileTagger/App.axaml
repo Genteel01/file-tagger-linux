@@ -12,27 +12,15 @@
 
      <Application.Resources>
          <ResourceDictionary>
-             <ResourceDictionary.ThemeDictionaries>
-                 <ResourceDictionary x:Key="Default">
-                     <ResourceDictionary.MergedDictionaries>
-                         <MergeResourceInclude Source="/Assets/Colours.axaml" />
-                         <MergeResourceInclude Source="/Assets/Brushes.axaml" />
-                         <MergeResourceInclude Source="/Assets/Icons.axaml" />
-                         <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
-                         <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
-                     </ResourceDictionary.MergedDictionaries>
-                 </ResourceDictionary>
-                 <ResourceDictionary x:Key="Light">
-                     <ResourceDictionary.MergedDictionaries>
-                         <MergeResourceInclude Source="/Assets/BrushesLight.axaml" />
-                     </ResourceDictionary.MergedDictionaries>
-                 </ResourceDictionary>
-                 <ResourceDictionary x:Key="Dark">
-                     <ResourceDictionary.MergedDictionaries>
-                         <MergeResourceInclude Source="/Assets/BrushesDark.axaml" />
-                     </ResourceDictionary.MergedDictionaries>
-                 </ResourceDictionary>
-             </ResourceDictionary.ThemeDictionaries>
+             <ResourceDictionary.MergedDictionaries>
+                 <MergeResourceInclude Source="/Assets/Colours.axaml" />
+                 <MergeResourceInclude Source="/Assets/Brushes.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesLight.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesDark.axaml" />
+                 <MergeResourceInclude Source="/Assets/Icons.axaml" />
+                 <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
+                 <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
+             </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
      </Application.Resources>
 
