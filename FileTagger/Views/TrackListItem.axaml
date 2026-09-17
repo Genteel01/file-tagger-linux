@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
+             xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
+             xmlns:converters="clr-namespace:FileTagger.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FileTagger.Views.TrackListItem" x:DataType="viewModels:TrackViewModel">
+    <UserControl.Resources>
+        <converters:RowBorderThicknessConverter x:Key="RowBorderThicknessConverter"/>
+        <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
+    </UserControl.Resources>
+    <Border>
+        <Border.BorderBrush>
+            <MultiBinding Converter="{StaticResource RowBorderBrushConverter}">
+                <Binding Path="Changed" />
+                <Binding Path="$parent[ListBox].((viewModels:MainWindowViewModel)DataContext).SelectedTheme" />
+            </MultiBinding>
+        </Border.BorderBrush>
+        <Border.BorderThickness>
+            <Binding Path="Changed" Converter="{StaticResource RowBorderThicknessConverter}"/>
+        </Border.BorderThickness>
+        <Grid Name="{Binding Path}" ColumnSpacing="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Track" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Year" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
+            </Grid.ColumnDefinitions>
+            <!--Title-->
+            <TextBlock Grid.Column="0" Text="{Binding Title}" Name="TitleBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="0" Text="{Binding Title, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="TitleBox"/>
+            <!--Album-->
+            <TextBlock Grid.Column="1" Text="{Binding Album}" Name="AlbumBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="1" Text="{Binding Album, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="AlbumBox"/>
+             <!--Artist-->
+            <TextBlock Grid.Column="2" Text="{Binding Artist}" Name="ArtistBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="2" Text="{Binding Artist, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="ArtistBox"/>
+             <!--AlbumArtist-->
+            <TextBlock Grid.Column="3" Text="{Binding AlbumArtist}" Name="AlbumArtistBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="3" Text="{Binding AlbumArtist, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="AlbumArtistBox"/>
+             <!--TrackNumber-->
+            <TextBlock Grid.Column="4" Text="{Binding TrackNumber}" Name="TrackNumberBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="4" Text="{Binding TrackNumber, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}" Name="TrackNumberBox"/>
+             <!--DiscNumber-->
+            <TextBlock Grid.Column="5" Text="{Binding DiscNumber}" Name="DiscNumberBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="5" Text="{Binding DiscNumber, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}" Name="DiscNumberBox"/>
+             <!--Year-->
+            <TextBlock Grid.Column="6" Text="{Binding Year}" Name="YearBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="6" Text="{Binding Year, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}" Name="YearBox"/>
+             <!--Genre-->
+            <TextBlock Grid.Column="7" Text="{Binding Genre}" Name="GenreBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="7" Text="{Binding Genre, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="GenreBox"/>
+             <!--Composer-->
+            <TextBlock Grid.Column="8" Text="{Binding Composer}" Name="ComposerBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="8" Text="{Binding Composer, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="ComposerBox"/>
+             <!--Comment-->
+            <TextBlock Grid.Column="9" Text="{Binding Comment}" Name="CommentBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="9" Text="{Binding Comment, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
+                     KeyDown="TextBoxEnterPressed" Name="CommentBox"/>
+            <!--Path-->
+            <TextBlock Grid.Column="10" Text="{Binding Path}" Name="PathBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="PathBox"/>
+        </Grid>
+    </Border>
+</UserControl>
