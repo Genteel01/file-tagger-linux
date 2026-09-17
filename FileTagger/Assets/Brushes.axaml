@@ -1,21 +1,21 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--pointerover on selection-->
-    <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{StaticResource PointerOverColour}"/>
+    <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{StaticResource LowAccentColour}"/>
     <!--ListBoxItem:selected, ComboBoxItem:selected-->
-    <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{StaticResource SelectionLightColour}"/>
+    <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{StaticResource MidLowAccentColour}"/>
     <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
-    <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{StaticResource SelectionMidColour}"/>
+    <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{StaticResource MidAccentColour}"/>
     <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
-    <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource SelectionDarkColour}"/>
+    <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource MidHighAccentColour}"/>
 
 
     <!--ScrollBar arrow pressed-->
-    <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource AccentColour}"/>
+    <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource HighAccentColour}"/>
     <!--ScrollBar:pointerover, Button:pressed-->
-    <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource SelectionDarkColour}"/>
+    <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource MidHighAccentColour}"/>
     <!--ScrollBar:pressed-->
-    <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource AccentColour}"/>
+    <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource HighAccentColour}"/>
 
     <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="Red"/>
     <SolidColorBrush x:Key="CutOverlayBrush" Color="#80FFFFFF"/>

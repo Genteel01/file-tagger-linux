@@ -12,7 +12,7 @@
             <SolidColorBrush x:Key='ThemeForegroundBrush'>#DEDEDE</SolidColorBrush>
 
             <!--Text Highlight-->
-            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource SelectionDarkColour}"/>
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource MidHighAccentColour}"/>
 
             <SolidColorBrush x:Key='MenuBorderBrush' Color="#2C2C2C"/>
             <SolidColorBrush x:Key='SectionBorderBrush' Color="#787878"/>
