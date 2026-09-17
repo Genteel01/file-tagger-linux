@@ -34,28 +34,6 @@
             <Setter Property="Background" Value="{DynamicResource ListSeparatorBrush}" />
             <Setter Property="Width" Value="3" />
         </Style>
-        <Style Selector="ListBox TextBlock">
-            <Setter Property="Height" Value="{StaticResource DefaultRowHeight}" />
-            <Setter Property="LineHeight" Value="{StaticResource DefaultRowHeight}" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="4 0"/>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-        <Style Selector="TextBox">
-            <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="Height" Value="{StaticResource DefaultRowHeight}"/>
-            <Setter Property="LineHeight" Value="{StaticResource DefaultRowHeight}"/>
-            <Setter Property="Padding" Value="4 0"/>
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="Transparent" />
-        </Style>
-        <Style Selector="TextBox:focus">
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Padding" Value="1 0"/>
-        </Style>
-        <Style Selector="TextBox:focus Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusedTextBoxBorderBrush}" />
-        </Style>
     </UserControl.Styles>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True"
                   GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown">
