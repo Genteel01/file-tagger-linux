@@ -11,4 +11,7 @@
 
     <!--Text Highlight-->
     <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource SelectionDarkColour}"/>
+
+    <SolidColorBrush x:Key='MenuBorderBrush' Color="#2C2C2C"/>
+    <SolidColorBrush x:Key='SectionBorderBrush' Color="#787878"/>
 </ResourceDictionary>

@@ -10,4 +10,7 @@
 
     <!--Text Highlight-->
     <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource AccentColour}"/>
+
+    <SolidColorBrush x:Key='MenuBorderBrush' Color="#D3D3D3"/>
+    <SolidColorBrush x:Key='SectionBorderBrush' Color="#888888"/>
 </ResourceDictionary>

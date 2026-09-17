@@ -17,7 +17,7 @@
         <converters:AreEqualConverter x:Key="AreEqualConverter"/>
     </Window.Resources>
     <Grid RowDefinitions="Auto, *" Name="Root">
-        <Border Grid.Row="0" BorderThickness="0 0 0 2" BorderBrush="LightGray" Margin="0 0 0 1">
+        <Border Grid.Row="0" BorderThickness="0 0 0 2" BorderBrush="{DynamicResource MenuBorderBrush}" Margin="0 0 0 1">
             <StackPanel Orientation="Horizontal" Spacing="4" Margin="0 2">
                 <StackPanel.Styles>
                     <Style Selector="Button">
@@ -75,8 +75,8 @@
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             <ContentControl Grid.Column="0" Content="{Binding MyEditPanel}"/>
-            <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="Gray" BorderThickness="1.5 0 1.5 0" BorderBrush="Gray"/>
-            <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0 2 2 2">
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="{DynamicResource SectionBorderBrush}" BorderThickness="1.5 0 1.5 0" BorderBrush="{DynamicResource SectionBorderBrush}"/>
+            <Border Grid.Column="2" BorderBrush="{DynamicResource SectionBorderBrush}" BorderThickness="0 2 2 2">
                 <views:TrackList/>
             </Border>
         </Grid>
