@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:FileTagger.Views"
+        xmlns:converters="clr-namespace:FileTagger.Converters"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -12,7 +13,9 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
+    <Window.Resources>
+        <converters:AreEqualConverter x:Key="AreEqualConverter"/>
+    </Window.Resources>
     <Grid RowDefinitions="Auto, *" Name="Root">
         <Border Grid.Row="0" BorderThickness="0 0 0 2" BorderBrush="LightGray" Margin="0 0 0 1">
             <StackPanel Orientation="Horizontal" Spacing="4" Margin="0 2">
@@ -31,6 +34,36 @@
                 </Button>
                 <Button Command="{Binding SaveMusicFilesCommand}" ToolTip.Tip="Save Changed Files">
                     <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
+                </Button>
+                <Button>
+                    <PathIcon Classes="horizontal" Data="{StaticResource ThemeIcon}"/>
+                    <Button.Flyout>
+                        <MenuFlyout ItemsSource="{Binding Themes}">
+                            <MenuFlyout.ItemContainerTheme>
+                                <ControlTheme TargetType="MenuItem"
+                                              BasedOn="{StaticResource {x:Type MenuItem}}"
+                                              x:DataType="ThemeVariant">
+                                    <Setter Property="Header" Value="{Binding .}"/>
+                                    <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding .}"/>
+                                    <Setter Property="Icon">
+                                        <Setter.Value>
+                                            <Template>
+                                            <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
+                                            <PathIcon.IsVisible>
+                                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                                                    <Binding Path="." />
+                                                    <Binding Path="#Root.((vm:MainWindowViewModel)DataContext).SelectedTheme" />
+                                                </MultiBinding>
+                                            </PathIcon.IsVisible>
+                                            </PathIcon>
+                                            </Template>
+                                        </Setter.Value>
+                                    </Setter>
+                                </ControlTheme>
+                            </MenuFlyout.ItemContainerTheme>
+                        </MenuFlyout>
+                    </Button.Flyout>
                 </Button>
             </StackPanel>
         </Border>

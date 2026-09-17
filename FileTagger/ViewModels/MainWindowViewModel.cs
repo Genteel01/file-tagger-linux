@@ -12,12 +12,13 @@ using FileTagger.Services;
 using ATL;
 using ATL.AudioData;
 using ATL.Logging;
+using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Models;
-using FileTagger.Views;
 
 namespace FileTagger.ViewModels;
 
@@ -84,6 +85,26 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private GridLength _editPanelWidth;
 
+    /// <summary>
+    /// List of <see cref="ThemeVariant"/> values to select from
+    /// </summary>
+    public ThemeVariant[] Themes { get; }
+
+    /// <summary>
+    /// Selected <see cref="ThemeVariant"/>
+    /// </summary>
+    [ObservableProperty] private ThemeVariant _selectedTheme;
+
+    [RelayCommand]
+    private void ChangeSelectedTheme(ThemeVariant value)
+    {
+        if (Application.Current is { } app)
+        {
+            SelectedTheme = value;
+            app.RequestedThemeVariant = value;
+        }
+    }
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
@@ -119,6 +140,8 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         //Load initial EditPanel width
         EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
+        Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
+        SelectedTheme = Application.Current?.RequestedThemeVariant ?? ThemeVariant.Default;
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -145,6 +168,8 @@ public partial class MainWindowViewModel : ViewModelBase
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
         ListColumnWidths = new AvaloniaDictionary<string, double>();
+        Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
+        SelectedTheme = ThemeVariant.Default;
     }
     #endif
 
