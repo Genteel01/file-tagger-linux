@@ -95,11 +95,6 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] private ThemeVariant _selectedTheme;
 
-    /// <summary>
-    /// Actual <see cref="ThemeVariant"/> of the application
-    /// </summary>
-    [ObservableProperty] private ThemeVariant _actualTheme;
-
     [RelayCommand]
     private void ChangeSelectedTheme(ThemeVariant value)
     {
@@ -147,19 +142,6 @@ public partial class MainWindowViewModel : ViewModelBase
         EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
         Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
         SelectedTheme = Application.Current?.RequestedThemeVariant ?? ThemeVariant.Default;
-        ActualTheme = Application.Current?.ActualThemeVariant ?? ThemeVariant.Default;
-        Application.Current?.ActualThemeVariantChanged += (sender, _) =>
-        {
-            if (sender is not Application app) return;
-            //Despite ActualThemeVariant being a non-nullable type, it CAN be null.
-            //Switching to ThemeVariant.Default triggers ActualThemeVariantChanged twice,
-            //the first time with ActualThemeVariant = null, and the second time with either Light or Dark
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (app.ActualThemeVariant != null)
-            {
-                ActualTheme = app.ActualThemeVariant;
-            }
-        };
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -188,7 +170,6 @@ public partial class MainWindowViewModel : ViewModelBase
         ListColumnWidths = new AvaloniaDictionary<string, double>();
         Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
         SelectedTheme = ThemeVariant.Default;
-        ActualTheme = ThemeVariant.Default;
     }
     #endif
 
