@@ -51,6 +51,21 @@ public partial class LabelledDropdown : UserControl
         set => SetValue(TextFilterProperty, value);
     }
 
+    public static readonly StyledProperty<string> OpenOnFocusTextProperty =
+        AvaloniaProperty.Register<LabelledDropdown, string>(
+            nameof(OpenOnFocusText),
+            defaultValue: "",
+            defaultBindingMode: BindingMode.OneWay);
+
+    /// <summary>
+    /// With this property set, the dropdown will only open on focus when <see cref="Text"/> is equal to this value
+    /// </summary>
+    public string OpenOnFocusText
+    {
+        get => GetValue(OpenOnFocusTextProperty);
+        set => SetValue(OpenOnFocusTextProperty, value);
+    }
+
     public event EventHandler? DropDownClosed;
     public event EventHandler? SearchFieldChanged;
 
@@ -61,6 +76,11 @@ public partial class LabelledDropdown : UserControl
 
     private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
     {
+        bool openedFromDropdownButton = e.NavigationMethod == NavigationMethod.Unspecified;
+        if (!openedFromDropdownButton && !string.IsNullOrEmpty(OpenOnFocusText))
+        {
+            if(Text != OpenOnFocusText) return;
+        }
         if (sender is AutoCompleteBox box)
         {
             box.IsDropDownOpen = true;
