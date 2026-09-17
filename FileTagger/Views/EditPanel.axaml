@@ -164,7 +164,7 @@
             </Panel>
             <Grid Margin="8 2 8 4" Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
                 <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Height="12" Data="{StaticResource LeftChevronIcon}"/></Button>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"/>
                 <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Height="12" Data="{StaticResource RightChevronIcon}"/></Button>
             </Grid>
         </StackPanel>
