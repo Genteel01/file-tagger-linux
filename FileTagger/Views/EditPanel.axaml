@@ -134,14 +134,14 @@
                         <MenuItem Header="_Extract cover" IsEnabled="{Binding IsShowingTrackImages}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <Separator Background="Black"/>
+                        <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
                         <MenuItem Header="Set cover _type">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Set cover _description">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <Separator Background="Black"/>
+                        <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
                         <MenuItem Header="C_ut cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                         </MenuItem>
