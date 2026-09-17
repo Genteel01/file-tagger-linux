@@ -9,7 +9,6 @@
     <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
     <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource SelectionDarkColour}"/>
 
-    <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="Red"/>
 
     <!--ScrollBar arrow pressed-->
     <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource AccentColour}"/>
@@ -17,4 +16,7 @@
     <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource SelectionDarkColour}"/>
     <!--ScrollBar:pressed-->
     <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource AccentColour}"/>
+
+    <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="Red"/>
+    <SolidColorBrush x:Key="CutOverlayBrush" Color="#80FFFFFF"/>
 </ResourceDictionary>

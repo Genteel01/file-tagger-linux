@@ -157,7 +157,7 @@
                     </ContextMenu>
                 </Panel.ContextMenu>
                 <Image Source="{Binding CurrentDisplayedImage}" Name="CoverImage"/>
-                <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="#80FFFFFF" Height="{Binding #CoverImage.Bounds.Height}" Width="{Binding #CoverImage.Bounds.Width}"/>
+                <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="{DynamicResource CutOverlayBrush}" Height="{Binding #CoverImage.Bounds.Height}" Width="{Binding #CoverImage.Bounds.Width}"/>
             </Panel>
             <Panel Margin="8 0" Height="16">
                 <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal" Spacing="4">

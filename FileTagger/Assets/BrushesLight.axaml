@@ -15,6 +15,7 @@
 
             <SolidColorBrush x:Key='MenuBorderBrush' Color="#D3D3D3"/>
             <SolidColorBrush x:Key='SectionBorderBrush' Color="#888888"/>
+            <SolidColorBrush x:Key='SortArrowBrush' Color="#30000000"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
