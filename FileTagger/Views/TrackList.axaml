@@ -75,7 +75,7 @@
                                 <Border.BorderBrush>
                                     <MultiBinding Converter="{StaticResource RowBorderBrushConverter}">
                                         <Binding Path="Changed" />
-                                        <Binding Path="#TrackListBox.((viewModels:MainWindowViewModel)DataContext).SelectedTheme" />
+                                        <Binding Path="#TrackListBox.((viewModels:MainWindowViewModel)DataContext).ActualTheme" />
                                     </MultiBinding>
                                 </Border.BorderBrush>
                                 <Border.BorderThickness>
