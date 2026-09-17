@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -90,5 +91,36 @@ public partial class TrackListItem : UserControl
             siblingBox.SelectAll();
             siblingBox.Focus();
         }
+    }
+
+    /// <summary>
+    /// The first time the Grid is tapped, show all the TextBoxes so their size can be calculated.
+    /// This is needed to prevent a bug where the ScrollViewer doesn't scroll to the TextBox when it is focused.
+    /// Removed itself at the end because we only need it to run once
+    /// </summary>
+    private void GridTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is not Grid item) return;
+        IEnumerable<Visual> children = item.GetVisualChildren();
+        foreach (Visual child in children)
+        {
+            if (child is TextBox box)
+            {
+                box.SizeChanged += TextBoxSizeChanged;
+                box.IsVisible = true;
+            }
+        }
+        item.Tapped -= GridTapped;
+    }
+
+
+    /// <summary>
+    /// After the size is initially calculated, hide the TextBox again and remove this handler
+    /// </summary>
+    private void TextBoxSizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        if (sender is not TextBox box) return;
+        box.IsVisible = false;
+        box.SizeChanged -= TextBoxSizeChanged;
     }
 }

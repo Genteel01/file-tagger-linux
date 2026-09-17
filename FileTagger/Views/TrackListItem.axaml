@@ -21,7 +21,7 @@
         <Border.BorderThickness>
             <Binding Path="Changed" Converter="{StaticResource RowBorderThicknessConverter}"/>
         </Border.BorderThickness>
-        <Grid Name="{Binding Path}" ColumnSpacing="4">
+        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
