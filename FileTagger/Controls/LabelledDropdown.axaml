@@ -16,9 +16,6 @@
             <Setter Property="Padding" Value="4 0" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
-        <Style Selector="Button:pressed ContentPresenter">
-            <Setter Property="Background" Value="Transparent" />
-        </Style>
         <Style Selector="TextBox">
             <Setter Property="LineHeight" Value="{StaticResource EditControlHeight}" />
         </Style>
