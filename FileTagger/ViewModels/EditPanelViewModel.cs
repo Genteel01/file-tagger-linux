@@ -428,6 +428,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void CopyCoverImage()
     {
+        CopiedPic = null;
         CopiedPic = SelectedTrackImages[DisplayedImageIndex];
         TracksToCutFrom = [];
     }
