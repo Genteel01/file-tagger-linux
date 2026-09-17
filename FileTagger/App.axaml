@@ -72,7 +72,7 @@
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         </Style>
         <Style Selector="Button:pointerover">
-            <Setter Property="Background" Value="{DynamicResource ThemeControlHighlightMidBrush}" />
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
 
         <Style Selector="PathIcon.horizontal">
