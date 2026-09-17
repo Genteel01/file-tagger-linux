@@ -15,13 +15,14 @@ public partial class LabelledDropdown : UserControl
         AvaloniaProperty.RegisterDirect<LabelledDropdown, string>(
             nameof(LabelText),
             o => o.LabelText,
+            unsetValue: "",
             defaultBindingMode: BindingMode.OneWay);
 
     public string LabelText
     {
         get;
         set => SetAndRaise(LabelTextProperty, ref field, value);
-    } = "";
+    }
 
     public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty =
         AutoCompleteBox.ItemsSourceProperty.AddOwner<LabelledDropdown>();
