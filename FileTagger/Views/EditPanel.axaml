@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:controls="clr-namespace:FileTagger.Controls"
+             xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:EditPanelViewModel"
@@ -78,14 +79,14 @@
                     ItemsSource="{Binding FieldOptions[Year]}"
                     Text="{Binding FieldTexts[Year]}"
                     DropDownClosed="AutoCompleteBoxDropdownClosed"
-                    SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                    SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
                 <controls:LabelledDropdown Grid.Column="1"
                    Name="TrackNumberField"
                    LabelText="Track Number"
                    ItemsSource="{Binding FieldOptions[TrackNumber]}"
                    Text="{Binding FieldTexts[TrackNumber]}"
                    DropDownClosed="AutoCompleteBoxDropdownClosed"
-                   SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                   SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
                 <controls:LabelledDropdown Grid.Column="2"
                     Name="GenreField"
                     LabelText="Genre"
@@ -117,7 +118,7 @@
                 ItemsSource="{Binding FieldOptions[DiscNumber]}"
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
-                SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
             <Panel Name="ImagePanel" Height="250" MaxWidth="250" Margin="8 32 8 4">
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">

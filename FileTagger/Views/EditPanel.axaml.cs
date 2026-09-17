@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
@@ -40,20 +39,6 @@ public partial class EditPanel : UserControl
         if (sender is AutoCompleteBox { IsKeyboardFocusWithin: false })
         {
             SidePanel.Focus();
-        }
-    }
-
-    private void AutoCompleteBoxNumberFieldTextChanged(object? sender, TextChangedEventArgs e)
-    {
-        if (sender is not TextBox box) return;
-        string text = box.Text ?? "";
-        string newString = string.Concat(text.Where(char.IsDigit));
-        int sizeDifference = text.Length - newString.Length;
-
-        if (sizeDifference > 0)
-        {
-            box.CaretIndex -= sizeDifference;
-            box.Text = newString;
         }
     }
 
