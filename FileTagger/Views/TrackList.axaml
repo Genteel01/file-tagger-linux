@@ -72,14 +72,15 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="viewModels:TrackViewModel">
                             <Border>
-                                <Border.Styles>
-                                    <Style Selector="Border">
-                                        <Setter Property="BorderThickness"
-                                                Value="{Binding Changed, Converter={StaticResource RowBorderThicknessConverter}}" />
-                                        <Setter Property="BorderBrush"
-                                                Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}, ConverterParameter={StaticResource ListSeparatorColour}}" />
-                                    </Style>
-                                </Border.Styles>
+                                <Border.BorderBrush>
+                                    <MultiBinding Converter="{StaticResource RowBorderBrushConverter}">
+                                        <Binding Path="Changed" />
+                                        <Binding Path="#TrackListBox.((viewModels:MainWindowViewModel)DataContext).SelectedTheme" />
+                                    </MultiBinding>
+                                </Border.BorderBrush>
+                                <Border.BorderThickness>
+                                    <Binding Path="Changed" Converter="{StaticResource RowBorderThicknessConverter}"/>
+                                </Border.BorderThickness>
                                 <Grid Name="{Binding Path}" ColumnSpacing="4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />

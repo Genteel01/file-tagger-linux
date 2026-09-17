@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Avalonia.Media.Immutable;
+using Avalonia.Styling;
 
 namespace FileTagger.Converters;
 
@@ -31,24 +32,30 @@ public class RowBorderThicknessConverter : IValueConverter
 /// <summary>
 /// Converts a bool binding to border brush. Used to visualise modified rows
 /// </summary>
-public class RowBorderBrushConverter : IValueConverter
+public class RowBorderBrushConverter : IMultiValueConverter
 {
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is true)
+        if (values.Count > 0)
         {
-            return new SolidColorBrush(Colors.Red);
+            bool canUseValue = values.Count >= 2 && values[1] != null && values[1] is ThemeVariant;
+            ThemeVariant themeVariant = canUseValue ? (ThemeVariant) values[1]! : ThemeVariant.Default;
+            if (values[0] is true)
+            {
+                object? changedColour = TryGetResource("TrackChangedIndicationBrush", themeVariant);
+                return changedColour ?? new SolidColorBrush(Color.Parse("#88FF0000"));
+            }
+            object? separatorColour = TryGetResource("ListSeparatorBrush", themeVariant);
+            return separatorColour ?? new SolidColorBrush(Color.Parse("#88888888"));
         }
-
-        if (parameter is ImmutableSolidColorBrush brush)
-        {
-            return brush;
-        }
-        return new SolidColorBrush(Colors.LightGray);
+        return new SolidColorBrush(Color.Parse("#88888888"));
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    private object? TryGetResource(string key, ThemeVariant themeVariant)
     {
-        throw new NotSupportedException();
+        if(Application.Current == null) return null;
+        if(themeVariant == ThemeVariant.Default) themeVariant = Application.Current.ActualThemeVariant;
+        Application.Current.Resources.TryGetResource(key, themeVariant, out object? separatorColour);
+        return separatorColour;
     }
 }

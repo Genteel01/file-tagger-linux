@@ -100,8 +100,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (Application.Current is { } app)
         {
-            SelectedTheme = value;
             app.RequestedThemeVariant = value;
+            SelectedTheme = value;
         }
     }
 
