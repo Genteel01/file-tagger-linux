@@ -609,12 +609,12 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     public bool IsShowingTrackImages => SelectedTrackImages.Count > 0;
 
     /// <summary>
-    /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values as strings, for populating a selection dropdown
+    /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values for populating a selection dropdown
     /// </summary>
     public PictureInfo.PIC_TYPE[] PictureTypes { get; }
 
     /// <summary>
-    /// String of the selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
+    /// The selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
     /// </summary>
     [ObservableProperty]
     private PictureInfo.PIC_TYPE _selectedPictureType = PictureInfo.PIC_TYPE.Front;
