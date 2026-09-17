@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using FileTagger.Extensions;
 
 namespace FileTagger.Controls;
 
@@ -67,7 +70,7 @@ public partial class LabelledDropdown : UserControl
     }
 
     public event EventHandler? DropDownClosed;
-    public event EventHandler? SearchFieldChanged;
+    public event EventHandler<TextChangedEventArgs>? SearchFieldChanged;
 
     public LabelledDropdown()
     {
@@ -76,14 +79,38 @@ public partial class LabelledDropdown : UserControl
 
     private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
     {
+        if(sender is not AutoCompleteBox box) return;
         bool openedFromDropdownButton = e.NavigationMethod == NavigationMethod.Unspecified;
         if (!openedFromDropdownButton && !string.IsNullOrEmpty(OpenOnFocusText))
         {
             if(Text != OpenOnFocusText) return;
         }
-        if (sender is AutoCompleteBox box)
+        box.IsDropDownOpen = true;
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        if (SearchFieldChanged != null)
         {
-            box.IsDropDownOpen = true;
+            List<TextBox> textBoxes = this.GetVisualDescendants<TextBox>().ToList();
+            if (textBoxes.Count != 0)
+            {
+                textBoxes[0].TextChanged += SearchFieldChanged;
+            }
+        }
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+        if (SearchFieldChanged != null)
+        {
+            List<TextBox> textBoxes = this.GetVisualDescendants<TextBox>().ToList();
+            if (textBoxes.Count != 0)
+            {
+                textBoxes[0].TextChanged -= SearchFieldChanged;
+            }
         }
     }
 
@@ -104,10 +131,5 @@ public partial class LabelledDropdown : UserControl
     private void SearchField_OnDropDownClosed(object? sender, EventArgs e)
     {
         DropDownClosed?.Invoke(sender, e);
-    }
-
-    private void SearchField_OnTextChanged(object? sender, TextChangedEventArgs e)
-    {
-        SearchFieldChanged?.Invoke(sender, e);
     }
 }

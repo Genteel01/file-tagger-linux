@@ -43,9 +43,9 @@ public partial class EditPanel : UserControl
         }
     }
 
-    private void AutoCompleteBoxNumberFieldTextChanged(object? sender, EventArgs e)
+    private void AutoCompleteBoxNumberFieldTextChanged(object? sender, TextChangedEventArgs e)
     {
-        if (sender is not AutoCompleteBox box) return;
+        if (sender is not TextBox box) return;
         string text = box.Text ?? "";
         string newString = string.Concat(text.Where(char.IsDigit));
         int sizeDifference = text.Length - newString.Length;
