@@ -6,4 +6,11 @@
     <Color x:Key='MidAccentColour'>#7E00bfff</Color>
     <Color x:Key='MidLowAccentColour'>#5300bfff</Color>
     <Color x:Key='LowAccentColour'>#2800bfff</Color>
+
+    <Color x:Key='OpaqueDarkAccentColour'>#FF005f7f</Color>
+    <Color x:Key='HighDarkAccentColour'>#D4005f7f</Color>
+    <Color x:Key='MidHighDarkAccentColour'>#A9005f7f</Color>
+    <Color x:Key='MidDarkAccentColour'>#7E005f7f</Color>
+    <Color x:Key='MidLowDarkAccentColour'>#53005f7f</Color>
+    <Color x:Key='LowDarkAccentColour'>#28005f7f</Color>
 </ResourceDictionary>
