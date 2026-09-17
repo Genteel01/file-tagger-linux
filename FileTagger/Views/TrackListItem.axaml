@@ -58,6 +58,7 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <!--Title-->
             <TextBlock Grid.Column="0" Text="{Binding Title}" Name="TitleBlock"
@@ -125,6 +126,7 @@
             <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="PathBox"/>
+            <Panel Grid.Column="11" Classes="buffer"/>
         </Grid>
     </Border>
 </UserControl>

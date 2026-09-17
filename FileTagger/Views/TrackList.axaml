@@ -34,6 +34,9 @@
             <Setter Property="Background" Value="{DynamicResource ListSeparatorBrush}" />
             <Setter Property="Width" Value="3" />
         </Style>
+        <Style Selector="Panel.buffer">
+            <Setter Property="Width" Value="3" />
+        </Style>
     </UserControl.Styles>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True"
                   GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown">
