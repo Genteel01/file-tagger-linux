@@ -45,12 +45,15 @@ public partial class EditPanel : UserControl
 
     private void AutoCompleteBoxNumberFieldTextChanged(object? sender, EventArgs e)
     {
-        if (sender is AutoCompleteBox box)
+        if (sender is not AutoCompleteBox box) return;
+        string text = box.Text ?? "";
+        string newString = string.Concat(text.Where(char.IsDigit));
+        int sizeDifference = text.Length - newString.Length;
+
+        if (sizeDifference > 0)
         {
-            if (box.Text != EditPanelViewModel.UnchangedField)
-            {
-                box.Text = string.Concat((box.Text ?? "").Where(c => char.IsDigit(c)));
-            }
+            box.CaretIndex -= sizeDifference;
+            box.Text = newString;
         }
     }
 
