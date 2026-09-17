@@ -145,10 +145,10 @@
                             <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Paste cover as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}">
-                            <MenuItem.Icon><Viewbox Stretch="Fill" Width="12"><PathIcon Data="{StaticResource PasteIcon}"/></Viewbox></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Paste cover as _new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}">
-                            <MenuItem.Icon><Viewbox Stretch="Fill" Width="12"><PathIcon Data="{StaticResource PasteIcon}"/></Viewbox></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </Panel.ContextMenu>

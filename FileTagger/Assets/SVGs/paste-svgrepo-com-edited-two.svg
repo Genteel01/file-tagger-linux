@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="800px"
+   height="800px"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch9">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop10" />
+    </linearGradient>
+  </defs>
+  <path
+     id="path9"
+     style="baseline-shift:baseline;display:inline;overflow:visible;fill:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:72;enable-background:accumulate;stop-color:#000000;stop-opacity:1;fill-rule:evenodd;stroke-width:0.99999;stroke-dasharray:none"
+     d="m 7.9863281,15.99999 c -0.5469143,0.0075 -0.9863142,0.453054 -0.9863086,1.00002 -5.6e-6,0.546966 0.4393943,0.992475 0.9863086,1.00002 h 7.9999809 c 1.316088,-0.01716 1.316088,-1.98288 0,-2.00004 z m -1.43e-5,-5.00001 C 7.4393995,11.007525 6.9999997,11.453034 7.0000052,12 c 2.73e-5,0.546943 0.4394177,0.992415 0.9863086,0.99996 h 7.9999812 c 1.313251,-0.01992 1.313251,-1.980063 0,-1.99998 z M 11,2.90001 c -0.5523,0 -1,0.44772 -1,1 v 2 h 4 v -2 c 0,-0.55228 -0.4477,-1 -1,-1 z m 4.8293,0 c -0.4118,-1.16519 -1.5231,-2 -2.8293,-2 h -2 c -1.30622,0 -2.41746,0.83481 -2.82929,2 H 6 c -1.65685,0 -3,1.34315 -3,3 V 20.1 c 0,1.6569 1.34315,3 3,3 h 12 c 1.6569,0 3,-1.3431 3,-3 V 5.90001 c 0,-1.65685 -1.3431,-3 -3,-3 z m 0.1707,2 v 2 c 0,0.55228 -0.4477,1 -1,1 H 9 c -0.55228,0 -1,-0.44772 -1,-1 v -2 H 6 c -0.55228,0 -1,0.44772 -1,1 V 20.1 c 0,0.5523 0.44772,1 1,1 h 12 c 0.5523,0 1,-0.4477 1,-1 V 5.90001 c 0,-0.55228 -0.4477,-1 -1,-1 z" />
+</svg>
