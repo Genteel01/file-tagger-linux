@@ -27,10 +27,10 @@
                 <!-- This is our title text block.  -->
                 <TextBlock Classes="h1" Text="Music Tagger" />
                 <Button Command="{Binding OpenMusicFilesCommand}" ToolTip.Tip="Open Files">
-                    <PathIcon Width="12" Data="{StaticResource OpenIcon}"/>
+                    <PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/>
                 </Button>
                 <Button Command="{Binding SaveMusicFilesCommand}" ToolTip.Tip="Save Changed Files">
-                    <PathIcon Width="12" Data="{StaticResource SaveIcon}"/>
+                    <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
             </StackPanel>
         </Border>

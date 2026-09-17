@@ -123,36 +123,36 @@
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="_Add cover" Command="{Binding AddCoverImagesCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Remove cover" Command="{Binding RemoveCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource MinusIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource MinusIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Replace c_over" Command="{Binding ReplaceCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Extract cover" IsEnabled="{Binding IsShowingTrackImages}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="Black"/>
                         <MenuItem Header="Set cover _type">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Set cover _description">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="Black"/>
                         <MenuItem Header="C_ut cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Copy cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CopyCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Paste cover as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Paste cover as _new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </Panel.ContextMenu>
@@ -167,9 +167,9 @@
                 </StackPanel>
             </Panel>
             <Grid Margin="8 2 8 4" Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
-                <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Height="12" Data="{StaticResource LeftChevronIcon}"/></Button>
+                <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"/>
-                <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Height="12" Data="{StaticResource RightChevronIcon}"/></Button>
+                <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
             </Grid>
         </StackPanel>
     </ScrollViewer>

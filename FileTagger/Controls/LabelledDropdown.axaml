@@ -70,7 +70,7 @@
                     TextFilter="{TemplateBinding TextFilter}">
                     <AutoCompleteBox.InnerRightContent>
                         <Button Tapped="ExpandButtonTapped" Width="24">
-                            <PathIcon Width="12" Data="{StaticResource DownChevronIcon}"/>
+                            <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
                         </Button>
                     </AutoCompleteBox.InnerRightContent>
                 </AutoCompleteBox>

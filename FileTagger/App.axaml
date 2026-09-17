@@ -71,5 +71,12 @@
         <Style Selector="Button">
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         </Style>
+
+        <Style Selector="PathIcon.horizontal">
+            <Setter Property="Width" Value="{DynamicResource SmallIconWidth}" />
+        </Style>
+        <Style Selector="PathIcon.vertical">
+            <Setter Property="Height" Value="{DynamicResource SmallIconWidth}" />
+        </Style>
     </Application.Styles>
 </Application>
