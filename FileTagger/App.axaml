@@ -13,8 +13,7 @@
      <Application.Resources>
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
-                 <MergeResourceInclude Source="/Assets/Colours.axaml" />
-                 <MergeResourceInclude Source="/Assets/Brushes.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesBase.axaml" />
                  <MergeResourceInclude Source="/Assets/BrushesLight.axaml" />
                  <MergeResourceInclude Source="/Assets/BrushesDark.axaml" />
                  <MergeResourceInclude Source="/Assets/Icons.axaml" />

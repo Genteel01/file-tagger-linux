@@ -2,21 +2,36 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
-            <SolidColorBrush x:Key='EditPanelBackground'>#F0F0F0</SolidColorBrush>
-            <SolidColorBrush x:Key='ListSeparatorBrush'>#13000000</SolidColorBrush>
+            <Color x:Key='ThemeForegroundColor'>#000000</Color>
 
-            <SolidColorBrush x:Key='ThemeBorderLowBrush'>#888888</SolidColorBrush>
-            <SolidColorBrush x:Key='ThemeBorderMidBrush'>#363636</SolidColorBrush>
-            <SolidColorBrush x:Key='ThemeBorderHighBrush'>#212121</SolidColorBrush>
-            <SolidColorBrush x:Key='ThemeForegroundBrush'>#000000</SolidColorBrush>
+            <Color x:Key='ThemeBorderLowColor'>#888888</Color>
+            <Color x:Key='ThemeBorderMidColor'>#363636</Color>
+            <Color x:Key='ThemeBorderHighColor'>#212121</Color>
+
+            <Color x:Key='ListSeparatorColor'>#16000000</Color>
+            <Color x:Key='EditPanelBackgroundColor'>#F0F0F0</Color>
+
+            <Color x:Key='MenuBorderColor'>#D3D3D3</Color>
+            <Color x:Key='SectionBorderColor'>#888888</Color>
+            <Color x:Key='SortArrowColor'>#30000000</Color>
+
+            <!--Text Colour, PathIcon colour-->
+            <SolidColorBrush x:Key='ThemeForegroundBrush' Color="{StaticResource ThemeForegroundColor}"/>
+
+            <SolidColorBrush x:Key='ThemeBorderLowBrush' Color="{StaticResource ThemeBorderLowColor}"/>
+            <SolidColorBrush x:Key='ThemeBorderMidBrush' Color="{StaticResource ThemeBorderMidColor}"/>
+            <SolidColorBrush x:Key='ThemeBorderHighBrush' Color="{StaticResource ThemeBorderHighColor}"/>
 
             <!--Text Highlight-->
-            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource OpaqueDarkAccentColour}"/>
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource OpaqueDarkAccentColor}"/>
 
-            <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource OpaqueDarkAccentColour}"/>
-            <SolidColorBrush x:Key='MenuBorderBrush' Color="#D3D3D3"/>
-            <SolidColorBrush x:Key='SectionBorderBrush' Color="#888888"/>
-            <SolidColorBrush x:Key='SortArrowBrush' Color="#30000000"/>
+            <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource OpaqueDarkAccentColor}"/>
+
+            <SolidColorBrush x:Key='EditPanelBackgroundBrush' Color="{StaticResource EditPanelBackgroundColor}"/>
+            <SolidColorBrush x:Key='ListSeparatorBrush' Color="{StaticResource ListSeparatorColor}"/>
+            <SolidColorBrush x:Key='MenuBorderBrush' Color="{StaticResource MenuBorderColor}"/>
+            <SolidColorBrush x:Key='SectionBorderBrush' Color="{StaticResource SectionBorderColor}"/>
+            <SolidColorBrush x:Key='SortArrowBrush' Color="{StaticResource SortArrowColor}"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

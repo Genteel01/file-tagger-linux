@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key='OpaqueAccentColor'>#FF00bfff</Color>
+    <Color x:Key='HighAccentColor'>#D400bfff</Color>
+    <Color x:Key='MidHighAccentColor'>#A900bfff</Color>
+    <Color x:Key='MidAccentColor'>#7E00bfff</Color>
+    <Color x:Key='MidLowAccentColor'>#5300bfff</Color>
+    <Color x:Key='LowAccentColor'>#2800bfff</Color>
+
+    <Color x:Key='OpaqueDarkAccentColor'>#FF005f7f</Color>
+    <Color x:Key='HighDarkAccentColor'>#D4005f7f</Color>
+    <Color x:Key='MidHighDarkAccentColor'>#A9005f7f</Color>
+    <Color x:Key='MidDarkAccentColor'>#7E005f7f</Color>
+    <Color x:Key='MidLowDarkAccentColor'>#53005f7f</Color>
+    <Color x:Key='LowDarkAccentColor'>#28005f7f</Color>
+
+    <Color x:Key="TrackChangedIndicationColor">Red</Color>
+    <Color x:Key='CutOverlayColor'>#80FFFFFF</Color>
+
+    <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
+    <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource MidHighAccentColor}"/>
+    <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
+    <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{StaticResource MidAccentColor}"/>
+    <!--ListBoxItem:selected, ComboBoxItem:selected-->
+    <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{StaticResource MidLowAccentColor}"/>
+    <!--pointerover on selection-->
+    <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{StaticResource LowAccentColor}"/>
+
+    <!--ScrollBar arrow pressed-->
+    <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource HighAccentColor}"/>
+    <!--ScrollBar:pointerover, Button:pressed-->
+    <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource MidHighAccentColor}"/>
+    <!--ScrollBar:pressed-->
+    <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource HighAccentColor}"/>
+
+    <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="{StaticResource TrackChangedIndicationColor}"/>
+    <SolidColorBrush x:Key="CutOverlayBrush" Color="{StaticResource CutOverlayColor}"/>
+</ResourceDictionary>
