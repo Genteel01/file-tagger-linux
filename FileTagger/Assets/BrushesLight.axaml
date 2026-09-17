@@ -11,8 +11,9 @@
             <SolidColorBrush x:Key='ThemeForegroundBrush'>#000000</SolidColorBrush>
 
             <!--Text Highlight-->
-            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighAccentColour}"/>
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource OpaqueDarkAccentColour}"/>
 
+            <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource OpaqueDarkAccentColour}"/>
             <SolidColorBrush x:Key='MenuBorderBrush' Color="#D3D3D3"/>
             <SolidColorBrush x:Key='SectionBorderBrush' Color="#888888"/>
             <SolidColorBrush x:Key='SortArrowBrush' Color="#30000000"/>
