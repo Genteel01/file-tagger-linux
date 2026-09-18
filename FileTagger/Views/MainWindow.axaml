@@ -16,8 +16,45 @@
     <Window.Resources>
         <converters:AreEqualConverter x:Key="AreEqualConverter"/>
     </Window.Resources>
-    <Grid RowDefinitions="Auto, *" Name="Root">
-        <Border Grid.Row="0" BorderThickness="0 0 0 2" BorderBrush="{DynamicResource MenuBorderBrush}" Margin="0 0 0 1">
+    <Grid RowDefinitions="Auto, Auto, *" Name="Root">
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File" Padding="4">
+                <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Settings" Padding="4">
+                <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}">
+                    <MenuItem.ItemContainerTheme>
+                        <ControlTheme TargetType="MenuItem"
+                                      BasedOn="{StaticResource {x:Type MenuItem}}"
+                                      x:DataType="ThemeVariant">
+                            <Setter Property="Header" Value="{Binding .}"/>
+                            <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
+                            <Setter Property="CommandParameter" Value="{Binding .}"/>
+                            <Setter Property="Icon">
+                                <Setter.Value>
+                                    <Template>
+                                        <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
+                                            <PathIcon.IsVisible>
+                                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                                                    <Binding Path="." />
+                                                    <Binding Path="#Root.((vm:MainWindowViewModel)DataContext).SelectedTheme" />
+                                                </MultiBinding>
+                                            </PathIcon.IsVisible>
+                                        </PathIcon>
+                                    </Template>
+                                </Setter.Value>
+                            </Setter>
+                        </ControlTheme>
+                    </MenuItem.ItemContainerTheme>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Border Grid.Row="1" BorderThickness="0 1 0 2" BorderBrush="{DynamicResource MenuBorderBrush}" Margin="0 0 0 1">
             <StackPanel Orientation="Horizontal" Spacing="4" Margin="0 2">
                 <StackPanel.Styles>
                     <Style Selector="Button">
@@ -68,7 +105,7 @@
             </StackPanel>
         </Border>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding EditPanelWidth, Mode=TwoWay}"/>
                 <ColumnDefinition Width="Auto"/>
