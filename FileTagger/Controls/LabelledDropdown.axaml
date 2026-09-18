@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="40"
              xmlns:controls="clr-namespace:FileTagger.Controls"
              x:DataType="controls:LabelledDropdown"
              x:Class="FileTagger.Controls.LabelledDropdown">
@@ -66,7 +66,7 @@
                     GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed"
                     TextFilter="{TemplateBinding TextFilter}">
                     <AutoCompleteBox.InnerRightContent>
-                        <Button Tapped="ExpandButtonTapped" Width="24">
+                        <Button Width="24">
                             <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
                         </Button>
                     </AutoCompleteBox.InnerRightContent>
