@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Styling;
+using FileTagger.Assets.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Models;
@@ -46,15 +47,14 @@ public class Preferences
     /// <returns></returns>
     public ThemeVariant GetStoredTheme()
     {
-        switch (RequestedTheme)
+        return RequestedTheme switch
         {
-            case "Light":
-                return ThemeVariant.Light;
-            case "Dark":
-                return ThemeVariant.Dark;
-            default:
-                return ThemeVariant.Default;
-        }
+            nameof(ThemeVariant.Light) => ThemeVariant.Light,
+            nameof(ThemeVariant.Dark) => ThemeVariant.Dark,
+            nameof(MyThemes.LightGreen) => MyThemes.LightGreen,
+            nameof(MyThemes.DarkGreen) => MyThemes.DarkGreen,
+            _ => ThemeVariant.Default
+        };
     }
 
     /// <summary>

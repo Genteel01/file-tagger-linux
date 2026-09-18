@@ -18,6 +18,7 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using FileTagger.Assets.Statics;
 using FileTagger.Models;
 
 namespace FileTagger.ViewModels;
@@ -88,7 +89,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// List of <see cref="ThemeVariant"/> values to select from
     /// </summary>
-    public ThemeVariant[] Themes { get; }
+    public ThemeVariant[] Themes { get; } = [ThemeVariant.Default, ThemeVariant.Light, MyThemes.LightGreen, ThemeVariant.Dark, MyThemes.DarkGreen];
 
     /// <summary>
     /// Selected <see cref="ThemeVariant"/>
@@ -142,7 +143,6 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         //Load initial EditPanel width
         EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
-        Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
         ThemeVariant loadedTheme = preferences.GetStoredTheme();
         if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
@@ -171,7 +171,6 @@ public partial class MainWindowViewModel : ViewModelBase
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
         ListColumnWidths = new AvaloniaDictionary<string, double>();
-        Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
         SelectedTheme = ThemeVariant.Default;
     }
     #endif

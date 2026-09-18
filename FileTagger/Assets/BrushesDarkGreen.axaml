@@ -1,0 +1,42 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:statics="clr-namespace:FileTagger.Assets.Statics">
+        <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="{x:Static statics:MyThemes.DarkGreen}">
+            <Color x:Key='OpaqueAccentColor'>#FF00e645</Color>
+            <Color x:Key='HighAccentColor'>#D400e645</Color>
+            <Color x:Key='MidHighAccentColor'>#A900e645</Color>
+            <Color x:Key='MidAccentColor'>#7E00e645</Color>
+            <Color x:Key='MidLowAccentColor'>#5300e645</Color>
+            <Color x:Key='LowAccentColor'>#2800e645</Color>
+
+            <Color x:Key='OpaqueDarkAccentColor'>#FF007f26</Color>
+            <Color x:Key='HighDarkAccentColor'>#D4007f26</Color>
+            <Color x:Key='MidHighDarkAccentColor'>#A9007f26</Color>
+            <Color x:Key='MidDarkAccentColor'>#7E007f26</Color>
+            <Color x:Key='MidLowDarkAccentColor'>#53007f26</Color>
+            <Color x:Key='LowDarkAccentColor'>#28007f26</Color>
+
+            <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
+            <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource MidHighAccentColor}"/>
+            <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
+            <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{StaticResource MidAccentColor}"/>
+            <!--ListBoxItem:selected, ComboBoxItem:selected-->
+            <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{StaticResource MidLowAccentColor}"/>
+            <!--pointerover on selection-->
+            <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{StaticResource LowAccentColor}"/>
+
+            <!--ScrollBar arrow pressed-->
+            <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource HighAccentColor}"/>
+            <!--ScrollBar:pointerover, Button:pressed-->
+            <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource MidHighAccentColor}"/>
+            <!--ScrollBar:pressed-->
+            <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource HighAccentColor}"/>
+
+            <!--Text Highlight-->
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource OpaqueAccentColor}"/>
+
+            <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource OpaqueAccentColor}"/>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>
