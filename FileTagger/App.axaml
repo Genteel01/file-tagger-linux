@@ -62,6 +62,12 @@
         <Style Selector="Button:pointerover">
             <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
+        <Style Selector="Button:pointerover ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush}" />
+        </Style>
+        <Style Selector="Button:pressed ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush}" />
+        </Style>
 
         <Style Selector="PathIcon.horizontal">
             <Setter Property="Width" Value="{DynamicResource SmallIconWidth}" />
