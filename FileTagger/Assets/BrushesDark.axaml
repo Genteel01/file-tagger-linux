@@ -3,6 +3,7 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
             <Color x:Key='HighlightColor'>#FF00bfff</Color>
+            <Color x:Key="HighlightForegroundColor">#FF0F0F0F</Color>
 
             <Color x:Key='ThemeBackgroundColor'>#0F0F0F</Color>
             <Color x:Key='ThemeForegroundColor'>#DEDEDE</Color>
@@ -29,6 +30,7 @@
 
             <!--Text Highlight-->
             <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
+            <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{StaticResource HighlightForegroundColor}" />
 
             <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource HighlightColor}"/>
 
