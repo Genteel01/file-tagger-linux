@@ -29,10 +29,10 @@
                 </StackPanel.Styles>
                 <!-- This is our title text block.  -->
                 <TextBlock Classes="h1" Text="Music Tagger" />
-                <Button Command="{Binding OpenMusicFilesCommand}" ToolTip.Tip="Open Files">
+                <Button ToolTip.Tip="Open Files" Command="{Binding OpenMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/>
                 </Button>
-                <Button Command="{Binding SaveMusicFilesCommand}" ToolTip.Tip="Save Changed Files">
+                <Button ToolTip.Tip="Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
                 <Button>
