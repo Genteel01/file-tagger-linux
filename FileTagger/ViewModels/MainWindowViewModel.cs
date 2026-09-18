@@ -108,6 +108,23 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Switches between light and dark theme
+    /// </summary>
+    [RelayCommand]
+    private void SwitchTheme()
+    {
+        ThemeVariant newTheme = SelectedTheme.ToString() switch
+        {
+            nameof(ThemeVariant.Light) => ThemeVariant.Dark,
+            nameof(ThemeVariant.Dark) => ThemeVariant.Light,
+            nameof(MyThemes.LightGreen) => MyThemes.DarkGreen,
+            nameof(MyThemes.DarkGreen) => MyThemes.LightGreen,
+            _ => ThemeVariant.Dark
+        };
+        ChangeSelectedTheme(newTheme);
+    }
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));

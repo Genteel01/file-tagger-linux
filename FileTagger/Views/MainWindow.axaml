@@ -72,35 +72,8 @@
                 <Button ToolTip.Tip="Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
-                <Button>
+                <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource ThemeIcon}"/>
-                    <Button.Flyout>
-                        <MenuFlyout ItemsSource="{Binding Themes}">
-                            <MenuFlyout.ItemContainerTheme>
-                                <ControlTheme TargetType="MenuItem"
-                                              BasedOn="{StaticResource {x:Type MenuItem}}"
-                                              x:DataType="ThemeVariant">
-                                    <Setter Property="Header" Value="{Binding .}"/>
-                                    <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
-                                    <Setter Property="CommandParameter" Value="{Binding .}"/>
-                                    <Setter Property="Icon">
-                                        <Setter.Value>
-                                            <Template>
-                                            <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
-                                            <PathIcon.IsVisible>
-                                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
-                                                    <Binding Path="." />
-                                                    <Binding Path="#Root.((vm:MainWindowViewModel)DataContext).SelectedTheme" />
-                                                </MultiBinding>
-                                            </PathIcon.IsVisible>
-                                            </PathIcon>
-                                            </Template>
-                                        </Setter.Value>
-                                    </Setter>
-                                </ControlTheme>
-                            </MenuFlyout.ItemContainerTheme>
-                        </MenuFlyout>
-                    </Button.Flyout>
                 </Button>
             </StackPanel>
         </Border>
