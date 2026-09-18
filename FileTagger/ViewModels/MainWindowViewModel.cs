@@ -93,7 +93,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Selected <see cref="ThemeVariant"/>
     /// </summary>
-    [ObservableProperty] private ThemeVariant _selectedTheme;
+    [ObservableProperty] private ThemeVariant _selectedTheme = ThemeVariant.Default;
 
     [RelayCommand]
     private void ChangeSelectedTheme(ThemeVariant value)
@@ -102,6 +102,8 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             app.RequestedThemeVariant = value;
             SelectedTheme = value;
+            PropertyInfo themeProperty = typeof(Preferences).GetProperty(nameof(Preferences.RequestedTheme))!;
+            _preferenceService.StorePreferenceItem(themeProperty, value.ToString());
         }
     }
 
@@ -141,7 +143,8 @@ public partial class MainWindowViewModel : ViewModelBase
         //Load initial EditPanel width
         EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
         Themes = [ThemeVariant.Default, ThemeVariant.Light, ThemeVariant.Dark];
-        SelectedTheme = Application.Current?.RequestedThemeVariant ?? ThemeVariant.Default;
+        ThemeVariant loadedTheme = preferences.GetStoredTheme();
+        if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
+using Avalonia.Styling;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Models;
@@ -33,6 +34,28 @@ public class Preferences
     /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
     /// </summary>
     public double EditPanelWidth { get; set; } = double.PositiveInfinity;
+
+    /// <summary>
+    /// A string representation of the theme that the user has requested
+    /// </summary>
+    public string RequestedTheme { get; set; } = ThemeVariant.Default.ToString();
+
+    /// <summary>
+    /// Gets the <see cref="ThemeVariant"/> corresponding to <see cref="RequestedTheme"/>
+    /// </summary>
+    /// <returns></returns>
+    public ThemeVariant GetStoredTheme()
+    {
+        switch (RequestedTheme)
+        {
+            case "Light":
+                return ThemeVariant.Light;
+            case "Dark":
+                return ThemeVariant.Dark;
+            default:
+                return ThemeVariant.Default;
+        }
+    }
 
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>
