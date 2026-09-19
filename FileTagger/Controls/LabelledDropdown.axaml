@@ -9,7 +9,7 @@
     <UserControl.Styles>
         <Style Selector="AutoCompleteBox">
             <Setter Property="Height" Value="{StaticResource EditControlHeight}" />
-            <Setter Property="Padding" Value="4 4 0 4" />
+            <Setter Property="Padding" Value="4 4 24 4" />
         </Style>
         <Style Selector="Button">
             <Setter Property="BorderThickness" Value="0" />
@@ -55,19 +55,18 @@
         <ControlTemplate>
             <StackPanel Name="LabelledDropdown">
                 <Label Content="{TemplateBinding LabelText}" Target="{Binding #PART_AutoCompleteBox}"/>
-                <AutoCompleteBox
-                    x:Name="PART_AutoCompleteBox"
-                    HorizontalAlignment="Stretch"
-                    ItemsSource="{TemplateBinding ItemsSource}"
-                    Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
-                    GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed"
-                    TextFilter="{TemplateBinding TextFilter}">
-                    <AutoCompleteBox.InnerRightContent>
-                        <Button x:Name="PART_Button" Width="24">
-                            <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
-                        </Button>
-                    </AutoCompleteBox.InnerRightContent>
-                </AutoCompleteBox>
+                <Panel>
+                    <AutoCompleteBox
+                        x:Name="PART_AutoCompleteBox"
+                        HorizontalAlignment="Stretch"
+                        ItemsSource="{TemplateBinding ItemsSource}"
+                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
+                        GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed"
+                        TextFilter="{TemplateBinding TextFilter}"/>
+                    <Button x:Name="PART_Button" Width="24" HorizontalAlignment="Right">
+                        <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
+                    </Button>
+                </Panel>
             </StackPanel>
         </ControlTemplate>
     </UserControl.Template>
