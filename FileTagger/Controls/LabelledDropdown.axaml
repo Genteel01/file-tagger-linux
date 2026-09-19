@@ -9,15 +9,12 @@
     <UserControl.Styles>
         <Style Selector="AutoCompleteBox">
             <Setter Property="Height" Value="{StaticResource EditControlHeight}" />
-            <Setter Property="Padding" Value="4 0 0 0" />
+            <Setter Property="Padding" Value="4 4 0 4" />
         </Style>
         <Style Selector="Button">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="4 0" />
             <Setter Property="Background" Value="Transparent" />
-        </Style>
-        <Style Selector="TextBox">
-            <Setter Property="LineHeight" Value="{StaticResource EditControlHeight}" />
         </Style>
         <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />

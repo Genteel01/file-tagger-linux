@@ -73,6 +73,7 @@ public partial class LabelledDropdown : UserControl
 
     private AutoCompleteBox? _autoCompleteBox;
     private TextBox? _textBox;
+    private TextPresenter? _textPresenter;
     private Popup? _popup;
     private Button? _button;
     private TopLevel? _topLevel;
@@ -100,15 +101,35 @@ public partial class LabelledDropdown : UserControl
 
     private void OnAutoCompleteBoxApplyTemplate(object?  sender, TemplateAppliedEventArgs e)
     {
+        _textBox?.TemplateApplied -= OnTextBoxApplyTemplate;
         _textBox?.LosingFocus -= TextBoxLosingFocus;
         _textBox?.TextChanged -= SearchFieldChanged;
 
         _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
         _popup = e.NameScope.Find<Popup>("PART_Popup");
 
+        _textBox?.TemplateApplied += OnTextBoxApplyTemplate;
         _textBox?.LosingFocus += TextBoxLosingFocus;
         _textBox?.TextChanged += SearchFieldChanged;
         _popup?.OverlayInputPassThroughElement = _topLevel;
+    }
+
+    private void OnTextBoxApplyTemplate(object?  sender, TemplateAppliedEventArgs e)
+    {
+        _textPresenter = e.NameScope.Get<TextPresenter>("PART_TextPresenter");
+    }
+
+    /// <summary>
+    /// Automatically set the line height of the text box to fill all space available
+    /// </summary>
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+        if (!e.HeightChanged) return;
+        if (_textPresenter is { Bounds.Height: > 0 })
+        {
+            _textBox?.LineHeight = _textPresenter.Bounds.Height;
+        }
     }
 
     /// <summary>
