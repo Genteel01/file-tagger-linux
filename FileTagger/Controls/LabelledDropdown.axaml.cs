@@ -1,17 +1,17 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Interactivity;
-using FileTagger.Extensions;
 
 namespace FileTagger.Controls;
 
+[TemplatePart("PART_Button", typeof(Button), IsRequired = true)]
+[TemplatePart("PART_AutoCompleteBox", typeof(AutoCompleteBox), IsRequired = true)]
 public partial class LabelledDropdown : UserControl
 {
     public static readonly StyledProperty<string> LabelTextProperty =
@@ -71,71 +71,44 @@ public partial class LabelledDropdown : UserControl
     public event EventHandler? DropDownClosed;
     public event EventHandler<TextChangedEventArgs>? SearchFieldChanged;
 
-    private AutoCompleteBox? _searchField = null;
-    private TextBox? _textBox = null;
-    private Popup? _popup = null;
-    private Button? _expandButton = null;
-    private TopLevel? _topLevel = null;
+    private AutoCompleteBox? _autoCompleteBox;
+    private TextBox? _textBox;
+    private Popup? _popup;
+    private Button? _button;
+    private TopLevel? _topLevel;
 
     public LabelledDropdown()
     {
         InitializeComponent();
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        base.OnLoaded(e);
+        base.OnApplyTemplate(e);
 
-        if (_searchField == null)
-        {
-            List<AutoCompleteBox> boxes = this.GetVisualDescendants<AutoCompleteBox>().ToList();
-            if (boxes.Count != 0)
-            {
-                _searchField = boxes[0];
-            }
-        }
-
-        if (_textBox == null)
-        {
-            List<TextBox> textBoxes = this.GetVisualDescendants<TextBox>().ToList();
-            if (textBoxes.Count != 0)
-            {
-                _textBox = textBoxes[0];
-            }
-        }
-
-        if (_popup == null)
-        {
-            List<Popup> popups = this.GetVisualDescendants<Popup>().ToList();
-            if (popups.Count != 0)
-            {
-                _popup = popups[0];
-            }
-        }
-
-        if (_expandButton == null)
-        {
-            List<Button> buttons = this.GetVisualDescendants<Button>().ToList();
-            if (buttons.Count != 0)
-            {
-                _expandButton = buttons[0];
-            }
-        }
+        _button?.GotFocus -= ExpandButtonFocused;
+        _autoCompleteBox?.TemplateApplied -= OnAutoCompleteBoxApplyTemplate;
 
         _topLevel = TopLevel.GetTopLevel(this);
+        _button = e.NameScope.Get<Button>("PART_Button");
+        _autoCompleteBox = e.NameScope.Get<AutoCompleteBox>("PART_AutoCompleteBox");
 
-        _expandButton?.GotFocus += ExpandButtonFocused;
+        _autoCompleteBox.TemplateApplied += OnAutoCompleteBoxApplyTemplate;
+
+        _button.GotFocus += ExpandButtonFocused;
+    }
+
+    private void OnAutoCompleteBoxApplyTemplate(object?  sender, TemplateAppliedEventArgs e)
+    {
+        _textBox?.LosingFocus -= TextBoxLosingFocus;
+        _textBox?.TextChanged -= SearchFieldChanged;
+
+        _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
+        _popup = e.NameScope.Find<Popup>("PART_Popup");
+
         _textBox?.LosingFocus += TextBoxLosingFocus;
         _textBox?.TextChanged += SearchFieldChanged;
         _popup?.OverlayInputPassThroughElement = _topLevel;
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        _textBox?.LosingFocus -= TextBoxLosingFocus;
-        _textBox?.TextChanged -= SearchFieldChanged;
-        _expandButton?.GotFocus -= ExpandButtonFocused;
     }
 
     /// <summary>
@@ -161,7 +134,7 @@ public partial class LabelledDropdown : UserControl
     private void ExpandButtonFocused(object? sender, FocusChangedEventArgs e)
     {
         _textBox?.Focus();
-        _searchField?.IsDropDownOpen = true;
+        _autoCompleteBox?.IsDropDownOpen = true;
     }
 
     private void SearchField_OnDropDownClosed(object? sender, EventArgs e)
@@ -177,7 +150,7 @@ public partial class LabelledDropdown : UserControl
     /// <param name="e"></param>
     private void TextBoxLosingFocus(object? sender, FocusChangingEventArgs e)
     {
-        if (_searchField?.IsDropDownOpen == true && e.NewFocusedElement == _expandButton)
+        if (_autoCompleteBox?.IsDropDownOpen == true && e.NewFocusedElement == _button)
         {
             e.TrySetNewFocusedElement(_textBox);
         }
