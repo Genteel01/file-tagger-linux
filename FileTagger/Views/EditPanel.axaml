@@ -39,10 +39,10 @@
         <Style Selector="Panel#PicTypeControl:pointerover ComboBox Border">
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
-        <Style Selector="Panel#PicTypeControl:focus-within PathIcon, Panel#PicTypeControl:focus-within ComboBox, ComboBox:dropdownopen">
+        <Style Selector="Panel#PicTypeControl:focus-within PathIcon, Panel#PicTypeControl:focus-within ComboBox, Panel#PicTypeControl.open ComboBox, Panel#PicTypeControl.open PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
-        <Style Selector="Panel#PicTypeControl:focus-within ComboBox Border, ComboBox:dropdownopen Border">
+        <Style Selector="Panel#PicTypeControl:focus-within ComboBox Border, Panel#PicTypeControl.open ComboBox Border">
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
         </Style>
         <Style Selector="Panel#PicTypeControl ComboBox TextBlock">
@@ -166,7 +166,8 @@
                     <Button Command="{Binding NextImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
                 </StackPanel>
             </Panel>
-            <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
+            <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
+                   Width="{Binding #ImagePanel.Bounds.Width}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
                 <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}" Name="PicTypeSelector"/>
                 <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
