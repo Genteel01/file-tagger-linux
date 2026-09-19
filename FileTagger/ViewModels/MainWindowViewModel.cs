@@ -54,7 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     /// <see cref="IPreferenceService"/> received through Dependency Injection
-    /// used for storing and retrieving <see cref="Preferences"/> data
+    /// used for storing and retrieving <see cref="UserPreferences"/> data
     /// </summary>
     private readonly IPreferenceService _preferenceService;
 
@@ -103,7 +103,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             app.RequestedThemeVariant = value;
             SelectedTheme = value;
-            PropertyInfo themeProperty = typeof(Preferences).GetProperty(nameof(Preferences.RequestedTheme))!;
+            PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
     }
@@ -142,25 +142,30 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
         }
-        //Load initial sort settings
-        Preferences preferences = _preferenceService.GetPreferenceData();
-        CurrentSort = preferences.SortOrder.Item1;
-        SortDescending = preferences.SortOrder.Item2;
-        //Load initial column widths
-        ListColumnWidths = new AvaloniaDictionary<string, double>(preferences.ListColumnWidths);
+        SetUpUserPreferences();
         //Set up event handler to update preferences whenever column widths change
-        ListColumnWidths.CollectionChanged += (_, args) =>
+        ListColumnWidths?.CollectionChanged += (_, args) =>
         {
             if (args.NewItems == null) return;
-            PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+            PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
             foreach (KeyValuePair<string, double> newItem in args.NewItems)
             {
                 _preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newItem.Key, newItem.Value);
             }
         };
-        //Load initial EditPanel width
-        EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
-        ThemeVariant loadedTheme = preferences.RequestedTheme;
+    }
+
+    /// <summary>
+    /// Sets up the data from User Preferences
+    /// </summary>
+    private void SetUpUserPreferences()
+    {
+        UserPreferences newPreferences = _preferenceService.UserPreferenceData;
+        ListColumnWidths = new AvaloniaDictionary<string, double>(newPreferences.ListColumnWidths);
+        EditPanelWidth = double.IsPositiveInfinity(newPreferences.EditPanelWidth) ? GridLength.Star : new GridLength(newPreferences.EditPanelWidth);
+        CurrentSort = newPreferences.SortOrder.Item1;
+        SortDescending = newPreferences.SortOrder.Item2;
+        ThemeVariant loadedTheme = newPreferences.RequestedTheme;
         if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
 
@@ -170,7 +175,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (e.PropertyName == nameof(EditPanelWidth))
         {
             //Store EditPanelWidth when it changes
-            PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+            PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
             double newValue = EditPanelWidth is { IsStar: true, Value: 1 } ? double.PositiveInfinity : EditPanelWidth.Value;
             _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
         }
@@ -323,7 +328,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         CurrentSort = fields;
-        PropertyInfo sortOrderProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
+        PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
         _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }

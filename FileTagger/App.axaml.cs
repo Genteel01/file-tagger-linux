@@ -42,7 +42,7 @@ public class App : Application
             _preferenceService = services.GetRequiredService<IPreferenceService>();
             await _preferenceService.LoadPreferenceData();
 
-            Preferences preferences = _preferenceService.GetPreferenceData();
+            SystemPreferences preferences = _preferenceService.SystemPreferenceData;
             //For convenience, we don't want to start maximised in Debug
             #if DEBUG
             WindowState startingWindowState = WindowState.Normal;

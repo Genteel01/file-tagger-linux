@@ -8,34 +8,11 @@ using FileTagger.ViewModels;
 
 namespace FileTagger.Models;
 
-public class Preferences
+/// <summary>
+/// Class that stores settings that the user has direct control over and might want to reset
+/// </summary>
+public class UserPreferences
 {
-    #region SystemPreferences
-
-    /// <summary>
-    /// Width and height of the main window
-    /// </summary>
-    public (double Width, double Height) WindowSize { get; set; } = (0, 0);
-
-    /// <summary>
-    /// Whether the main window is maximised
-    /// </summary>
-    public bool IsMaximised { get; set; } = false;
-
-    /// <summary>
-    /// Widths of each column in the track list
-    /// </summary>
-    public Dictionary<string, double> ListColumnWidths { get; set; } = new Dictionary<string, double>();
-
-    /// <summary>
-    /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
-    /// </summary>
-    public double EditPanelWidth { get; set; } = double.PositiveInfinity;
-
-    #endregion
-
-    #region UserPreferences
-
     /// <summary>
     /// String defining which fields the track list is sorted by,
     /// and a bool defining whether they are sorted in descending order
@@ -66,7 +43,15 @@ public class Preferences
         set => _storedTheme = value.ToString();
     }
 
-    #endregion
+    /// <summary>
+    /// Widths of each column in the track list
+    /// </summary>
+    public Dictionary<string, double> ListColumnWidths { get; set; } = new Dictionary<string, double>();
+
+    /// <summary>
+    /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
+    /// </summary>
+    public double EditPanelWidth { get; set; } = double.PositiveInfinity;
 
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>

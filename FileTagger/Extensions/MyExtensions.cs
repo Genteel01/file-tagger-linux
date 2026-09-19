@@ -49,11 +49,11 @@ public static class MyExtensions
         public void StoreWindowState(IPreferenceService preferenceService)
         {
             bool isMaximised = window.WindowState == WindowState.Maximized;
-            PropertyInfo maximisedProperty = typeof(Preferences).GetProperty(nameof(Preferences.IsMaximised))!;
+            PropertyInfo maximisedProperty = typeof(SystemPreferences).GetProperty(nameof(SystemPreferences.IsMaximised))!;
             preferenceService.StorePreferenceItem(maximisedProperty, isMaximised);
             if (!isMaximised)
             {
-                PropertyInfo sizeProperty = typeof(Preferences).GetProperty(nameof(Preferences.WindowSize))!;
+                PropertyInfo sizeProperty = typeof(SystemPreferences).GetProperty(nameof(SystemPreferences.WindowSize))!;
                 preferenceService.StorePreferenceItem(sizeProperty, (window.Width, window.Height));
             }
         }
