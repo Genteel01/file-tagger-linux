@@ -20,6 +20,7 @@
                  <MergeResourceInclude Source="/Assets/Icons.axaml" />
                  <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
+                 <MergeResourceInclude Source="/Controls/LabelledDropdown.axaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
      </Application.Resources>

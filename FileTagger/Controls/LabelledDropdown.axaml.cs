@@ -7,12 +7,13 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Media;
 
 namespace FileTagger.Controls;
 
 [TemplatePart("PART_Button", typeof(Button), IsRequired = true)]
 [TemplatePart("PART_AutoCompleteBox", typeof(AutoCompleteBox), IsRequired = true)]
-public partial class LabelledDropdown : UserControl
+public class LabelledDropdown : TemplatedControl
 {
     public static readonly StyledProperty<string> LabelTextProperty =
         AvaloniaProperty.Register<LabelledDropdown, string>(
@@ -59,6 +60,15 @@ public partial class LabelledDropdown : UserControl
             defaultValue: "",
             defaultBindingMode: BindingMode.OneWay);
 
+    public static readonly StyledProperty<IBrush?> ButtonBackgroundProperty =
+        Border.BackgroundProperty.AddOwner<LabelledDropdown>();
+
+    public IBrush? ButtonBackground
+    {
+        get => GetValue(ButtonBackgroundProperty);
+        set => SetValue(ButtonBackgroundProperty, value);
+    }
+
     /// <summary>
     /// With this property set, the dropdown will only open on focus when <see cref="Text"/> is equal to this value
     /// </summary>
@@ -78,24 +88,22 @@ public partial class LabelledDropdown : UserControl
     private Button? _button;
     private TopLevel? _topLevel;
 
-    public LabelledDropdown()
-    {
-        InitializeComponent();
-    }
-
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
         _button?.GotFocus -= ExpandButtonFocused;
         _autoCompleteBox?.TemplateApplied -= OnAutoCompleteBoxApplyTemplate;
+        _autoCompleteBox?.GotFocus -= AutoCompleteBoxFocusGained;
+        _autoCompleteBox?.DropDownClosed -= DropDownClosed;
 
         _topLevel = TopLevel.GetTopLevel(this);
         _button = e.NameScope.Get<Button>("PART_Button");
         _autoCompleteBox = e.NameScope.Get<AutoCompleteBox>("PART_AutoCompleteBox");
 
         _autoCompleteBox.TemplateApplied += OnAutoCompleteBoxApplyTemplate;
-
+        _autoCompleteBox.GotFocus += AutoCompleteBoxFocusGained;
+        _autoCompleteBox.DropDownClosed += DropDownClosed;
         _button.GotFocus += ExpandButtonFocused;
     }
 
@@ -156,11 +164,6 @@ public partial class LabelledDropdown : UserControl
     {
         _textBox?.Focus();
         _autoCompleteBox?.IsDropDownOpen = true;
-    }
-
-    private void SearchField_OnDropDownClosed(object? sender, EventArgs e)
-    {
-        DropDownClosed?.Invoke(sender, e);
     }
 
     /// <summary>
