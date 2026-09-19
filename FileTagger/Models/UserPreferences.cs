@@ -46,7 +46,8 @@ public class UserPreferences
     /// <summary>
     /// Widths of each column in the track list
     /// </summary>
-    public Dictionary<string, double> ListColumnWidths { get; set; } = new Dictionary<string, double>();
+    public Dictionary<string, double> ListColumnWidths { get; set
+        { field = value; AddMissingColumnWidths(); } } = new Dictionary<string, double>();
 
     /// <summary>
     /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
@@ -56,7 +57,7 @@ public class UserPreferences
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>
     /// </summary>
-    public void AddMissingColumnWidths()
+    private void AddMissingColumnWidths()
     {
         List<PropertyInfo> trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?) )];
         foreach (PropertyInfo trackProperty in trackProperties)
