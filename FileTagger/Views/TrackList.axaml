@@ -14,10 +14,13 @@
         <converters:SortArrowsConverter x:Key="SortArrowsConverter"/>
     </UserControl.Resources>
     <UserControl.Styles>
-        <Style Selector="ListBox, ListBoxItem">
-            <Setter Property="Margin" Value="0" />
+        <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Height" Value="{DynamicResource DefaultRowHeight}"/>
         </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
             <Setter Property="Height" Value="42"/>
