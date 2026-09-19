@@ -37,24 +37,27 @@ public class Preferences
     public double EditPanelWidth { get; set; } = double.PositiveInfinity;
 
     /// <summary>
-    /// A string representation of the theme that the user has requested
+    /// A string representation of the theme that the user has requested.
+    /// Storing it as a string for the JSON parser when we save/load
     /// </summary>
-    public string RequestedTheme { get; set; } = ThemeVariant.Default.ToString();
+    private string _storedTheme = ThemeVariant.Default.ToString();
 
     /// <summary>
-    /// Gets the <see cref="ThemeVariant"/> corresponding to <see cref="RequestedTheme"/>
+    /// The theme that the user has requested, parsed from the stored string at <see cref="_storedTheme"/>
     /// </summary>
-    /// <returns></returns>
-    public ThemeVariant GetStoredTheme()
-    {
-        return RequestedTheme switch
+    public ThemeVariant RequestedTheme {
+        get
         {
-            nameof(ThemeVariant.Light) => ThemeVariant.Light,
-            nameof(ThemeVariant.Dark) => ThemeVariant.Dark,
-            nameof(MyThemes.LightGreen) => MyThemes.LightGreen,
-            nameof(MyThemes.DarkGreen) => MyThemes.DarkGreen,
-            _ => ThemeVariant.Default
-        };
+            return _storedTheme switch
+            {
+                nameof(ThemeVariant.Light) => ThemeVariant.Light,
+                nameof(ThemeVariant.Dark) => ThemeVariant.Dark,
+                nameof(MyThemes.LightGreen) => MyThemes.LightGreen,
+                nameof(MyThemes.DarkGreen) => MyThemes.DarkGreen,
+                _ => ThemeVariant.Default
+            };
+        }
+        set => _storedTheme = value.ToString();
     }
 
     /// <summary>

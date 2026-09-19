@@ -104,7 +104,7 @@ public partial class MainWindowViewModel : ViewModelBase
             app.RequestedThemeVariant = value;
             SelectedTheme = value;
             PropertyInfo themeProperty = typeof(Preferences).GetProperty(nameof(Preferences.RequestedTheme))!;
-            _preferenceService.StorePreferenceItem(themeProperty, value.ToString());
+            _preferenceService.StorePreferenceItem(themeProperty, value);
         }
     }
 
@@ -160,7 +160,7 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         //Load initial EditPanel width
         EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
-        ThemeVariant loadedTheme = preferences.GetStoredTheme();
+        ThemeVariant loadedTheme = preferences.RequestedTheme;
         if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
 
