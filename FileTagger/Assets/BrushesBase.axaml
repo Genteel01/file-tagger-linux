@@ -9,6 +9,8 @@
 
             <Color x:Key='HighlightColor'>#FF005f7f</Color>
 
+            <Color x:Key="FocusedTextBoxTrackColor">#FFccf2ff</Color>
+
             <Color x:Key='ThemeForegroundColor'>#000000</Color>
 
             <Color x:Key='ThemeBorderLowColor'>#888888</Color>
@@ -51,7 +53,7 @@
             <!--Text Highlight-->
             <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
 
-            <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource HighlightColor}"/>
+            <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
 
             <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="{StaticResource TrackChangedIndicationColor}"/>
             <SolidColorBrush x:Key="CutOverlayBrush" Color="{StaticResource CutOverlayColor}"/>

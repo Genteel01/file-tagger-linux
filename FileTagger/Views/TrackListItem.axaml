@@ -13,26 +13,20 @@
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="TextBlock">
-            <Setter Property="Height" Value="{StaticResource DefaultRowHeight}" />
-            <Setter Property="LineHeight" Value="{StaticResource DefaultRowHeight}" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="{StaticResource RowHeight}" />
+            <Setter Property="LineHeight" Value="{StaticResource RowHeight}" />
             <Setter Property="Padding" Value="4 0"/>
             <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="TextBox">
-            <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="Height" Value="{StaticResource DefaultRowHeight}"/>
-            <Setter Property="LineHeight" Value="{StaticResource DefaultRowHeight}"/>
-            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="Height" Value="{StaticResource RowHeight}"/>
+            <Setter Property="LineHeight" Value="{StaticResource RowLineHeight}"/>
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
-        <Style Selector="TextBox:focus">
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Padding" Value="1 0"/>
-        </Style>
-        <Style Selector="TextBox:focus Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusedTextBoxBorderBrush}" />
+        <Style Selector="TextBox:focus DataValidationErrors">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Background" Value="{DynamicResource FocusedTextBoxTrackBrush}" />
         </Style>
     </UserControl.Styles>
     <Border>
@@ -45,7 +39,7 @@
         <Border.BorderThickness>
             <Binding Path="Changed" Converter="{StaticResource RowBorderThicknessConverter}"/>
         </Border.BorderThickness>
-        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped">
+        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />

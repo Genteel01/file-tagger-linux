@@ -10,6 +10,8 @@
 
             <Color x:Key='HighlightColor'>#FF007f26</Color>
 
+            <Color x:Key="FocusedTextBoxTrackColor">#FFccfada</Color>
+
             <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
             <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource ThemeAccentColor}"/>
             <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
@@ -29,7 +31,7 @@
             <!--Text Highlight-->
             <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
 
-            <SolidColorBrush x:Key='FocusedTextBoxBorderBrush' Color="{StaticResource HighlightColor}"/>
+            <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

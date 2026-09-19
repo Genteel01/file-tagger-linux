@@ -20,7 +20,7 @@
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="Height" Value="{DynamicResource DefaultRowHeight}"/>
+            <Setter Property="Height" Value="{DynamicResource RowHeight}"/>
         </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
             <Setter Property="Height" Value="42"/>
