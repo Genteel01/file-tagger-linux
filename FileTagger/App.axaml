@@ -55,6 +55,7 @@
         <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Content" Value="" />
+            <Setter Property="Padding" Value="0" />
         </Style>
 
         <Style Selector="Button">

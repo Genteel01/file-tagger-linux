@@ -20,35 +20,35 @@
             <Setter Property="OpenOnFocusText" Value="{x:Static viewModels:EditPanelViewModel.UnchangedField}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
-        <Style Selector="Grid#PicTypeControl PathIcon, Grid#PicTypeControl ComboBox">
+        <Style Selector="Panel#PicTypeControl PathIcon, Panel#PicTypeControl ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
+        <Style Selector="Panel#PicTypeControl Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="28"/>
+        </Style>
+        <Style Selector="Panel#PicTypeControl ComboBox">
+            <Setter Property="Padding" Value="28 4"/>
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover PathIcon, Grid#PicTypeControl:pointerover ComboBox">
+        <Style Selector="Panel#PicTypeControl:pointerover PathIcon, Panel#PicTypeControl:pointerover ComboBox">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover ComboBox Border">
+        <Style Selector="Panel#PicTypeControl:pointerover ComboBox Border">
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
-        </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within PathIcon, Grid#PicTypeControl:focus-within ComboBox">
+        <Style Selector="Panel#PicTypeControl:focus-within PathIcon, Panel#PicTypeControl:focus-within ComboBox, ComboBox:dropdownopen">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within ComboBox Border">
+        <Style Selector="Panel#PicTypeControl:focus-within ComboBox Border, ComboBox:dropdownopen Border">
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
         </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}" />
-        </Style>
-        <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
+        <Style Selector="Panel#PicTypeControl ComboBox TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
-        <Style Selector="Grid#PicTypeControl ComboBoxItem">
+        <Style Selector="Panel#PicTypeControl ComboBoxItem">
             <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
     </UserControl.Styles>
@@ -166,11 +166,11 @@
                     <Button Command="{Binding NextImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
                 </StackPanel>
             </Panel>
-            <Grid Margin="8 2 8 4" Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
-                <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"/>
-                <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
-            </Grid>
+            <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
+                <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}" Name="PicTypeSelector"/>
+                <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
+                <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
+            </Panel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
