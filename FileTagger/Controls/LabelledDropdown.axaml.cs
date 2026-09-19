@@ -14,17 +14,16 @@ namespace FileTagger.Controls;
 
 public partial class LabelledDropdown : UserControl
 {
-    public static readonly DirectProperty<LabelledDropdown, string> LabelTextProperty =
-        AvaloniaProperty.RegisterDirect<LabelledDropdown, string>(
+    public static readonly StyledProperty<string> LabelTextProperty =
+        AvaloniaProperty.Register<LabelledDropdown, string>(
             nameof(LabelText),
-            o => o.LabelText,
-            unsetValue: "",
+            defaultValue: "",
             defaultBindingMode: BindingMode.OneWay);
 
     public string LabelText
     {
-        get;
-        set => SetAndRaise(LabelTextProperty, ref field, value);
+        get => GetValue(LabelTextProperty);
+        set => SetValue(LabelTextProperty, value);
     }
 
     public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty =
