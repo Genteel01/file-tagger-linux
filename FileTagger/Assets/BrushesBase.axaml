@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
+            <Color x:Key="ThemeAccentColor0">#FF00bfff</Color>
             <Color x:Key="ThemeAccentColor">#CC00bfff</Color>
             <Color x:Key="ThemeAccentColor2">#9900bfff</Color>
             <Color x:Key="ThemeAccentColor3">#6600bfff</Color>
@@ -48,7 +49,7 @@
             <!--ScrollBar:pressed-->
             <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource ThemeAccentColor}"/>
             <!--ScrollBar arrow pressed-->
-            <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource ThemeAccentColor}"/>
+            <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource ThemeAccentColor0}"/>
 
             <!--Text Highlight-->
             <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>

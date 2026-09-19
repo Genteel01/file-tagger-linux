@@ -42,14 +42,20 @@
             <Setter Property="Cursor" Value="Hand" />
         </Style>
 
-        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter, controls|LabelledDropdown ListBoxItem:pointerover /template/ ContentPresenter">
+        <Style Selector="ComboBoxItem:pointerover ContentPresenter, controls|LabelledDropdown ListBoxItem:pointerover ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
-        <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+        <Style Selector="ComboBoxItem:focus ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
+        </Style>
+        <Style Selector="ComboBoxItem:focus:pointerover ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
         </Style>
-        <Style Selector="ComboBoxItem:pointerover:selected /template/ ContentPresenter">
+        <Style Selector="ComboBoxItem:selected ContentPresenter, ComboBoxItem:selected:focus ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
+        </Style>
+        <Style Selector="ComboBoxItem:selected:pointerover ContentPresenter, ComboBoxItem:selected:focus:pointerover ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush}" />
         </Style>
 
         <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
