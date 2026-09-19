@@ -49,7 +49,8 @@ public class PreferenceServiceTests
 
         Action call = () => preferenceService.StorePreferenceItem(incorrectObjectProperty, newFieldValue);
 
-        Assert.ThrowsAny<Exception>(call);
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
     }
 
 
@@ -119,7 +120,8 @@ public class PreferenceServiceTests
 
         Action call = () => preferenceService.StorePreferenceDictionaryValue(incorrectObjectProperty, newKey, newValue);
 
-        Assert.ThrowsAny<Exception>(call);
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
     }
 
     [Fact]
