@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -75,6 +74,7 @@ public partial class LabelledDropdown : UserControl
 
     private AutoCompleteBox? _searchField = null;
     private TextBox? _textBox = null;
+    private Popup? _popup = null;
     private Button? _expandButton = null;
     private TopLevel? _topLevel = null;
 
@@ -105,6 +105,15 @@ public partial class LabelledDropdown : UserControl
             }
         }
 
+        if (_popup == null)
+        {
+            List<Popup> popups = this.GetVisualDescendants<Popup>().ToList();
+            if (popups.Count != 0)
+            {
+                _popup = popups[0];
+            }
+        }
+
         if (_expandButton == null)
         {
             List<Button> buttons = this.GetVisualDescendants<Button>().ToList();
@@ -117,9 +126,9 @@ public partial class LabelledDropdown : UserControl
         _topLevel = TopLevel.GetTopLevel(this);
 
         _expandButton?.GotFocus += ExpandButtonFocused;
-        _searchField?.DropDownOpening += SearchField_OnDropDownOpening;
         _textBox?.LosingFocus += TextBoxLosingFocus;
         _textBox?.TextChanged += SearchFieldChanged;
+        _popup?.OverlayInputPassThroughElement = _topLevel;
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
@@ -128,7 +137,6 @@ public partial class LabelledDropdown : UserControl
         _textBox?.LosingFocus -= TextBoxLosingFocus;
         _textBox?.TextChanged -= SearchFieldChanged;
         _expandButton?.GotFocus -= ExpandButtonFocused;
-        _searchField?.DropDownOpening -= SearchField_OnDropDownOpening;
     }
 
     /// <summary>
@@ -160,21 +168,6 @@ public partial class LabelledDropdown : UserControl
     private void SearchField_OnDropDownClosed(object? sender, EventArgs e)
     {
         DropDownClosed?.Invoke(sender, e);
-    }
-
-    /// <summary>
-    /// When the dropdown opens, get it and set it so it doesn't block input
-    /// </summary>
-    private void SearchField_OnDropDownOpening(object? sender, CancelEventArgs e)
-    {
-        if (sender is not AutoCompleteBox box) return;
-
-        List<Popup> popups = box.GetVisualDescendants<Popup>().ToList();
-        if (popups.Count != 0)
-        {
-            Popup popup = popups[0];
-            popup.OverlayInputPassThroughElement = _topLevel;
-        }
     }
 
     /// <summary>
