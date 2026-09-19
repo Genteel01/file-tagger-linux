@@ -123,12 +123,12 @@ public class PreferenceServiceTests
     }
 
     [Fact]
-    public void UserPreferences_ListColumnWidths_StartEmpty()
+    public void UserPreferences_ListColumnWidths_StartFull()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
         UserPreferences preferences = preferenceService.UserPreferenceData;
 
-        Assert.Empty(preferences.ListColumnWidths);
+        Assert.NotEmpty(preferences.ListColumnWidths);
     }
 
     [Fact]
@@ -143,14 +143,14 @@ public class PreferenceServiceTests
     }
 
     [Fact]
-    public async Task LoadPreferenceData_NoSavedData_LeavesListColumnWidthsEmpty()
+    public async Task LoadPreferenceData_NoSavedData_LeavesListColumnWidthsFull()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
 
         await preferenceService.LoadPreferenceData();
 
         UserPreferences preferences = preferenceService.UserPreferenceData;
-        Assert.Empty(preferences.ListColumnWidths);
+        Assert.NotEmpty(preferences.ListColumnWidths);
     }
 
     [Fact]
