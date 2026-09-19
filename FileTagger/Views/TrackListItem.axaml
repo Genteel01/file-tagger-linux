@@ -4,13 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
-             xmlns:converters="clr-namespace:FileTagger.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FileTagger.Views.TrackListItem" x:DataType="viewModels:TrackViewModel">
-    <UserControl.Resources>
-        <converters:RowBorderThicknessConverter x:Key="RowBorderThicknessConverter"/>
-        <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
-    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="TextBlock">
             <Setter Property="Height" Value="{StaticResource RowHeight}" />
@@ -28,17 +23,16 @@
             <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="Background" Value="{DynamicResource FocusedTextBoxTrackBrush}" />
         </Style>
+        <Style Selector="Border#RowBorder">
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorBrush}"/>
+        </Style>
+        <Style Selector="Border#RowBorder.isChanged">
+            <Setter Property="BorderThickness" Value="0 1" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TrackChangedIndicationBrush}"/>
+        </Style>
     </UserControl.Styles>
-    <Border>
-        <Border.BorderBrush>
-            <MultiBinding Converter="{StaticResource RowBorderBrushConverter}">
-                <Binding Path="Changed" />
-                <Binding Path="$parent[ListBox].((viewModels:MainWindowViewModel)DataContext).SelectedTheme" />
-            </MultiBinding>
-        </Border.BorderBrush>
-        <Border.BorderThickness>
-            <Binding Path="Changed" Converter="{StaticResource RowBorderThicknessConverter}"/>
-        </Border.BorderThickness>
+    <Border Name="RowBorder" Classes.isChanged="{Binding Changed}">
         <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
