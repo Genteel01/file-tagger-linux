@@ -125,6 +125,12 @@ public partial class MainWindowViewModel : ViewModelBase
         ChangeSelectedTheme(newTheme);
     }
 
+    [RelayCommand]
+    private void ClearPreferences()
+    {
+        _preferenceService.ResetUserPreferences();
+    }
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
@@ -153,6 +159,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 _preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newItem.Key, newItem.Value);
             }
         };
+        _preferenceService.UserPreferencesSet += (_, _) => SetUpUserPreferences();
     }
 
     /// <summary>

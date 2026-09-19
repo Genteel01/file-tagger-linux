@@ -52,6 +52,9 @@
                         </ControlTheme>
                     </MenuItem.ItemContainerTheme>
                 </MenuItem>
+                <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <Border Grid.Row="1" BorderThickness="0 1 0 2" BorderBrush="{DynamicResource MenuBorderBrush}" Margin="0 0 0 1">

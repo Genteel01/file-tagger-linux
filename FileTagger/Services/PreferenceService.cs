@@ -11,7 +11,7 @@ namespace FileTagger.Services;
 public class PreferenceService(IFileService fileService) : IPreferenceService
 {
     public const int PreferenceErrorCode = 123456789;
-    private Preferences _preferenceData = new Preferences();
+    public event EventHandler? UserPreferencesSet;
 
     public UserPreferences UserPreferenceData { get; set; } = new UserPreferences();
     public SystemPreferences SystemPreferenceData { get; set; } = new SystemPreferences();
@@ -98,5 +98,11 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
             fileService.SaveJsonData(UserPreferenceData),
             fileService.SaveJsonData(SystemPreferenceData)
         );
+    }
+
+    public void ResetUserPreferences()
+    {
+        UserPreferenceData = new UserPreferences();
+        UserPreferencesSet?.Invoke(this, EventArgs.Empty);
     }
 }
