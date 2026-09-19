@@ -10,11 +10,7 @@ namespace FileTagger.Models;
 
 public class Preferences
 {
-    /// <summary>
-    /// String defining which fields the track list is sorted by,
-    /// and a bool defining whether they are sorted in descending order
-    /// </summary>
-    public (string, bool) SortOrder { get; set; } = (nameof(TrackViewModel.Path), false);
+    #region SystemPreferences
 
     /// <summary>
     /// Width and height of the main window
@@ -35,6 +31,16 @@ public class Preferences
     /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
     /// </summary>
     public double EditPanelWidth { get; set; } = double.PositiveInfinity;
+
+    #endregion
+
+    #region UserPreferences
+
+    /// <summary>
+    /// String defining which fields the track list is sorted by,
+    /// and a bool defining whether they are sorted in descending order
+    /// </summary>
+    public (string, bool) SortOrder { get; set; } = (nameof(TrackViewModel.Path), false);
 
     /// <summary>
     /// A string representation of the theme that the user has requested.
@@ -59,6 +65,8 @@ public class Preferences
         }
         set => _storedTheme = value.ToString();
     }
+
+    #endregion
 
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>
