@@ -78,16 +78,25 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
 
     public async Task LoadPreferenceData()
     {
-        UserPreferences? loadedUserData = await fileService.LoadObjectData<UserPreferences>();
-        if (loadedUserData != null) UserPreferenceData = loadedUserData;
-        UserPreferenceData.AddMissingColumnWidths();
-        SystemPreferences? loadedSystemData = await fileService.LoadObjectData<SystemPreferences>();
+        Task<UserPreferences?> userTask = fileService.LoadObjectData<UserPreferences>();
+        Task<SystemPreferences?> systemTask = fileService.LoadObjectData<SystemPreferences>();
+        await Task.WhenAll(userTask, systemTask);
+        UserPreferences? loadedUserData = userTask.Result;
+        if (loadedUserData != null)
+        {
+            UserPreferenceData = loadedUserData;
+            UserPreferencesSet?.Invoke(this, EventArgs.Empty);
+        }
+
+        SystemPreferences? loadedSystemData = systemTask.Result;
         if (loadedSystemData != null) SystemPreferenceData = loadedSystemData;
     }
 
     public async Task SavePreferenceData()
     {
-        await fileService.SaveJsonData(UserPreferenceData);
-        await fileService.SaveJsonData(SystemPreferenceData);
+        await Task.WhenAll(
+            fileService.SaveJsonData(UserPreferenceData),
+            fileService.SaveJsonData(SystemPreferenceData)
+        );
     }
 }
