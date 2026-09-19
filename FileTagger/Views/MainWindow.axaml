@@ -4,47 +4,92 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:FileTagger.Views"
+        xmlns:converters="clr-namespace:FileTagger.Converters"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="FileTagger"
-        Width="1600"
-        Height="900"
-        Padding="4">
+        Title="FileTagger">
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    <Window.Resources>
+        <converters:AreEqualConverter x:Key="AreEqualConverter"/>
+    </Window.Resources>
+    <Grid RowDefinitions="Auto, Auto, *" Name="Root">
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File" Padding="4">
+                <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Settings" Padding="4">
+                <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}">
+                    <MenuItem.ItemContainerTheme>
+                        <ControlTheme TargetType="MenuItem"
+                                      BasedOn="{StaticResource {x:Type MenuItem}}"
+                                      x:DataType="ThemeVariant">
+                            <Setter Property="Header" Value="{Binding .}"/>
+                            <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
+                            <Setter Property="CommandParameter" Value="{Binding .}"/>
+                            <Setter Property="Icon">
+                                <Setter.Value>
+                                    <Template>
+                                        <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
+                                            <PathIcon.IsVisible>
+                                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                                                    <Binding Path="." />
+                                                    <Binding Path="#Root.((vm:MainWindowViewModel)DataContext).SelectedTheme" />
+                                                </MultiBinding>
+                                            </PathIcon.IsVisible>
+                                        </PathIcon>
+                                    </Template>
+                                </Setter.Value>
+                            </Setter>
+                        </ControlTheme>
+                    </MenuItem.ItemContainerTheme>
+                </MenuItem>
+                <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Border Grid.Row="1" BorderThickness="0 1 0 2" BorderBrush="{DynamicResource MenuBorderBrush}" Margin="0 0 0 1">
+            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0 2">
+                <StackPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Width" Value="26"/>
+                        <Setter Property="Height" Value="26"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="CornerRadius" Value="4"/>
+                    </Style>
+                </StackPanel.Styles>
+                <!-- This is our title text block.  -->
+                <TextBlock Classes="h1" Text="Music Tagger" />
+                <Button ToolTip.Tip="Open Files" Command="{Binding OpenMusicFilesCommand}">
+                    <PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/>
+                </Button>
+                <Button ToolTip.Tip="Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                    <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
+                </Button>
+                <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">
+                    <PathIcon Classes="horizontal" Data="{StaticResource ThemeIcon}"/>
+                </Button>
+            </StackPanel>
+        </Border>
 
-    <Grid RowDefinitions="Auto, *"
-          x:Name="Root">
-
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4">
-            <!-- This is our title text block.  -->
-            <TextBlock Classes="h1" Text="Music Tagger" />
-            <Button Command="{Binding OpenMusicFilesCommand}">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <PathIcon Width="12" Data="{StaticResource OpenIcon}"/>
-                    <TextBlock VerticalAlignment="Center" Text="Open Music Files"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding SaveMusicFilesCommand}">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <PathIcon Width="12" Data="{StaticResource SaveIcon}"/>
-                    <TextBlock VerticalAlignment="Center" Text="Save Music Files"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding EditPanelWidth, Mode=TwoWay}"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             <ContentControl Grid.Column="0" Content="{Binding MyEditPanel}"/>
-            <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="Gray" BorderThickness="1.5 0 1.5 0" BorderBrush="Gray"/>
-            <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="0 2 2 2">
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns" Background="{DynamicResource SectionBorderBrush}" BorderThickness="1.5 0 1.5 0" BorderBrush="{DynamicResource SectionBorderBrush}"/>
+            <Border Grid.Column="2" BorderBrush="{DynamicResource SectionBorderBrush}" BorderThickness="0 2 2 2">
                 <views:TrackList/>
             </Border>
         </Grid>

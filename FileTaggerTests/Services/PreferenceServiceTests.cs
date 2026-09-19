@@ -18,12 +18,12 @@ public class PreferenceServiceTests
     public void StorePreferenceItem_RightType_Succeeds()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
         const double newFieldValue = 0;
 
         preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
 
-        Preferences preferences = preferenceService.GetPreferenceData();
+        UserPreferences preferences = preferenceService.UserPreferenceData;
         Assert.Equal(newFieldValue, preferences.EditPanelWidth);
     }
 
@@ -31,7 +31,7 @@ public class PreferenceServiceTests
     public void StorePreferenceItem_WrongType_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
         const string newFieldValue = "0";
 
         Action call = () => preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
@@ -49,7 +49,8 @@ public class PreferenceServiceTests
 
         Action call = () => preferenceService.StorePreferenceItem(incorrectObjectProperty, newFieldValue);
 
-        Assert.ThrowsAny<Exception>(call);
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
     }
 
 
@@ -57,13 +58,13 @@ public class PreferenceServiceTests
     public void StorePreferenceDictionaryValue_RightTypes_Succeeds()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+        PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
         const string newKey = "TestKey";
         const double newValue = 0;
 
         preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newKey, newValue);
 
-        Preferences preferences = preferenceService.GetPreferenceData();
+        UserPreferences preferences = preferenceService.UserPreferenceData;
         Assert.Equal(newValue, preferences.ListColumnWidths[newKey]);
     }
 
@@ -71,7 +72,7 @@ public class PreferenceServiceTests
     public void StorePreferenceDictionaryValue_WrongKeyType_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+        PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
         const double newKey = 0;
         const string newValue = "0";
 
@@ -85,7 +86,7 @@ public class PreferenceServiceTests
     public void StorePreferenceDictionaryValue_WrongValueType_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+        PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
         const string newKey = "TestKey";
         const string newValue = "0";
 
@@ -99,7 +100,7 @@ public class PreferenceServiceTests
     public void StorePreferenceDictionaryValue_NotDictionary_Throws()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo incorrectTypeProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        PropertyInfo incorrectTypeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
         const string newKey = "TestKey";
         const double newValue = 0;
 
@@ -119,26 +120,38 @@ public class PreferenceServiceTests
 
         Action call = () => preferenceService.StorePreferenceDictionaryValue(incorrectObjectProperty, newKey, newValue);
 
-        Assert.ThrowsAny<Exception>(call);
+        InvalidCastException e = Assert.Throws<InvalidCastException>(call);
+        Assert.Equal(PreferenceService.PreferenceErrorCode, e.HResult);
     }
 
     [Fact]
-    public void Preferences_ListColumnWidths_StartEmpty()
+    public void UserPreferences_ListColumnWidths_StartFull()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        Preferences preferences = preferenceService.GetPreferenceData();
+        UserPreferences preferences = preferenceService.UserPreferenceData;
 
-        Assert.Empty(preferences.ListColumnWidths);
+        Assert.NotEmpty(preferences.ListColumnWidths);
     }
 
     [Fact]
-    public async Task LoadPreferenceData_NoSavedData_FillsListColumnWidths()
+    public void StorePreferenceItem_SystemPreference_Succeeds()
+    {
+        PreferenceService preferenceService = CreateMockPreferenceService();
+        PropertyInfo isMaximisedProperty = typeof(SystemPreferences).GetProperty(nameof(SystemPreferences.IsMaximised))!;
+
+        preferenceService.StorePreferenceItem(isMaximisedProperty, true);
+
+        Assert.True(preferenceService.SystemPreferenceData.IsMaximised);
+    }
+
+    [Fact]
+    public async Task LoadPreferenceData_NoSavedData_LeavesListColumnWidthsFull()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
 
         await preferenceService.LoadPreferenceData();
 
-        Preferences preferences = preferenceService.GetPreferenceData();
+        UserPreferences preferences = preferenceService.UserPreferenceData;
         Assert.NotEmpty(preferences.ListColumnWidths);
     }
 
@@ -146,7 +159,7 @@ public class PreferenceServiceTests
     public async Task LoadPreferenceData_WithSavedData_LoadsValues()
     {
         PreferenceService preferenceService = CreateMockPreferenceService();
-        PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+        PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
         const double newFieldValue = 0;
         const double changedFieldValue = 1;
         preferenceService.StorePreferenceItem(editPanelWidthProperty, newFieldValue);
@@ -155,7 +168,7 @@ public class PreferenceServiceTests
 
         await preferenceService.LoadPreferenceData();
 
-        Preferences preferences = preferenceService.GetPreferenceData();
+        UserPreferences preferences = preferenceService.UserPreferenceData;
         Assert.Equal(newFieldValue, preferences.EditPanelWidth);
     }
 }

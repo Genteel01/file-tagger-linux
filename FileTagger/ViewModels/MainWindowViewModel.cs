@@ -12,12 +12,14 @@ using FileTagger.Services;
 using ATL;
 using ATL.AudioData;
 using ATL.Logging;
+using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using FileTagger.Assets.Statics;
 using FileTagger.Models;
-using FileTagger.Views;
 
 namespace FileTagger.ViewModels;
 
@@ -52,7 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     /// <see cref="IPreferenceService"/> received through Dependency Injection
-    /// used for storing and retrieving <see cref="Preferences"/> data
+    /// used for storing and retrieving <see cref="UserPreferences"/> data
     /// </summary>
     private readonly IPreferenceService _preferenceService;
 
@@ -84,6 +86,51 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private GridLength _editPanelWidth;
 
+    /// <summary>
+    /// List of <see cref="ThemeVariant"/> values to select from
+    /// </summary>
+    public ThemeVariant[] Themes { get; } = [ThemeVariant.Default, ThemeVariant.Light, MyThemes.LightGreen, ThemeVariant.Dark, MyThemes.DarkGreen];
+
+    /// <summary>
+    /// Selected <see cref="ThemeVariant"/>
+    /// </summary>
+    [ObservableProperty] private ThemeVariant _selectedTheme = ThemeVariant.Default;
+
+    [RelayCommand]
+    private void ChangeSelectedTheme(ThemeVariant value)
+    {
+        if (Application.Current is { } app)
+        {
+            app.RequestedThemeVariant = value;
+            SelectedTheme = value;
+            PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
+            _preferenceService.StorePreferenceItem(themeProperty, value);
+        }
+    }
+
+    /// <summary>
+    /// Switches between light and dark theme
+    /// </summary>
+    [RelayCommand]
+    private void SwitchTheme()
+    {
+        ThemeVariant newTheme = SelectedTheme.ToString() switch
+        {
+            nameof(ThemeVariant.Light) => ThemeVariant.Dark,
+            nameof(ThemeVariant.Dark) => ThemeVariant.Light,
+            nameof(MyThemes.LightGreen) => MyThemes.DarkGreen,
+            nameof(MyThemes.DarkGreen) => MyThemes.LightGreen,
+            _ => ThemeVariant.Dark
+        };
+        ChangeSelectedTheme(newTheme);
+    }
+
+    [RelayCommand]
+    private void ClearPreferences()
+    {
+        _preferenceService.ResetUserPreferences();
+    }
+
     public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
@@ -101,24 +148,32 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
         }
-        //Load initial sort settings
-        Preferences preferences = _preferenceService.GetPreferenceData();
-        CurrentSort = preferences.SortOrder.Item1;
-        SortDescending = preferences.SortOrder.Item2;
-        //Load initial column widths
-        ListColumnWidths = new AvaloniaDictionary<string, double>(preferences.ListColumnWidths);
+        SetUpUserPreferences();
         //Set up event handler to update preferences whenever column widths change
-        ListColumnWidths.CollectionChanged += (_, args) =>
+        ListColumnWidths?.CollectionChanged += (_, args) =>
         {
             if (args.NewItems == null) return;
-            PropertyInfo columnWidthsProperty = typeof(Preferences).GetProperty(nameof(Preferences.ListColumnWidths))!;
+            PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
             foreach (KeyValuePair<string, double> newItem in args.NewItems)
             {
                 _preferenceService.StorePreferenceDictionaryValue(columnWidthsProperty, newItem.Key, newItem.Value);
             }
         };
-        //Load initial EditPanel width
-        EditPanelWidth = double.IsPositiveInfinity(preferences.EditPanelWidth) ? GridLength.Star : new GridLength(preferences.EditPanelWidth);
+        _preferenceService.UserPreferencesSet += (_, _) => SetUpUserPreferences();
+    }
+
+    /// <summary>
+    /// Sets up the data from User Preferences
+    /// </summary>
+    private void SetUpUserPreferences()
+    {
+        UserPreferences newPreferences = _preferenceService.UserPreferenceData;
+        ListColumnWidths = new AvaloniaDictionary<string, double>(newPreferences.ListColumnWidths);
+        EditPanelWidth = double.IsPositiveInfinity(newPreferences.EditPanelWidth) ? GridLength.Star : new GridLength(newPreferences.EditPanelWidth);
+        CurrentSort = newPreferences.SortOrder.Item1;
+        SortDescending = newPreferences.SortOrder.Item2;
+        ThemeVariant loadedTheme = newPreferences.RequestedTheme;
+        if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -127,7 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (e.PropertyName == nameof(EditPanelWidth))
         {
             //Store EditPanelWidth when it changes
-            PropertyInfo editPanelWidthProperty = typeof(Preferences).GetProperty(nameof(Preferences.EditPanelWidth))!;
+            PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
             double newValue = EditPanelWidth is { IsStar: true, Value: 1 } ? double.PositiveInfinity : EditPanelWidth.Value;
             _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
         }
@@ -145,6 +200,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _supportedFileExtensions = [];
         CurrentSort = nameof(TrackViewModel.Path);
         ListColumnWidths = new AvaloniaDictionary<string, double>();
+        SelectedTheme = ThemeVariant.Default;
     }
     #endif
 
@@ -279,7 +335,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         CurrentSort = fields;
-        PropertyInfo sortOrderProperty = typeof(Preferences).GetProperty(nameof(Preferences.SortOrder))!;
+        PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
         _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }

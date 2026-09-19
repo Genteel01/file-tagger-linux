@@ -5,20 +5,22 @@
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:converters="clr-namespace:FileTagger.Converters"
              xmlns:controls="clr-namespace:FileTagger.Controls"
+             xmlns:views="clr-namespace:FileTagger.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:MainWindowViewModel"
              x:Class="FileTagger.Views.TrackList">
     <UserControl.Resources>
-        <converters:RowBorderThicknessConverter x:Key="RowBorderThicknessConverter"/>
-        <converters:RowBorderBrushConverter x:Key="RowBorderBrushConverter"/>
         <converters:GridSizeConverter x:Key="GridSizeConverter"/>
         <converters:SortArrowsConverter x:Key="SortArrowsConverter"/>
     </UserControl.Resources>
     <UserControl.Styles>
-        <Style Selector="ListBox, ListBoxItem">
-            <Setter Property="Margin" Value="0" />
+        <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Height" Value="{DynamicResource RowHeight}"/>
         </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
             <Setter Property="Height" Value="42"/>
@@ -27,33 +29,16 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Orientation" Value="Vertical"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorColour}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorBrush}"/>
             <Setter Property="BorderThickness" Value="0 0 0 2"/>
             <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="GridSplitter">
-            <Setter Property="Background" Value="{DynamicResource ListSeparatorColour}" />
+            <Setter Property="Background" Value="{DynamicResource ListSeparatorBrush}" />
             <Setter Property="Width" Value="3" />
         </Style>
-        <Style Selector="ListBox TextBlock">
-            <Setter Property="Height" Value="{StaticResource DefaultRowHeight}" />
-            <Setter Property="LineHeight" Value="{StaticResource DefaultRowHeight}" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="4 0"/>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-        <Style Selector="TextBox">
-            <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="Height" Value="{StaticResource DefaultRowHeight}"/>
-            <Setter Property="LineHeight" Value="{StaticResource DefaultRowHeight}"/>
-            <Setter Property="Padding" Value="4 0"/>
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="Transparent" />
-        </Style>
-        <Style Selector="TextBox:focus">
-            <Setter Property="BorderBrush" Value="{DynamicResource Selection5}" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Padding" Value="1 0"/>
+        <Style Selector="Panel.buffer">
+            <Setter Property="Width" Value="3" />
         </Style>
     </UserControl.Styles>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True"
@@ -68,97 +53,7 @@
                          SelectionChanged="OnListBoxSelectionChanged" Name="TrackListBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="viewModels:TrackViewModel">
-                            <Border>
-                                <Border.Styles>
-                                    <Style Selector="Border">
-                                        <Setter Property="BorderThickness"
-                                                Value="{Binding Changed, Converter={StaticResource RowBorderThicknessConverter}}" />
-                                        <Setter Property="BorderBrush"
-                                                Value="{Binding Changed, Converter={StaticResource RowBorderBrushConverter}, ConverterParameter={StaticResource ListSeparatorColour}}" />
-                                    </Style>
-                                </Border.Styles>
-                                <Grid Name="{Binding Path}" ColumnSpacing="4">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Track" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Year" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
-                                    </Grid.ColumnDefinitions>
-                                    <!--Title-->
-                                    <TextBlock Grid.Column="0" Text="{Binding Title}" Name="TitleBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="0" Text="{Binding Title, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="TitleBox"/>
-                                    <!--Album-->
-                                    <TextBlock Grid.Column="1" Text="{Binding Album}" Name="AlbumBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="1" Text="{Binding Album, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="AlbumBox"/>
-                                     <!--Artist-->
-                                    <TextBlock Grid.Column="2" Text="{Binding Artist}" Name="ArtistBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="2" Text="{Binding Artist, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="ArtistBox"/>
-                                     <!--AlbumArtist-->
-                                    <TextBlock Grid.Column="3" Text="{Binding AlbumArtist}" Name="AlbumArtistBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="3" Text="{Binding AlbumArtist, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="AlbumArtistBox"/>
-                                     <!--TrackNumber-->
-                                    <TextBlock Grid.Column="4" Text="{Binding TrackNumber}" Name="TrackNumberBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="4" Text="{Binding TrackNumber, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="ValidateNumberOnlyField" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="TrackNumberBox"/>
-                                     <!--DiscNumber-->
-                                    <TextBlock Grid.Column="5" Text="{Binding DiscNumber}" Name="DiscNumberBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="5" Text="{Binding DiscNumber, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="ValidateNumberOnlyField" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="DiscNumberBox"/>
-                                     <!--Year-->
-                                    <TextBlock Grid.Column="6" Text="{Binding Year}" Name="YearBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="6" Text="{Binding Year, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="ValidateNumberOnlyField" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="YearBox"/>
-                                     <!--Genre-->
-                                    <TextBlock Grid.Column="7" Text="{Binding Genre}" Name="GenreBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="7" Text="{Binding Genre, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="GenreBox"/>
-                                     <!--Composer-->
-                                    <TextBlock Grid.Column="8" Text="{Binding Composer}" Name="ComposerBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="8" Text="{Binding Composer, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="ComposerBox"/>
-                                     <!--Comment-->
-                                    <TextBlock Grid.Column="9" Text="{Binding Comment}" Name="CommentBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="9" Text="{Binding Comment, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                                             KeyDown="TextBoxEnterPressed" Name="CommentBox"/>
-                                    <!--Path-->
-                                    <TextBlock Grid.Column="10" Text="{Binding Path}" Name="PathBlock"
-                                               DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-                                    <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
-                                             LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                                             KeyDown="TextBoxEnterPressed" Name="PathBox"/>
-                                </Grid>
-                            </Border>
+                            <views:TrackListItem/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

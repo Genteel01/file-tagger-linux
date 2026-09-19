@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FileTagger.App"
              xmlns:local="using:FileTagger"
+             xmlns:controls="clr-namespace:FileTagger.Controls"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -12,10 +13,14 @@
      <Application.Resources>
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
-                 <MergeResourceInclude Source="/Assets/Colours.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesBase.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesLightGreen.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesDark.axaml" />
+                 <MergeResourceInclude Source="/Assets/BrushesDarkGreen.axaml" />
                  <MergeResourceInclude Source="/Assets/Icons.axaml" />
                  <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
+                 <MergeResourceInclude Source="/Controls/LabelledDropdown.axaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
      </Application.Resources>
@@ -36,52 +41,47 @@
         <Style Selector="Button, ComboBox">
             <Setter Property="Cursor" Value="Hand" />
         </Style>
-        <!--
-        :selected:focus for last selected item
-        :selected for other selected items (eg. middle ones selected with shift or old ones selected with control)
-        -->
-        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection1}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection2}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
-        </Style>
-        <Style Selector="ListBoxItem:pointerover:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
-        </Style>
 
-        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection1}" />
+        <Style Selector="ComboBoxItem:pointerover ContentPresenter, controls|LabelledDropdown ListBoxItem:pointerover ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
-        <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection2}" />
+        <Style Selector="ComboBoxItem:focus ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
-        <Style Selector="ComboBoxItem:pointerover:selected /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        <Style Selector="ComboBoxItem:focus:pointerover ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
         </Style>
-        <Style Selector="ComboBoxItem:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        <Style Selector="ComboBoxItem:selected ContentPresenter, ComboBoxItem:selected:focus ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
         </Style>
-        <Style Selector="ComboBoxItem:pointerover:selected:focus /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection4}" />
+        <Style Selector="ComboBoxItem:selected:pointerover ContentPresenter, ComboBoxItem:selected:focus:pointerover ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush}" />
         </Style>
 
         <Style Selector="ComboBox ToggleButton:checked ContentPresenter, ComboBox ToggleButton:unchecked ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Content" Value="" />
+            <Setter Property="Padding" Value="0" />
         </Style>
 
         <Style Selector="Button">
-            <Setter Property="Background" Value="White" />
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         </Style>
-        <Style Selector="Button:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Selection3}" />
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
+        </Style>
+        <Style Selector="Button:pointerover ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush}" />
+        </Style>
+        <Style Selector="Button:pressed ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush}" />
+        </Style>
+
+        <Style Selector="PathIcon.horizontal">
+            <Setter Property="Width" Value="{DynamicResource SmallIconWidth}" />
+        </Style>
+        <Style Selector="PathIcon.vertical">
+            <Setter Property="Height" Value="{DynamicResource SmallIconWidth}" />
         </Style>
     </Application.Styles>
 </Application>

@@ -11,16 +11,28 @@ namespace FileTagger.Services;
 public class PreferenceService(IFileService fileService) : IPreferenceService
 {
     public const int PreferenceErrorCode = 123456789;
-    private Preferences _preferenceData = new Preferences();
+    public event EventHandler? UserPreferencesSet;
 
-    public Preferences GetPreferenceData()  => _preferenceData;
+    public UserPreferences UserPreferenceData { get; set; } = new UserPreferences();
+    public SystemPreferences SystemPreferenceData { get; set; } = new SystemPreferences();
 
     public void StorePreferenceItem(PropertyInfo property, object value)
     {
         bool correctType = property.PropertyType == value.GetType();
         if(correctType)
         {
-            property.SetValue(_preferenceData, value);
+            if (property.DeclaringType == typeof(UserPreferences))
+            {
+                property.SetValue(UserPreferenceData, value);
+            }
+            else if (property.DeclaringType == typeof(SystemPreferences))
+            {
+                property.SetValue(SystemPreferenceData, value);
+            }
+            else
+            {
+                throw new InvalidCastException($"Property {property.Name} Declaring Type {property.DeclaringType} is not UserPreferences or SystemPreferences", PreferenceErrorCode);
+            }
         }
         else
         {
@@ -36,7 +48,19 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
                             property.PropertyType.GenericTypeArguments[1] == typeof(TV);
         if (isDictionary && isRightTypes)
         {
-            IDictionary<TK, TV> dictionary = (IDictionary<TK, TV>)property.GetValue(_preferenceData)!;
+            IDictionary<TK, TV> dictionary;
+            if (property.DeclaringType == typeof(UserPreferences))
+            {
+                dictionary = (IDictionary<TK, TV>)property.GetValue(UserPreferenceData)!;
+            }
+            else if (property.DeclaringType == typeof(SystemPreferences))
+            {
+                dictionary = (IDictionary<TK, TV>)property.GetValue(SystemPreferenceData)!;
+            }
+            else
+            {
+                throw new InvalidCastException($"Property {property.Name} Declaring Type {property.DeclaringType} is not UserPreferences or SystemPreferences", PreferenceErrorCode);
+            }
             if (!dictionary.IsReadOnly)
             {
                 dictionary[key] = value;
@@ -54,13 +78,31 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
 
     public async Task LoadPreferenceData()
     {
-        Preferences? loadedData = await fileService.LoadObjectData<Preferences>();
-        if (loadedData != null) _preferenceData = loadedData;
-        _preferenceData.AddMissingColumnWidths();
+        Task<UserPreferences?> userTask = fileService.LoadObjectData<UserPreferences>();
+        Task<SystemPreferences?> systemTask = fileService.LoadObjectData<SystemPreferences>();
+        await Task.WhenAll(userTask, systemTask);
+        UserPreferences? loadedUserData = userTask.Result;
+        if (loadedUserData != null)
+        {
+            UserPreferenceData = loadedUserData;
+            UserPreferencesSet?.Invoke(this, EventArgs.Empty);
+        }
+
+        SystemPreferences? loadedSystemData = systemTask.Result;
+        if (loadedSystemData != null) SystemPreferenceData = loadedSystemData;
     }
 
     public async Task SavePreferenceData()
     {
-        await fileService.SaveJsonData(_preferenceData);
+        await Task.WhenAll(
+            fileService.SaveJsonData(UserPreferenceData),
+            fileService.SaveJsonData(SystemPreferenceData)
+        );
+    }
+
+    public void ResetUserPreferences()
+    {
+        UserPreferenceData = new UserPreferences();
+        UserPreferencesSet?.Invoke(this, EventArgs.Empty);
     }
 }

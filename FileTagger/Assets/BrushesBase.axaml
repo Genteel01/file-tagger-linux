@@ -1,0 +1,69 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <Color x:Key="ThemeAccentColor0">#FF00bfff</Color>
+            <Color x:Key="ThemeAccentColor">#CC00bfff</Color>
+            <Color x:Key="ThemeAccentColor2">#9900bfff</Color>
+            <Color x:Key="ThemeAccentColor3">#6600bfff</Color>
+            <Color x:Key="ThemeAccentColor4">#3300bfff</Color>
+
+            <Color x:Key='HighlightColor'>#FF005f7f</Color>
+
+            <Color x:Key="FocusedTextBoxTrackColor">#FFccf2ff</Color>
+
+            <Color x:Key='ThemeForegroundColor'>#000000</Color>
+
+            <Color x:Key='ThemeBorderLowColor'>#888888</Color>
+            <Color x:Key='ThemeBorderMidColor'>#363636</Color>
+            <Color x:Key='ThemeBorderHighColor'>#212121</Color>
+
+            <Color x:Key='ListSeparatorColor'>#16000000</Color>
+            <Color x:Key='EditPanelBackgroundColor'>#F0F0F0</Color>
+
+            <Color x:Key='MenuBorderColor'>#D3D3D3</Color>
+            <Color x:Key='SectionBorderColor'>#888888</Color>
+            <Color x:Key='SortArrowColor'>#30000000</Color>
+
+            <Color x:Key="TrackChangedIndicationColor">Red</Color>
+            <Color x:Key='CutOverlayColor'>#80FFFFFF</Color>
+
+            <!--Text Colour, PathIcon colour-->
+            <SolidColorBrush x:Key='ThemeForegroundBrush' Color="{StaticResource ThemeForegroundColor}"/>
+
+            <SolidColorBrush x:Key='ThemeBorderLowBrush' Color="{StaticResource ThemeBorderLowColor}"/>
+            <SolidColorBrush x:Key='ThemeBorderMidBrush' Color="{StaticResource ThemeBorderMidColor}"/>
+            <SolidColorBrush x:Key='ThemeBorderHighBrush' Color="{StaticResource ThemeBorderHighColor}"/>
+
+            <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
+            <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource ThemeAccentColor}"/>
+            <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
+            <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{StaticResource ThemeAccentColor2}"/>
+            <!--ListBoxItem:selected, ComboBoxItem:selected-->
+            <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{StaticResource ThemeAccentColor3}"/>
+            <!--pointerover on selection-->
+            <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{StaticResource ThemeAccentColor4}"/>
+
+            <!--ScrollBar:pointerover, Button:pressed-->
+            <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{StaticResource ThemeAccentColor2}"/>
+            <!--ScrollBar:pressed-->
+            <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource ThemeAccentColor}"/>
+            <!--ScrollBar arrow pressed-->
+            <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource ThemeAccentColor0}"/>
+
+            <!--Text Highlight-->
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
+
+            <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
+
+            <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="{StaticResource TrackChangedIndicationColor}"/>
+            <SolidColorBrush x:Key="CutOverlayBrush" Color="{StaticResource CutOverlayColor}"/>
+
+            <SolidColorBrush x:Key='EditPanelBackgroundBrush' Color="{StaticResource EditPanelBackgroundColor}"/>
+            <SolidColorBrush x:Key='ListSeparatorBrush' Color="{StaticResource ListSeparatorColor}"/>
+            <SolidColorBrush x:Key='MenuBorderBrush' Color="{StaticResource MenuBorderColor}"/>
+            <SolidColorBrush x:Key='SectionBorderBrush' Color="{StaticResource SectionBorderColor}"/>
+            <SolidColorBrush x:Key='SortArrowBrush' Color="{StaticResource SortArrowColor}"/>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

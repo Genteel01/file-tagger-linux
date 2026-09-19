@@ -1,5 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <x:Double x:Key="DefaultRowHeight">30</x:Double>
+    <x:Double x:Key="RowHeight">30</x:Double>
+    <x:Double x:Key="RowLineHeight">22</x:Double>
     <x:Double x:Key="EditControlHeight">32</x:Double>
+    <x:Double x:Key="SmallIconWidth">12</x:Double>
 </ResourceDictionary>

@@ -1,84 +1,66 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:controls="clr-namespace:FileTagger.Controls"
-             x:DataType="controls:LabelledDropdown"
-             x:Class="FileTagger.Controls.LabelledDropdown">
-    <UserControl.Styles>
-        <Style Selector="AutoCompleteBox">
-            <Setter Property="Height" Value="{StaticResource EditControlHeight}" />
-            <Setter Property="Padding" Value="4 0" />
-            <Setter Property="BorderThickness" Value="1 1 0 1" />
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:FileTagger.Controls">
+    <ControlTheme x:Key="{x:Type controls:LabelledDropdown}" TargetType="controls:LabelledDropdown">
+        <Style Selector="^">
+            <Style Selector="^ AutoCompleteBox">
+                <Setter Property="Height" Value="{StaticResource EditControlHeight}" />
+                <Setter Property="Padding" Value="4 4 24 4" />
+            </Style>
+            <Style Selector="^ Button">
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="4 0" />
+            </Style>
+            <!--Setting Border and Foreground colours depending on the state of the control-->
+            <Style Selector="^ PathIcon, ^ Label:disabled">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
+            </Style>
+            <Style Selector="^ Label, ^ TextBox">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
+            </Style>
+            <Style Selector="^ AutoCompleteBox">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
+            </Style>
+            <Style Selector="^:pointerover TextBox Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+            </Style>
+            <Style Selector="^:pointerover PathIcon">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
+            </Style>
+            <Style Selector="^:focus-within TextBox Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}" />
+            </Style>
+            <Style Selector="^:focus-within Label">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeBorderHighBrush}" />
+            </Style>
+            <Style Selector="^:focus-within PathIcon, ^:focus-within TextBox">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+            </Style>
         </Style>
-        <Style Selector="Button">
-            <Setter Property="BorderThickness" Value="0 1 1 1" />
-            <Setter Property="Padding" Value="4 0" />
-        </Style>
-        <Style Selector="TextBox">
-            <Setter Property="LineHeight" Value="{StaticResource EditControlHeight}" />
-        </Style>
-        <Style Selector="Button:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="White" />
-        </Style>
-        <Style Selector="ListBox">
-            <Setter Property="Padding" Value="0" />
-        </Style>
-        <Style Selector="ListBoxItem">
-            <Setter Property="Padding" Value="4" />
-        </Style>
-        <!--Setting Border and Foreground colours depending on the state of the control-->
-        <Style Selector="Label:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
-        </Style>
-        <Style Selector="Label, TextBox">
-            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
-        </Style>
-        <Style Selector="PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
-        </Style>
-        <Style Selector="Button, AutoCompleteBox">
-            <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}" />
-        </Style>
-        <Style Selector="#LabelledDropdown:pointerover TextBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
-        </Style>
-        <Style Selector="#LabelledDropdown:pointerover Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
-        </Style>
-        <Style Selector="#LabelledDropdown:pointerover PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
-        </Style>
-        <Style Selector="#LabelledDropdown:focus-within TextBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
-        </Style>
-        <Style Selector="#LabelledDropdown:focus-within Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
-        </Style>
-        <Style Selector="#LabelledDropdown:focus-within PathIcon, #LabelledDropdown:focus-within TextBox, #LabelledDropdown:focus-within Label">
-            <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
-        </Style>
-    </UserControl.Styles>
-    <UserControl.Template>
-        <ControlTemplate>
-            <StackPanel Name="LabelledDropdown">
-                <Label Content="{TemplateBinding LabelText}" Target="{Binding #SearchField}"/>
-                <Grid ColumnDefinitions="*,Auto">
-                    <AutoCompleteBox
-                        Grid.Column="0"
-                        Name="SearchField"
-                        HorizontalAlignment="Stretch"
-                        ItemsSource="{TemplateBinding ItemsSource}"
-                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
-                        GotFocus="AutoCompleteBoxFocusGained" DropDownClosed="SearchField_OnDropDownClosed" TextChanged="SearchField_OnTextChanged"
-                        TextFilter="{TemplateBinding TextFilter}">
-                    </AutoCompleteBox>
-                    <Button Grid.Column="1" Tapped="ExpandButtonTapped" Width="24">
-                        <PathIcon Width="12" Data="{StaticResource DownChevronIcon}"/>
-                    </Button>
-                </Grid>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Name="LabelledDropdown">
+                    <Label Content="{TemplateBinding LabelText}" Target="{Binding #PART_AutoCompleteBox}"/>
+                    <Panel>
+                        <AutoCompleteBox
+                            x:Name="PART_AutoCompleteBox"
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{TemplateBinding ItemsSource}"
+                            Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
+                            TextFilter="{TemplateBinding TextFilter}"/>
+                        <Button x:Name="PART_Button" Width="24" HorizontalAlignment="Right" Background="{TemplateBinding ButtonBackground}">
+                            <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
+                        </Button>
+                    </Panel>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <Design.PreviewWith>
+        <Border Width="150" Padding="5">
+            <StackPanel Spacing="20">
+                <controls:LabelledDropdown LabelText="Label" Text="Text"/>
             </StackPanel>
-        </ControlTemplate>
-    </UserControl.Template>
-</UserControl>
+        </Border>
+    </Design.PreviewWith>
+</ResourceDictionary>

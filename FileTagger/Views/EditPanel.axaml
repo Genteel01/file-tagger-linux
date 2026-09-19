@@ -4,45 +4,52 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:controls="clr-namespace:FileTagger.Controls"
+             xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:EditPanelViewModel"
 >
     <UserControl.Styles>
         <Style Selector="StackPanel#SidePanel">
-            <Setter Property="Background" Value="#f0f0f0" />
+            <Setter Property="Background" Value="{DynamicResource EditPanelBackgroundBrush}" />
         </Style>
         <Style Selector="StackPanel#SidePanel > :is(Control)">
             <Setter Property="Margin" Value="8 4" />
         </Style>
+        <Style Selector="controls|LabelledDropdown">
+            <Setter Property="OpenOnFocusText" Value="{x:Static viewModels:EditPanelViewModel.UnchangedField}"/>
+        </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
-        <Style Selector="Grid#PicTypeControl PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource IdleColour}" />
+        <Style Selector="Panel#PicTypeControl PathIcon, Panel#PicTypeControl ComboBox">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl ComboBox, Grid#PicTypeControl Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource IdleColour}"/>
+        <Style Selector="Panel#PicTypeControl Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="28"/>
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource HoverColour}" />
+        <Style Selector="Panel#PicTypeControl ComboBox">
+            <Setter Property="Padding" Value="28 4"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+        <Style Selector="Panel#PicTypeControl:pointerover PathIcon, Panel#PicTypeControl:pointerover ComboBox">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:pointerover Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource HoverColour}" />
+        <Style Selector="Panel#PicTypeControl:pointerover ComboBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource FocusColour}" />
+        <Style Selector="Panel#PicTypeControl:focus-within PathIcon, Panel#PicTypeControl:focus-within ComboBox, Panel#PicTypeControl.open ComboBox, Panel#PicTypeControl.open PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}"/>
+        <Style Selector="Panel#PicTypeControl:focus-within ComboBox Border, Panel#PicTypeControl.open ComboBox Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
         </Style>
-        <Style Selector="Grid#PicTypeControl:focus-within Button ContentPresenter">
-            <Setter Property="BorderBrush" Value="{DynamicResource FocusColour}" />
-        </Style>
-        <Style Selector="Grid#PicTypeControl ComboBox TextBlock">
+        <Style Selector="Panel#PicTypeControl ComboBox TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Panel#PicTypeControl ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
         </Style>
     </UserControl.Styles>
     <ScrollViewer>
@@ -72,14 +79,14 @@
                     ItemsSource="{Binding FieldOptions[Year]}"
                     Text="{Binding FieldTexts[Year]}"
                     DropDownClosed="AutoCompleteBoxDropdownClosed"
-                    SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                    SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
                 <controls:LabelledDropdown Grid.Column="1"
                    Name="TrackNumberField"
                    LabelText="Track Number"
                    ItemsSource="{Binding FieldOptions[TrackNumber]}"
                    Text="{Binding FieldTexts[TrackNumber]}"
                    DropDownClosed="AutoCompleteBoxDropdownClosed"
-                   SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                   SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
                 <controls:LabelledDropdown Grid.Column="2"
                     Name="GenreField"
                     LabelText="Genre"
@@ -111,46 +118,46 @@
                 ItemsSource="{Binding FieldOptions[DiscNumber]}"
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
-                SearchFieldChanged="AutoCompleteBoxNumberFieldTextChanged"/>
+                SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
             <Panel Name="ImagePanel" Height="250" MaxWidth="250" Margin="8 32 8 4">
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="_Add cover" Command="{Binding AddCoverImagesCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Remove cover" Command="{Binding RemoveCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource MinusIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource MinusIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Replace c_over" Command="{Binding ReplaceCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Extract cover" IsEnabled="{Binding IsShowingTrackImages}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <Separator Background="Black"/>
+                        <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
                         <MenuItem Header="Set cover _type">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Set cover _description">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <Separator Background="Black"/>
+                        <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
                         <MenuItem Header="C_ut cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Copy cover" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CopyCoverImageCommand}">
-                            <MenuItem.Icon><PathIcon Width="12" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Paste cover as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}">
-                            <MenuItem.Icon><Viewbox Stretch="Fill" Width="12"><PathIcon Data="{StaticResource PasteIcon}"/></Viewbox></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Paste cover as _new" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsNewCommand}">
-                            <MenuItem.Icon><Viewbox Stretch="Fill" Width="12"><PathIcon Data="{StaticResource PasteIcon}"/></Viewbox></MenuItem.Icon>
+                            <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </Panel.ContextMenu>
                 <Image Source="{Binding CurrentDisplayedImage}" Name="CoverImage"/>
-                <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="#80FFFFFF" Height="{Binding #CoverImage.Bounds.Height}" Width="{Binding #CoverImage.Bounds.Width}"/>
+                <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="{DynamicResource CutOverlayBrush}" Height="{Binding #CoverImage.Bounds.Height}" Width="{Binding #CoverImage.Bounds.Width}"/>
             </Panel>
             <Panel Margin="8 0" Height="16">
                 <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal" Spacing="4">
@@ -159,11 +166,12 @@
                     <Button Command="{Binding NextImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
                 </StackPanel>
             </Panel>
-            <Grid Margin="8 2 8 4" Name="PicTypeControl" ColumnDefinitions="Auto, *, Auto" Height="{StaticResource EditControlHeight}" Width="{Binding #ImagePanel.Bounds.Width}">
-                <Button Grid.Column="0" Command="{Binding PreviousPicTypeCommand}" BorderThickness="1 1 0 1"><PathIcon Height="12" Data="{StaticResource LeftChevronIcon}"/></Button>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}"></ComboBox>
-                <Button Grid.Column="2" Command="{Binding NextPicTypeCommand}" BorderThickness="0 1 1 1"><PathIcon Height="12" Data="{StaticResource RightChevronIcon}"/></Button>
-            </Grid>
+            <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
+                   Width="{Binding #ImagePanel.Bounds.Width}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
+                <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}" Name="PicTypeSelector"/>
+                <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
+                <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
+            </Panel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

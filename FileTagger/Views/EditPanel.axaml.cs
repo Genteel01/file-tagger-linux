@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using FileTagger.ViewModels;
@@ -34,23 +34,50 @@ public partial class EditPanel : UserControl
         DiscNumberField.TextFilter = _searchFunction;
     }
 
+    /// <summary>
+    /// <see cref="PicTypeSelector"/>'s Popup
+    /// </summary>
+    private Popup? _popup;
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        PicTypeSelector.TemplateApplied += PicTypeSelectorTemplateApplied;
+    }
+
+    /// <summary>
+    /// Set up the popup to allow pointer passthrough
+    /// </summary>
+    private void PicTypeSelectorTemplateApplied(object? sender, TemplateAppliedEventArgs e)
+    {
+        _popup = e.NameScope.Get<Popup>("PART_Popup");
+        _popup.OverlayInputPassThroughElement = TopLevel.GetTopLevel(this);
+        _popup.LostFocus += PicTypeSelectorDropDownLostFocus;
+    }
+
+    /// <summary>
+    /// Set up the popup to refocus itself after clicking one of PicTypeSelector's buttons and to close the popup
+    /// when it loses focus. Don't close the popup when the new focus is the ComboBox or a ComboBoxItem,
+    /// because it closes itself in those cases
+    /// </summary>
+    private void PicTypeSelectorDropDownLostFocus(object? sender, FocusChangedEventArgs e)
+    {
+        if (e.NewFocusedElement is Button b && b.Parent == PicTypeSelector.Parent)
+        {
+            _popup?.Focus();
+        }
+        else if(e.NewFocusedElement != PicTypeSelector && e.NewFocusedElement is not ComboBoxItem)
+        {
+            _popup?.Close();
+        }
+    }
+
     private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
     {
         //The box loses keyboard focus if you select an item from the dropdown, but retains it if it closes otherwise
         if (sender is AutoCompleteBox { IsKeyboardFocusWithin: false })
         {
             SidePanel.Focus();
-        }
-    }
-
-    private void AutoCompleteBoxNumberFieldTextChanged(object? sender, EventArgs e)
-    {
-        if (sender is AutoCompleteBox box)
-        {
-            if (box.Text != EditPanelViewModel.UnchangedField)
-            {
-                box.Text = string.Concat((box.Text ?? "").Where(c => char.IsDigit(c)));
-            }
         }
     }
 
