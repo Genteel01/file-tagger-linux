@@ -77,7 +77,37 @@ public partial class TrackViewModel : ViewModelBase
     [ObservableProperty]
     private string _comment;
 
-    public ObservableCollection<PictureInfo> EmbeddedPictures { get; }
+    /// <summary>
+    /// The Track that this ViewModel represents
+    /// </summary>
+    private readonly Track _originalTrack;
+
+    private bool _isCoverSet = false;
+    /// <summary>
+    /// The Track's images. Loads them on first access because it's a slow operation and is memory intensive.
+    /// We don't want to do it load them all at once, because it would increase load times, and we don't want to load
+    /// them unless we actually need them, because it is a waste of memory.
+    /// </summary>
+    public ObservableCollection<PictureInfo> EmbeddedPictures
+    {
+        get
+        {
+            if (!_isCoverSet)
+            {
+                field = GetOriginalTrackImages();
+                field.CollectionChanged += (_, _) =>
+                {
+                    for (int i = 0; i < EmbeddedPictures.Count; i++)
+                    {
+                        EmbeddedPictures[i].Position = i + 1;
+                    }
+                    Changed = true;
+                };
+                _isCoverSet = true;
+            }
+            return field;
+        }
+    } = [];
 
     /// <summary>
     /// Gets or sets whether the track has changed
@@ -102,6 +132,7 @@ public partial class TrackViewModel : ViewModelBase
     /// <param name="track">The Track to load</param>
     public TrackViewModel(Track track)
     {
+        _originalTrack = track;
         Path = track.Path;
         Title = track.Title;
         Album = track.Album;
@@ -113,16 +144,16 @@ public partial class TrackViewModel : ViewModelBase
         AlbumArtist = track.AlbumArtist;
         Composer = track.Composer;
         Comment = track.Comment;
-        EmbeddedPictures = [.. track.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported)];
-        EmbeddedPictures.CollectionChanged += (_, _) =>
-        {
-            for (int i = 0; i < EmbeddedPictures.Count; i++)
-            {
-                EmbeddedPictures[i].Position = i + 1;
-            }
-            Changed = true;
-        };
         _finishedSetup = true;
+    }
+
+    /// <summary>
+    /// Gets the original track's embedded pictures
+    /// </summary>
+    /// <returns></returns>
+    private ObservableCollection<PictureInfo> GetOriginalTrackImages()
+    {
+        return [.. _originalTrack.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported)];
     }
 
     /// <summary>
@@ -131,7 +162,7 @@ public partial class TrackViewModel : ViewModelBase
     /// <returns>The Track</returns>
     private Track GetTrack()
     {
-        Track thisTrack = new Track(Path);
+        Track thisTrack = _originalTrack;
         thisTrack.Title = Title;
         thisTrack.Album = Album;
         thisTrack.Artist = Artist;
