@@ -15,6 +15,7 @@
     </Design.DataContext>
     <Window.Resources>
         <converters:AreEqualConverter x:Key="AreEqualConverter"/>
+        <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
     </Window.Resources>
     <Grid RowDefinitions="Auto, Auto, *" Name="Root">
         <Menu Grid.Row="0">
@@ -32,7 +33,7 @@
                         <ControlTheme TargetType="MenuItem"
                                       BasedOn="{StaticResource {x:Type MenuItem}}"
                                       x:DataType="ThemeVariant">
-                            <Setter Property="Header" Value="{Binding .}"/>
+                            <Setter Property="Header" Value="{Binding ., Converter={StaticResource UpperCamelCaseSpacer}}"/>
                             <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
                             <Setter Property="CommandParameter" Value="{Binding .}"/>
                             <Setter Property="Icon">
