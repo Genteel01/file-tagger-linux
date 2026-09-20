@@ -468,17 +468,31 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private void ChooseDisplayedImage()
     {
+        int oldDisplayedIndex = DisplayedImageIndex;
+        PictureInfo? oldDisplayedImage = SelectedImage;
         DisplayedImageIndex = 0;
         SelectedTrackImages = [];
         if (!HasSelectedTracks) return;
 
+        SelectedTrackImages = GetSelectedTrackImages();
+        if (oldDisplayedImage != null && SelectedTrackImages.Count > oldDisplayedIndex)
+        {
+            if (SelectedTrackImages[oldDisplayedIndex].TrueEqual(oldDisplayedImage)) DisplayedImageIndex = oldDisplayedIndex;
+        }
+    }
+
+    /// <summary>
+    /// Gets the images from SelectedTracks, if all of them have the same images
+    /// </summary>
+    /// <returns></returns>
+    private List<PictureInfo> GetSelectedTrackImages()
+    {
         List<PictureInfo> referencePics = SelectedTracks[0].EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
-        if (referencePics.Count == 0) return;
+        if (referencePics.Count == 0) return [];
         //If there's only one track selected, display its images
         if (SelectedTracks.Count == 1)
         {
-            SelectedTrackImages = referencePics;
-            return;
+            return referencePics;
         }
         //If there is more than one track selected, display its images if they are the same across the entire selection
         List<List<PictureInfo>> picsPerTrack = [];
@@ -486,16 +500,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         foreach (TrackViewModel track in SelectedTracks.Skip(1))
         {
             List<PictureInfo> relevantPics = track.EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
-            if (relevantPics.Count != referencePics.Count) return;
+            if (relevantPics.Count != referencePics.Count) return [];
             picsPerTrack.Add(relevantPics);
         }
 
         for (int i = 0; i < referencePics.Count; i++)
         {
             bool allTracksMatch = picsPerTrack.All(pics => pics[i].PicturesEqual(referencePics[i]));
-            if(!allTracksMatch) return;
+            if(!allTracksMatch) return [];
         }
-        SelectedTrackImages = referencePics;
+        return referencePics;
     }
 
     /// <summary>
