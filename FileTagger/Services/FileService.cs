@@ -26,7 +26,8 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         IStorageBookmarkFolder? initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
         if(initialLocation == null) return [];
 
-        IReadOnlyList<IStorageFile> files = await GetChildFiles(initialLocation, extensions);
+        bool showHiddenFiles = initialLocation.Name.StartsWith('.');
+        IReadOnlyList<IStorageFile> files = await GetChildFiles(initialLocation, extensions, showHiddenFiles);
         return files;
     }
 
@@ -50,7 +51,8 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         if (folders.Count == 0) return ([], true, null);
 
         IStorageFolder folder = folders[0];
-        IReadOnlyList<IStorageFile> files = await GetChildFiles(folder, extensions);
+        bool showHiddenFiles = folder.Name.StartsWith('.');
+        IReadOnlyList<IStorageFile> files = await GetChildFiles(folder, extensions, showHiddenFiles);
 
         string? newBookmarkId = await folder.SaveBookmarkAsync();
         //Release the old bookmark if we got a new one
@@ -62,7 +64,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         return (files, false, newBookmarkId);
     }
 
-    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder, List<string> extensions)
+    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder, List<string> extensions, bool showHiddenFiles)
     {
         try
         {
@@ -72,6 +74,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
             await foreach (IStorageItem item in items)
             {
+                if(!showHiddenFiles && item.Name.StartsWith('.')) continue;
                 if (item is IStorageFile file)
                 {
                     string fileName = file.Name.ToLower();
@@ -83,7 +86,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
                 }
                 else if (item is IStorageFolder childFolder)
                 {
-                    files.AddRange(await GetChildFiles(childFolder, extensions));
+                    files.AddRange(await GetChildFiles(childFolder, extensions, showHiddenFiles));
                 }
             }
 
