@@ -43,13 +43,8 @@ public class App : Application
             await _preferenceService.LoadPreferenceData();
 
             SystemPreferences preferences = _preferenceService.SystemPreferenceData;
-            //For convenience, we don't want to start maximised in Debug
-            #if DEBUG
-            WindowState startingWindowState = WindowState.Normal;
-            #else
-            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal;
-            #endif
 
+            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal;
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
 
             MainWindow mainWindow = new MainWindow
