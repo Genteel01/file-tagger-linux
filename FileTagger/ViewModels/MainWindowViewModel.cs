@@ -160,6 +160,9 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         };
         _preferenceService.UserPreferencesSet += (_, _) => SetUpUserPreferences();
+        #if DEBUG
+        ConsoleLogger dummy = new ConsoleLogger();
+        #endif
     }
 
     /// <summary>
@@ -226,59 +229,90 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     /// Opens the file picker to choose a directory, then loads all music files in that directory as <see cref="TrackViewModel"/>
+    /// Stores the Bookmark ID of the chosen directory
     /// </summary>
     [RelayCommand]
     private async Task OpenMusicFiles(CancellationToken token)
     {
-        #if DEBUG
-        ConsoleLogger dummy = new ConsoleLogger();
-        #endif
         ErrorMessages?.Clear();
         try
         {
-            (IReadOnlyList<IStorageFile>, bool) files = await _fileService.OpenFilesRecursivelyAsync(_supportedFileExtensions);
-            if (files.Item2) return;
+            string? lastDirectory = _preferenceService.SystemPreferenceData.LastDirectory;
+            (IReadOnlyList<IStorageFile> files, bool cancelled, string? bookmarkId) files = await _fileService.OpenFilesRecursivelyAsync(_supportedFileExtensions, lastDirectory);
+            if (files.cancelled) return;
 
-            List<TrackViewModel> newTracks = [];
-            //Never have more chunks than the number of threads available on the system, but also there's overhead in
-            //creating threads, so we don't want our chunks to be too small, because that means we run more threads
-            //Using 32 as an arbitrary minimum chunk size
-            int chunkSize = (int)MathF.Ceiling((float)files.Item1.Count / Environment.ProcessorCount);
-            IEnumerable<IStorageFile[]> chunkedFiles = files.Item1.Chunk(Math.Max(chunkSize, 32));
+            LoadTracks(files.files);
 
-            List<Thread> threads = [];
-            object trackLocker = new object();
-
-            foreach (IStorageFile[] fileSubset in chunkedFiles)
-            {
-                Thread t = new Thread(() =>
-                {
-                    foreach (IStorageFile file in fileSubset)
-                    {
-                        Track track = new Track(file.Path.LocalPath);
-                        TrackViewModel trackViewModel = new TrackViewModel(track);
-                        lock (trackLocker)
-                        {
-                            newTracks.Add(trackViewModel);
-                        }
-                    }
-                });
-                threads.Add(t);
-                t.Start();
-            }
-            foreach (Thread thread in threads)
-            {
-                thread.Join();
-            }
-            SelectedTracks.Clear();
-            SelectionChanged();
-            Tracks = newTracks;
-            SortTracks(CurrentSort, false);
+            if (files.bookmarkId == null) return;
+            PropertyInfo lastDirectoryProperty = typeof(SystemPreferences).GetProperty(nameof(SystemPreferences.LastDirectory))!;
+            _preferenceService.StorePreferenceItem(lastDirectoryProperty, files.bookmarkId);
         }
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Loads the tracks from the bookmarked directory, if there is one
+    /// </summary>
+    public async Task OpenInitialFiles()
+    {
+        ErrorMessages?.Clear();
+        try
+        {
+            string? lastDirectory = _preferenceService.SystemPreferenceData.LastDirectory;
+            if (lastDirectory == null) return;
+            IReadOnlyList<IStorageFile> files = await _fileService.OpenBookmarkedFilesAsync(_supportedFileExtensions, lastDirectory);
+
+            LoadTracks(files);
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Loads all tracks in the given list of files
+    /// </summary>
+    private void LoadTracks(IReadOnlyList<IStorageFile> files)
+    {
+        List<TrackViewModel> newTracks = [];
+        //Never have more chunks than the number of threads available on the system, but also there's overhead in
+        //creating threads, so we don't want our chunks to be too small, because that means we run more threads
+        //Using 32 as an arbitrary minimum chunk size
+        int chunkSize = (int)MathF.Ceiling((float)files.Count / Environment.ProcessorCount);
+        IEnumerable<IStorageFile[]> chunkedFiles = files.Chunk(Math.Max(chunkSize, 32));
+
+        List<Thread> threads = [];
+        object trackLocker = new object();
+
+        foreach (IStorageFile[] fileSubset in chunkedFiles)
+        {
+            Thread t = new Thread(() =>
+            {
+                foreach (IStorageFile file in fileSubset)
+                {
+                    Track track = new Track(file.Path.LocalPath);
+                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    lock (trackLocker)
+                    {
+                        newTracks.Add(trackViewModel);
+                    }
+                }
+            });
+            threads.Add(t);
+            t.Start();
+        }
+        foreach (Thread thread in threads)
+        {
+            thread.Join();
+        }
+        SelectedTracks.Clear();
+        SelectionChanged();
+        Tracks = newTracks;
+        SortTracks(CurrentSort, false);
     }
 
     /// <summary>

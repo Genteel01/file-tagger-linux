@@ -14,4 +14,9 @@ public class SystemPreferences
     /// Whether the main window is maximised
     /// </summary>
     public bool IsMaximised { get; set; } = false;
+
+    /// <summary>
+    /// Bookmark ID of the last directory that was accessed for files
+    /// </summary>
+    public string? LastDirectory { get; set; }
 }
