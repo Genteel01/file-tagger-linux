@@ -20,8 +20,11 @@
             <Setter Property="OpenOnFocusText" Value="{x:Static viewModels:EditPanelViewModel.UnchangedField}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
-        <Style Selector="Panel#PicTypeControl PathIcon, Panel#PicTypeControl ComboBox">
+        <Style Selector="Panel#PicTypeControl PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
+        </Style>
+        <Style Selector="Panel#PicTypeControl ComboBox">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Panel#PicTypeControl Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -33,7 +36,7 @@
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
-        <Style Selector="Panel#PicTypeControl:pointerover PathIcon, Panel#PicTypeControl:pointerover ComboBox">
+        <Style Selector="Panel#PicTypeControl:pointerover PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Panel#PicTypeControl:pointerover ComboBox Border">
