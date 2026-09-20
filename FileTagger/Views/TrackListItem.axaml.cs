@@ -46,7 +46,8 @@ public partial class TrackListItem : UserControl
             siblingBlock.IsEnabled = true;
             textBox.IsVisible = false;
             textBox.IsEnabled = false;
-            if (DataContext is MainWindowViewModel vm)
+            ListBox? listBox = textBox.FindAncestorOfType<ListBox>();
+            if (listBox?.DataContext is MainWindowViewModel vm)
             {
                 vm.SelectionChanged();
             }
