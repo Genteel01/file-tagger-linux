@@ -64,28 +64,35 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
     private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder, List<string> extensions)
     {
-        IAsyncEnumerable<IStorageItem> items = folder.GetItemsAsync();
-
-        List<IStorageFile> files = [];
-
-        await foreach (IStorageItem item in items)
+        try
         {
-            if (item is IStorageFile file)
+            IAsyncEnumerable<IStorageItem> items = folder.GetItemsAsync();
+
+            List<IStorageFile> files = [];
+
+            await foreach (IStorageItem item in items)
             {
-                string fileName = file.Name.ToLower();
-                string extension = "." + fileName.Split(".").Last().ToLower();
-                if (extensions.Contains(extension))
+                if (item is IStorageFile file)
                 {
-                    files.Add(file);
+                    string fileName = file.Name.ToLower();
+                    string extension = "." + fileName.Split(".").Last().ToLower();
+                    if (extensions.Contains(extension))
+                    {
+                        files.Add(file);
+                    }
+                }
+                else if (item is IStorageFolder childFolder)
+                {
+                    files.AddRange(await GetChildFiles(childFolder, extensions));
                 }
             }
-            else if (item is IStorageFolder childFolder)
-            {
-                files.AddRange(await GetChildFiles(childFolder, extensions));
-            }
-        }
 
-        return files;
+            return files;
+        }
+        catch (Exception e)
+        {
+            return [];
+        }
     }
 
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
