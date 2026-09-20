@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
+using FileTagger.Extensions;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
@@ -38,26 +38,17 @@ public partial class TrackListItem : UserControl
         {
             string searchName = textBox.Name?.Replace("Box", "Block") ?? "";
 
-            IEnumerable<ILogical> siblings = textBox.GetLogicalSiblings();
-            TextBlock? siblingBlock = null;
-            foreach (ILogical sibling in siblings)
-            {
-                if (sibling is TextBlock block && block.Name == searchName)
-                {
-                    siblingBlock = block;
-                }
-            }
+            TextBlock? siblingBlock = textBox.GetFirstSibling<TextBlock>(box => box.Name == searchName);
 
-            if (siblingBlock != null)
+            if (siblingBlock == null) return;
+
+            siblingBlock.IsVisible = true;
+            siblingBlock.IsEnabled = true;
+            textBox.IsVisible = false;
+            textBox.IsEnabled = false;
+            if (DataContext is MainWindowViewModel vm)
             {
-                siblingBlock.IsVisible = true;
-                siblingBlock.IsEnabled = true;
-                textBox.IsVisible = false;
-                textBox.IsEnabled = false;
-                if (DataContext is MainWindowViewModel vm)
-                {
-                    vm.SelectionChanged();
-                }
+                vm.SelectionChanged();
             }
         }
     }
@@ -72,25 +63,16 @@ public partial class TrackListItem : UserControl
         if (sender is not TextBlock textBlock) return;
 
         string searchName = textBlock.Name?.Replace("Block", "Box") ?? "";
-        IEnumerable<ILogical> siblings = textBlock.GetLogicalSiblings();
-        TextBox? siblingBox = null;
-        foreach (ILogical sibling in siblings)
-        {
-            if (sibling is TextBox box && box.Name == searchName)
-            {
-                siblingBox = box;
-            }
-        }
+        TextBox? siblingBox = textBlock.GetFirstSibling<TextBox>(box => box.Name == searchName);
 
-        if (siblingBox != null)
-        {
-            textBlock.IsVisible = false;
-            textBlock.IsEnabled = false;
-            siblingBox.IsVisible = true;
-            siblingBox.IsEnabled = true;
-            siblingBox.SelectAll();
-            siblingBox.Focus();
-        }
+        if (siblingBox == null) return;
+
+        textBlock.IsVisible = false;
+        textBlock.IsEnabled = false;
+        siblingBox.IsVisible = true;
+        siblingBox.IsEnabled = true;
+        siblingBox.SelectAll();
+        siblingBox.Focus();
     }
 
     /// <summary>
