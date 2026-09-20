@@ -360,7 +360,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private int RemoveCurrentlyDisplayedImage(TrackViewModel track)
     {
-        PictureInfo displayedImage = SelectedImage;
+        if (!IsShowingTrackImages) return -1;
+        PictureInfo displayedImage = SelectedImage!;
         int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(displayedImage));
         if (index != -1)
         {
@@ -385,7 +386,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             if (!HasSelectedTracks || !IsShowingTrackImages) return false;
             if(CopiedPic == null) return false;
             if(TracksToCutFrom.Count < SelectedTracks.Count) return false;
-            if (!CopiedPic.TrueEqual(SelectedImage)) return false;
+            if (!CopiedPic.TrueEqual(SelectedImage!)) return false;
             return SelectedTracks.All(track => TracksToCutFrom.Any(cutTrack => cutTrack == track));
         }
     }
@@ -593,13 +594,13 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// The PictureInfo of the image that is currently being displayed
     /// </summary>
-    private PictureInfo SelectedImage => SelectedTrackImages[DisplayedImageIndex];
+    private PictureInfo? SelectedImage => IsShowingTrackImages ? SelectedTrackImages[DisplayedImageIndex] : null;
 
     /// <summary>
     /// Bitmap of <see cref="SelectedImage"/>, showing <see cref="_imageService"/>.GetDefaultImage() if SelectedTrackImages is empty.
     /// Updates when SelectedTrackImages or DisplayedImageIndex change
     /// </summary>
-    public Bitmap CurrentDisplayedImage => IsShowingTrackImages ? GetAndCacheBitmap(SelectedImage) : _imageService.GetDefaultImage();
+    public Bitmap CurrentDisplayedImage => IsShowingTrackImages ? GetAndCacheBitmap(SelectedImage!) : _imageService.GetDefaultImage();
 
     /// <summary>
     /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes
