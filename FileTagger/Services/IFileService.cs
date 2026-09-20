@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
-using FileTagger.Models;
 
 namespace FileTagger.Services;
 
