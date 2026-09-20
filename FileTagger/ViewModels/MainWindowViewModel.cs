@@ -279,36 +279,25 @@ public partial class MainWindowViewModel : ViewModelBase
     private void LoadTracks(IReadOnlyList<IStorageFile> files)
     {
         List<TrackViewModel> newTracks = [];
-        //Never have more chunks than the number of threads available on the system, but also there's overhead in
-        //creating threads, so we don't want our chunks to be too small, because that means we run more threads
-        //Using 32 as an arbitrary minimum chunk size
-        int chunkSize = (int)MathF.Ceiling((float)files.Count / Environment.ProcessorCount);
-        IEnumerable<IStorageFile[]> chunkedFiles = files.Chunk(Math.Max(chunkSize, 32));
 
-        List<Thread> threads = [];
-        object trackLocker = new object();
+        List<Task> tasks = [];
+        Lock trackLocker = new Lock();
 
-        foreach (IStorageFile[] fileSubset in chunkedFiles)
+        foreach (IStorageFile file in files)
         {
-            Thread t = new Thread(() =>
+            Task task = Task.Run(() =>
             {
-                foreach (IStorageFile file in fileSubset)
+                Track track = new Track(file.Path.LocalPath);
+                TrackViewModel trackViewModel = new TrackViewModel(track);
+                lock (trackLocker)
                 {
-                    Track track = new Track(file.Path.LocalPath);
-                    TrackViewModel trackViewModel = new TrackViewModel(track);
-                    lock (trackLocker)
-                    {
-                        newTracks.Add(trackViewModel);
-                    }
+                    newTracks.Add(trackViewModel);
                 }
             });
-            threads.Add(t);
-            t.Start();
+            tasks.Add(task);
         }
-        foreach (Thread thread in threads)
-        {
-            thread.Join();
-        }
+        Task.WaitAll(tasks);
+
         SelectedTracks.Clear();
         SelectionChanged();
         Tracks = newTracks;
