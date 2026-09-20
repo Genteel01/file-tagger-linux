@@ -318,7 +318,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
-            return [];
+            throw;
         }
     }
 

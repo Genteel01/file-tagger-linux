@@ -260,6 +260,7 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
+            throw;
         }
     }
 
@@ -280,6 +281,7 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
             ErrorMessages?.Add(e.Message);
+            throw;
         }
     }
 
