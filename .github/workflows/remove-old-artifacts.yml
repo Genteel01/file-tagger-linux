@@ -3,7 +3,7 @@ name: Remove old artifacts
 on:
   schedule:
     # Every Sunday at 3am
-    - cron: '0 3 * * 0'
+    - cron: '15 3 * * 0'
 
 jobs:
   remove-old-artifacts:
@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Remove old artifacts
-      uses: c-hive/gha-remove-artifacts@v1.8
+      uses: c-hive/gha-remove-artifacts@v1
       with:
         age: '7 days' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
         # Optional inputs
