@@ -93,7 +93,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     public void Receive(MainWindowViewModel.SelectedItemsMessage message)
     {
-        SelectedTracks =  message.Tracks;
+        SelectedTracks = message.Tracks;
         SelectionChanged();
     }
 
@@ -260,7 +260,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         foreach (TrackViewModel track in tracks)
         {
-            SelectedTracks.AddRange();
             track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
             track.EmbeddedPictures.AddRange(newImages);
         }
