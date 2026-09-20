@@ -64,6 +64,11 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly List<string> _supportedFileExtensions;
 
     /// <summary>
+    /// List of file extensions to do extra checking on when creating tracks
+    /// </summary>
+    private readonly List<string> _concurrentFileExtensions = [];
+
+    /// <summary>
     /// The current sorting options for Tracks
     /// </summary>
     [ObservableProperty]
@@ -142,8 +147,13 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (f.Readable)
             {
+                int id = f.ContainerId != f.DataFormat.ID ? f.ContainerId : f.DataFormat.ID;
                 foreach (string extension in f)
                 {
+                    if (id == AudioDataIOFactory.CID_WMA)
+                    {
+                        _concurrentFileExtensions.Add(extension.ToLower());
+                    }
                     _supportedFileExtensions.Add(extension.ToLower());
                 }
             }
@@ -282,17 +292,28 @@ public partial class MainWindowViewModel : ViewModelBase
 
         List<Task> tasks = [];
         Lock trackLocker = new Lock();
+        Lock wmaLocker = new Lock();
 
         foreach (IStorageFile file in files)
         {
             Task task = Task.Run(() =>
             {
-                Track track = new Track(file.Path.LocalPath);
-                TrackViewModel trackViewModel = new TrackViewModel(track);
-                lock (trackLocker)
+                //WMA files can hit an error if you try to make two tracks at the same time, so run an extra Lock on them
+                string extension = "." + file.Name.Split(".").Last().ToLower();
+                if (_concurrentFileExtensions.Contains(extension))
                 {
-                    newTracks.Add(trackViewModel);
+                    Track track;
+                    lock (wmaLocker) { track = new Track(file.Path.LocalPath); }
+                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
+                else
+                {
+                    Track track = new Track(file.Path.LocalPath);
+                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    lock (trackLocker) { newTracks.Add(trackViewModel); }
+                }
+
             });
             tasks.Add(task);
         }
