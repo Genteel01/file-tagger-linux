@@ -614,7 +614,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Bitmap of <see cref="SelectedImage"/>, showing <see cref="_imageService"/>.GetDefaultImage() if SelectedTrackImages is empty.
     /// Updates when SelectedTrackImages or DisplayedImageIndex change
     /// </summary>
-    public Bitmap CurrentDisplayedImage => IsShowingTrackImages ? GetAndCacheBitmap(SelectedImage!) : _imageService.GetDefaultImage();
+    public Bitmap? CurrentDisplayedImage => IsShowingTrackImages ? GetAndCacheBitmap(SelectedImage!) : null;
 
     /// <summary>
     /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes

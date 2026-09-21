@@ -4,4 +4,5 @@
     <x:Double x:Key="RowLineHeight">22</x:Double>
     <x:Double x:Key="EditControlHeight">32</x:Double>
     <x:Double x:Key="SmallIconWidth">12</x:Double>
+    <x:Double x:Key="BaseImageSize">250</x:Double>
 </ResourceDictionary>

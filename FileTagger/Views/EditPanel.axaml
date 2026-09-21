@@ -12,6 +12,7 @@
 >
     <UserControl.Resources>
         <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
+        <converters:NumberPercentageConverter x:Key="NumberPercentageConverter" />
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="StackPanel#SidePanel">
@@ -22,6 +23,13 @@
         </Style>
         <Style Selector="controls|LabelledDropdown">
             <Setter Property="OpenOnFocusText" Value="{x:Static viewModels:EditPanelViewModel.UnchangedField}"/>
+        </Style>
+        <Style Selector="Border#FallbackImage:disabled">
+            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
+        </Style>
+        <!--Overlay changing the colour of the displayed image-->
+        <Style Selector="Image.Cut">
+            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
         <Style Selector="Panel#PicTypeControl PathIcon">
@@ -126,7 +134,7 @@
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
-            <Panel Name="ImagePanel" Height="250" MaxWidth="250" Margin="8 32 8 4">
+            <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" MaxWidth="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch" Margin="8 32 8 4">
                 <Panel.ContextMenu>
                     <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                         <MenuItem Header="_Add cover" Command="{Binding AddCoverImagesCommand}">
@@ -163,8 +171,15 @@
                         </MenuItem>
                     </ContextMenu>
                 </Panel.ContextMenu>
-                <Image Source="{Binding CurrentDisplayedImage}" Name="CoverImage"/>
-                <Grid IsVisible="{Binding DisplayedImageIsBeingCut}" Background="{DynamicResource CutOverlayBrush}" Height="{Binding #CoverImage.Bounds.Height}" Width="{Binding #CoverImage.Bounds.Width}"/>
+                <Image IsVisible="{Binding IsShowingTrackImages}" Classes.Cut="{Binding DisplayedImageIsBeingCut}" Source="{Binding CurrentDisplayedImage}" />
+                <Panel IsVisible="{Binding !IsShowingTrackImages}">
+                    <Border Name="FallbackImage" Background="{DynamicResource ThemeBackgroundBrush}"
+                            CornerRadius="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.05}"
+                            Width="{Binding #ImagePanel.Bounds.Width}" Height="{Binding #FallbackImage.Bounds.Width}"/>
+                    <PathIcon Width="{Binding #ImagePanel.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
+                              Height="{Binding #ImagePanel.Bounds.Height, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
+                              Data="{StaticResource ImageIcon}" Foreground="{DynamicResource EditPanelBackgroundBrush}"/>
+                </Panel>
             </Panel>
             <Panel Margin="8 0" Height="16">
                 <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal" Spacing="4">
