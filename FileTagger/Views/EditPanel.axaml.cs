@@ -12,12 +12,15 @@ public partial class EditPanel : UserControl
 {
     private readonly AutoCompleteFilterPredicate<string?> _searchFunction = (search, item) =>
     {
-        if (search == Consts.UnchangedField || item == Consts.UnchangedField || string.IsNullOrWhiteSpace(search))
+        if (string.IsNullOrWhiteSpace(search)) return true;
+        string searchTrimmed = search.Trim();
+        string? itemTrimmed = item?.Trim();
+        if (searchTrimmed == Consts.UnchangedField || itemTrimmed == Consts.UnchangedField)
         {
             return true;
         }
 
-        return item?.Contains(search, StringComparison.CurrentCultureIgnoreCase) ?? false;
+        return itemTrimmed?.Contains(searchTrimmed, StringComparison.CurrentCultureIgnoreCase) ?? false;
     };
     public EditPanel()
     {
