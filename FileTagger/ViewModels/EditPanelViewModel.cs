@@ -267,7 +267,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
     /// <summary>
     /// Opens the file picker for the user to select new images,
-    /// then adds them to the cover images of the currently selected type, for the currently selected tracks
+    /// then adds them to the EmbeddedPictures of the currently selected type, for the currently selected tracks
     /// </summary>
     [RelayCommand]
     private async Task AddCoverImages(CancellationToken token)
@@ -323,8 +323,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Removes the visible cover image from the selected tracks, or remove all cover images of the selected type
-    /// from all selected tracks if there are different covers for the selected tracks
+    /// Removes the visible picture from the selected tracks, or remove all pictures of the selected type
+    /// from all selected tracks if there are different pictures for the selected tracks
     /// </summary>
     [RelayCommand]
     private void RemoveCoverImage()
@@ -603,7 +603,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private int _displayedImageIndex = 0;
 
     /// <summary>
-    /// String to indicate how many covers there are, and which one is being viewed
+    /// String to indicate how many pictures there are, and which one is being viewed
     /// </summary>
     public string PicCountString => $"{DisplayedImageIndex + 1}/{SelectedTrackImages.Count}";
 
