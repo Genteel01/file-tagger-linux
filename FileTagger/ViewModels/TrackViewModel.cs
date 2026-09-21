@@ -190,7 +190,10 @@ public partial class TrackViewModel : ViewModelBase
     /// </summary>
     public void SaveTrackChanges()
     {
-        GetTrack().Save();
-        Changed = false;
+        if (Changed)
+        {
+            GetTrack().Save();
+            Changed = false;
+        }
     }
 }
