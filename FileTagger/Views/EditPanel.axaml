@@ -5,10 +5,14 @@
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
+             xmlns:converters="clr-namespace:FileTagger.Converters"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:EditPanelViewModel"
 >
+    <UserControl.Resources>
+        <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
+    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="StackPanel#SidePanel">
             <Setter Property="Background" Value="{DynamicResource EditPanelBackgroundBrush}" />
@@ -20,8 +24,11 @@
             <Setter Property="OpenOnFocusText" Value="{x:Static viewModels:EditPanelViewModel.UnchangedField}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
-        <Style Selector="Panel#PicTypeControl PathIcon, Panel#PicTypeControl ComboBox">
+        <Style Selector="Panel#PicTypeControl PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
+        </Style>
+        <Style Selector="Panel#PicTypeControl ComboBox">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Panel#PicTypeControl Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -33,7 +40,7 @@
             <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         </Style>
-        <Style Selector="Panel#PicTypeControl:pointerover PathIcon, Panel#PicTypeControl:pointerover ComboBox">
+        <Style Selector="Panel#PicTypeControl:pointerover PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
         </Style>
         <Style Selector="Panel#PicTypeControl:pointerover ComboBox Border">
@@ -168,7 +175,7 @@
             </Panel>
             <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
                    Width="{Binding #ImagePanel.Bounds.Width}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
-                <ComboBox ItemsSource="{Binding PictureTypes}" SelectedItem="{Binding SelectedPictureType}" Name="PicTypeSelector"/>
+                <ComboBox ItemsSource="{Binding PictureTypes, Converter={StaticResource UpperCamelCaseSpacer}}" SelectedItem="{Binding SelectedPictureType, Converter={StaticResource UpperCamelCaseSpacer}}" Name="PicTypeSelector"/>
                 <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
             </Panel>

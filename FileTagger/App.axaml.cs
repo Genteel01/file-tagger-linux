@@ -43,13 +43,8 @@ public class App : Application
             await _preferenceService.LoadPreferenceData();
 
             SystemPreferences preferences = _preferenceService.SystemPreferenceData;
-            //For convenience, we don't want to start maximised in Debug
-            #if DEBUG
-            WindowState startingWindowState = WindowState.Normal;
-            #else
-            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal;
-            #endif
 
+            WindowState startingWindowState = preferences.IsMaximised ? WindowState.Maximized : WindowState.Normal;
             MainWindowViewModel mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
 
             MainWindow mainWindow = new MainWindow
@@ -65,7 +60,10 @@ public class App : Application
             //Add a callback so we can store the size of the window when it changes
             mainWindow.Resized += (sender, _) => { if (sender is Window window) window.StoreWindowState(_preferenceService); };
 
+            mainWindow.TemplateApplied += (_, _) => { mainWindow.Hide(); };
             desktop.MainWindow = mainWindow;
+            await mainWindowViewModel.OpenInitialFiles();
+            desktop.MainWindow.Show();
             desktop.ShutdownRequested += DesktopOnShutdownRequested;
         }
 

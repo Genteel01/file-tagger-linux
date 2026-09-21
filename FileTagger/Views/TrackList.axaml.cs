@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using FileTagger.Controls;
 using FileTagger.ViewModels;
@@ -25,6 +26,34 @@ public partial class TrackList : UserControl
         InitializeComponent();
     }
 
+    private ScrollBar? _horizontalScrollBar;
+    private ScrollBar? _verticalScrollBar;
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+
+        ListScroller.TemplateApplied += (_, args) =>
+        {
+            _horizontalScrollBar = args.NameScope.Find<ScrollBar>("PART_HorizontalScrollBar");
+            _verticalScrollBar = args.NameScope.Find<ScrollBar>("PART_VerticalScrollBar");
+
+            _horizontalScrollBar?.Focusable = true;
+            _verticalScrollBar?.Focusable = true;
+            _horizontalScrollBar?.GettingFocus += ScrollBarGettingFocus;
+            _verticalScrollBar?.GettingFocus += ScrollBarGettingFocus;
+        };
+    }
+
+    /// <summary>
+    /// We want the ScrollBars to be Focusable so clicking them won't meet the condition in <see cref="ScrollViewerFocusGained"/>,
+    /// but we don't want them to actually take focus from whatever you were focusing before, so we redirect it back
+    /// </summary>
+    private void ScrollBarGettingFocus(object? sender, FocusChangingEventArgs e)
+    {
+        e.TrySetNewFocusedElement(e.OldFocusedElement);
+    }
+
     private void OnListBoxSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (DataContext is MainWindowViewModel vm)
@@ -33,6 +62,9 @@ public partial class TrackList : UserControl
         }
     }
 
+    /// <summary>
+    /// Reset the selection when we Focus the ScrollViewer
+    /// </summary>
     private void ScrollViewerFocusGained(object? sender, FocusChangedEventArgs e)
     {
         if (e.NewFocusedElement == sender)

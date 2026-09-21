@@ -36,17 +36,7 @@ public class UserPreferences
     /// The theme that the user has requested, parsed from the stored string at <see cref="_storedTheme"/>
     /// </summary>
     public ThemeVariant RequestedTheme {
-        get
-        {
-            return _storedTheme switch
-            {
-                nameof(ThemeVariant.Light) => ThemeVariant.Light,
-                nameof(ThemeVariant.Dark) => ThemeVariant.Dark,
-                nameof(MyThemes.LightGreen) => MyThemes.LightGreen,
-                nameof(MyThemes.DarkGreen) => MyThemes.DarkGreen,
-                _ => ThemeVariant.Default
-            };
-        }
+        get => MyThemes.StringToTheme(_storedTheme);
         set => _storedTheme = value.ToString();
     }
 

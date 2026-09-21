@@ -9,9 +9,14 @@ public class FakeFileService : IFileService
 {
     private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { IncludeFields = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals };
     private Dictionary<string, JsonDocument> _documents = new Dictionary<string, JsonDocument>();
-    public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions)
+    public async Task<IReadOnlyList<IStorageFile>> OpenBookmarkedFilesAsync(List<string> extensions, string bookmarkId)
     {
-        return ([], true);
+        return [];
+    }
+
+    public async Task<(IReadOnlyList<IStorageFile> files, bool cancelled, string? bookmarkId)> OpenFilesRecursivelyAsync(List<string> extensions, string? bookmarkId = null)
+    {
+        return ([], false, null);
     }
 
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()

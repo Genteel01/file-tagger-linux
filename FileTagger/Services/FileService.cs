@@ -18,48 +18,84 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
             "Genteel01.FileTagger");
 
     private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { IncludeFields = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals };
-    public async Task<(IReadOnlyList<IStorageFile>, bool)> OpenFilesRecursivelyAsync(List<string> extensions)
+
+    public async Task<IReadOnlyList<IStorageFile>> OpenBookmarkedFilesAsync(List<string> extensions, string bookmarkId)
     {
         TopLevel? target = getTarget();
-        if (target == null) return ([], true);
+        if (target == null) return [];
+        IStorageBookmarkFolder? initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+        if(initialLocation == null) return [];
+
+        bool showHiddenFiles = initialLocation.Name.StartsWith('.');
+        IReadOnlyList<IStorageFile> files = await GetChildFiles(initialLocation, extensions, showHiddenFiles);
+        return files;
+    }
+
+    public async Task<(IReadOnlyList<IStorageFile>, bool, string?)> OpenFilesRecursivelyAsync(List<string> extensions, string? bookmarkId = null)
+    {
+        TopLevel? target = getTarget();
+        if (target == null) return ([], true, null);
+        //Load initial location from bookmark
+        IStorageBookmarkFolder? initialLocation = null;
+        if (bookmarkId != null)
+        {
+            initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+        }
         IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
             Title = "Open Folders",
-            AllowMultiple = true,
+            AllowMultiple = false,
+            SuggestedStartLocation = initialLocation,
         });
 
-        List<IStorageFile> files = [];
-        foreach (IStorageFolder folder in folders)
+        if (folders.Count == 0) return ([], true, null);
+
+        IStorageFolder folder = folders[0];
+        bool showHiddenFiles = folder.Name.StartsWith('.');
+        IReadOnlyList<IStorageFile> files = await GetChildFiles(folder, extensions, showHiddenFiles);
+
+        string? newBookmarkId = await folder.SaveBookmarkAsync();
+        //Release the old bookmark if we got a new one
+        if (newBookmarkId != null && initialLocation != null)
         {
-            files.AddRange(await GetChildFiles(folder, extensions));
+            await initialLocation.ReleaseBookmarkAsync();
+            initialLocation.Dispose();
         }
-        return (files, folders.Count == 0);
+        return (files, false, newBookmarkId);
     }
 
-    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder, List<string> extensions)
+    private async Task<IReadOnlyList<IStorageFile>> GetChildFiles(IStorageFolder folder, List<string> extensions, bool showHiddenFiles)
     {
-        IAsyncEnumerable<IStorageItem> items = folder.GetItemsAsync();
-
-        List<IStorageFile> files = [];
-
-        await foreach (IStorageItem item in items)
+        try
         {
-            if (item is IStorageFile file)
+            IAsyncEnumerable<IStorageItem> items = folder.GetItemsAsync();
+
+            List<IStorageFile> files = [];
+
+            await foreach (IStorageItem item in items)
             {
-                string fileName = file.Name.ToLower();
-                string extension = "." + fileName.Split(".").Last().ToLower();
-                if (extensions.Contains(extension))
+                if(!showHiddenFiles && item.Name.StartsWith('.')) continue;
+                if (item is IStorageFile file)
                 {
-                    files.Add(file);
+                    string fileName = file.Name.ToLower();
+                    string extension = "." + fileName.Split(".").Last().ToLower();
+                    if (extensions.Contains(extension))
+                    {
+                        files.Add(file);
+                    }
+                }
+                else if (item is IStorageFolder childFolder)
+                {
+                    files.AddRange(await GetChildFiles(childFolder, extensions, showHiddenFiles));
                 }
             }
-            else if (item is IStorageFolder childFolder)
-            {
-                files.AddRange(await GetChildFiles(childFolder, extensions));
-            }
-        }
 
-        return files;
+            return files;
+        }
+        catch (Exception e)
+        {
+            return [];
+        }
     }
 
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()

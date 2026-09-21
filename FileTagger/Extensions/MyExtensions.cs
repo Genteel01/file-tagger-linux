@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ATL;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.VisualTree;
+using Avalonia.LogicalTree;
 using FileTagger.Models;
 using FileTagger.Services;
 
@@ -12,28 +12,42 @@ namespace FileTagger.Extensions;
 public static class MyExtensions
 {
     /// <summary>
-    /// Extensions for Visual
+    /// Extensions for ILogical
     /// </summary>
-    extension(Visual root)
+    extension(ILogical logical)
     {
         /// <summary>
-        /// Enumerates all descendants of a Visual of the given type T
+        /// Gets the first ILogical sibling of type <see cref="T"/>
         /// </summary>
-        public IEnumerable<T> GetVisualDescendants<T>()
+        public T? GetFirstSibling<T>() where T : class, ILogical
         {
-            List<T> children = [];
-            foreach (Visual child in root.GetVisualChildren())
+            IEnumerable<ILogical> siblings = logical.GetLogicalSiblings();
+            foreach (ILogical sibling in siblings)
             {
-                if (child is T correctTypeChild)
+                if (sibling is T t)
                 {
-                    children.Add(correctTypeChild);
-                }
-                else
-                {
-                    children.AddRange(child.GetVisualDescendants<T>());
+                    return t;
                 }
             }
-            return children;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the first ILogical sibling of type <see cref="T"/> that matches the given predicate
+        /// </summary>
+        public T? GetFirstSibling<T>(Func<T, bool> match) where T : class, ILogical
+        {
+            IEnumerable<ILogical> siblings = logical.GetLogicalSiblings();
+            foreach (ILogical sibling in siblings)
+            {
+                if (sibling is T t && match(t))
+                {
+                    return t;
+                }
+            }
+
+            return null;
         }
     }
 
