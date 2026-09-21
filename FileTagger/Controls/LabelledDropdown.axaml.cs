@@ -12,6 +12,12 @@ using FileTagger.Assets.Statics;
 
 namespace FileTagger.Controls;
 
+/// <summary>
+/// AutoCompleteBox cannot open its dropdown when the text is empty. As a workaround, we keep a single space at the end
+/// of the text at all times using the default value of <see cref="TextProperty"/> and <see cref="OnPropertyChanged"/>,
+/// and use this space to open the dropdown. We prevent the caret from moving to the final space using
+/// <see cref="TextBoxPropertyChanged"/> and prevent selection of the final space using <see cref="TextPresenterPropertyChanged"/>.
+/// </summary>
 [TemplatePart("PART_Button", typeof(Button), IsRequired = true)]
 [TemplatePart("PART_AutoCompleteBox", typeof(AutoCompleteBox), IsRequired = true)]
 public class LabelledDropdown : TemplatedControl
@@ -38,7 +44,7 @@ public class LabelledDropdown : TemplatedControl
     }
 
     public static readonly StyledProperty<string?> TextProperty =
-        TextBlock.TextProperty.AddOwner<LabelledDropdown>(new StyledPropertyMetadata<string?>(string.Empty, BindingMode.TwoWay, enableDataValidation: true));
+        TextBlock.TextProperty.AddOwner<LabelledDropdown>(new StyledPropertyMetadata<string?>(" ", BindingMode.TwoWay, enableDataValidation: true));
 
     public string? Text
     {
@@ -89,6 +95,46 @@ public class LabelledDropdown : TemplatedControl
     private Button? _button;
     private TopLevel? _topLevel;
 
+    /// <summary>
+    /// Make sure there is always a space at the end of the text box
+    /// </summary>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property.Name is not nameof(Text)) return;
+        if (Text?.EndsWith(' ') == false) Text += ' ';
+    }
+
+    /// <summary>
+    /// Prevent selection of the final space in the text box
+    /// </summary>
+    private void TextBoxPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs change)
+    {
+        if (_textBox is null) return;
+        if (change.Property.Name is not (nameof(TextBox.SelectionEnd) or nameof(TextBox.SelectionStart))) return;
+        if (_textBox.SelectionStart == _textBox.SelectionEnd) return;
+        if (string.IsNullOrEmpty(_textBox.Text)) return;
+        if (!_textBox.Text.EndsWith(' ')) return;
+        if (_textBox.SelectionEnd == _textBox.Text.Length)
+        {
+            _textBox?.SelectionEnd = _textBox.Text.Length - 1;
+        }
+    }
+
+    /// <summary>
+    /// Prevent the caret from moving to the final space in the text box
+    /// </summary>
+    private void TextPresenterPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs change)
+    {
+        if (_textPresenter is null) return;
+        if (change.Property.Name != nameof(TextPresenter.CaretIndex)) return;
+        if (_textPresenter.Text == null) return;
+        if (_textPresenter.CaretIndex == _textPresenter.Text.Length && _textPresenter.Text.EndsWith(' '))
+        {
+            _textPresenter.CaretIndex = _textPresenter.Text.Length - 1;
+        }
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -113,6 +159,7 @@ public class LabelledDropdown : TemplatedControl
         _textBox?.TemplateApplied -= OnTextBoxApplyTemplate;
         _textBox?.LosingFocus -= TextBoxLosingFocus;
         _textBox?.TextChanged -= SearchFieldChanged;
+        _textBox?.PropertyChanged -= TextBoxPropertyChanged;
 
         _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
         _popup = e.NameScope.Find<Popup>("PART_Popup");
@@ -120,13 +167,16 @@ public class LabelledDropdown : TemplatedControl
         _textBox?.TemplateApplied += OnTextBoxApplyTemplate;
         _textBox?.LosingFocus += TextBoxLosingFocus;
         _textBox?.TextChanged += SearchFieldChanged;
+        _textBox?.PropertyChanged += TextBoxPropertyChanged;
         _textBox?.Tag = NumberValidationFlags.AllowTrailingWhitespace | NumberValidationFlags.AllowUnchangedField;
         _popup?.OverlayInputPassThroughElement = _topLevel;
     }
 
-    private void OnTextBoxApplyTemplate(object?  sender, TemplateAppliedEventArgs e)
+    private void OnTextBoxApplyTemplate(object? sender, TemplateAppliedEventArgs e)
     {
+        _textPresenter?.PropertyChanged -= TextPresenterPropertyChanged;
         _textPresenter = e.NameScope.Get<TextPresenter>("PART_TextPresenter");
+        _textPresenter?.PropertyChanged += TextPresenterPropertyChanged;
     }
 
     /// <summary>
@@ -154,7 +204,7 @@ public class LabelledDropdown : TemplatedControl
         if(e.NewFocusedElement == e.OldFocusedElement) return;
         if (!string.IsNullOrEmpty(OpenOnFocusText))
         {
-            if(Text != OpenOnFocusText) return;
+            if(Text?.Trim() != OpenOnFocusText) return;
         }
         box.IsDropDownOpen = true;
     }
