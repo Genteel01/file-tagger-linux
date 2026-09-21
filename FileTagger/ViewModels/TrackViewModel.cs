@@ -173,10 +173,13 @@ public partial class TrackViewModel : ViewModelBase
         thisTrack.AlbumArtist = AlbumArtist;
         thisTrack.Composer = Composer;
         thisTrack.Comment = Comment;
-        thisTrack.EmbeddedPictures.Clear();
-        foreach (PictureInfo picture in EmbeddedPictures)
+        if (_isCoverSet)
         {
-            thisTrack.EmbeddedPictures.Add(picture);
+            thisTrack.EmbeddedPictures.Clear();
+            foreach (PictureInfo picture in EmbeddedPictures)
+            {
+                thisTrack.EmbeddedPictures.Add(picture);
+            }
         }
         return thisTrack;
     }
