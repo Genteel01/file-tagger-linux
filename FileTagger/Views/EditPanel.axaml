@@ -12,6 +12,7 @@
 >
     <UserControl.Resources>
         <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
+        <converters:AreEqualConverter x:Key="AreEqualConverter" />
         <converters:NumberPercentageConverter x:Key="NumberPercentageConverter" />
     </UserControl.Resources>
     <UserControl.Styles>
@@ -178,7 +179,16 @@
                             Width="{Binding #ImagePanel.Bounds.Width}" Height="{Binding #FallbackImage.Bounds.Width}"/>
                     <PathIcon Width="{Binding #ImagePanel.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                               Height="{Binding #ImagePanel.Bounds.Height, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
-                              Data="{StaticResource ImageIcon}" Foreground="{DynamicResource EditPanelBackgroundBrush}"/>
+                              Foreground="{DynamicResource EditPanelBackgroundBrush}" Classes.One="{Binding HasNoImages}">
+                        <PathIcon.Styles>
+                            <Style Selector="PathIcon.One">
+                                <Setter Property="Data" Value="{StaticResource ImageIcon}"/>
+                            </Style>
+                            <Style Selector="PathIcon">
+                                <Setter Property="Data" Value="{StaticResource ThreeImageIcon}"/>
+                            </Style>
+                        </PathIcon.Styles>
+                    </PathIcon>
                 </Panel>
             </Panel>
             <Panel Margin="8 0" Height="16">
@@ -187,6 +197,15 @@
                     <TextBlock Text="{Binding PicCountString}"/>
                     <Button Command="{Binding NextImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
                 </StackPanel>
+                <TextBlock Text="Various Covers">
+                    <TextBlock.IsVisible>
+                        <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                            <Binding Path="!IsShowingTrackImages" />
+                            <Binding Path="HasSelectedTracks" />
+                            <Binding Path="!HasNoImages" />
+                        </MultiBinding>
+                    </TextBlock.IsVisible>
+                </TextBlock>
             </Panel>
             <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
                    Width="{Binding #ImagePanel.Bounds.Width}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">

@@ -472,6 +472,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         PictureInfo? oldDisplayedImage = SelectedImage;
         DisplayedImageIndex = 0;
         SelectedTrackImages = [];
+        HasNoImages = true;
         if (!HasSelectedTracks) return;
 
         SelectedTrackImages = GetSelectedTrackImages();
@@ -488,18 +489,19 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private List<PictureInfo> GetSelectedTrackImages()
     {
         List<PictureInfo> referencePics = SelectedTracks[0].EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
-        if (referencePics.Count == 0) return [];
+        if(referencePics.Count != 0) HasNoImages = false;
         //If there's only one track selected, display its images
-        if (SelectedTracks.Count == 1)
-        {
-            return referencePics;
-        }
+        if (SelectedTracks.Count == 1) return referencePics;
         //If there is more than one track selected, display its images if they are the same across the entire selection
         List<List<PictureInfo>> picsPerTrack = [];
         //Skip the first track, since its images are in referencePics
         foreach (TrackViewModel track in SelectedTracks.Skip(1))
         {
             List<PictureInfo> relevantPics = track.EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
+            if (relevantPics.Count != 0)
+            {
+                HasNoImages = false;
+            }
             if (relevantPics.Count != referencePics.Count) return [];
             picsPerTrack.Add(relevantPics);
         }
@@ -625,6 +627,12 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Whether we are showing the images of the selected tracks, or the default image
     /// </summary>
     public bool IsShowingTrackImages => SelectedTrackImages.Count > 0;
+
+    /// <summary>
+    /// Whether all SelectedTracks have no EmbeddedPictures
+    /// </summary>
+    [ObservableProperty]
+    private bool _hasNoImages;
 
     /// <summary>
     /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values for populating a selection dropdown
