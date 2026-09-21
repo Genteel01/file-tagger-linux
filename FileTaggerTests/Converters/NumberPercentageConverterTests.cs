@@ -41,6 +41,20 @@ public class NumberPercentageConverterTests
         new TheoryDataRow<Thickness, ulong>(new Thickness(25), 50),
     };
 
+    public static IList<object> CornerRadiusTestData => new List<object>
+    {
+        new TheoryDataRow<CornerRadius, double>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, float>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, sbyte>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, byte>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, short>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, ushort>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, int>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, uint>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, long>(new CornerRadius(25), 50),
+        new TheoryDataRow<CornerRadius, ulong>(new CornerRadius(25), 50),
+    };
+
     [Theory]
     [MemberData(nameof(DoubleTestData))]
     public void Convert_NumberWithScale_ReturnsScaledDouble(double expectedValue, object? value)
@@ -55,6 +69,15 @@ public class NumberPercentageConverterTests
     public void Convert_NumberToThickness_ReturnsUniformThickness(Thickness expectedValue, object? value)
     {
         object? result = GetConverter().Convert(value, typeof(Thickness), TestScale, CultureInfo.InvariantCulture);
+
+        Assert.Equal(expectedValue, result);
+    }
+
+    [Theory]
+    [MemberData(nameof(CornerRadiusTestData))]
+    public void Convert_NumberToCornerRadius_ReturnsUniformCornerRadius(CornerRadius expectedValue, object? value)
+    {
+        object? result = GetConverter().Convert(value, typeof(CornerRadius), TestScale, CultureInfo.InvariantCulture);
 
         Assert.Equal(expectedValue, result);
     }
