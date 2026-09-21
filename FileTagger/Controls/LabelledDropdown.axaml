@@ -12,7 +12,10 @@
                 <Setter Property="Padding" Value="4 0" />
             </Style>
             <!--Setting Border and Foreground colours depending on the state of the control-->
-            <Style Selector="^ PathIcon, ^ Label:disabled">
+            <Style Selector="^ Label:disabled">
+                <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}" />
+            </Style>
+            <Style Selector="^ PathIcon">
                 <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
             </Style>
             <Style Selector="^ Label, ^ TextBox">
