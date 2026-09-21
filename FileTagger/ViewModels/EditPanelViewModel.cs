@@ -11,6 +11,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FileTagger.Assets.Statics;
 using FileTagger.Extensions;
 using FileTagger.Services;
 
@@ -18,11 +19,6 @@ namespace FileTagger.ViewModels;
 
 public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowViewModel.SelectedItemsMessage>
 {
-    /// <summary>
-    /// Value for edit fields that we don't want to change
-    /// </summary>
-    public const string UnchangedField = "< keep >";
-
     /// <summary>
     /// All the tracks that are currently selected
     /// </summary>
@@ -164,14 +160,14 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             {
                 bool allTracksMatch = newFieldOptions[propertyInfo.Name]
                     .All(property => Equals(property, propertyInfo.GetValue(SelectedTracks[0])));
-                newFieldTexts[propertyInfo.Name] = allTracksMatch ? propertyInfo.GetValue(SelectedTracks[0])?.ToString() ?? "" : UnchangedField;
+                newFieldTexts[propertyInfo.Name] = allTracksMatch ? propertyInfo.GetValue(SelectedTracks[0])?.ToString() ?? "" : Consts.UnchangedField;
             }
         }
 
         //Add UnchangedField as an option for each field, and remove blank options
         foreach (PropertyInfo propertyInfo in _trackProperties)
         {
-            newFieldOptions[propertyInfo.Name].Insert(0, UnchangedField);
+            newFieldOptions[propertyInfo.Name].Insert(0, Consts.UnchangedField);
             newFieldOptions[propertyInfo.Name].Remove("");
             newFieldOptions[propertyInfo.Name].Remove(null);
         }
@@ -188,7 +184,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         {
             foreach (PropertyInfo propertyInfo in _trackProperties)
             {
-                if (FieldTexts[propertyInfo.Name] == UnchangedField) continue;
+                if (FieldTexts[propertyInfo.Name] == Consts.UnchangedField) continue;
 
                 if (propertyInfo.PropertyType == typeof(string))
                 {

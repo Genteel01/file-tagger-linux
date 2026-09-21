@@ -16,3 +16,11 @@ public static class MyThemes
         _ => ThemeVariant.Default
     };
 }
+
+public static class Consts
+{
+    /// <summary>
+    /// Value for edit fields that we don't want to change
+    /// </summary>
+    public const string UnchangedField = "< keep >";
+}

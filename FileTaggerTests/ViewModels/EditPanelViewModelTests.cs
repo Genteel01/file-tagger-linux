@@ -1,3 +1,4 @@
+using FileTagger.Assets.Statics;
 using FileTagger.Services;
 using FileTagger.ViewModels;
 using FileTaggerTests.Fakers;
@@ -63,7 +64,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal(artistNameString, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, artistNameString },
+            new object?[] { Consts.UnchangedField, artistNameString },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -80,7 +81,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal(artistNameString, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField },
+            new object?[] { Consts.UnchangedField },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -97,7 +98,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal(trackNumber.ToString(), viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, trackNumber },
+            new object?[] { Consts.UnchangedField, trackNumber },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -113,7 +114,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal("", viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField },
+            new object?[] { Consts.UnchangedField },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -131,7 +132,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal(artistNameString, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, artistNameString },
+            new object?[] { Consts.UnchangedField, artistNameString },
             viewModel.FieldOptions[fieldName]);
 
     }
@@ -150,7 +151,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal(trackNumber.ToString(), viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, trackNumber },
+            new object?[] { Consts.UnchangedField, trackNumber },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -168,9 +169,9 @@ public class EditPanelViewModelTests
 
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([firstTrack, secondTrack]));
 
-        Assert.Equal(EditPanelViewModel.UnchangedField, viewModel.FieldTexts[fieldName]);
+        Assert.Equal(Consts.UnchangedField, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, firstArtistName, secondArtistName },
+            new object?[] { Consts.UnchangedField, firstArtistName, secondArtistName },
             viewModel.FieldOptions[fieldName]);
 
     }
@@ -189,9 +190,9 @@ public class EditPanelViewModelTests
 
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([firstTrack, secondTrack]));
 
-        Assert.Equal(EditPanelViewModel.UnchangedField, viewModel.FieldTexts[fieldName]);
+        Assert.Equal(Consts.UnchangedField, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, firstTrackNumber, secondTrackNumber },
+            new object?[] { Consts.UnchangedField, firstTrackNumber, secondTrackNumber },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -209,9 +210,9 @@ public class EditPanelViewModelTests
 
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([firstTrack, secondTrack]));
 
-        Assert.Equal(EditPanelViewModel.UnchangedField, viewModel.FieldTexts[fieldName]);
+        Assert.Equal(Consts.UnchangedField, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, secondArtistName },
+            new object?[] { Consts.UnchangedField, secondArtistName },
             viewModel.FieldOptions[fieldName]);
 
     }
@@ -230,9 +231,9 @@ public class EditPanelViewModelTests
 
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([firstTrack, secondTrack]));
 
-        Assert.Equal(EditPanelViewModel.UnchangedField, viewModel.FieldTexts[fieldName]);
+        Assert.Equal(Consts.UnchangedField, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField, secondTrackNumber },
+            new object?[] { Consts.UnchangedField, secondTrackNumber },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -251,7 +252,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal(artistName, viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField },
+            new object?[] { Consts.UnchangedField },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -271,7 +272,7 @@ public class EditPanelViewModelTests
 
         Assert.Equal("", viewModel.FieldTexts[fieldName]);
         Assert.Equal(
-            new object?[] { EditPanelViewModel.UnchangedField },
+            new object?[] { Consts.UnchangedField },
             viewModel.FieldOptions[fieldName]);
     }
 
@@ -300,7 +301,7 @@ public class EditPanelViewModelTests
         const string fieldValue = "Original";
         track.Artist = fieldValue;
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
-        viewModel.FieldTexts[fieldName] = EditPanelViewModel.UnchangedField;
+        viewModel.FieldTexts[fieldName] = Consts.UnchangedField;
 
         viewModel.StoreFieldChanges();
 
@@ -347,7 +348,7 @@ public class EditPanelViewModelTests
         const int fieldValue = 1;
         track.TrackNumber = fieldValue;
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
-        viewModel.FieldTexts[fieldName] = EditPanelViewModel.UnchangedField;
+        viewModel.FieldTexts[fieldName] = Consts.UnchangedField;
 
         viewModel.StoreFieldChanges();
 

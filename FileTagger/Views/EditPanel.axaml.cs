@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
+using FileTagger.Assets.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
@@ -11,7 +12,7 @@ public partial class EditPanel : UserControl
 {
     private readonly AutoCompleteFilterPredicate<string?> _searchFunction = (search, item) =>
     {
-        if (search == EditPanelViewModel.UnchangedField || item == EditPanelViewModel.UnchangedField || string.IsNullOrWhiteSpace(search))
+        if (search == Consts.UnchangedField || item == Consts.UnchangedField || string.IsNullOrWhiteSpace(search))
         {
             return true;
         }

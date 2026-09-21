@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
              xmlns:converters="clr-namespace:FileTagger.Converters"
+             xmlns:statics="clr-namespace:FileTagger.Assets.Statics"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:EditPanelViewModel"
@@ -23,7 +24,7 @@
             <Setter Property="Margin" Value="8 4" />
         </Style>
         <Style Selector="controls|LabelledDropdown">
-            <Setter Property="OpenOnFocusText" Value="{x:Static viewModels:EditPanelViewModel.UnchangedField}"/>
+            <Setter Property="OpenOnFocusText" Value="{x:Static statics:Consts.UnchangedField}"/>
         </Style>
         <Style Selector="Border#FallbackImage:disabled">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
