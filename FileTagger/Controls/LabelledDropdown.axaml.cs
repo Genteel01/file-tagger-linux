@@ -8,6 +8,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using FileTagger.Assets.Statics;
 
 namespace FileTagger.Controls;
 
@@ -119,6 +120,7 @@ public class LabelledDropdown : TemplatedControl
         _textBox?.TemplateApplied += OnTextBoxApplyTemplate;
         _textBox?.LosingFocus += TextBoxLosingFocus;
         _textBox?.TextChanged += SearchFieldChanged;
+        _textBox?.Tag = NumberValidationFlags.AllowTrailingWhitespace | NumberValidationFlags.AllowUnchangedField;
         _popup?.OverlayInputPassThroughElement = _topLevel;
     }
 

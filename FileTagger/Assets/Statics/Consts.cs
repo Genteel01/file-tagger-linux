@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Styling;
 
 namespace FileTagger.Assets.Statics;
@@ -23,4 +24,13 @@ public static class Consts
     /// Value for edit fields that we don't want to change
     /// </summary>
     public const string UnchangedField = "< keep >";
+}
+
+[Flags]
+public enum NumberValidationFlags
+{
+    AllowLeadingWhitespace = 1,
+    AllowMidWhitespace = 2,
+    AllowTrailingWhitespace = 4,
+    AllowUnchangedField = 16
 }
