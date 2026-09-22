@@ -379,14 +379,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// List of tracks we are cutting images from
     /// </summary>
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
-    private List<TrackViewModel> _tracksToCutFrom = [];
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    private partial List<TrackViewModel> TracksToCutFrom { get; set; } = [];
 
     /// <summary>
     /// The currently copied image, if there is one
     /// </summary>
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(HasImageClipboardData))]
-    private PictureInfo? _copiedPic = null;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasImageClipboardData))]
+    private partial PictureInfo? CopiedPic { get; set; } = null;
 
     [RelayCommand(CanExecute = nameof(HasDisplayedPicture))]
     private void CutCoverImage()
