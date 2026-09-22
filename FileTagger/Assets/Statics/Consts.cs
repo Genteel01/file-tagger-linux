@@ -25,12 +25,3 @@ public static class Consts
     /// </summary>
     public const string UnchangedField = "< keep >";
 }
-
-[Flags]
-public enum NumberValidationFlags
-{
-    AllowLeadingWhitespace = 1,
-    AllowMidWhitespace = 2,
-    AllowTrailingWhitespace = 4,
-    AllowUnchangedField = 16
-}

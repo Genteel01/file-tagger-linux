@@ -5,6 +5,15 @@ using FileTagger.Assets.Statics;
 
 namespace FileTagger.SharedEventHandlers;
 
+[Flags]
+public enum NumberValidationFlags
+{
+    AllowLeadingWhitespace = 1,
+    AllowMidWhitespace = 2,
+    AllowTrailingWhitespace = 4,
+    AllowUnchangedField = 16
+}
+
 public static class TextValidation
 {
     public static readonly EventHandler<TextChangedEventArgs> OnlyAllowNumberInput = (sender, _) =>
