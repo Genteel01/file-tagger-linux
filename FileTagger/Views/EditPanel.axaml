@@ -155,7 +155,7 @@
                         <MenuItem Header="Set picture _type">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Set picture _description" IsEnabled="{Binding !HasNoImages}" Command="{Binding OpenPictureDescriptionDialogCommand}">
+                        <MenuItem Header="Set picture _description" IsEnabled="{Binding !SelectedTracksHaveNoPictures}" Command="{Binding OpenPictureDescriptionDialogCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
@@ -180,7 +180,7 @@
                             Width="{Binding #ImagePanel.Bounds.Width}" Height="{Binding #FallbackImage.Bounds.Width}"/>
                     <PathIcon Width="{Binding #ImagePanel.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                               Height="{Binding #ImagePanel.Bounds.Height, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
-                              Foreground="{DynamicResource EditPanelBackgroundBrush}" Classes.One="{Binding HasNoImages}">
+                              Foreground="{DynamicResource EditPanelBackgroundBrush}" Classes.One="{Binding SelectedTracksHaveNoPictures}">
                         <PathIcon.Styles>
                             <Style Selector="PathIcon.One">
                                 <Setter Property="Data" Value="{StaticResource ImageIcon}"/>
@@ -203,7 +203,7 @@
                         <MultiBinding Converter="{StaticResource AreEqualConverter}">
                             <Binding Path="!HasDisplayedPicture" />
                             <Binding Path="HasSelectedTracks" />
-                            <Binding Path="!HasNoImages" />
+                            <Binding Path="!SelectedTracksHaveNoPictures" />
                         </MultiBinding>
                     </TextBlock.IsVisible>
                 </TextBlock>
