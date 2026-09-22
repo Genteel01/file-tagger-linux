@@ -1,6 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
+using Commons;
 using FileTagger.Services;
 
 namespace FileTaggerTests.Fakers;
@@ -22,6 +24,11 @@ public class FakeFileService : IFileService
     public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
     {
         return [];
+    }
+
+    public async Task<string?> SaveImageFile(Bitmap bitmap, ImageFormat format, string suggestedName, string? bookmarkId)
+    {
+        return null;
     }
 
     public async Task<T?> LoadObjectData<T>() where T : class?

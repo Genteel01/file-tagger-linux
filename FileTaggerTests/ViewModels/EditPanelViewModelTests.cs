@@ -7,11 +7,12 @@ namespace FileTaggerTests.ViewModels;
 
 public class EditPanelViewModelTests
 {
-    private static EditPanelViewModel CreateMockViewModel()
+    public static EditPanelViewModel CreateMockViewModel()
     {
         IFileService fileService = new FakeFileService();
         IImageService imageService = new FakeImageService();
-        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService, () => null);
+        IPreferenceService preferenceService = new PreferenceService(fileService);
+        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService, preferenceService, () => null);
         return editPanelViewModel;
     }
 
