@@ -414,7 +414,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(HasImageClipboardData))]
     private PictureInfo? _copiedPic = null;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasDisplayedPicture))]
     private void CutCoverImage()
     {
         CopyCoverImage();
@@ -435,7 +435,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         TracksToCutFrom = [];
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasDisplayedPicture))]
     private void CopyCoverImage()
     {
         CopiedPic = null;
@@ -443,7 +443,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         TracksToCutFrom = [];
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasImageClipboardData))]
     private void PasteCoverImageAsReplacement()
     {
         if(CopiedPic == null) return;
@@ -461,7 +461,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         ChooseDisplayedImage();
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasImageClipboardData))]
     private void PasteCoverImageAsNew()
     {
         if(CopiedPic == null) return;
@@ -483,7 +483,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         PictureInfo? oldDisplayedPicture = DisplayedPicture;
         DisplayedPictureIndex = 0;
         SelectedTrackPictures = [];
-        SelectedTracksHaveNoPictures = true;
+        SelectedTrackHasPictures = false;
         if (!HasSelectedTracks) return;
 
         SelectedTrackPictures = GetSelectedTrackPictures();
@@ -500,7 +500,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private List<PictureInfo> GetSelectedTrackPictures()
     {
         List<PictureInfo> referencePics = SelectedTracks[0].EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
-        if(referencePics.Count != 0) SelectedTracksHaveNoPictures = false;
+        if(referencePics.Count != 0) SelectedTrackHasPictures = true;
         //If there's only one track selected, display its images
         if (SelectedTracks.Count == 1) return referencePics;
         //If there is more than one track selected, display its images if they are the same across the entire selection
@@ -511,7 +511,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             List<PictureInfo> relevantPics = track.EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
             if (relevantPics.Count != 0)
             {
-                SelectedTracksHaveNoPictures = false;
+                SelectedTrackHasPictures = true;
             }
             if (relevantPics.Count != referencePics.Count) return [];
             picsPerTrack.Add(relevantPics);
@@ -542,7 +542,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// Opens the dialog to edit picture description, and saves the result if it wasn't cancelled
     /// </summary>
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(SelectedTrackHasPictures))]
     private async Task OpenPictureDescriptionDialog()
     {
         if (_getDialogTarget?.Invoke() is not Window target) return;
@@ -627,10 +627,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Whether all SelectedTracks have no EmbeddedPictures
+    /// Whether any SelectedTrack has pictures of the selected type
     /// </summary>
     [ObservableProperty]
-    private bool _selectedTracksHaveNoPictures = true;
+    public partial bool SelectedTrackHasPictures { get; private set; } = false;
 
     /// <summary>
     /// All EmbeddedPictures for the <see cref="SelectedTracks"/> for the <see cref="SelectedPictureType"/>
