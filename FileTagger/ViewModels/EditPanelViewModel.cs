@@ -224,7 +224,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
         if(images.Count == 0) return;
 
-        if (IsShowingTrackImages)
+        if (DisplayedPicture != null)
         {
             ReplaceDisplayedImage(SelectedTracks, images);
         }
@@ -280,7 +280,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         AddImagesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
-        DisplayedImageIndex = SelectedTrackImages.Count - 1;
+        DisplayedPictureIndex = SelectedTrackImages.Count - 1;
     }
 
     /// <summary>
@@ -331,7 +331,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void RemoveCoverImage()
     {
-        if (IsShowingTrackImages)
+        if (DisplayedPicture != null)
         {
             RemoveCurrentlyDisplayedImages(SelectedTracks);
         }
@@ -362,8 +362,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private int RemoveCurrentlyDisplayedImage(TrackViewModel track)
     {
-        if (!IsShowingTrackImages) return -1;
-        PictureInfo displayedImage = SelectedImage!;
+        if (DisplayedPicture == null) return -1;
+        PictureInfo displayedImage = DisplayedPicture;
         int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(displayedImage));
         if (index != -1)
         {
@@ -385,10 +385,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         get
         {
-            if (!HasSelectedTracks || !IsShowingTrackImages) return false;
+            if (!HasSelectedTracks || DisplayedPicture == null) return false;
             if(CopiedPic == null) return false;
             if(TracksToCutFrom.Count < SelectedTracks.Count) return false;
-            if (!CopiedPic.TrueEqual(SelectedImage!)) return false;
+            if (!CopiedPic.TrueEqual(DisplayedPicture)) return false;
             return SelectedTracks.All(track => TracksToCutFrom.Any(cutTrack => cutTrack == track));
         }
     }
@@ -430,7 +430,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private void CopyCoverImage()
     {
         CopiedPic = null;
-        CopiedPic = SelectedImage;
+        CopiedPic = DisplayedPicture;
         TracksToCutFrom = [];
     }
 
@@ -441,7 +441,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         FinishCutting();
         CopiedPic.PicType = SelectedPictureType;
         List<PictureInfo> images = [CopiedPic];
-        if (IsShowingTrackImages)
+        if (DisplayedPicture != null)
         {
             ReplaceDisplayedImage(SelectedTracks, images);
         }
@@ -462,7 +462,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         AddImagesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
-        DisplayedImageIndex = SelectedTrackImages.Count - 1;
+        DisplayedPictureIndex = SelectedTrackImages.Count - 1;
     }
 
     /// <summary>
@@ -470,17 +470,17 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private void ChooseDisplayedImage()
     {
-        int oldDisplayedIndex = DisplayedImageIndex;
-        PictureInfo? oldDisplayedImage = SelectedImage;
-        DisplayedImageIndex = 0;
+        int oldDisplayedIndex = DisplayedPictureIndex;
+        PictureInfo? oldDisplayedPicture = DisplayedPicture;
+        DisplayedPictureIndex = 0;
         SelectedTrackImages = [];
         HasNoImages = true;
         if (!HasSelectedTracks) return;
 
         SelectedTrackImages = GetSelectedTrackImages();
-        if (oldDisplayedImage != null && SelectedTrackImages.Count > oldDisplayedIndex)
+        if (oldDisplayedPicture != null && SelectedTrackImages.Count > oldDisplayedIndex)
         {
-            if (SelectedTrackImages[oldDisplayedIndex].TrueEqual(oldDisplayedImage)) DisplayedImageIndex = oldDisplayedIndex;
+            if (SelectedTrackImages[oldDisplayedIndex].TrueEqual(oldDisplayedPicture)) DisplayedPictureIndex = oldDisplayedIndex;
         }
     }
 
@@ -540,7 +540,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
         PicDescriptionDialog dialog = new PicDescriptionDialog();
         string initialText = "";
-        if (IsShowingTrackImages) initialText = SelectedImage!.Description;
+        if (DisplayedPicture != null) initialText = DisplayedPicture.Description;
         PictureDescriptionViewModel vm = new PictureDescriptionViewModel(dialog, initialText);
         dialog.DataContext = vm;
 
@@ -549,9 +549,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
         foreach (TrackViewModel track in SelectedTracks)
         {
-            if (IsShowingTrackImages)
+            if (DisplayedPicture != null)
             {
-                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(SelectedImage!));
+                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(DisplayedPicture));
                 track.ChangePictureDescription(result, index);
             }
             else
@@ -579,7 +579,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void NextImage()
     {
-        DisplayedImageIndex  = (DisplayedImageIndex + 1) % SelectedTrackImages.Count;
+        DisplayedPictureIndex  = (DisplayedPictureIndex + 1) % SelectedTrackImages.Count;
     }
 
     /// <summary>
@@ -588,9 +588,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void PreviousImage()
     {
-        int newIndex = DisplayedImageIndex - 1;
+        int newIndex = DisplayedPictureIndex - 1;
         if (newIndex < 0) newIndex = SelectedTrackImages.Count - 1;
-        DisplayedImageIndex = newIndex;
+        DisplayedPictureIndex = newIndex;
     }
 
     /// <summary>
@@ -622,8 +622,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Will be empty if selected tracks have different images
     /// </summary>
     [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))]
-    [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
-    [NotifyPropertyChangedFor(nameof(IsShowingTrackImages))]
+    [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
+    [NotifyPropertyChangedFor(nameof(HasDisplayedPicture))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
     [ObservableProperty]
@@ -633,26 +633,25 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// The index representing which entry in <see cref="SelectedTrackImages"/> to display
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CurrentDisplayedImage))]
+    [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
-    private int _displayedImageIndex = 0;
+    private int _displayedPictureIndex = 0;
 
     /// <summary>
     /// String to indicate how many pictures there are, and which one is being viewed
     /// </summary>
-    public string PicCountString => $"{DisplayedImageIndex + 1}/{SelectedTrackImages.Count}";
+    public string PicCountString => $"{DisplayedPictureIndex + 1}/{SelectedTrackImages.Count}";
 
     /// <summary>
     /// The PictureInfo of the image that is currently being displayed
     /// </summary>
-    private PictureInfo? SelectedImage => IsShowingTrackImages ? SelectedTrackImages[DisplayedImageIndex] : null;
+    private PictureInfo? DisplayedPicture => DisplayedPictureIndex < SelectedTrackImages.Count ? SelectedTrackImages[DisplayedPictureIndex] : null;
 
     /// <summary>
-    /// Bitmap of <see cref="SelectedImage"/>, showing <see cref="_imageService"/>.GetDefaultImage() if SelectedTrackImages is empty.
-    /// Updates when SelectedTrackImages or DisplayedImageIndex change
+    /// Bitmap of <see cref="DisplayedPicture"/>. Updates when SelectedTrackImages or DisplayedPictureIndex change
     /// </summary>
-    public Bitmap? CurrentDisplayedImage => IsShowingTrackImages ? GetAndCacheBitmap(SelectedImage!) : null;
+    public Bitmap? DisplayedPictureBitmap => DisplayedPicture != null ? GetAndCacheBitmap(DisplayedPicture) : null;
 
     /// <summary>
     /// Whether to show the navigation buttons for moving between images. Updates when <see cref="SelectedTrackImages"/> changes
@@ -660,9 +659,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     public bool ShowImageNavigationButtons => SelectedTrackImages.Count > 1;
 
     /// <summary>
-    /// Whether we are showing the images of the selected tracks, or the default image
+    /// Whether we are showing the pictures of the selected tracks, or the default image
     /// </summary>
-    public bool IsShowingTrackImages => SelectedTrackImages.Count > 0;
+    public bool HasDisplayedPicture => DisplayedPicture != null;
 
     /// <summary>
     /// Whether all SelectedTracks have no EmbeddedPictures

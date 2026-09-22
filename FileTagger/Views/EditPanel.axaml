@@ -148,7 +148,7 @@
                         <MenuItem Header="Replace p_ictures" Command="{Binding ReplaceCoverImageCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="_Extract picture" IsEnabled="{Binding IsShowingTrackImages}">
+                        <MenuItem Header="_Extract picture" IsEnabled="{Binding HasDisplayedPicture}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
@@ -159,10 +159,10 @@
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
-                        <MenuItem Header="C_ut picture" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CutCoverImageCommand}">
+                        <MenuItem Header="C_ut picture" IsEnabled="{Binding HasDisplayedPicture}" Command="{Binding CutCoverImageCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="_Copy picture" IsEnabled="{Binding IsShowingTrackImages}" Command="{Binding CopyCoverImageCommand}">
+                        <MenuItem Header="_Copy picture" IsEnabled="{Binding HasDisplayedPicture}" Command="{Binding CopyCoverImageCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="_Paste picture as replacement" IsEnabled="{Binding HasImageClipboardData}" Command="{Binding PasteCoverImageAsReplacementCommand}">
@@ -173,8 +173,8 @@
                         </MenuItem>
                     </ContextMenu>
                 </Panel.ContextMenu>
-                <Image IsVisible="{Binding IsShowingTrackImages}" Classes.Cut="{Binding DisplayedImageIsBeingCut}" Source="{Binding CurrentDisplayedImage}" />
-                <Panel IsVisible="{Binding !IsShowingTrackImages}">
+                <Image IsVisible="{Binding HasDisplayedPicture}" Classes.Cut="{Binding DisplayedImageIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"/>
+                <Panel IsVisible="{Binding !HasDisplayedPicture}">
                     <Border Name="FallbackImage" Background="{DynamicResource ThemeBackgroundBrush}"
                             CornerRadius="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.05}"
                             Width="{Binding #ImagePanel.Bounds.Width}" Height="{Binding #FallbackImage.Bounds.Width}"/>
@@ -201,7 +201,7 @@
                 <TextBlock Text="Various Pictures">
                     <TextBlock.IsVisible>
                         <MultiBinding Converter="{StaticResource AreEqualConverter}">
-                            <Binding Path="!IsShowingTrackImages" />
+                            <Binding Path="!HasDisplayedPicture" />
                             <Binding Path="HasSelectedTracks" />
                             <Binding Path="!HasNoImages" />
                         </MultiBinding>
