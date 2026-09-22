@@ -485,40 +485,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Opens the dialog to edit picture description, and saves the result if it wasn't cancelled
-    /// </summary>
-    [RelayCommand(CanExecute = nameof(SelectedTrackHasPictures))]
-    private async Task OpenPictureDescriptionDialog()
-    {
-        if (_getDialogTarget?.Invoke() is not Window target) return;
-
-        PicDescriptionDialog dialog = new PicDescriptionDialog();
-        string initialText = "";
-        if (DisplayedPicture != null) initialText = DisplayedPicture.Description;
-        PictureDescriptionViewModel vm = new PictureDescriptionViewModel(dialog, initialText);
-        dialog.DataContext = vm;
-
-        string? result = await dialog.ShowDialog<string?>(target);
-        if (result == null) return;
-
-        foreach (TrackViewModel track in SelectedTracks)
-        {
-            if (DisplayedPicture != null)
-            {
-                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(DisplayedPicture));
-                track.ChangePictureDescription(result, index);
-            }
-            else
-            {
-                for (int i = 0; i < track.EmbeddedPictures.Count; i++)
-                {
-                    track.ChangePictureDescription(result, i);
-                }
-            }
-        }
-    }
-
-    /// <summary>
     /// Choose the correct image to display when <see cref="SelectedPictureType"/> changes
     /// </summary>
     // ReSharper disable once UnusedParameterInPartialMethod
@@ -662,6 +628,40 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
         SelectedPictureType = newType;
         ChooseDisplayedImage();
+    }
+
+    /// <summary>
+    /// Opens the dialog to edit picture description, and saves the result if it wasn't cancelled
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(SelectedTrackHasPictures))]
+    private async Task OpenPictureDescriptionDialog()
+    {
+        if (_getDialogTarget?.Invoke() is not Window target) return;
+
+        PicDescriptionDialog dialog = new PicDescriptionDialog();
+        string initialText = "";
+        if (DisplayedPicture != null) initialText = DisplayedPicture.Description;
+        PictureDescriptionViewModel vm = new PictureDescriptionViewModel(dialog, initialText);
+        dialog.DataContext = vm;
+
+        string? result = await dialog.ShowDialog<string?>(target);
+        if (result == null) return;
+
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if (DisplayedPicture != null)
+            {
+                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(DisplayedPicture));
+                track.ChangePictureDescription(result, index);
+            }
+            else
+            {
+                for (int i = 0; i < track.EmbeddedPictures.Count; i++)
+                {
+                    track.ChangePictureDescription(result, i);
+                }
+            }
+        }
     }
 
     [RelayCommand(CanExecute = nameof(HasDisplayedPicture))]
