@@ -193,11 +193,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
                 if (propertyInfo.PropertyType == typeof(string))
                 {
-                    propertyInfo.SetValue(track, FieldTexts[propertyInfo.Name].TrimEnd());
+                    propertyInfo.SetValue(track, FieldTexts[propertyInfo.Name]);
                 }
                 else if (propertyInfo.PropertyType == typeof(int?))
                 {
-                    bool parsed = int.TryParse(FieldTexts[propertyInfo.Name].Trim(), out int parsedInt);
+                    bool parsed = int.TryParse(FieldTexts[propertyInfo.Name], out int parsedInt);
                     if (parsed) propertyInfo.SetValue(track, parsedInt);
                     else propertyInfo.SetValue(track, null);
                 }
