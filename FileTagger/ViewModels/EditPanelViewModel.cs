@@ -226,23 +226,23 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
 
         if (DisplayedPicture != null)
         {
-            ReplaceDisplayedImage(SelectedTracks, images);
+            ReplaceDisplayedPicture(SelectedTracks, images);
         }
         else
         {
-            ReplaceAllImages(SelectedTracks, images);
+            ReplaceAllPictures(SelectedTracks, images);
         }
         ChooseDisplayedImage();
     }
 
     /// <summary>
-    /// Replaces the currently displayed image on the given tracks, then adds the new images
+    /// Replaces the currently displayed picture on the given tracks, then adds the new pictures
     /// </summary>
-    private void ReplaceDisplayedImage(List<TrackViewModel> tracks, List<PictureInfo> newImages)
+    private void ReplaceDisplayedPicture(List<TrackViewModel> tracks, List<PictureInfo> newImages)
     {
         foreach (TrackViewModel track in tracks)
         {
-            int index = RemoveCurrentlyDisplayedImage(track);
+            int index = RemoveCurrentlyDisplayedPicture(track);
             if (index == -1)
             {
                 track.EmbeddedPictures.AddRange(newImages);
@@ -256,9 +256,9 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Replaces the images on the given tracks with the new images
+    /// Replaces the pictures on the given tracks with the new pictures
     /// </summary>
-    private void ReplaceAllImages(List<TrackViewModel> tracks, List<PictureInfo> newImages)
+    private void ReplaceAllPictures(List<TrackViewModel> tracks, List<PictureInfo> newImages)
     {
         foreach (TrackViewModel track in tracks)
         {
@@ -277,16 +277,16 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
 
         if(images.Count == 0) return;
-        AddImagesToTracks(SelectedTracks, images);
+        AddPicturesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
         DisplayedPictureIndex = SelectedTrackImages.Count - 1;
     }
 
     /// <summary>
-    /// Adds the given images to the given tracks
+    /// Adds the given pictures to the given tracks
     /// </summary>
-    private void AddImagesToTracks(List<TrackViewModel> tracks, List<PictureInfo> images)
+    private void AddPicturesToTracks(List<TrackViewModel> tracks, List<PictureInfo> images)
     {
         foreach (TrackViewModel track in tracks)
         {
@@ -333,7 +333,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         if (DisplayedPicture != null)
         {
-            RemoveCurrentlyDisplayedImages(SelectedTracks);
+            RemoveCurrentlyDisplayedPictures(SelectedTracks);
         }
         else
         {
@@ -346,13 +346,13 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Removes the currently displayed image from the given tracks
+    /// Removes the currently displayed pictures from the given tracks
     /// </summary>
-    private void RemoveCurrentlyDisplayedImages(List<TrackViewModel> tracks)
+    private void RemoveCurrentlyDisplayedPictures(List<TrackViewModel> tracks)
     {
         foreach (TrackViewModel track in tracks)
         {
-            RemoveCurrentlyDisplayedImage(track);
+            RemoveCurrentlyDisplayedPicture(track);
         }
     }
 
@@ -360,7 +360,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// Removes the currently displayed image from the given track.
     /// Returns the index of the removed image in the given track's EmbeddedPictures
     /// </summary>
-    private int RemoveCurrentlyDisplayedImage(TrackViewModel track)
+    private int RemoveCurrentlyDisplayedPicture(TrackViewModel track)
     {
         if (DisplayedPicture == null) return -1;
         PictureInfo displayedImage = DisplayedPicture;
@@ -443,11 +443,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         List<PictureInfo> images = [CopiedPic];
         if (DisplayedPicture != null)
         {
-            ReplaceDisplayedImage(SelectedTracks, images);
+            ReplaceDisplayedPicture(SelectedTracks, images);
         }
         else
         {
-            ReplaceAllImages(SelectedTracks, images);
+            ReplaceAllPictures(SelectedTracks, images);
         }
         ChooseDisplayedImage();
     }
@@ -459,7 +459,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         FinishCutting();
         CopiedPic.PicType = SelectedPictureType;
         List<PictureInfo> images = [CopiedPic];
-        AddImagesToTracks(SelectedTracks, images);
+        AddPicturesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
         DisplayedPictureIndex = SelectedTrackImages.Count - 1;
