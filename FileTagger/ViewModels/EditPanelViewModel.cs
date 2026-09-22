@@ -533,7 +533,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void NextImage()
     {
-        DisplayedPictureIndex  = (DisplayedPictureIndex + 1) % SelectedTrackPictures.Count;
+        DisplayedPictureIndex = Maths.ChangeCollectionIndex(DisplayedPictureIndex, SelectedTrackPictures.Count, 1);
     }
 
     /// <summary>
@@ -542,9 +542,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void PreviousImage()
     {
-        int newIndex = DisplayedPictureIndex - 1;
-        if (newIndex < 0) newIndex = SelectedTrackPictures.Count - 1;
-        DisplayedPictureIndex = newIndex;
+        DisplayedPictureIndex = Maths.ChangeCollectionIndex(DisplayedPictureIndex, SelectedTrackPictures.Count, -1);
     }
 
     /// <summary>
@@ -553,9 +551,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void NextPicType()
     {
-        int currentIndex = PictureTypes.IndexOf(SelectedPictureType);
-        if (currentIndex == -1) return;
-        SelectedPictureType = PictureTypes[(currentIndex + 1) % PictureTypes.Length];
+        ChangeSelectedPictureType(1);
     }
 
     /// <summary>
@@ -564,11 +560,14 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void PreviousPicType()
     {
+        ChangeSelectedPictureType(-1);
+    }
+
+    private void ChangeSelectedPictureType(int change)
+    {
         int currentIndex = PictureTypes.IndexOf(SelectedPictureType);
         if (currentIndex == -1) return;
-        int newIndex = currentIndex - 1;
-        if (newIndex < 0) newIndex = PictureTypes.Length - 1;
-        SelectedPictureType = PictureTypes[newIndex];
+        SelectedPictureType = PictureTypes[DisplayedPictureIndex = Maths.ChangeCollectionIndex(currentIndex, PictureTypes.Length, change)];
     }
 
     /// <summary>

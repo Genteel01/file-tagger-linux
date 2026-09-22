@@ -34,3 +34,14 @@ public static class Consts
     /// </summary>
     public const string UnchangedField = "< keep >";
 }
+
+public static class Maths
+{
+    public static int ChangeCollectionIndex(int currentIndex, int collectionCount, int change)
+    {
+        int newIndex = currentIndex + change;
+        if (newIndex >= collectionCount) return newIndex % collectionCount;
+        if (newIndex < 0) return newIndex + collectionCount;
+        return newIndex;
+    }
+}
