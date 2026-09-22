@@ -39,10 +39,8 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         if (target == null) return ([], true, null);
         //Load initial location from bookmark
         IStorageBookmarkFolder? bookmarkFolder = null;
-        if (bookmarkId != null)
-        {
-            bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
-        }
+        if (bookmarkId != null) bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+
         //Get music folder if there is no bookmark
         IStorageFolder? initialLocation = bookmarkFolder ?? await target.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Music);
 
