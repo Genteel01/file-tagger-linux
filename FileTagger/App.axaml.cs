@@ -36,7 +36,6 @@ public class App : Application
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
             serviceCollection.AddSingleton<Func<TopLevel?>>(_ => () => TopLevel.GetTopLevel(desktop.MainWindow));
-            serviceCollection.AddSingleton<Func<Window?>>(_ => () => desktop.MainWindow);
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();
 

@@ -54,14 +54,17 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private readonly IImageService _imageService;
 
-    private readonly Func<Window?>? _getDialogTarget = null;
+    /// <summary>
+    /// Function to get the target to use to display a dialog
+    /// </summary>
+    private readonly Func<TopLevel?>? _getDialogTarget = null;
 
     /// <summary>
     /// Array of properties of TrackViewModel that we want to be editable
     /// </summary>
     private readonly PropertyInfo[] _trackProperties;
 
-    public EditPanelViewModel(IFileService fileService, IImageService imageService, Func<Window?> getDialogTarget)
+    public EditPanelViewModel(IFileService fileService, IImageService imageService, Func<TopLevel?> getDialogTarget)
     {
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
@@ -535,8 +538,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private async Task OpenPictureDescriptionDialog()
     {
-        Window? target = _getDialogTarget?.Invoke();
-        if (target == null) return;
+        if (_getDialogTarget?.Invoke() is not Window target) return;
 
         PicDescriptionDialog dialog = new PicDescriptionDialog();
         string initialText = "";
