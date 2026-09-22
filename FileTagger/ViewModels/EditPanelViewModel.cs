@@ -155,7 +155,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         {
             foreach (PropertyInfo propertyInfo in _trackProperties)
             {
-                if(!newFieldOptions[propertyInfo.Name].Contains(propertyInfo.GetValue(track)))
+                if (!newFieldOptions[propertyInfo.Name].Contains(propertyInfo.GetValue(track)))
                     newFieldOptions[propertyInfo.Name].Add(propertyInfo.GetValue(track));
             }
         }
@@ -231,7 +231,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private async Task ReplaceCoverImage(CancellationToken token)
     {
         List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
-        if(images.Count == 0) return;
+        if (images.Count == 0) return;
 
         if (DisplayedPicture != null)
         {
@@ -285,7 +285,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     {
         List<PictureInfo> images = await SelectImageFiles(SelectedPictureType);
 
-        if(images.Count == 0) return;
+        if (images.Count == 0) return;
         AddPicturesToTracks(SelectedTracks, images);
 
         ChooseDisplayedImage();
@@ -395,8 +395,8 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         get
         {
             if (!HasSelectedTracks || DisplayedPicture == null) return false;
-            if(CopiedPic == null) return false;
-            if(TracksToCutFrom.Count < SelectedTracks.Count) return false;
+            if (CopiedPic == null) return false;
+            if (TracksToCutFrom.Count < SelectedTracks.Count) return false;
             if (!CopiedPic.TrueEqual(DisplayedPicture)) return false;
             return SelectedTracks.All(track => TracksToCutFrom.Any(cutTrack => cutTrack == track));
         }
@@ -446,7 +446,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand(CanExecute = nameof(HasImageClipboardData))]
     private void PasteCoverImageAsReplacement()
     {
-        if(CopiedPic == null) return;
+        if (CopiedPic == null) return;
         FinishCutting();
         CopiedPic.PicType = SelectedPictureType;
         List<PictureInfo> images = [CopiedPic];
@@ -464,7 +464,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand(CanExecute = nameof(HasImageClipboardData))]
     private void PasteCoverImageAsNew()
     {
-        if(CopiedPic == null) return;
+        if (CopiedPic == null) return;
         FinishCutting();
         CopiedPic.PicType = SelectedPictureType;
         List<PictureInfo> images = [CopiedPic];
@@ -500,7 +500,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private List<PictureInfo> GetSelectedTrackPictures()
     {
         List<PictureInfo> referencePics = SelectedTracks[0].EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
-        if(referencePics.Count != 0) SelectedTrackHasPictures = true;
+        if (referencePics.Count != 0) SelectedTrackHasPictures = true;
         //If there's only one track selected, display its images
         if (SelectedTracks.Count == 1) return referencePics;
         //If there is more than one track selected, display its images if they are the same across the entire selection
@@ -520,7 +520,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         for (int i = 0; i < referencePics.Count; i++)
         {
             bool allTracksMatch = picsPerTrack.All(pics => pics[i].PicturesEqual(referencePics[i]));
-            if(!allTracksMatch) return [];
+            if (!allTracksMatch) return [];
         }
         return referencePics;
     }

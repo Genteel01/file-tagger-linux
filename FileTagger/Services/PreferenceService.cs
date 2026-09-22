@@ -19,7 +19,7 @@ public class PreferenceService(IFileService fileService) : IPreferenceService
     public void StorePreferenceItem(PropertyInfo property, object value)
     {
         bool correctType = property.PropertyType == value.GetType();
-        if(correctType)
+        if (correctType)
         {
             if (property.DeclaringType == typeof(UserPreferences))
             {

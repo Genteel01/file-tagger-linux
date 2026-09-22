@@ -26,7 +26,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         TopLevel? target = getTarget();
         if (target == null) return [];
         IStorageBookmarkFolder? initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
-        if(initialLocation == null) return [];
+        if (initialLocation == null) return [];
 
         bool showHiddenFiles = initialLocation.Name.StartsWith('.');
         IReadOnlyList<IStorageFile> files = await GetChildFiles(initialLocation, extensions, showHiddenFiles);
@@ -77,7 +77,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
             await foreach (IStorageItem item in items)
             {
-                if(!showHiddenFiles && item.Name.StartsWith('.')) continue;
+                if (!showHiddenFiles && item.Name.StartsWith('.')) continue;
                 if (item is IStorageFile file)
                 {
                     string fileName = file.Name.ToLower();

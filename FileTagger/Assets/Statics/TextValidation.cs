@@ -36,9 +36,9 @@ public static class TextValidation
 
         string newString = string.Concat(text.Where(c => char.IsDigit(c) || char.IsWhiteSpace(c)));
         bool entirelyWhitespace = string.IsNullOrWhiteSpace(newString);
-        if(!allowTrailingWhitespace && !entirelyWhitespace) newString = newString.TrimEnd();
-        if(!allowLeadingWhitespace && !entirelyWhitespace) newString = newString.TrimStart();
-        if(!allowMidWhitespace && !entirelyWhitespace)
+        if (!allowTrailingWhitespace && !entirelyWhitespace) newString = newString.TrimEnd();
+        if (!allowLeadingWhitespace && !entirelyWhitespace) newString = newString.TrimStart();
+        if (!allowMidWhitespace && !entirelyWhitespace)
         {
             int leadingWhitespaceCount = newString.Length - newString.TrimStart().Length;
             int trailingWhitespaceCount = newString.Length - newString.TrimEnd().Length;

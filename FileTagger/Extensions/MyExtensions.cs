@@ -83,8 +83,8 @@ public static class MyExtensions
         /// </summary>
         public bool PicturesEqual(PictureInfo other)
         {
-            if(pictureInfo.PictureHash == 0) pictureInfo.ComputePicHash();
-            if(other.PictureHash == 0) other.ComputePicHash();
+            if (pictureInfo.PictureHash == 0) pictureInfo.ComputePicHash();
+            if (other.PictureHash == 0) other.ComputePicHash();
             return pictureInfo.PictureHash == other.PictureHash;
         }
 

@@ -70,7 +70,7 @@ public partial class EditPanel : UserControl
         {
             _popup?.Focus();
         }
-        else if(e.NewFocusedElement != PicTypeSelector && e.NewFocusedElement is not ComboBoxItem)
+        else if (e.NewFocusedElement != PicTypeSelector && e.NewFocusedElement is not ComboBoxItem)
         {
             _popup?.Close();
         }

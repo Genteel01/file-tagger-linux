@@ -12,7 +12,7 @@ public class NumberPercentageConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if(value is null) return Activator.CreateInstance(targetType);
+        if (value is null) return Activator.CreateInstance(targetType);
 
         double scaledValue;
 
@@ -42,9 +42,9 @@ public class NumberPercentageConverter : IValueConverter
             }
         }
 
-        if(targetType == typeof(double)) return scaledValue;
-        if(targetType == typeof(Thickness)) return new Thickness(scaledValue);
-        if(targetType == typeof(CornerRadius)) return new CornerRadius(scaledValue);
+        if (targetType == typeof(double)) return scaledValue;
+        if (targetType == typeof(Thickness)) return new Thickness(scaledValue);
+        if (targetType == typeof(CornerRadius)) return new CornerRadius(scaledValue);
         return value;
     }
 

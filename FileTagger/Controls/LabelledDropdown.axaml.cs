@@ -150,11 +150,11 @@ public class LabelledDropdown : TemplatedControl
     /// <param name="e"></param>
     private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
     {
-        if(sender is not AutoCompleteBox box) return;
-        if(e.NewFocusedElement == e.OldFocusedElement) return;
+        if (sender is not AutoCompleteBox box) return;
+        if (e.NewFocusedElement == e.OldFocusedElement) return;
         if (!string.IsNullOrEmpty(OpenOnFocusText))
         {
-            if(Text?.Trim() != OpenOnFocusText) return;
+            if (Text?.Trim() != OpenOnFocusText) return;
         }
         box.IsDropDownOpen = true;
     }

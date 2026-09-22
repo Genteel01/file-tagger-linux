@@ -180,7 +180,7 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentSort = newPreferences.SortOrder.Item1;
         SortDescending = newPreferences.SortOrder.Item2;
         ThemeVariant loadedTheme = newPreferences.RequestedTheme;
-        if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
+        if (loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
