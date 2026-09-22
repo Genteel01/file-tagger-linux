@@ -173,7 +173,9 @@
                         </MenuItem>
                     </ContextMenu>
                 </Panel.ContextMenu>
-                <Image IsVisible="{Binding HasDisplayedPicture}" Classes.Cut="{Binding DisplayedImageIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"/>
+                <Image IsVisible="{Binding HasDisplayedPicture}" Classes.Cut="{Binding DisplayedImageIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"
+                       ToolTip.ServiceEnabled="{Binding DisplayedPicture?.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       ToolTip.Tip="{Binding DisplayedPicture?.Description}"/>
                 <Panel IsVisible="{Binding !HasDisplayedPicture}">
                     <Border Name="FallbackImage" Background="{DynamicResource ThemeBackgroundBrush}"
                             CornerRadius="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.05}"

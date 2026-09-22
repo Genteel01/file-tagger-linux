@@ -629,6 +629,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// if they are the same across all tracks. Will be empty if selected tracks have different pictures
     /// </summary>
     [NotifyPropertyChangedFor(nameof(ShowImageNavigationButtons))]
+    [NotifyPropertyChangedFor(nameof(DisplayedPicture))]
     [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
     [NotifyPropertyChangedFor(nameof(HasDisplayedPicture))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
@@ -640,6 +641,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// The index representing which entry in <see cref="SelectedTrackPictures"/> to display
     /// </summary>
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayedPicture))]
     [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
@@ -658,7 +660,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// The PictureInfo of the image that is currently being displayed
     /// </summary>
-    private PictureInfo? DisplayedPicture => DisplayedPictureIndex < SelectedTrackPictures.Count ? SelectedTrackPictures[DisplayedPictureIndex] : null;
+    public PictureInfo? DisplayedPicture => DisplayedPictureIndex < SelectedTrackPictures.Count ? SelectedTrackPictures[DisplayedPictureIndex] : null;
 
     /// <summary>
     /// Bitmap of <see cref="DisplayedPicture"/>. Updates when SelectedTrackPictures or DisplayedPictureIndex change
