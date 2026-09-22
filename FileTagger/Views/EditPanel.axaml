@@ -155,7 +155,7 @@
                         <MenuItem Header="Set picture _type">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Set picture _description">
+                        <MenuItem Header="Set picture _description" IsEnabled="{Binding !HasNoImages}" Command="{Binding OpenPictureDescriptionDialogCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="{DynamicResource ThemeForegroundBrush}"/>

@@ -157,6 +157,16 @@ public partial class TrackViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Changes the description of the Embedded Picture at the given index
+    /// </summary>
+    public void ChangePictureDescription(string newDescription, int index)
+    {
+        string oldDescription = EmbeddedPictures[index].Description;
+        EmbeddedPictures[index].Description = newDescription;
+        if (oldDescription != newDescription) Changed = true;
+    }
+
+    /// <summary>
     /// Gets a Track of this ViewModel
     /// </summary>
     /// <returns>The Track</returns>

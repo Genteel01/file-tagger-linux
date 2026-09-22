@@ -6,12 +6,14 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using ATL;
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Assets.Statics;
+using FileTagger.Dialogs;
 using FileTagger.Extensions;
 using FileTagger.Services;
 
@@ -52,12 +54,14 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private readonly IImageService _imageService;
 
+    private readonly Func<Window?>? _getDialogTarget = null;
+
     /// <summary>
     /// Array of properties of TrackViewModel that we want to be editable
     /// </summary>
     private readonly PropertyInfo[] _trackProperties;
 
-    public EditPanelViewModel(IFileService fileService, IImageService imageService)
+    public EditPanelViewModel(IFileService fileService, IImageService imageService, Func<Window?> getDialogTarget)
     {
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
@@ -69,6 +73,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             (property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?)) )];
         FieldTexts = SetUpFieldTexts();
         FieldOptions = SetUpFieldOptions();
+        _getDialogTarget = getDialogTarget;
     }
 
     #if DEBUG
@@ -522,6 +527,41 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
             _cachedImages[picInfo.PictureHash] = bitmap;
         }
         return bitmap;
+    }
+
+    /// <summary>
+    /// Opens the dialog to edit picture description, and saves the result if it wasn't cancelled
+    /// </summary>
+    [RelayCommand]
+    private async Task OpenPictureDescriptionDialog()
+    {
+        Window? target = _getDialogTarget?.Invoke();
+        if (target == null) return;
+
+        PicDescriptionDialog dialog = new PicDescriptionDialog();
+        string initialText = "";
+        if (IsShowingTrackImages) initialText = SelectedImage!.Description;
+        PictureDescriptionViewModel vm = new PictureDescriptionViewModel(dialog, initialText);
+        dialog.DataContext = vm;
+
+        string? result = await dialog.ShowDialog<string?>(target);
+        if (result == null) return;
+
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if (IsShowingTrackImages)
+            {
+                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(SelectedImage!));
+                track.ChangePictureDescription(result, index);
+            }
+            else
+            {
+                for (int i = 0; i < track.EmbeddedPictures.Count; i++)
+                {
+                    track.ChangePictureDescription(result, i);
+                }
+            }
+        }
     }
 
     /// <summary>

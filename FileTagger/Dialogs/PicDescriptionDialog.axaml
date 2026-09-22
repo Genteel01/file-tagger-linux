@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
+        mc:Ignorable="d"
+        Width="{StaticResource DescriptionDialogWidth}" Height="{StaticResource DescriptionDialogHeight}"
+        d:DesignWidth="{StaticResource DescriptionDialogWidth}" d:DesignHeight="{StaticResource DescriptionDialogHeight}"
+        x:Class="FileTagger.Dialogs.PicDescriptionDialog" x:DataType="viewModels:PictureDescriptionViewModel" CanMinimize="False"
+        Title="Set Picture Description"
+        WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False"
+        KeyDown="DialogKeyDown">
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="BorderThickness" Value="0 1 0 0"/>
+        </Style>
+        <Style Selector="Grid#ButtonGrid Panel">
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeBorderLowBrush}"/>
+        </Style>
+        <Style Selector="Grid#ButtonGrid:pointerover Panel">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="Button#CancelButton">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderHighBrush}"/>
+        </Style>
+        <Style Selector="Button#CancelButton:pointerover">
+            <Setter Property="Background" Value="{DynamicResource CancelHoverBrush}" />
+        </Style>
+        <Style Selector="Button#CancelButton:pointerover ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource CancelSolidBrush}" />
+            <Setter Property="BorderThickness" Value="0 1 1 0"/>
+        </Style>
+        <Style Selector="Button#CancelButton:pressed ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CancelPressedBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CancelSolidBrush}" />
+            <Setter Property="BorderThickness" Value="0 1 1 0"/>
+        </Style>
+        <Style Selector="Button#SaveButton:pointerover ContentPresenter">
+            <Setter Property="BorderThickness" Value="1 1 0 0"/>
+        </Style>
+        <Style Selector="Button#SaveButton:pressed ContentPresenter">
+            <Setter Property="BorderThickness" Value="1 1 0 0"/>
+        </Style>
+    </Window.Styles>
+    <DockPanel>
+        <Grid Name="ButtonGrid" DockPanel.Dock="Bottom" ColumnDefinitions="*, Auto *" Height="{StaticResource DescriptionDialogRowHeight}">
+            <Button Grid.Column="0" Name="CancelButton" Content="Cancel" Command="{Binding CancelCommand}"/>
+            <Panel Grid.Column="1"/>
+            <Button Grid.Column="2" Name="SaveButton" Content="Save" Command="{Binding CloseCommand}"/>
+        </Grid>
+        <TextBox Name="InputBox" Text="{Binding PicDescription}" PlaceholderText="Description" Margin="8"
+                 Height="{StaticResource DescriptionDialogRowHeight}" LineHeight="{StaticResource DescriptionDialogLineHeight}"/>
+    </DockPanel>
+</Window>
