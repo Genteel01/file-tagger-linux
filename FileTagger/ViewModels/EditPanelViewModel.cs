@@ -688,4 +688,26 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// so we don't have to re-decode the same image multiple times
     /// </summary>
     private readonly Dictionary<uint, Bitmap> _cachedImages = new Dictionary<uint, Bitmap>();
+
+    [RelayCommand]
+    private void ChangePictureType(PictureInfo.PIC_TYPE newType)
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if (DisplayedPicture != null)
+            {
+                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(DisplayedPicture));
+                track.ChangePictureType(newType, index);
+            }
+            else
+            {
+                for (int i = 0; i < track.EmbeddedPictures.Count; i++)
+                {
+                    track.ChangePictureType(newType, i);
+                }
+            }
+        }
+        SelectedPictureType = newType;
+        ChooseDisplayedImage();
+    }
 }

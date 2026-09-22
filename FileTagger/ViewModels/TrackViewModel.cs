@@ -167,6 +167,16 @@ public partial class TrackViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Changes the type of the Embedded Picture at the given index
+    /// </summary>
+    public void ChangePictureType(PictureInfo.PIC_TYPE newType, int index)
+    {
+        PictureInfo.PIC_TYPE oldType = EmbeddedPictures[index].PicType;
+        EmbeddedPictures[index].PicType = newType;
+        if (oldType != newType) Changed = true;
+    }
+
+    /// <summary>
     /// Gets a Track of this ViewModel
     /// </summary>
     /// <returns>The Track</returns>
