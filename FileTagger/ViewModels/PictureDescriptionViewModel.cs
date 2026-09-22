@@ -7,7 +7,7 @@ namespace FileTagger.ViewModels;
 public partial class PictureDescriptionViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private string _picDescription = "";
+    public partial string PicDescription { get; set; }
 
     private readonly Window _dialog;
 

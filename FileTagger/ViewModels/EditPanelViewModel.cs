@@ -24,25 +24,26 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// All the tracks that are currently selected
     /// </summary>
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(HasSelectedTracks))]
-    private List<TrackViewModel> _selectedTracks = [];
-
-    /// <summary>
-    /// The value in the edit box for each field
-    /// </summary>
     [ObservableProperty]
-    private Dictionary<string, string> _fieldTexts = new Dictionary<string, string>();
-
-    /// <summary>
-    /// The options in the edit box dropdown for each field
-    /// </summary>
-    [ObservableProperty]
-    private Dictionary<string, List<object?>> _fieldOptions = new Dictionary<string, List<object?>>();
+    [NotifyPropertyChangedFor(nameof(HasSelectedTracks))]
+    private partial List<TrackViewModel> SelectedTracks { get; set; } = [];
 
     /// <summary>
     /// Whether SelectedTracks is not empty
     /// </summary>
     public bool HasSelectedTracks => SelectedTracks.Count > 0;
+
+    /// <summary>
+    /// The value in the edit box for each field
+    /// </summary>
+    [ObservableProperty]
+    public partial Dictionary<string, string> FieldTexts { get; private set; } = new Dictionary<string, string>();
+
+    /// <summary>
+    /// The options in the edit box dropdown for each field
+    /// </summary>
+    [ObservableProperty]
+    public partial Dictionary<string, List<object?>> FieldOptions { get; private set; } = new Dictionary<string, List<object?>>();
 
     /// <summary>
     /// <see cref="IFileService"/> received through Dependency Injection used for opening the file dialog
@@ -633,7 +634,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
     [ObservableProperty]
-    private List<PictureInfo> _selectedTrackPictures = [];
+    private partial List<PictureInfo> SelectedTrackPictures { get; set; } = [];
 
     /// <summary>
     /// The index representing which entry in <see cref="SelectedTrackPictures"/> to display
@@ -642,7 +643,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
     [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
-    private int _displayedPictureIndex = 0;
+    private partial int DisplayedPictureIndex { get; set; } = 0;
 
     /// <summary>
     /// String to indicate how many pictures there are, and which one is being viewed
@@ -678,7 +679,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// The selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
     /// </summary>
     [ObservableProperty]
-    private PictureInfo.PIC_TYPE _selectedPictureType = PictureInfo.PIC_TYPE.Front;
+    public partial PictureInfo.PIC_TYPE SelectedPictureType { get; set; } = PictureInfo.PIC_TYPE.Front;
 
     /// <summary>
     /// Dictionary of Bitmaps mapped to the corresponding <see cref="PictureInfo.PictureHash"/>,

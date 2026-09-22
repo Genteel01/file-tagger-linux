@@ -21,61 +21,61 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets or sets the title
     /// </summary>
     [ObservableProperty]
-    private string _title;
+    public partial string Title { get; set; }
 
     /// <summary>
     /// Gets or sets the album
     /// </summary>
     [ObservableProperty]
-    private string _album;
+    public partial string Album { get; set; }
 
     /// <summary>
     /// Gets or sets the artist
     /// </summary>
     [ObservableProperty]
-    private string _artist;
+    public partial string Artist { get; set; }
 
     /// <summary>
     /// Gets or sets the track number
     /// </summary>
     [ObservableProperty]
-    private int? _trackNumber;
+    public partial int? TrackNumber { get; set; }
 
     /// <summary>
     /// Gets or sets the disc number
     /// </summary>
     [ObservableProperty]
-    private int? _discNumber;
+    public partial int? DiscNumber { get; set; }
 
     /// <summary>
     /// Gets or sets the year
     /// </summary>
     [ObservableProperty]
-    private int? _year;
+    public partial int? Year { get; set; }
 
     /// <summary>
     /// Gets or sets the genre
     /// </summary>
     [ObservableProperty]
-    private string _genre;
+    public partial string Genre { get; set; }
 
     /// <summary>
     /// Gets or sets the album artist
     /// </summary>
     [ObservableProperty]
-    private string _albumArtist;
+    public partial string AlbumArtist { get; set; }
 
     /// <summary>
     /// Gets or sets the composer
     /// </summary>
     [ObservableProperty]
-    private string _composer;
+    public partial string Composer { get; set; }
 
     /// <summary>
     /// Gets or sets the comment
     /// </summary>
     [ObservableProperty]
-    private string _comment;
+    public partial string Comment { get; set; }
 
     /// <summary>
     /// The Track that this ViewModel represents
@@ -113,9 +113,9 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets or sets whether the track has changed
     /// </summary>
     [ObservableProperty]
-    private bool _changed;
+    public partial bool Changed { get; set; }
 
-    private bool _finishedSetup;
+    private readonly bool _finishedSetup;
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {

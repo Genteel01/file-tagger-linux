@@ -29,7 +29,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// All the tracks that have been loaded in
     /// </summary>
     [ObservableProperty]
-    private List<TrackViewModel> _tracks = [];
+    public partial List<TrackViewModel> Tracks { get; private set; } = [];
 
     /// <summary>
     /// All the tracks that are currently selected
@@ -72,24 +72,24 @@ public partial class MainWindowViewModel : ViewModelBase
     /// The current sorting options for Tracks
     /// </summary>
     [ObservableProperty]
-    private string _currentSort;
+    public partial string CurrentSort { get; private set; }
 
     /// <summary>
     /// Keeps track of whether sorting is ascending or descending
     /// </summary>
     [ObservableProperty]
-    private bool _sortDescending;
+    public partial bool SortDescending { get; private set; }
 
     /// <summary>
     /// Widths for each column in the track list
     /// </summary>
-    public AvaloniaDictionary<string, double> ListColumnWidths { get; set; }
+    public AvaloniaDictionary<string, double> ListColumnWidths { get; private set; } = new AvaloniaDictionary<string, double>();
 
     /// <summary>
     /// Width for the Edit Panel
     /// </summary>
     [ObservableProperty]
-    private GridLength _editPanelWidth;
+    public partial GridLength EditPanelWidth { get; set; }
 
     /// <summary>
     /// List of <see cref="ThemeVariant"/> values to select from
@@ -99,7 +99,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Selected <see cref="ThemeVariant"/>
     /// </summary>
-    [ObservableProperty] private ThemeVariant _selectedTheme = ThemeVariant.Default;
+    [ObservableProperty]
+    public partial ThemeVariant SelectedTheme { get; private set; } = ThemeVariant.Default;
 
     [RelayCommand]
     private void ChangeSelectedTheme(ThemeVariant value)
@@ -153,7 +154,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         SetUpUserPreferences();
         //Set up event handler to update preferences whenever column widths change
-        ListColumnWidths?.CollectionChanged += (_, args) =>
+        ListColumnWidths.CollectionChanged += (_, args) =>
         {
             if (args.NewItems == null) return;
             PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
