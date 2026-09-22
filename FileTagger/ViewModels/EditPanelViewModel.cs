@@ -45,7 +45,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     public bool HasSelectedTracks => SelectedTracks.Count > 0;
 
     /// <summary>
-    /// <see cref="IFileService"/> received through Dependency Injection used for opening file dialog
+    /// <see cref="IFileService"/> received through Dependency Injection used for opening the file dialog
     /// </summary>
     private readonly IFileService _fileService;
 
@@ -70,7 +70,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
         IsActive = true;
 
-        //Select properties that are writable, and are either string or int?
+        //Select properties that are writable and are either string or int?
         _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
             (property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?)) )];
         FieldTexts = SetUpFieldTexts();
@@ -325,7 +325,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     }
 
     /// <summary>
-    /// Removes the visible picture from the selected tracks, or remove all pictures of the selected type
+    /// Removes the visible picture from the selected tracks, or removes all pictures of the selected type
     /// from all selected tracks if there are different pictures for the selected tracks
     /// </summary>
     [RelayCommand]
