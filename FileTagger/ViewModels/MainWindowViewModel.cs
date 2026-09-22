@@ -29,7 +29,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// All the tracks that have been loaded in
     /// </summary>
     [ObservableProperty]
-    public partial List<TrackViewModel> Tracks { get; private set; } = [];
+    public partial List<TrackViewModel> Tracks { get; set; } = [];
 
     /// <summary>
     /// All the tracks that are currently selected

@@ -11,7 +11,7 @@ public class MainWindowViewModelTests
         IFileService fileService = new FakeFileService();
         PreferenceService preferenceService = new PreferenceService(fileService);
         IImageService imageService = new FakeImageService();
-        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService);
+        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService, () => null);
         MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(fileService, preferenceService, editPanelViewModel);
         return mainWindowViewModel;
     }
