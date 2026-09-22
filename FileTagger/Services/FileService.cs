@@ -36,11 +36,14 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         TopLevel? target = getTarget();
         if (target == null) return ([], true, null);
         //Load initial location from bookmark
-        IStorageBookmarkFolder? initialLocation = null;
+        IStorageBookmarkFolder? bookmarkFolder = null;
         if (bookmarkId != null)
         {
-            initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+            bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
         }
+        //Get music folder if there is no bookmark
+        IStorageFolder? initialLocation = bookmarkFolder ?? await target.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Music);
+
         IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
             Title = "Open Folders",
@@ -56,10 +59,10 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
         string? newBookmarkId = await folder.SaveBookmarkAsync();
         //Release the old bookmark if we got a new one
-        if (newBookmarkId != null && initialLocation != null)
+        if (newBookmarkId != null && bookmarkFolder != null)
         {
-            await initialLocation.ReleaseBookmarkAsync();
-            initialLocation.Dispose();
+            await bookmarkFolder.ReleaseBookmarkAsync();
+            bookmarkFolder.Dispose();
         }
         return (files, false, newBookmarkId);
     }
