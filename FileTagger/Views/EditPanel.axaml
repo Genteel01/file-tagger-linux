@@ -142,7 +142,7 @@
                         <MenuItem Header="Replace p_ictures" Command="{Binding ReplaceCoverImageCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="_Extract picture" IsEnabled="{Binding HasDisplayedPicture}">
+                        <MenuItem Header="_Extract picture" Command="{Binding ExtractCoverImageCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="{DynamicResource ThemeForegroundBrush}"/>

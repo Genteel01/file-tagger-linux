@@ -15,6 +15,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Assets.Statics;
 using FileTagger.Dialogs;
 using FileTagger.Extensions;
+using FileTagger.Models;
 using FileTagger.Services;
 
 namespace FileTagger.ViewModels;
@@ -51,6 +52,11 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private readonly IFileService _fileService;
 
     /// <summary>
+    /// <see cref="IPreferenceService"/> received through Dependency Injection used for getting the initial save location for extracted image
+    /// </summary>
+    private readonly IPreferenceService _preferenceService;
+
+    /// <summary>
     /// <see cref="IImageService"/> received through Dependency Injection used for handling images
     /// </summary>
     private readonly IImageService _imageService;
@@ -65,9 +71,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private readonly PropertyInfo[] _trackProperties;
 
-    public EditPanelViewModel(IFileService fileService, IImageService imageService, Func<TopLevel?> getDialogTarget)
+    public EditPanelViewModel(IFileService fileService, IImageService imageService, IPreferenceService preferenceService, Func<TopLevel?> getDialogTarget)
     {
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+        _preferenceService =  preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
         IsActive = true;
 
@@ -88,6 +95,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _trackProperties = [];
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
+        _preferenceService = new PreferenceService(_fileService);
     }
     #endif
 
@@ -709,5 +717,19 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         }
         SelectedPictureType = newType;
         ChooseDisplayedImage();
+    }
+
+    [RelayCommand(CanExecute = nameof(HasDisplayedPicture))]
+    private async Task ExtractCoverImage()
+    {
+        Bitmap? bitmap = DisplayedPictureBitmap;
+        if (bitmap == null || DisplayedPicture == null) return;
+
+        string? bookmarkId = _preferenceService.SystemPreferenceData.LastDirectory;
+        string? newBookmarkId = await _fileService.SaveImageFile(bitmap, DisplayedPicture.NativeFormat, DisplayedPicture.PictureHash.ToString(), bookmarkId);
+
+        if (newBookmarkId == null) return;
+        PropertyInfo lastDirectoryProperty = typeof(SystemPreferences).GetProperty(nameof(SystemPreferences.LastDirectory))!;
+        _preferenceService.StorePreferenceItem(lastDirectoryProperty, newBookmarkId);
     }
 }
