@@ -17,13 +17,17 @@
         <converters:AreEqualConverter x:Key="AreEqualConverter"/>
         <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
     </Window.Resources>
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenMusicFilesCommand}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveMusicFilesCommand}" />
+    </Window.KeyBindings>
     <Grid RowDefinitions="Auto, Auto, *" Name="Root">
         <Menu Grid.Row="0">
             <MenuItem Header="_File" Padding="4">
-                <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}">
+                <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}" InputGesture="Ctrl+O">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}" InputGesture="Ctrl+S">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -70,10 +74,10 @@
                 </StackPanel.Styles>
                 <!-- This is our title text block.  -->
                 <TextBlock Classes="h1" Text="Music Tagger" />
-                <Button ToolTip.Tip="Open Files" Command="{Binding OpenMusicFilesCommand}">
+                <Button ToolTip.Tip="Open Files (Ctrl+O)" Command="{Binding OpenMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/>
                 </Button>
-                <Button ToolTip.Tip="Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                <Button ToolTip.Tip="Save Changed Files (Ctrl+S)" Command="{Binding SaveMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
                 <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">
