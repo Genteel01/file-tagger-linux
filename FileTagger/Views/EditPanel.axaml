@@ -5,17 +5,11 @@
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
-             xmlns:converters="clr-namespace:FileTagger.Converters"
              xmlns:statics="clr-namespace:FileTagger.Assets.Statics"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:EditPanelViewModel"
 >
-    <UserControl.Resources>
-        <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
-        <converters:AreEqualConverter x:Key="AreEqualConverter" />
-        <converters:NumberPercentageConverter x:Key="NumberPercentageConverter" />
-    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="StackPanel#SidePanel">
             <Setter Property="Background" Value="{DynamicResource EditPanelBackgroundBrush}" />

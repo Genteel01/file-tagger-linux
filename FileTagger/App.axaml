@@ -3,6 +3,7 @@
              x:Class="FileTagger.App"
              xmlns:local="using:FileTagger"
              xmlns:controls="clr-namespace:FileTagger.Controls"
+             xmlns:converters="clr-namespace:FileTagger.Converters"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -22,6 +23,11 @@
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
                  <MergeResourceInclude Source="/Controls/LabelledDropdown.axaml" />
              </ResourceDictionary.MergedDictionaries>
+             <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
+             <converters:AreEqualConverter x:Key="AreEqualConverter" />
+             <converters:GridSizeConverter x:Key="GridSizeConverter"/>
+             <converters:SortArrowsConverter x:Key="SortArrowsConverter"/>
+             <converters:NumberPercentageConverter x:Key="NumberPercentageConverter" />
          </ResourceDictionary>
      </Application.Resources>
 
