@@ -346,12 +346,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     private int RemoveCurrentlyDisplayedPicture(TrackViewModel track)
     {
         if (DisplayedPicture == null) return -1;
-        PictureInfo displayedImage = DisplayedPicture;
-        int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(displayedImage));
-        if (index != -1)
-        {
-            track.EmbeddedPictures.RemoveAt(index);
-        }
+        int index = track.EmbeddedPictures.Remove(pic => pic.TrueEqual(DisplayedPicture));
         return index;
     }
 

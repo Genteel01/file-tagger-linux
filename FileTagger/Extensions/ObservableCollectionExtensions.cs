@@ -49,6 +49,17 @@ public static class ObservableCollectionExtensions
         }
 
         /// <summary>
+        /// Removes the first item that matches the predicate, and returns its index
+        /// </summary>
+        public int Remove(Func<T, bool> match)
+        {
+            int index = collection.FindIndex(match);
+            if (index < 0) return -1;
+            collection.RemoveAt(index);
+            return index;
+        }
+
+        /// <summary>
         /// Adds a collection of items to the end of the list.
         /// </summary>
         public void AddRange(IEnumerable<T> newItems)
