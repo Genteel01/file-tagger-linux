@@ -119,14 +119,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SwitchTheme()
     {
-        ThemeVariant newTheme = SelectedTheme.ToString() switch
-        {
-            nameof(ThemeVariant.Light) => ThemeVariant.Dark,
-            nameof(ThemeVariant.Dark) => ThemeVariant.Light,
-            nameof(MyThemes.LightGreen) => MyThemes.DarkGreen,
-            nameof(MyThemes.DarkGreen) => MyThemes.LightGreen,
-            _ => ThemeVariant.Dark
-        };
+        ThemeVariant newTheme = MyThemes.GetOppositeTheme(SelectedTheme.ToString());
         ChangeSelectedTheme(newTheme);
     }
 

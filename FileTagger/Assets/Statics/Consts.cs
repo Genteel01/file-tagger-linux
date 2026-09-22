@@ -16,6 +16,15 @@ public static class MyThemes
         nameof(DarkGreen) => DarkGreen,
         _ => ThemeVariant.Default
     };
+
+    public static ThemeVariant GetOppositeTheme(string themeName) => themeName switch
+    {
+        nameof(ThemeVariant.Light) => ThemeVariant.Dark,
+        nameof(ThemeVariant.Dark) => ThemeVariant.Light,
+        nameof(LightGreen) => DarkGreen,
+        nameof(DarkGreen) => LightGreen,
+        _ => ThemeVariant.Dark
+    };
 }
 
 public static class Consts
