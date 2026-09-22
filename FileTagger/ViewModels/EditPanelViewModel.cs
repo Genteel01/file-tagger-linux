@@ -611,21 +611,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     [RelayCommand]
     private void ChangePictureType(PictureInfo.PIC_TYPE newType)
     {
-        foreach (TrackViewModel track in SelectedTracks)
-        {
-            if (DisplayedPicture != null)
-            {
-                int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(DisplayedPicture));
-                track.ChangePictureType(newType, index);
-            }
-            else
-            {
-                for (int i = 0; i < track.EmbeddedPictures.Count; i++)
-                {
-                    track.ChangePictureType(newType, i);
-                }
-            }
-        }
+        PerformActionOnSelectedTracks((track, index) => track.ChangePictureType(newType, index));
         SelectedPictureType = newType;
         ChooseDisplayedImage();
     }
@@ -647,18 +633,26 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         string? result = await dialog.ShowDialog<string?>(target);
         if (result == null) return;
 
+        PerformActionOnSelectedTracks((track, index) => track.ChangePictureDescription(result, index));
+    }
+
+    /// <summary>
+    /// Performs an operation on the displayed picture, or all pictures when no individual picture is displayed.
+    /// </summary>
+    private void PerformActionOnSelectedTracks(Action<TrackViewModel, int> action)
+    {
         foreach (TrackViewModel track in SelectedTracks)
         {
             if (DisplayedPicture != null)
             {
                 int index = track.EmbeddedPictures.FindIndex(pic => pic.TrueEqual(DisplayedPicture));
-                track.ChangePictureDescription(result, index);
+                action(track, index);
             }
             else
             {
                 for (int i = 0; i < track.EmbeddedPictures.Count; i++)
                 {
-                    track.ChangePictureDescription(result, i);
+                    action(track, i);
                 }
             }
         }
