@@ -70,7 +70,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _imageService =  imageService ?? throw new ArgumentNullException(nameof(imageService));
         IsActive = true;
 
-        PictureTypes = Enum.GetValues<PictureInfo.PIC_TYPE>();
         //Select properties that are writable, and are either string or int?
         _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
             (property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?)) )];
@@ -88,7 +87,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         _trackProperties = [];
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
-        PictureTypes = Enum.GetValues<PictureInfo.PIC_TYPE>();
     }
     #endif
 
@@ -675,7 +673,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// List of <see cref="PictureInfo.PIC_TYPE"/> enum values for populating a selection dropdown
     /// </summary>
-    public PictureInfo.PIC_TYPE[] PictureTypes { get; }
+    public PictureInfo.PIC_TYPE[] PictureTypes { get; } = Enum.GetValues<PictureInfo.PIC_TYPE>();
 
     /// <summary>
     /// The selected <see cref="PictureInfo.PIC_TYPE"/> from the dropdown
