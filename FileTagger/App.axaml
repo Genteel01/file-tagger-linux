@@ -22,6 +22,7 @@
                  <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />
                  <MergeResourceInclude Source="/Controls/LabelledDropdown.axaml" />
+                 <MergeResourceInclude Source="/Controls/SubMenuItem.axaml" />
              </ResourceDictionary.MergedDictionaries>
              <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
              <converters:AreEqualConverter x:Key="AreEqualConverter" />

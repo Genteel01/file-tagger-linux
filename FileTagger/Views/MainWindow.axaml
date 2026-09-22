@@ -27,31 +27,8 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings" Padding="4">
-                <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}">
-                    <MenuItem.ItemContainerTheme>
-                        <ControlTheme TargetType="MenuItem"
-                                      BasedOn="{StaticResource {x:Type MenuItem}}"
-                                      x:DataType="ThemeVariant">
-                            <Setter Property="Header" Value="{Binding ., Converter={StaticResource UpperCamelCaseSpacer}}"/>
-                            <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
-                            <Setter Property="CommandParameter" Value="{Binding .}"/>
-                            <Setter Property="Icon">
-                                <Setter.Value>
-                                    <Template>
-                                        <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
-                                            <PathIcon.IsVisible>
-                                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
-                                                    <Binding Path="." />
-                                                    <Binding Path="#Root.((vm:MainWindowViewModel)DataContext).SelectedTheme" />
-                                                </MultiBinding>
-                                            </PathIcon.IsVisible>
-                                        </PathIcon>
-                                    </Template>
-                                </Setter.Value>
-                            </Setter>
-                        </ControlTheme>
-                    </MenuItem.ItemContainerTheme>
-                </MenuItem>
+                <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}"
+                          ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedTheme}" Command="{Binding ChangeSelectedThemeCommand}"/>
                 <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                 </MenuItem>

@@ -146,31 +146,9 @@
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                         </MenuItem>
                         <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
-                        <MenuItem Header="Set picture _type" IsEnabled="{Binding !SelectedTracksHaveNoPictures}" ItemsSource="{Binding PictureTypes}">
+                        <MenuItem Header="Set picture _type" IsEnabled="{Binding !SelectedTracksHaveNoPictures}" ItemsSource="{Binding PictureTypes}"
+                                  ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedPictureType}" Command="{Binding ChangePictureTypeCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
-                            <MenuItem.ItemContainerTheme>
-                                <ControlTheme TargetType="MenuItem"
-                                              BasedOn="{StaticResource {x:Type MenuItem}}"
-                                              x:DataType="ThemeVariant">
-                                    <Setter Property="Header" Value="{Binding ., Converter={StaticResource UpperCamelCaseSpacer}}"/>
-                                    <Setter Property="Command" Value="{Binding #SidePanel.((viewModels:EditPanelViewModel)DataContext).ChangePictureTypeCommand}"/>
-                                    <Setter Property="CommandParameter" Value="{Binding .}"/>
-                                    <Setter Property="Icon">
-                                        <Setter.Value>
-                                            <Template>
-                                                <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
-                                                    <PathIcon.IsVisible>
-                                                        <MultiBinding Converter="{StaticResource AreEqualConverter}">
-                                                            <Binding Path="." />
-                                                            <Binding Path="#SidePanel.((viewModels:EditPanelViewModel)DataContext).SelectedPictureType" />
-                                                        </MultiBinding>
-                                                    </PathIcon.IsVisible>
-                                                </PathIcon>
-                                            </Template>
-                                        </Setter.Value>
-                                    </Setter>
-                                </ControlTheme>
-                            </MenuItem.ItemContainerTheme>
                         </MenuItem>
                         <MenuItem Header="Set picture _description" IsEnabled="{Binding !SelectedTracksHaveNoPictures}" Command="{Binding OpenPictureDescriptionDialogCommand}">
                             <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
