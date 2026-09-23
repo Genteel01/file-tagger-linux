@@ -8,7 +8,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
-using FileTagger.SharedEventHandlers;
+using FileTagger.Statics;
 
 namespace FileTagger.Controls;
 
