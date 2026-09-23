@@ -146,7 +146,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// <summary>
     /// Function to get the target to use to display a dialog
     /// </summary>
-    private readonly Func<TopLevel?>? _getDialogTarget = null;
+    private readonly Func<TopLevel?> _getDialogTarget;
 
     public EmbeddedPictureViewModel(IFileService fileService, IImageService imageService, IPreferenceService preferenceService, Func<TopLevel?> getDialogTarget)
     {
@@ -165,6 +165,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
         _preferenceService = new PreferenceService(_fileService);
+        _getDialogTarget = () => null;
     }
     #endif
 
