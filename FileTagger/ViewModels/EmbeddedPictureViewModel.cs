@@ -479,7 +479,6 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     {
         ModifySelectedTracksPictures((track, index) => track.ChangePictureType(newType, index));
         SelectedPictureType = newType;
-        ChooseDisplayedImage();
     }
 
     /// <summary>
