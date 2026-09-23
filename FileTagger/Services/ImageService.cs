@@ -39,7 +39,8 @@ public class ImageService : IImageService
         _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
         if (bitmap == null)
         {
-            bitmap = new Bitmap(new MemoryStream(picInfo.PictureData));
+            using MemoryStream ms = new MemoryStream(picInfo.PictureData);
+            bitmap = new Bitmap(ms);
             _cachedImages[picInfo.PictureHash] = bitmap;
         }
         return bitmap;
