@@ -117,7 +117,6 @@
                 <TextBlock.IsVisible>
                     <MultiBinding Converter="{StaticResource AreEqualConverter}">
                         <Binding Path="!HasDisplayedPicture" />
-                        <Binding Path="HasSelectedTracks" />
                         <Binding Path="SelectedTrackHasPictures" />
                     </MultiBinding>
                 </TextBlock.IsVisible>
