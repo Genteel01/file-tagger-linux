@@ -386,10 +386,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         foreach (TrackViewModel track in SelectedTracks.Skip(1))
         {
             List<PictureInfo> relevantPics = track.EmbeddedPictures.Where(MatchesSelectedPicType).ToList();
-            if (relevantPics.Count != 0)
-            {
-                SelectedTrackHasPictures = true;
-            }
+            if (relevantPics.Count != 0) SelectedTrackHasPictures = true;
             if (relevantPics.Count != referencePics.Count) return [];
             picsPerTrack.Add(relevantPics);
         }
