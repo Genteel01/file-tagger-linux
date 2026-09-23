@@ -118,7 +118,7 @@
             </StackPanel>
             <TextBlock Text="Various Pictures">
                 <TextBlock.IsVisible>
-                    <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="!HasDisplayedPicture" />
                         <Binding Path="SelectedTrackHasPictures" />
                     </MultiBinding>
