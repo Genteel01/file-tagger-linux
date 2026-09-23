@@ -479,6 +479,8 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         if (result == null) return;
 
         ModifySelectedTracksPictures((track, index) => track.ChangePictureDescription(result, index));
+        //Force an update so the binding reads the new description
+        ChooseDisplayedImage();
     }
 
     /// <summary>
