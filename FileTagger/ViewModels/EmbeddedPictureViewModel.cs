@@ -103,7 +103,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// <summary>
     /// Bitmap of <see cref="DisplayedPicture"/>. Updates when SelectedTrackPictures or DisplayedPictureIndex change
     /// </summary>
-    public Bitmap? DisplayedPictureBitmap => DisplayedPicture != null ? GetAndCacheBitmap(DisplayedPicture) : null;
+    public Bitmap? DisplayedPictureBitmap => DisplayedPicture != null ? _imageService.GetBitmap(DisplayedPicture) : null;
 
     /// <summary>
     /// Whether we are showing the pictures of the selected tracks, or the default image
@@ -120,12 +120,6 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// </summary>
     [ObservableProperty]
     public partial PictureInfo.PIC_TYPE SelectedPictureType { get; set; } = PictureInfo.PIC_TYPE.Front;
-
-    /// <summary>
-    /// Dictionary of Bitmaps mapped to the corresponding <see cref="PictureInfo.PictureHash"/>,
-    /// so we don't have to re-decode the same image multiple times
-    /// </summary>
-    private readonly Dictionary<uint, Bitmap> _cachedImages = new Dictionary<uint, Bitmap>();
 
     /// <summary>
     /// List of tracks we are cutting images from
@@ -406,20 +400,6 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
             if (!allTracksMatch) return [];
         }
         return referencePics;
-    }
-
-    /// <summary>
-    /// Gets a <see cref="Bitmap"/> of the given <see cref="PictureInfo"/>
-    /// </summary>
-    private Bitmap GetAndCacheBitmap(PictureInfo picInfo)
-    {
-        _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
-        if (bitmap == null)
-        {
-            bitmap = new Bitmap(new MemoryStream(picInfo.PictureData));
-            _cachedImages[picInfo.PictureHash] = bitmap;
-        }
-        return bitmap;
     }
 
     /// <summary>
