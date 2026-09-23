@@ -6,6 +6,9 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
              x:Class="FileTagger.Views.EmbeddedPictureView" x:DataType="viewModels:EmbeddedPictureViewModel">
     <UserControl.Styles>
+        <Style Selector="Border#FallbackImage:disabled">
+            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
+        </Style>
         <!--Overlay changing the colour of the displayed image-->
         <Style Selector="Image.Cut">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
