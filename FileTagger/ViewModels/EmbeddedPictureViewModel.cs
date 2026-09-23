@@ -28,11 +28,6 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     public List<TrackViewModel> SelectedTracks { get; private set; } = [];
 
     /// <summary>
-    /// Whether we have a copied image
-    /// </summary>
-    public bool HasImageClipboardData => CopiedPic != null;
-
-    /// <summary>
     /// Decides whether to show the display image as being cut.
     /// Is true if <see cref="TracksToCutFrom"/> contains all of <see cref="SelectedTracks"/> and the displayed image is <see cref="CopiedPic"/>
     /// </summary>
@@ -127,6 +122,11 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasImageClipboardData))]
     private partial PictureInfo? CopiedPic { get; set; } = null;
+
+    /// <summary>
+    /// Whether we have a copied image
+    /// </summary>
+    private bool HasImageClipboardData => CopiedPic != null;
 
     /// <summary>
     /// <see cref="IFileService"/> received through Dependency Injection used for opening the file dialog
