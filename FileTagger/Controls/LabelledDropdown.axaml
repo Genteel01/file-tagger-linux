@@ -12,7 +12,10 @@
                 <Setter Property="Padding" Value="4 0" />
             </Style>
             <!--Setting Border and Foreground colours depending on the state of the control-->
-            <Style Selector="^ PathIcon, ^ Label:disabled">
+            <Style Selector="^ Label:disabled">
+                <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}" />
+            </Style>
+            <Style Selector="^ PathIcon">
                 <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
             </Style>
             <Style Selector="^ Label, ^ TextBox">
@@ -47,7 +50,7 @@
                             HorizontalAlignment="Stretch"
                             ItemsSource="{TemplateBinding ItemsSource}"
                             Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
-                            TextFilter="{TemplateBinding TextFilter}"/>
+                            MinimumPrefixLength="0" TextFilter="{TemplateBinding TextFilter}"/>
                         <Button x:Name="PART_Button" Width="24" HorizontalAlignment="Right" Background="{TemplateBinding ButtonBackground}">
                             <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
                         </Button>

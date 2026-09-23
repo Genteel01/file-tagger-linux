@@ -20,6 +20,7 @@ public class ViewLocator : IDataTemplate
         {
             MainWindowViewModel => new MainWindow(),
             EditPanelViewModel => new EditPanel(),
+            EmbeddedPictureViewModel => new EmbeddedPictureView(),
             _ => new TextBlock { Text = $"No view for {data?.GetType().Name}" }
         };
     }

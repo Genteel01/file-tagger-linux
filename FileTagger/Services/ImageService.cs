@@ -1,20 +1,18 @@
-using System;
+using System.Collections.Generic;
 using System.IO;
 using ATL;
 using ATL.AudioData;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 
 namespace FileTagger.Services;
 
 public class ImageService : IImageService
 {
-    private Bitmap? _defaultImage;
-    public Bitmap GetDefaultImage()
-    {
-        _defaultImage ??= new Bitmap(AssetLoader.Open(new Uri("avares://FileTagger/Assets/placeholder.png", UriKind.Absolute)));
-        return _defaultImage;
-    }
+    /// <summary>
+    /// Dictionary of Bitmaps mapped to the corresponding <see cref="PictureInfo.PictureHash"/>,
+    /// so we don't have to re-decode the same image multiple times
+    /// </summary>
+    private readonly Dictionary<uint, Bitmap> _cachedImages = new Dictionary<uint, Bitmap>();
 
     public PictureInfo CreatePictureInfoFromBitmap(Bitmap bitmap, PictureInfo.PIC_TYPE pictureType)
     {
@@ -31,5 +29,20 @@ public class ImageService : IImageService
             pictureType, MetaDataIOFactory.TagType.ANY, 0);
         picInfo.ComputePicHash();
         return picInfo;
+    }
+
+    /// <summary>
+    /// Gets a <see cref="Bitmap"/> of the given <see cref="PictureInfo"/>
+    /// </summary>
+    public Bitmap GetBitmap(PictureInfo picInfo)
+    {
+        _cachedImages.TryGetValue(picInfo.PictureHash, out Bitmap? bitmap);
+        if (bitmap == null)
+        {
+            using MemoryStream ms = new MemoryStream(picInfo.PictureData);
+            bitmap = new Bitmap(ms);
+            _cachedImages[picInfo.PictureHash] = bitmap;
+        }
+        return bitmap;
     }
 }

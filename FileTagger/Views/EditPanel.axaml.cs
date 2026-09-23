@@ -1,8 +1,8 @@
 using System;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
+using FileTagger.Assets.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
@@ -11,12 +11,15 @@ public partial class EditPanel : UserControl
 {
     private readonly AutoCompleteFilterPredicate<string?> _searchFunction = (search, item) =>
     {
-        if (search == EditPanelViewModel.UnchangedField || item == EditPanelViewModel.UnchangedField || string.IsNullOrWhiteSpace(search))
+        if (string.IsNullOrWhiteSpace(search)) return true;
+        string searchTrimmed = search.Trim();
+        string? itemTrimmed = item?.Trim();
+        if (searchTrimmed == Consts.UnchangedField || itemTrimmed == Consts.UnchangedField)
         {
             return true;
         }
 
-        return item?.Contains(search, StringComparison.CurrentCultureIgnoreCase) ?? false;
+        return itemTrimmed?.Contains(searchTrimmed, StringComparison.CurrentCultureIgnoreCase) ?? false;
     };
     public EditPanel()
     {
@@ -34,43 +37,6 @@ public partial class EditPanel : UserControl
         DiscNumberField.TextFilter = _searchFunction;
     }
 
-    /// <summary>
-    /// <see cref="PicTypeSelector"/>'s Popup
-    /// </summary>
-    private Popup? _popup;
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        PicTypeSelector.TemplateApplied += PicTypeSelectorTemplateApplied;
-    }
-
-    /// <summary>
-    /// Set up the popup to allow pointer passthrough
-    /// </summary>
-    private void PicTypeSelectorTemplateApplied(object? sender, TemplateAppliedEventArgs e)
-    {
-        _popup = e.NameScope.Get<Popup>("PART_Popup");
-        _popup.OverlayInputPassThroughElement = TopLevel.GetTopLevel(this);
-        _popup.LostFocus += PicTypeSelectorDropDownLostFocus;
-    }
-
-    /// <summary>
-    /// Set up the popup to refocus itself after clicking one of PicTypeSelector's buttons and to close the popup
-    /// when it loses focus. Don't close the popup when the new focus is the ComboBox or a ComboBoxItem,
-    /// because it closes itself in those cases
-    /// </summary>
-    private void PicTypeSelectorDropDownLostFocus(object? sender, FocusChangedEventArgs e)
-    {
-        if (e.NewFocusedElement is Button b && b.Parent == PicTypeSelector.Parent)
-        {
-            _popup?.Focus();
-        }
-        else if(e.NewFocusedElement != PicTypeSelector && e.NewFocusedElement is not ComboBoxItem)
-        {
-            _popup?.Close();
-        }
-    }
 
     private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
     {

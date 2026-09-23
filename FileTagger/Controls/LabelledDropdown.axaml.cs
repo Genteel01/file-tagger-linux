@@ -8,6 +8,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using FileTagger.SharedEventHandlers;
 
 namespace FileTagger.Controls;
 
@@ -37,7 +38,7 @@ public class LabelledDropdown : TemplatedControl
     }
 
     public static readonly StyledProperty<string?> TextProperty =
-        TextBlock.TextProperty.AddOwner<LabelledDropdown>(new StyledPropertyMetadata<string?>(string.Empty, BindingMode.TwoWay, enableDataValidation: true));
+        TextBlock.TextProperty.AddOwner<LabelledDropdown>(new StyledPropertyMetadata<string?>("", BindingMode.TwoWay, enableDataValidation: true));
 
     public string? Text
     {
@@ -78,7 +79,7 @@ public class LabelledDropdown : TemplatedControl
         set => SetValue(OpenOnFocusTextProperty, value);
     }
 
-    public event EventHandler? DropDownClosed;
+    public event EventHandler<EventArgs>? DropDownClosed;
     public event EventHandler<TextChangedEventArgs>? SearchFieldChanged;
 
     private AutoCompleteBox? _autoCompleteBox;
@@ -95,7 +96,6 @@ public class LabelledDropdown : TemplatedControl
         _button?.GotFocus -= ExpandButtonFocused;
         _autoCompleteBox?.TemplateApplied -= OnAutoCompleteBoxApplyTemplate;
         _autoCompleteBox?.GotFocus -= AutoCompleteBoxFocusGained;
-        _autoCompleteBox?.DropDownClosed -= DropDownClosed;
 
         _topLevel = TopLevel.GetTopLevel(this);
         _button = e.NameScope.Get<Button>("PART_Button");
@@ -103,7 +103,6 @@ public class LabelledDropdown : TemplatedControl
 
         _autoCompleteBox.TemplateApplied += OnAutoCompleteBoxApplyTemplate;
         _autoCompleteBox.GotFocus += AutoCompleteBoxFocusGained;
-        _autoCompleteBox.DropDownClosed += DropDownClosed;
         _button.GotFocus += ExpandButtonFocused;
     }
 
@@ -112,6 +111,7 @@ public class LabelledDropdown : TemplatedControl
         _textBox?.TemplateApplied -= OnTextBoxApplyTemplate;
         _textBox?.LosingFocus -= TextBoxLosingFocus;
         _textBox?.TextChanged -= SearchFieldChanged;
+        _popup?.Closed -= PopupDropDownClosed;
 
         _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
         _popup = e.NameScope.Find<Popup>("PART_Popup");
@@ -119,10 +119,17 @@ public class LabelledDropdown : TemplatedControl
         _textBox?.TemplateApplied += OnTextBoxApplyTemplate;
         _textBox?.LosingFocus += TextBoxLosingFocus;
         _textBox?.TextChanged += SearchFieldChanged;
+        _textBox?.Tag = NumberValidationFlags.AllowUnchangedField;
         _popup?.OverlayInputPassThroughElement = _topLevel;
+        _popup?.Closed += PopupDropDownClosed;
     }
 
-    private void OnTextBoxApplyTemplate(object?  sender, TemplateAppliedEventArgs e)
+    private void PopupDropDownClosed(object? sender, EventArgs e)
+    {
+        DropDownClosed?.Invoke(_autoCompleteBox, EventArgs.Empty);
+    }
+
+    private void OnTextBoxApplyTemplate(object? sender, TemplateAppliedEventArgs e)
     {
         _textPresenter = e.NameScope.Get<TextPresenter>("PART_TextPresenter");
     }
@@ -148,11 +155,11 @@ public class LabelledDropdown : TemplatedControl
     /// <param name="e"></param>
     private void AutoCompleteBoxFocusGained(object? sender, FocusChangedEventArgs e)
     {
-        if(sender is not AutoCompleteBox box) return;
-        if(e.NewFocusedElement == e.OldFocusedElement) return;
+        if (sender is not AutoCompleteBox box) return;
+        if (e.NewFocusedElement == e.OldFocusedElement) return;
         if (!string.IsNullOrEmpty(OpenOnFocusText))
         {
-            if(Text != OpenOnFocusText) return;
+            if (Text?.Trim() != OpenOnFocusText) return;
         }
         box.IsDropDownOpen = true;
     }

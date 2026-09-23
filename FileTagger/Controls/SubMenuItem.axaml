@@ -1,0 +1,24 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+                  x:DataType="system:Object" x:Key="SubMenuItem">
+        <Setter Property="Header" Value="{Binding ., Converter={StaticResource UpperCamelCaseSpacer}}"/>
+        <Setter Property="Command" Value="{Binding $parent[MenuItem].Command}"/>
+        <Setter Property="CommandParameter" Value="{Binding .}"/>
+        <Setter Property="Icon">
+            <Setter.Value>
+                <Template>
+                    <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
+                        <PathIcon.IsVisible>
+                            <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                                <Binding Path="." />
+                                <Binding Path="$parent[MenuItem;1].Tag" />
+                            </MultiBinding>
+                        </PathIcon.IsVisible>
+                    </PathIcon>
+                </Template>
+            </Setter.Value>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

@@ -7,6 +7,8 @@ using System.Text.Json.Serialization;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
+using Commons;
 
 namespace FileTagger.Services;
 
@@ -24,7 +26,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         TopLevel? target = getTarget();
         if (target == null) return [];
         IStorageBookmarkFolder? initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
-        if(initialLocation == null) return [];
+        if (initialLocation == null) return [];
 
         bool showHiddenFiles = initialLocation.Name.StartsWith('.');
         IReadOnlyList<IStorageFile> files = await GetChildFiles(initialLocation, extensions, showHiddenFiles);
@@ -36,11 +38,12 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         TopLevel? target = getTarget();
         if (target == null) return ([], true, null);
         //Load initial location from bookmark
-        IStorageBookmarkFolder? initialLocation = null;
-        if (bookmarkId != null)
-        {
-            initialLocation = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
-        }
+        IStorageBookmarkFolder? bookmarkFolder = null;
+        if (bookmarkId != null) bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+
+        //Get music folder if there is no bookmark
+        IStorageFolder? initialLocation = bookmarkFolder ?? await target.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Music);
+
         IReadOnlyList<IStorageFolder> folders = await target.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
             Title = "Open Folders",
@@ -56,10 +59,10 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
         string? newBookmarkId = await folder.SaveBookmarkAsync();
         //Release the old bookmark if we got a new one
-        if (newBookmarkId != null && initialLocation != null)
+        if (newBookmarkId != null && bookmarkFolder != null)
         {
-            await initialLocation.ReleaseBookmarkAsync();
-            initialLocation.Dispose();
+            await bookmarkFolder.ReleaseBookmarkAsync();
+            bookmarkFolder.Dispose();
         }
         return (files, false, newBookmarkId);
     }
@@ -74,7 +77,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
             await foreach (IStorageItem item in items)
             {
-                if(!showHiddenFiles && item.Name.StartsWith('.')) continue;
+                if (!showHiddenFiles && item.Name.StartsWith('.')) continue;
                 if (item is IStorageFile file)
                 {
                     string fileName = file.Name.ToLower();
@@ -110,6 +113,52 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         });
 
         return files;
+    }
+
+    public async Task<string?> SaveImageFile(Bitmap bitmap, ImageFormat format, string suggestedName, string? bookmarkId)
+    {
+        TopLevel? target = getTarget();
+        if (target == null) return null;
+
+        //Get initial location from bookmark
+        IStorageBookmarkFolder? bookmarkFolder = null;
+        if (bookmarkId != null) bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+
+        //Use pictures folder if there is no bookmark
+        IStorageFolder? initialLocation = bookmarkFolder ?? await target.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Pictures);
+
+        FilePickerFileType suggestedFileType =
+            format == ImageFormat.Jpeg ? FilePickerFileTypes.ImageJpg : FilePickerFileTypes.ImagePng;
+
+        //Open the file picker to choose a save location and name
+        SaveFilePickerResult newFile = await target.StorageProvider.SaveFilePickerWithResultAsync(new FilePickerSaveOptions
+        {
+            Title = "Save Image",
+            ShowOverwritePrompt = true,
+            FileTypeChoices = [FilePickerFileTypes.ImageJpg, FilePickerFileTypes.ImagePng],
+            SuggestedFileType = suggestedFileType,
+            SuggestedStartLocation = initialLocation,
+            SuggestedFileName = suggestedName,
+        });
+
+        if (newFile.File == null) return null;
+        if (newFile.SelectedFileType != null) suggestedFileType = newFile.SelectedFileType;
+        BitmapEncoderOptions options = suggestedFileType == FilePickerFileTypes.ImageJpg ? new JpegBitmapEncoderOptions() : new PngBitmapEncoderOptions();
+
+        await using Stream stream = await newFile.File.OpenWriteAsync();
+        bitmap.Save(stream, options);
+
+        //Get a new bookmark for the new file's directory
+        IStorageFolder? folder = await newFile.File.GetParentAsync();
+        if (folder == null) return null;
+        string? newBookmarkId = await folder.SaveBookmarkAsync();
+        //Release the old bookmark if we got a new one
+        if (newBookmarkId != null && bookmarkFolder != null)
+        {
+            await bookmarkFolder.ReleaseBookmarkAsync();
+            bookmarkFolder.Dispose();
+        }
+        return newBookmarkId;
     }
 
     public async Task<T?> LoadObjectData<T>() where T : class?

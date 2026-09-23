@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:FileTagger.Views"
-        xmlns:converters="clr-namespace:FileTagger.Converters"
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -13,46 +12,23 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    <Window.Resources>
-        <converters:AreEqualConverter x:Key="AreEqualConverter"/>
-        <converters:UpperCamelCaseSpacer x:Key="UpperCamelCaseSpacer" />
-    </Window.Resources>
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenMusicFilesCommand}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveMusicFilesCommand}" />
+    </Window.KeyBindings>
     <Grid RowDefinitions="Auto, Auto, *" Name="Root">
         <Menu Grid.Row="0">
             <MenuItem Header="_File" Padding="4">
-                <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}">
+                <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}" InputGesture="Ctrl+O">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}" InputGesture="Ctrl+S">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings" Padding="4">
-                <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}">
-                    <MenuItem.ItemContainerTheme>
-                        <ControlTheme TargetType="MenuItem"
-                                      BasedOn="{StaticResource {x:Type MenuItem}}"
-                                      x:DataType="ThemeVariant">
-                            <Setter Property="Header" Value="{Binding ., Converter={StaticResource UpperCamelCaseSpacer}}"/>
-                            <Setter Property="Command" Value="{Binding #Root.((vm:MainWindowViewModel)DataContext).ChangeSelectedThemeCommand}"/>
-                            <Setter Property="CommandParameter" Value="{Binding .}"/>
-                            <Setter Property="Icon">
-                                <Setter.Value>
-                                    <Template>
-                                        <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
-                                            <PathIcon.IsVisible>
-                                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
-                                                    <Binding Path="." />
-                                                    <Binding Path="#Root.((vm:MainWindowViewModel)DataContext).SelectedTheme" />
-                                                </MultiBinding>
-                                            </PathIcon.IsVisible>
-                                        </PathIcon>
-                                    </Template>
-                                </Setter.Value>
-                            </Setter>
-                        </ControlTheme>
-                    </MenuItem.ItemContainerTheme>
-                </MenuItem>
+                <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}"
+                          ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedTheme}" Command="{Binding ChangeSelectedThemeCommand}"/>
                 <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                 </MenuItem>
@@ -70,10 +46,10 @@
                 </StackPanel.Styles>
                 <!-- This is our title text block.  -->
                 <TextBlock Classes="h1" Text="Music Tagger" />
-                <Button ToolTip.Tip="Open Files" Command="{Binding OpenMusicFilesCommand}">
+                <Button ToolTip.Tip="Open Files (Ctrl+O)" Command="{Binding OpenMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/>
                 </Button>
-                <Button ToolTip.Tip="Save Changed Files" Command="{Binding SaveMusicFilesCommand}">
+                <Button ToolTip.Tip="Save Changed Files (Ctrl+S)" Command="{Binding SaveMusicFilesCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
                 <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">

@@ -35,6 +35,7 @@ public class App : Application
             serviceCollection.AddSingleton<IImageService, ImageService>();
             serviceCollection.AddSingleton<MainWindowViewModel>();
             serviceCollection.AddSingleton<EditPanelViewModel>();
+            serviceCollection.AddSingleton<EmbeddedPictureViewModel>();
             serviceCollection.AddSingleton<Func<TopLevel?>>(_ => () => TopLevel.GetTopLevel(desktop.MainWindow));
 
             IServiceProvider services = serviceCollection.BuildServiceProvider();

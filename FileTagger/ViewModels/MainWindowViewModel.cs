@@ -19,6 +19,7 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Assets.Statics;
+using FileTagger.Extensions;
 using FileTagger.Models;
 
 namespace FileTagger.ViewModels;
@@ -29,7 +30,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// All the tracks that have been loaded in
     /// </summary>
     [ObservableProperty]
-    private List<TrackViewModel> _tracks = [];
+    public partial List<TrackViewModel> Tracks { get; set; } = [];
 
     /// <summary>
     /// All the tracks that are currently selected
@@ -72,24 +73,24 @@ public partial class MainWindowViewModel : ViewModelBase
     /// The current sorting options for Tracks
     /// </summary>
     [ObservableProperty]
-    private string _currentSort;
+    public partial string CurrentSort { get; private set; }
 
     /// <summary>
     /// Keeps track of whether sorting is ascending or descending
     /// </summary>
     [ObservableProperty]
-    private bool _sortDescending;
+    public partial bool SortDescending { get; private set; }
 
     /// <summary>
     /// Widths for each column in the track list
     /// </summary>
-    public AvaloniaDictionary<string, double> ListColumnWidths { get; set; }
+    public AvaloniaDictionary<string, double> ListColumnWidths { get; private set; } = new AvaloniaDictionary<string, double>();
 
     /// <summary>
     /// Width for the Edit Panel
     /// </summary>
     [ObservableProperty]
-    private GridLength _editPanelWidth;
+    public partial GridLength EditPanelWidth { get; set; }
 
     /// <summary>
     /// List of <see cref="ThemeVariant"/> values to select from
@@ -99,7 +100,8 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Selected <see cref="ThemeVariant"/>
     /// </summary>
-    [ObservableProperty] private ThemeVariant _selectedTheme = ThemeVariant.Default;
+    [ObservableProperty]
+    public partial ThemeVariant SelectedTheme { get; private set; } = ThemeVariant.Default;
 
     [RelayCommand]
     private void ChangeSelectedTheme(ThemeVariant value)
@@ -119,14 +121,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SwitchTheme()
     {
-        ThemeVariant newTheme = SelectedTheme.ToString() switch
-        {
-            nameof(ThemeVariant.Light) => ThemeVariant.Dark,
-            nameof(ThemeVariant.Dark) => ThemeVariant.Light,
-            nameof(MyThemes.LightGreen) => MyThemes.DarkGreen,
-            nameof(MyThemes.DarkGreen) => MyThemes.LightGreen,
-            _ => ThemeVariant.Dark
-        };
+        ThemeVariant newTheme = MyThemes.GetOppositeTheme(SelectedTheme.ToString());
         ChangeSelectedTheme(newTheme);
     }
 
@@ -160,7 +155,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         SetUpUserPreferences();
         //Set up event handler to update preferences whenever column widths change
-        ListColumnWidths?.CollectionChanged += (_, args) =>
+        ListColumnWidths.CollectionChanged += (_, args) =>
         {
             if (args.NewItems == null) return;
             PropertyInfo columnWidthsProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnWidths))!;
@@ -186,7 +181,7 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentSort = newPreferences.SortOrder.Item1;
         SortDescending = newPreferences.SortOrder.Item2;
         ThemeVariant loadedTheme = newPreferences.RequestedTheme;
-        if(loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
+        if (loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -223,6 +218,20 @@ public partial class MainWindowViewModel : ViewModelBase
     public void SelectionChanged()
     {
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
+    }
+
+    /// <summary>
+    /// Works out which visuals each row in the list should show
+    /// </summary>
+    private void CalculateChangeGroups()
+    {
+        List<int> changedTracks = Tracks.FindIndices(track => track.Changed).ToList();
+        if (changedTracks.Count == 0) return;
+        foreach (int i in changedTracks)
+        {
+            Tracks[i].IsChangeStart = !changedTracks.Contains(i - 1);
+            Tracks[i].IsChangeEnd = !changedTracks.Contains(i + 1);
+        }
     }
 
     /// <summary>
@@ -307,12 +316,14 @@ public partial class MainWindowViewModel : ViewModelBase
                     Track track;
                     lock (wmaLocker) { track = new Track(file.Path.LocalPath); }
                     TrackViewModel trackViewModel = new TrackViewModel(track);
+                    trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
                 else
                 {
                     Track track = new Track(file.Path.LocalPath);
                     TrackViewModel trackViewModel = new TrackViewModel(track);
+                    trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
 
@@ -326,6 +337,24 @@ public partial class MainWindowViewModel : ViewModelBase
         Tracks = newTracks;
         SortTracks(CurrentSort, false);
     }
+
+    private void TrackChanged(object? _, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName == nameof(TrackViewModel.Changed))
+        {
+            //If we change many tracks at the same time, we don't want to run CalculateChangeGroups for each one
+            if (_changeQueued) return;
+            _changeQueued = true;
+            Task.Run(() =>
+            {
+                Task.Delay(10).Wait();
+                CalculateChangeGroups();
+                _changeQueued = false;
+            });
+        }
+    }
+
+    private bool _changeQueued = false;
 
     /// <summary>
     /// Sorts tracks by the fields in the order given
@@ -384,5 +413,6 @@ public partial class MainWindowViewModel : ViewModelBase
         PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
         _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
+        CalculateChangeGroups();
     }
 }

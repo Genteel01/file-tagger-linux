@@ -21,61 +21,61 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets or sets the title
     /// </summary>
     [ObservableProperty]
-    private string _title;
+    public partial string Title { get; set; }
 
     /// <summary>
     /// Gets or sets the album
     /// </summary>
     [ObservableProperty]
-    private string _album;
+    public partial string Album { get; set; }
 
     /// <summary>
     /// Gets or sets the artist
     /// </summary>
     [ObservableProperty]
-    private string _artist;
+    public partial string Artist { get; set; }
 
     /// <summary>
     /// Gets or sets the track number
     /// </summary>
     [ObservableProperty]
-    private int? _trackNumber;
+    public partial int? TrackNumber { get; set; }
 
     /// <summary>
     /// Gets or sets the disc number
     /// </summary>
     [ObservableProperty]
-    private int? _discNumber;
+    public partial int? DiscNumber { get; set; }
 
     /// <summary>
     /// Gets or sets the year
     /// </summary>
     [ObservableProperty]
-    private int? _year;
+    public partial int? Year { get; set; }
 
     /// <summary>
     /// Gets or sets the genre
     /// </summary>
     [ObservableProperty]
-    private string _genre;
+    public partial string Genre { get; set; }
 
     /// <summary>
     /// Gets or sets the album artist
     /// </summary>
     [ObservableProperty]
-    private string _albumArtist;
+    public partial string AlbumArtist { get; set; }
 
     /// <summary>
     /// Gets or sets the composer
     /// </summary>
     [ObservableProperty]
-    private string _composer;
+    public partial string Composer { get; set; }
 
     /// <summary>
     /// Gets or sets the comment
     /// </summary>
     [ObservableProperty]
-    private string _comment;
+    public partial string Comment { get; set; }
 
     /// <summary>
     /// The Track that this ViewModel represents
@@ -113,14 +113,23 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets or sets whether the track has changed
     /// </summary>
     [ObservableProperty]
-    private bool _changed;
+    public partial bool Changed { get; set; }
 
-    private bool _finishedSetup;
+    /// <summary>
+    /// In a list of tracks, IsChangeStart = true when Changed = true and the previous item on the list has Changed = false
+    /// </summary>
+    [ObservableProperty] public partial bool IsChangeStart { get; set; } = false;
+    /// <summary>
+    /// In a list of tracks, IsChangeEnd = true when Changed = true and the next item on the list has Changed = false
+    /// </summary>
+    [ObservableProperty] public partial bool IsChangeEnd { get; set; } = false;
+
+    private readonly bool _finishedSetup;
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (_finishedSetup && e.PropertyName != "Changed")
+        if (_finishedSetup && e.PropertyName != nameof(Changed) && e.PropertyName != nameof(IsChangeStart) && e.PropertyName != nameof(IsChangeEnd))
         {
             Changed = true;
         }
@@ -157,6 +166,26 @@ public partial class TrackViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Changes the description of the Embedded Picture at the given index
+    /// </summary>
+    public void ChangePictureDescription(string newDescription, int index)
+    {
+        string oldDescription = EmbeddedPictures[index].Description;
+        EmbeddedPictures[index].Description = newDescription;
+        if (oldDescription != newDescription) Changed = true;
+    }
+
+    /// <summary>
+    /// Changes the type of the Embedded Picture at the given index
+    /// </summary>
+    public void ChangePictureType(PictureInfo.PIC_TYPE newType, int index)
+    {
+        PictureInfo.PIC_TYPE oldType = EmbeddedPictures[index].PicType;
+        EmbeddedPictures[index].PicType = newType;
+        if (oldType != newType) Changed = true;
+    }
+
+    /// <summary>
     /// Gets a Track of this ViewModel
     /// </summary>
     /// <returns>The Track</returns>
@@ -173,10 +202,13 @@ public partial class TrackViewModel : ViewModelBase
         thisTrack.AlbumArtist = AlbumArtist;
         thisTrack.Composer = Composer;
         thisTrack.Comment = Comment;
-        thisTrack.EmbeddedPictures.Clear();
-        foreach (PictureInfo picture in EmbeddedPictures)
+        if (_isCoverSet)
         {
-            thisTrack.EmbeddedPictures.Add(picture);
+            thisTrack.EmbeddedPictures.Clear();
+            foreach (PictureInfo picture in EmbeddedPictures)
+            {
+                thisTrack.EmbeddedPictures.Add(picture);
+            }
         }
         return thisTrack;
     }
@@ -187,7 +219,12 @@ public partial class TrackViewModel : ViewModelBase
     /// </summary>
     public void SaveTrackChanges()
     {
-        GetTrack().Save();
-        Changed = false;
+        if (Changed)
+        {
+            GetTrack().Save();
+            Changed = false;
+            IsChangeStart = false;
+            IsChangeEnd = false;
+        }
     }
 }

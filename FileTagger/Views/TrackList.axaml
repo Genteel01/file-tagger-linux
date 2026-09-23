@@ -3,16 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
-             xmlns:converters="clr-namespace:FileTagger.Converters"
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:views="clr-namespace:FileTagger.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:MainWindowViewModel"
              x:Class="FileTagger.Views.TrackList">
-    <UserControl.Resources>
-        <converters:GridSizeConverter x:Key="GridSizeConverter"/>
-        <converters:SortArrowsConverter x:Key="SortArrowsConverter"/>
-    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />
@@ -41,8 +36,11 @@
             <Setter Property="Width" Value="3" />
         </Style>
     </UserControl.Styles>
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Ctrl+A" Command="{Binding #TrackListBox.SelectAll}" />
+    </UserControl.KeyBindings>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True" Name="ListScroller"
-                  GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown">
+                  Tapped="ScrollViewerTapped" KeyDown="Root_OnKeyDown">
         <Panel Grid.IsSharedSizeScope="True">
             <Grid RowDefinitions="Auto, *">
                 <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->

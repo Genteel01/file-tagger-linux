@@ -25,8 +25,13 @@
             <Color x:Key='SectionBorderColor'>#888888</Color>
             <Color x:Key='SortArrowColor'>#30000000</Color>
 
-            <Color x:Key="TrackChangedIndicationColor">Red</Color>
+            <Color x:Key="TrackChangedBorderColor">Red</Color>
+            <Color x:Key="TrackChangedBackgroundColor">#0BFF0000</Color>
             <Color x:Key='CutOverlayColor'>#80FFFFFF</Color>
+
+            <Color x:Key="CancelHoverColor">#66ff0000</Color>
+            <Color x:Key="CancelPressedColor">#99ff0000</Color>
+            <Color x:Key="CancelSolidColor">#FFff0000</Color>
 
             <!--Text Colour, PathIcon colour-->
             <SolidColorBrush x:Key='ThemeForegroundBrush' Color="{StaticResource ThemeForegroundColor}"/>
@@ -56,8 +61,13 @@
 
             <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
 
-            <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="{StaticResource TrackChangedIndicationColor}"/>
+            <SolidColorBrush x:Key="TrackChangedBorderBrush" Color="{StaticResource TrackChangedBorderColor}"/>
+            <SolidColorBrush x:Key="TrackChangedBackgroundBrush" Color="{StaticResource TrackChangedBackgroundColor}"/>
             <SolidColorBrush x:Key="CutOverlayBrush" Color="{StaticResource CutOverlayColor}"/>
+
+            <SolidColorBrush x:Key="CancelHoverBrush" Color="{StaticResource CancelHoverColor}"/>
+            <SolidColorBrush x:Key="CancelPressedBrush" Color="{StaticResource CancelPressedColor}"/>
+            <SolidColorBrush x:Key="CancelSolidBrush" Color="{StaticResource CancelSolidColor}"/>
 
             <SolidColorBrush x:Key='EditPanelBackgroundBrush' Color="{StaticResource EditPanelBackgroundColor}"/>
             <SolidColorBrush x:Key='ListSeparatorBrush' Color="{StaticResource ListSeparatorColor}"/>

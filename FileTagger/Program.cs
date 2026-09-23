@@ -16,6 +16,10 @@ sealed class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .With(new X11PlatformOptions
+            {
+                UseDBusMenu = false
+            })
             .WithInterFont()
             .LogToTrace();
 }

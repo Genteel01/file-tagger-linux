@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using FileTagger.Controls;
@@ -46,8 +47,7 @@ public partial class TrackList : UserControl
     }
 
     /// <summary>
-    /// We want the ScrollBars to be Focusable so clicking them won't meet the condition in <see cref="ScrollViewerFocusGained"/>,
-    /// but we don't want them to actually take focus from whatever you were focusing before, so we redirect it back
+    /// Keep the previous element focused when you scroll
     /// </summary>
     private void ScrollBarGettingFocus(object? sender, FocusChangingEventArgs e)
     {
@@ -63,11 +63,11 @@ public partial class TrackList : UserControl
     }
 
     /// <summary>
-    /// Reset the selection when we Focus the ScrollViewer
+    /// Reset the selection when we tap the empty part of the ScrollViewer
     /// </summary>
-    private void ScrollViewerFocusGained(object? sender, FocusChangedEventArgs e)
+    private void ScrollViewerTapped(object? sender, TappedEventArgs e)
     {
-        if (e.NewFocusedElement == sender)
+        if (e.Source is ScrollContentPresenter)
         {
             TrackListBox.UnselectAll();
         }
