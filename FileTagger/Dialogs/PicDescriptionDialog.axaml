@@ -8,8 +8,7 @@
         d:DesignWidth="{StaticResource DescriptionDialogWidth}" d:DesignHeight="{StaticResource DescriptionDialogHeight}"
         x:Class="FileTagger.Dialogs.PicDescriptionDialog" x:DataType="viewModels:PictureDescriptionViewModel" CanMinimize="False"
         Title="Set Picture Description"
-        WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False"
-        KeyDown="DialogKeyDown">
+        WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False">
     <Window.Styles>
         <Style Selector="Button">
             <Setter Property="BorderThickness" Value="0 1 0 0"/>
@@ -43,6 +42,10 @@
             <Setter Property="BorderThickness" Value="1 1 0 0"/>
         </Style>
     </Window.Styles>
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Enter" Command="{Binding CloseCommand}" />
+        <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}" />
+    </Window.KeyBindings>
     <DockPanel>
         <Grid Name="ButtonGrid" DockPanel.Dock="Bottom" ColumnDefinitions="*, Auto *" Height="{StaticResource DescriptionDialogRowHeight}">
             <Button Grid.Column="0" Name="CancelButton" Content="Cancel" Command="{Binding CancelCommand}"/>
