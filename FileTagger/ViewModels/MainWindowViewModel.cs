@@ -218,7 +218,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public void SelectionChanged()
     {
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
-        CalculateChangeGroups();
     }
 
     /// <summary>
@@ -317,12 +316,14 @@ public partial class MainWindowViewModel : ViewModelBase
                     Track track;
                     lock (wmaLocker) { track = new Track(file.Path.LocalPath); }
                     TrackViewModel trackViewModel = new TrackViewModel(track);
+                    trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
                 else
                 {
                     Track track = new Track(file.Path.LocalPath);
                     TrackViewModel trackViewModel = new TrackViewModel(track);
+                    trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
 
@@ -335,6 +336,14 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectionChanged();
         Tracks = newTracks;
         SortTracks(CurrentSort, false);
+    }
+
+    private void TrackChanged(object? _, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName == nameof(TrackViewModel.Changed))
+        {
+            CalculateChangeGroups();
+        }
     }
 
     /// <summary>
