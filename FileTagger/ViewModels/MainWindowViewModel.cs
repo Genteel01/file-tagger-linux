@@ -342,9 +342,19 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (args.PropertyName == nameof(TrackViewModel.Changed))
         {
-            CalculateChangeGroups();
+            //If we change many tracks at the same time, we don't want to run CalculateChangeGroups for each one
+            if (_changeQueued) return;
+            _changeQueued = true;
+            Task.Run(() =>
+            {
+                Task.Delay(10).Wait();
+                CalculateChangeGroups();
+                _changeQueued = false;
+            });
         }
     }
+
+    private bool _changeQueued = false;
 
     /// <summary>
     /// Sorts tracks by the fields in the order given
