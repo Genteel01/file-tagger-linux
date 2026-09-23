@@ -22,7 +22,7 @@
         </Style>
     </UserControl.Styles>
     <ScrollViewer>
-        <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
+        <StackPanel Name="SidePanel" IsEnabled="{Binding SelectedTracks.Count}" Focusable="True" LostFocus="PanelFocusLost">
             <controls:LabelledDropdown
                 Name="TitleField"
                 LabelText="Title"

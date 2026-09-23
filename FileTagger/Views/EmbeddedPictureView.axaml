@@ -52,7 +52,7 @@
     <StackPanel>
         <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch">
             <Panel.ContextMenu>
-                <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
+                <ContextMenu IsEnabled="{Binding SelectedTracks.Count}">
                     <MenuItem Header="_Add picture" Command="{Binding AddCoverImagesCommand}">
                         <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
                     </MenuItem>

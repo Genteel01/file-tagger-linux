@@ -25,14 +25,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// <summary>
     /// All the tracks that are currently selected
     /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasSelectedTracks))]
-    private partial List<TrackViewModel> SelectedTracks { get; set; } = [];
-
-    /// <summary>
-    /// Whether SelectedTracks is not empty
-    /// </summary>
-    public bool HasSelectedTracks => SelectedTracks.Count > 0;
+    public List<TrackViewModel> SelectedTracks { get; private set; } = [];
 
     /// <summary>
     /// Whether we have a copied image
@@ -47,7 +40,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     {
         get
         {
-            if (!HasSelectedTracks || DisplayedPicture == null) return false;
+            if (SelectedTracks.Count == 0 || DisplayedPicture == null) return false;
             if (CopiedPic == null) return false;
             if (TracksToCutFrom.Count < SelectedTracks.Count) return false;
             if (!CopiedPic.TrueEqual(DisplayedPicture)) return false;
@@ -361,7 +354,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         DisplayedPictureIndex = 0;
         SelectedTrackPictures = [];
         SelectedTrackHasPictures = false;
-        if (!HasSelectedTracks) return;
+        if (SelectedTracks.Count == 0) return;
 
         SelectedTrackPictures = GetSelectedTrackPictures();
         if (oldDisplayedPicture != null && SelectedTrackPictures.Count > oldDisplayedIndex)

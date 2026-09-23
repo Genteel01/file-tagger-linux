@@ -14,13 +14,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// All the tracks that are currently selected
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasSelectedTracks))]
-    private partial List<TrackViewModel> SelectedTracks { get; set; } = [];
-
-    /// <summary>
-    /// Whether SelectedTracks is not empty
-    /// </summary>
-    public bool HasSelectedTracks => SelectedTracks.Count > 0;
+    public partial List<TrackViewModel> SelectedTracks { get; private set; } = [];
 
     /// <summary>
     /// The value in the edit box for each field
@@ -110,7 +104,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         Dictionary<string, string> newFieldTexts = SetUpFieldTexts();
         Dictionary<string, List<object?>> newFieldOptions = SetUpFieldOptions();
 
-        if (!HasSelectedTracks)
+        if (SelectedTracks.Count == 0)
         {
             FieldTexts = newFieldTexts;
             FieldOptions = newFieldOptions;
