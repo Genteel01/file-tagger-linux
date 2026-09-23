@@ -88,7 +88,7 @@
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
-            <ContentControl Content="{Binding EmbeddedPicture}"/>
+            <ContentControl Content="{Binding EmbeddedPicture}" Margin="8"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -47,7 +47,7 @@
         </Style>
     </UserControl.Styles>
     <StackPanel>
-        <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" MaxWidth="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch" Margin="8 32 8 4">
+        <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" MaxWidth="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch">
             <Panel.ContextMenu>
                 <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                     <MenuItem Header="_Add picture" Command="{Binding AddCoverImagesCommand}">
@@ -106,7 +106,8 @@
                 </PathIcon>
             </Panel>
         </Panel>
-        <Panel Margin="8 0" Height="16">
+        <!--Is a StackPanel for design purposes, in practice only one item is actually shown at a time-->
+        <StackPanel Orientation="Horizontal" Margin="0 2" Height="16">
             <StackPanel IsVisible="{Binding ShowImageNavigationButtons}" Orientation="Horizontal" Spacing="4">
                 <Button Command="{Binding PreviousImageCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <TextBlock Text="{Binding PicCountString}"/>
@@ -121,8 +122,8 @@
                     </MultiBinding>
                 </TextBlock.IsVisible>
             </TextBlock>
-        </Panel>
-        <Panel Margin="8 2 8 4" Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
+        </StackPanel>
+        <Panel Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
                Width="{Binding #ImagePanel.Bounds.Width}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
             <ComboBox ItemsSource="{Binding PictureTypes, Converter={StaticResource UpperCamelCaseSpacer}}" SelectedItem="{Binding SelectedPictureType, Converter={StaticResource UpperCamelCaseSpacer}}" Name="PicTypeSelector"/>
             <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
