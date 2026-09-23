@@ -1,6 +1,5 @@
 using System;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using FileTagger.Assets.Statics;
@@ -37,6 +36,7 @@ public partial class EditPanel : UserControl
         ComposerField.TextFilter = _searchFunction;
         DiscNumberField.TextFilter = _searchFunction;
     }
+
 
     private void AutoCompleteBoxDropdownClosed(object? sender, EventArgs e)
     {
