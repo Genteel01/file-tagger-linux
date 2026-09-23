@@ -36,8 +36,11 @@
             <Setter Property="Width" Value="3" />
         </Style>
     </UserControl.Styles>
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Ctrl+A" Command="{Binding #TrackListBox.SelectAll}" />
+    </UserControl.KeyBindings>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True" Name="ListScroller"
-                  GotFocus="ScrollViewerFocusGained" KeyDown="Root_OnKeyDown">
+                  Tapped="ScrollViewerTapped" KeyDown="Root_OnKeyDown">
         <Panel Grid.IsSharedSizeScope="True">
             <Grid RowDefinitions="Auto, *">
                 <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->
