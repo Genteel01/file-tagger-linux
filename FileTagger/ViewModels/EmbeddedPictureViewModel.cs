@@ -202,7 +202,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         ReplacePictures(images);
     }
 
-    private void ReplacePictures(List<PictureInfo> pictures)
+    private void ReplacePictures(List<PictureInfo> newPictures)
     {
         foreach (TrackViewModel track in SelectedTracks)
         {
@@ -211,8 +211,8 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
             if(DisplayedPicture != null) index = RemoveCurrentlyDisplayedPicture(track);
             else track.EmbeddedPictures.RemoveAll(MatchesSelectedPicType);
             //Add the new pictures either in place or on the end
-            if (index == -1) track.EmbeddedPictures.AddRange(pictures);
-            else track.EmbeddedPictures.InsertRange(index, pictures);
+            if (index == -1) track.EmbeddedPictures.AddRange(newPictures);
+            else track.EmbeddedPictures.InsertRange(index, newPictures);
         }
         ChooseDisplayedImage();
     }
@@ -233,11 +233,11 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// <summary>
     /// Adds the given pictures to the Selected Tracks
     /// </summary>
-    private void AddPicturesToEnd(List<PictureInfo> pictures)
+    private void AddPicturesToEnd(List<PictureInfo> newPictures)
     {
         foreach (TrackViewModel track in SelectedTracks)
         {
-            track.EmbeddedPictures.AddRange(pictures);
+            track.EmbeddedPictures.AddRange(newPictures);
         }
         ChooseDisplayedImage();
         DisplayedPictureIndex = SelectedTrackPictures.Count - 1;
@@ -307,7 +307,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     }
 
     /// <summary>
-    /// Removes the images that were cut from the tracks they were cut from
+    /// Removes the image that was cut from the tracks it was cut from
     /// </summary>
     private void FinishCutting()
     {
