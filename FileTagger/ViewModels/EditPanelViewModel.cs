@@ -608,10 +608,10 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     private readonly Dictionary<uint, Bitmap> _cachedImages = new Dictionary<uint, Bitmap>();
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(SelectedTrackHasPictures))]
     private void ChangePictureType(PictureInfo.PIC_TYPE newType)
     {
-        PerformActionOnSelectedTracks((track, index) => track.ChangePictureType(newType, index));
+        ModifySelectedTracksPictures((track, index) => track.ChangePictureType(newType, index));
         SelectedPictureType = newType;
         ChooseDisplayedImage();
     }
@@ -633,13 +633,13 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         string? result = await dialog.ShowDialog<string?>(target);
         if (result == null) return;
 
-        PerformActionOnSelectedTracks((track, index) => track.ChangePictureDescription(result, index));
+        ModifySelectedTracksPictures((track, index) => track.ChangePictureDescription(result, index));
     }
 
     /// <summary>
     /// Performs an operation on the displayed picture, or all pictures when no individual picture is displayed.
     /// </summary>
-    private void PerformActionOnSelectedTracks(Action<TrackViewModel, int> action)
+    private void ModifySelectedTracksPictures(Action<TrackViewModel, int> action)
     {
         foreach (TrackViewModel track in SelectedTracks)
         {
