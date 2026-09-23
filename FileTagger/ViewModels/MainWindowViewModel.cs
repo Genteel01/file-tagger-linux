@@ -19,6 +19,7 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Assets.Statics;
+using FileTagger.Extensions;
 using FileTagger.Models;
 
 namespace FileTagger.ViewModels;
@@ -217,6 +218,21 @@ public partial class MainWindowViewModel : ViewModelBase
     public void SelectionChanged()
     {
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
+        CalculateChangeGroups();
+    }
+
+    /// <summary>
+    /// Works out which visuals each row in the list should show
+    /// </summary>
+    private void CalculateChangeGroups()
+    {
+        List<int> changedTracks = Tracks.FindIndices(track => track.Changed).ToList();
+        if (changedTracks.Count == 0) return;
+        foreach (int i in changedTracks)
+        {
+            Tracks[i].IsChangeStart = !changedTracks.Contains(i - 1);
+            Tracks[i].IsChangeEnd = !changedTracks.Contains(i + 1);
+        }
     }
 
     /// <summary>
@@ -378,5 +394,6 @@ public partial class MainWindowViewModel : ViewModelBase
         PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
         _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
+        CalculateChangeGroups();
     }
 }

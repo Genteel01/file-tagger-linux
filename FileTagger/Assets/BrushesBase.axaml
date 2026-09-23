@@ -25,7 +25,8 @@
             <Color x:Key='SectionBorderColor'>#888888</Color>
             <Color x:Key='SortArrowColor'>#30000000</Color>
 
-            <Color x:Key="TrackChangedIndicationColor">Red</Color>
+            <Color x:Key="TrackChangedBorderColor">Red</Color>
+            <Color x:Key="TrackChangedBackgroundColor">#0BFF0000</Color>
             <Color x:Key='CutOverlayColor'>#80FFFFFF</Color>
 
             <Color x:Key="CancelHoverColor">#66ff0000</Color>
@@ -60,7 +61,8 @@
 
             <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
 
-            <SolidColorBrush x:Key="TrackChangedIndicationBrush" Color="{StaticResource TrackChangedIndicationColor}"/>
+            <SolidColorBrush x:Key="TrackChangedBorderBrush" Color="{StaticResource TrackChangedBorderColor}"/>
+            <SolidColorBrush x:Key="TrackChangedBackgroundBrush" Color="{StaticResource TrackChangedBackgroundColor}"/>
             <SolidColorBrush x:Key="CutOverlayBrush" Color="{StaticResource CutOverlayColor}"/>
 
             <SolidColorBrush x:Key="CancelHoverBrush" Color="{StaticResource CancelHoverColor}"/>

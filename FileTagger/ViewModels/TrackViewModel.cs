@@ -115,12 +115,21 @@ public partial class TrackViewModel : ViewModelBase
     [ObservableProperty]
     public partial bool Changed { get; set; }
 
+    /// <summary>
+    /// In a list of tracks, IsChangeStart = true when Changed = true and the previous item on the list has Changed = false
+    /// </summary>
+    [ObservableProperty] public partial bool IsChangeStart { get; set; } = false;
+    /// <summary>
+    /// In a list of tracks, IsChangeEnd = true when Changed = true and the next item on the list has Changed = false
+    /// </summary>
+    [ObservableProperty] public partial bool IsChangeEnd { get; set; } = false;
+
     private readonly bool _finishedSetup;
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (_finishedSetup && e.PropertyName != "Changed")
+        if (_finishedSetup && e.PropertyName != nameof(Changed) && e.PropertyName != nameof(IsChangeStart) && e.PropertyName != nameof(IsChangeEnd))
         {
             Changed = true;
         }
@@ -214,6 +223,8 @@ public partial class TrackViewModel : ViewModelBase
         {
             GetTrack().Save();
             Changed = false;
+            IsChangeStart = false;
+            IsChangeEnd = false;
         }
     }
 }

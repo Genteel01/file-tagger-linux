@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ATL;
 using Avalonia.Controls;
@@ -11,6 +12,26 @@ namespace FileTagger.Extensions;
 
 public static class MyExtensions
 {
+    /// <summary>
+    /// Extensions for List
+    /// </summary>
+    extension<T>(List<T> collection)
+    {
+        /// <summary>
+        /// Returns the indices of all items that match the predicate.
+        /// </summary>
+        public IEnumerable<int> FindIndices(Func<T, bool> match)
+        {
+            IEnumerable<int> indices = [];
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (match(collection[i])) indices = indices.Append(i);
+            }
+
+            return indices;
+        }
+    }
+
     /// <summary>
     /// Extensions for ILogical
     /// </summary>
