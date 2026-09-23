@@ -43,7 +43,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// Decides whether to show the display image as being cut.
     /// Is true if <see cref="TracksToCutFrom"/> contains all of <see cref="SelectedTracks"/> and the displayed image is <see cref="CopiedPic"/>
     /// </summary>
-    public bool DisplayedImageIsBeingCut
+    public bool DisplayedPictureIsBeingCut
     {
         get
         {
@@ -69,7 +69,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     [NotifyPropertyChangedFor(nameof(DisplayedPicture))]
     [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
     [NotifyPropertyChangedFor(nameof(HasDisplayedPicture))]
-    [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    [NotifyPropertyChangedFor(nameof(DisplayedPictureIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
     [ObservableProperty]
     private partial List<PictureInfo> SelectedTrackPictures { get; set; } = [];
@@ -80,7 +80,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DisplayedPicture))]
     [NotifyPropertyChangedFor(nameof(DisplayedPictureBitmap))]
-    [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    [NotifyPropertyChangedFor(nameof(DisplayedPictureIsBeingCut))]
     [NotifyPropertyChangedFor(nameof(PicCountString))]
     private partial int DisplayedPictureIndex { get; set; } = 0;
 
@@ -125,7 +125,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// List of tracks we are cutting images from
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(DisplayedImageIsBeingCut))]
+    [NotifyPropertyChangedFor(nameof(DisplayedPictureIsBeingCut))]
     private partial List<TrackViewModel> TracksToCutFrom { get; set; } = [];
 
     /// <summary>
