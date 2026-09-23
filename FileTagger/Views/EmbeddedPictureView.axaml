@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
              x:Class="FileTagger.Views.EmbeddedPictureView" x:DataType="viewModels:EmbeddedPictureViewModel">
     <UserControl.Styles>
         <!--Overlay changing the colour of the displayed image-->
@@ -47,7 +47,7 @@
         </Style>
     </UserControl.Styles>
     <StackPanel>
-        <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" MaxWidth="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch">
+        <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch">
             <Panel.ContextMenu>
                 <ContextMenu IsEnabled="{Binding HasSelectedTracks}">
                     <MenuItem Header="_Add picture" Command="{Binding AddCoverImagesCommand}">
@@ -91,9 +91,9 @@
             <Panel IsVisible="{Binding !HasDisplayedPicture}">
                 <Border Name="FallbackImage" Background="{DynamicResource ThemeBackgroundBrush}"
                         CornerRadius="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.05}"
-                        Width="{Binding #ImagePanel.Bounds.Width}" Height="{Binding #FallbackImage.Bounds.Width}"/>
-                <PathIcon Width="{Binding #ImagePanel.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
-                          Height="{Binding #ImagePanel.Bounds.Height, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
+                        MaxWidth="{StaticResource BaseImageSize}" Height="{Binding #FallbackImage.Bounds.Width}"/>
+                <PathIcon Width="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
+                          Height="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                           Foreground="{DynamicResource EditPanelBackgroundBrush}" Classes.One="{Binding !SelectedTrackHasPictures}">
                     <PathIcon.Styles>
                         <Style Selector="PathIcon.One">
@@ -124,7 +124,7 @@
             </TextBlock>
         </StackPanel>
         <Panel Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
-               Width="{Binding #ImagePanel.Bounds.Width}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
+               MaxWidth="{StaticResource BaseImageSize}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
             <ComboBox ItemsSource="{Binding PictureTypes, Converter={StaticResource UpperCamelCaseSpacer}}" SelectedItem="{Binding SelectedPictureType, Converter={StaticResource UpperCamelCaseSpacer}}" Name="PicTypeSelector"/>
             <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
             <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
