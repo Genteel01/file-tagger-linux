@@ -451,7 +451,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     {
         int currentIndex = PictureTypes.IndexOf(SelectedPictureType);
         if (currentIndex == -1) return;
-        SelectedPictureType = PictureTypes[DisplayedPictureIndex = Maths.ChangeCollectionIndex(currentIndex, PictureTypes.Length, change)];
+        SelectedPictureType = PictureTypes[Maths.ChangeCollectionIndex(currentIndex, PictureTypes.Length, change)];
     }
 
     [RelayCommand(CanExecute = nameof(SelectedTrackHasPictures))]
