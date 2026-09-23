@@ -6,7 +6,6 @@
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:sharedEventHandlers="clr-namespace:FileTagger.SharedEventHandlers"
              xmlns:statics="clr-namespace:FileTagger.Assets.Statics"
-             xmlns:views="clr-namespace:FileTagger.Views"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="900"
              x:Class="FileTagger.Views.EditPanel"
              x:DataType="viewModels:EditPanelViewModel"
@@ -89,7 +88,7 @@
                 Text="{Binding FieldTexts[DiscNumber]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"
                 SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
-            <views:EmbeddedPictureView/>
+            <ContentControl Content="{Binding EmbeddedPicture}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

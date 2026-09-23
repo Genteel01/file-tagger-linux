@@ -9,10 +9,8 @@ public class EditPanelViewModelTests
 {
     public static EditPanelViewModel CreateMockViewModel()
     {
-        IFileService fileService = new FakeFileService();
-        IImageService imageService = new FakeImageService();
-        IPreferenceService preferenceService = new PreferenceService(fileService);
-        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(fileService, imageService, preferenceService, () => null);
+        EmbeddedPictureViewModel stubEmbeddedPicture = new EmbeddedPictureViewModel();
+        EditPanelViewModel editPanelViewModel = new EditPanelViewModel(stubEmbeddedPicture);
         return editPanelViewModel;
     }
 
