@@ -350,8 +350,9 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     {
         if (CopiedPic == null) return;
         FinishCutting();
-        CopiedPic.PicType = SelectedPictureType;
-        List<PictureInfo> images = [CopiedPic];
+        PictureInfo newPic = new PictureInfo(CopiedPic);
+        newPic.PicType = SelectedPictureType;
+        List<PictureInfo> images = [newPic];
         if(replaceExisting) ReplacePictures(images);
         else AddPicturesToEnd(images);
     }
