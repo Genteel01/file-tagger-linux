@@ -28,22 +28,6 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     public List<TrackViewModel> SelectedTracks { get; private set; } = [];
 
     /// <summary>
-    /// Decides whether to show the display image as being cut.
-    /// Is true if <see cref="TracksToCutFrom"/> contains all of <see cref="SelectedTracks"/> and the displayed image is <see cref="CopiedPic"/>
-    /// </summary>
-    public bool DisplayedPictureIsBeingCut
-    {
-        get
-        {
-            if (SelectedTracks.Count == 0 || DisplayedPicture == null) return false;
-            if (CopiedPic == null) return false;
-            if (TracksToCutFrom.Count < SelectedTracks.Count) return false;
-            if (!CopiedPic.TrueEqual(DisplayedPicture)) return false;
-            return SelectedTracks.All(track => TracksToCutFrom.Any(cutTrack => cutTrack == track));
-        }
-    }
-
-    /// <summary>
     /// Whether any SelectedTrack has pictures of the selected type
     /// </summary>
     [ObservableProperty]
@@ -110,13 +94,6 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     public partial PictureInfo.PIC_TYPE SelectedPictureType { get; set; } = PictureInfo.PIC_TYPE.Front;
 
     /// <summary>
-    /// List of tracks we are cutting images from
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(DisplayedPictureIsBeingCut))]
-    private partial List<TrackViewModel> TracksToCutFrom { get; set; } = [];
-
-    /// <summary>
     /// The currently copied image, if there is one
     /// </summary>
     [ObservableProperty]
@@ -127,6 +104,29 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// Whether we have a copied image
     /// </summary>
     private bool HasImageClipboardData => CopiedPic != null;
+
+    /// <summary>
+    /// List of tracks we are cutting images from
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayedPictureIsBeingCut))]
+    private partial List<TrackViewModel> TracksToCutFrom { get; set; } = [];
+
+    /// <summary>
+    /// Decides whether to show the display image as being cut.
+    /// Is true if <see cref="TracksToCutFrom"/> contains all of <see cref="SelectedTracks"/> and the displayed image is <see cref="CopiedPic"/>
+    /// </summary>
+    public bool DisplayedPictureIsBeingCut
+    {
+        get
+        {
+            if (DisplayedPicture == null) return false;
+            if (CopiedPic == null) return false;
+            if (!CopiedPic.TrueEqual(DisplayedPicture)) return false;
+            if (TracksToCutFrom.Count < SelectedTracks.Count) return false;
+            return SelectedTracks.All(track => TracksToCutFrom.Any(cutTrack => cutTrack == track));
+        }
+    }
 
     /// <summary>
     /// <see cref="IFileService"/> received through Dependency Injection used for opening the file dialog
