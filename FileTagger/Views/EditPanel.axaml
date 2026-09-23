@@ -21,48 +21,6 @@
         <Style Selector="controls|LabelledDropdown">
             <Setter Property="OpenOnFocusText" Value="{x:Static statics:Consts.UnchangedField}"/>
         </Style>
-        <Style Selector="Border#FallbackImage:disabled">
-            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
-        </Style>
-        <!--Overlay changing the colour of the displayed image-->
-        <Style Selector="Image.Cut">
-            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
-        </Style>
-        <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
-        <Style Selector="Panel#PicTypeControl PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />
-        </Style>
-        <Style Selector="Panel#PicTypeControl ComboBox">
-            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
-        </Style>
-        <Style Selector="Panel#PicTypeControl Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Width" Value="28"/>
-        </Style>
-        <Style Selector="Panel#PicTypeControl ComboBox">
-            <Setter Property="Padding" Value="28 4"/>
-            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
-        </Style>
-        <Style Selector="Panel#PicTypeControl:pointerover PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource ThemeBorderMidBrush}" />
-        </Style>
-        <Style Selector="Panel#PicTypeControl:pointerover ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
-        </Style>
-        <Style Selector="Panel#PicTypeControl:focus-within PathIcon, Panel#PicTypeControl:focus-within ComboBox, Panel#PicTypeControl.open ComboBox, Panel#PicTypeControl.open PathIcon">
-            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
-        </Style>
-        <Style Selector="Panel#PicTypeControl:focus-within ComboBox Border, Panel#PicTypeControl.open ComboBox Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
-        </Style>
-        <Style Selector="Panel#PicTypeControl ComboBox TextBlock">
-            <Setter Property="TextAlignment" Value="Center" />
-        </Style>
-        <Style Selector="Panel#PicTypeControl ComboBoxItem">
-            <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
-        </Style>
     </UserControl.Styles>
     <ScrollViewer>
         <StackPanel Name="SidePanel" IsEnabled="{Binding HasSelectedTracks}" Focusable="True" LostFocus="PanelFocusLost">
