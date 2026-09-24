@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Avalonia.Controls;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 
 namespace FileTagger.Statics;
 

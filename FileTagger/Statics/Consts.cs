@@ -1,7 +1,7 @@
 using Avalonia.Styling;
 using FileTagger.ViewModels;
 
-namespace FileTagger.Assets.Statics;
+namespace FileTagger.Statics;
 
 public static class MyThemes
 {

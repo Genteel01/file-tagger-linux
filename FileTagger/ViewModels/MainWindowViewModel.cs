@@ -19,7 +19,7 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.Dialogs;
 using FileTagger.Extensions;
 using FileTagger.Models;

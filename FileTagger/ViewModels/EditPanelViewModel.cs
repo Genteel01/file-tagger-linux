@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 
 namespace FileTagger.ViewModels;
 

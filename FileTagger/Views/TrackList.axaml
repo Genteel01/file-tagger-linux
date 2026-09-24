@@ -5,7 +5,7 @@
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:views="clr-namespace:FileTagger.Views"
-             xmlns:statics="clr-namespace:FileTagger.Assets.Statics"
+             xmlns:statics="clr-namespace:FileTagger.Statics"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:MainWindowViewModel"
              x:Class="FileTagger.Views.TrackList">

@@ -1,7 +1,7 @@
 using System.Globalization;
 using ATL;
 using Avalonia.Styling;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.Converters;
 
 namespace FileTaggerTests.Converters;

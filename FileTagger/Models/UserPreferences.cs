@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Styling;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Models;

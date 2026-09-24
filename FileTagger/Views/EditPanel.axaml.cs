@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
