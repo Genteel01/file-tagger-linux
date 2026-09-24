@@ -19,6 +19,7 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FileTagger.Assets.Statics;
+using FileTagger.Dialogs;
 using FileTagger.Extensions;
 using FileTagger.Models;
 
@@ -36,6 +37,10 @@ public partial class MainWindowViewModel : ViewModelBase
     /// All the tracks that are currently selected
     /// </summary>
     public ObservableCollection<TrackViewModel> SelectedTracks { get; } = [];
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
+    public partial bool HasSelectedTracks { get; set; }
 
     /// <summary>
     /// Message to send SelectedTracks to <see cref="EditPanelViewModel"/>
@@ -131,11 +136,17 @@ public partial class MainWindowViewModel : ViewModelBase
         _preferenceService.ResetUserPreferences();
     }
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
+    /// <summary>
+    /// Function to get the target to use to display a dialog
+    /// </summary>
+    private readonly Func<TopLevel?> _getDialogTarget;
+
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
+        _getDialogTarget = getDialogTarget;
         _supportedFileExtensions = [];
 
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
@@ -209,6 +220,7 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentSort = nameof(TrackViewModel.Path);
         ListColumnWidths = new AvaloniaDictionary<string, double>();
         SelectedTheme = ThemeVariant.Default;
+        _getDialogTarget = () => null;
     }
     #endif
 
@@ -217,6 +229,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void SelectionChanged()
     {
+        HasSelectedTracks = SelectedTracks.Count > 0;
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
     }
 
@@ -414,5 +427,18 @@ public partial class MainWindowViewModel : ViewModelBase
         _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
         Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
         CalculateChangeGroups();
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    public async Task OpenAutoNumber()
+    {
+        if (_getDialogTarget.Invoke() is not Window target) return;
+
+        AutoNumberDialog dialog = new AutoNumberDialog();
+        int initialValue = 1;
+        AutoNumberViewModel vm = new AutoNumberViewModel(dialog, SelectedTracks.ToList(), initialValue);
+        dialog.DataContext = vm;
+
+        await dialog.ShowDialog(target);
     }
 }
