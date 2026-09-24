@@ -141,10 +141,15 @@ public partial class TrackViewModel : ViewModelBase
 
     private bool _finishedSetup = false;
 
+    private static readonly string[] IgnoreChangeProperties =
+    [
+        nameof(Changed), nameof(IsChangeStart), nameof(IsChangeEnd), nameof(IsCutting)
+    ];
+
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (_finishedSetup && e.PropertyName != nameof(Changed) && e.PropertyName != nameof(IsChangeStart) && e.PropertyName != nameof(IsChangeEnd) && e.PropertyName != nameof(IsCutting))
+        if (_finishedSetup && !IgnoreChangeProperties.Contains(e.PropertyName))
         {
             Changed = true;
         }
