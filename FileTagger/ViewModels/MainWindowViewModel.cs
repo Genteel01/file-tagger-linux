@@ -218,7 +218,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
         _supportedFileExtensions = [];
-        CurrentSort = nameof(TrackViewModel.Path);
+        CurrentSort = Sorts.PathSort;
         ListColumnWidths = new AvaloniaDictionary<string, double>();
         SelectedTheme = ThemeVariant.Default;
         _getDialogTarget = () => null;
