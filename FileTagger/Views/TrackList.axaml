@@ -18,6 +18,9 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="Height" Value="{DynamicResource RowHeight}"/>
         </Style>
+        <Style Selector="ListBoxItem:nth-child(even) views|TrackListItem">
+            <Setter Property="Background" Value="{DynamicResource AlternateListItemBrush}" />
+        </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
             <Setter Property="Height" Value="42"/>
         </Style>
@@ -42,7 +45,7 @@
     </UserControl.KeyBindings>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True" Name="ListScroller"
                   Tapped="ScrollViewerTapped" KeyDown="Root_OnKeyDown">
-        <Panel Grid.IsSharedSizeScope="True">
+        <Panel Grid.IsSharedSizeScope="True" HorizontalAlignment="Left">
             <Grid RowDefinitions="Auto, *">
                 <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->
                 <TextBlock Grid.Row="0" Classes="titleTextBlock"/>
@@ -50,6 +53,25 @@
                 <ListBox Grid.Row="1" ItemsSource="{Binding Tracks}" SelectionMode="Multiple"
                          SelectedItems="{Binding SelectedTracks}"
                          SelectionChanged="OnListBoxSelectionChanged" Name="TrackListBox">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="_Undo Changes" Command="{Binding RevertChangesCommand}">
+                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Cut _Tags" Command="{Binding CutTagsCommand}" IsVisible="{Binding CanCopyTags}">
+                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="_Copy Tags" Command="{Binding CopyTagsCommand}" IsVisible="{Binding CanCopyTags}">
+                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="_Paste Tags" Command="{Binding PasteTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="viewModels:TrackViewModel">
                             <views:TrackListItem/>

@@ -1,10 +1,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using ATL;
-using Commons;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FileTagger.Extensions;
 
 namespace FileTagger.ViewModels;
 
@@ -135,12 +134,22 @@ public partial class TrackViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] public partial bool IsChangeEnd { get; set; } = false;
 
-    private readonly bool _finishedSetup;
+    /// <summary>
+    /// Whether this track's tags are being cut
+    /// </summary>
+    [ObservableProperty] public partial bool IsCutting { get; set; } = false;
+
+    private bool _finishedSetup = false;
+
+    private static readonly string[] IgnoreChangeProperties =
+    [
+        nameof(Changed), nameof(IsChangeStart), nameof(IsChangeEnd), nameof(IsCutting)
+    ];
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (_finishedSetup && e.PropertyName != nameof(Changed) && e.PropertyName != nameof(IsChangeStart) && e.PropertyName != nameof(IsChangeEnd))
+        if (_finishedSetup && !IgnoreChangeProperties.Contains(e.PropertyName))
         {
             Changed = true;
         }
@@ -156,16 +165,42 @@ public partial class TrackViewModel : ViewModelBase
         string? directory = System.IO.Path.GetDirectoryName(track.Path);
         Directory = directory == null ? "" : directory + System.IO.Path.DirectorySeparatorChar;
         FileName = System.IO.Path.GetFileName(track.Path);
-        Title = track.Title;
-        Album = track.Album;
-        Artist = track.Artist;
-        TrackNumber = track.TrackNumber;
-        DiscNumber = track.DiscNumber;
-        Year = track.Year;
-        Genre = track.Genre;
-        AlbumArtist = track.AlbumArtist;
-        Composer = track.Composer;
-        Comment = track.Comment;
+        SetUpViewModel();
+    }
+
+    /// <summary>
+    /// Creates a new TrackViewModel as a copy of an existing one. Will only contain the editable tags of the track
+    /// </summary>
+    public TrackViewModel(TrackViewModel original)
+    {
+        Directory = "";
+        FileName = "";
+        _originalTrack = new Track();
+        original.CopyTo(this);
+    }
+
+    private void SetUpViewModel()
+    {
+        _finishedSetup = false;
+        Title = _originalTrack.Title;
+        Album = _originalTrack.Album;
+        Artist = _originalTrack.Artist;
+        TrackNumber = _originalTrack.TrackNumber;
+        DiscNumber = _originalTrack.DiscNumber;
+        Year = _originalTrack.Year;
+        Genre = _originalTrack.Genre;
+        AlbumArtist = _originalTrack.AlbumArtist;
+        Composer = _originalTrack.Composer;
+        Comment = _originalTrack.Comment;
+
+        if(_isCoverSet)
+        {
+            EmbeddedPictures.Clear();
+            EmbeddedPictures.AddRange(GetOriginalTrackImages());
+        }
+        Changed = false;
+        IsChangeStart = false;
+        IsChangeEnd = false;
         _finishedSetup = true;
     }
 
@@ -175,7 +210,7 @@ public partial class TrackViewModel : ViewModelBase
     /// <returns></returns>
     private ObservableCollection<PictureInfo> GetOriginalTrackImages()
     {
-        return [.. _originalTrack.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported)];
+        return [.. _originalTrack.EmbeddedPictures.Select(pic => new PictureInfo(pic))];
     }
 
     /// <summary>
@@ -204,26 +239,25 @@ public partial class TrackViewModel : ViewModelBase
     /// <returns>The Track</returns>
     private Track GetTrack()
     {
-        Track thisTrack = _originalTrack;
-        thisTrack.Title = Title;
-        thisTrack.Album = Album;
-        thisTrack.Artist = Artist;
-        thisTrack.TrackNumber = TrackNumber;
-        thisTrack.DiscNumber = DiscNumber;
-        thisTrack.Year = Year;
-        thisTrack.Genre = Genre;
-        thisTrack.AlbumArtist = AlbumArtist;
-        thisTrack.Composer = Composer;
-        thisTrack.Comment = Comment;
+        _originalTrack.Title = Title;
+        _originalTrack.Album = Album;
+        _originalTrack.Artist = Artist;
+        _originalTrack.TrackNumber = TrackNumber;
+        _originalTrack.DiscNumber = DiscNumber;
+        _originalTrack.Year = Year;
+        _originalTrack.Genre = Genre;
+        _originalTrack.AlbumArtist = AlbumArtist;
+        _originalTrack.Composer = Composer;
+        _originalTrack.Comment = Comment;
         if (_isCoverSet)
         {
-            thisTrack.EmbeddedPictures.Clear();
+            _originalTrack.EmbeddedPictures.Clear();
             foreach (PictureInfo picture in EmbeddedPictures)
             {
-                thisTrack.EmbeddedPictures.Add(picture);
+                _originalTrack.EmbeddedPictures.Add(picture);
             }
         }
-        return thisTrack;
+        return _originalTrack;
     }
 
 
@@ -239,5 +273,50 @@ public partial class TrackViewModel : ViewModelBase
             IsChangeStart = false;
             IsChangeEnd = false;
         }
+    }
+
+    public void RevertChanges()
+    {
+        SetUpViewModel();
+    }
+
+    /// <summary>
+    /// Copies the editable Properties of this TrackViewModel to another one
+    /// </summary>
+    public void CopyTo(TrackViewModel copy)
+    {
+        copy.Title = Title;
+        copy.Album = Album;
+        copy.Artist = Artist;
+        copy.TrackNumber = TrackNumber;
+        copy.DiscNumber = DiscNumber;
+        copy.Year = Year;
+        copy.Genre = Genre;
+        copy.AlbumArtist = AlbumArtist;
+        copy.Composer = Composer;
+        copy.Comment = Comment;
+        copy.EmbeddedPictures.Clear();
+        foreach (PictureInfo picture in EmbeddedPictures)
+        {
+            copy.EmbeddedPictures.Add(new PictureInfo(picture));
+        }
+    }
+
+    /// <summary>
+    /// Clears all tags from this track
+    /// </summary>
+    public void ClearTags()
+    {
+        Title = "";
+        Album = "";
+        Artist = "";
+        TrackNumber = null;
+        DiscNumber = null;
+        Year = null;
+        Genre = "";
+        AlbumArtist = "";
+        Composer = "";
+        Comment = "";
+        EmbeddedPictures.Clear();
     }
 }

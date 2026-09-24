@@ -9,7 +9,7 @@ public class EditPanelViewModelTests
 {
     public static EditPanelViewModel CreateMockViewModel()
     {
-        EmbeddedPictureViewModel stubEmbeddedPicture = new EmbeddedPictureViewModel();
+        EmbeddedPictureViewModel stubEmbeddedPicture = EmbeddedPictureViewModelTests.CreateStubViewModel();
         EditPanelViewModel editPanelViewModel = new EditPanelViewModel(stubEmbeddedPicture);
         return editPanelViewModel;
     }

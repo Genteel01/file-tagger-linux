@@ -318,7 +318,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     private void CopyCoverImage()
     {
         CopiedPic = null;
-        CopiedPic = DisplayedPicture;
+        CopiedPic = new PictureInfo(DisplayedPicture);
         TracksToCutFrom = [];
     }
 

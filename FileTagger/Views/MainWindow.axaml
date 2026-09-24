@@ -26,6 +26,23 @@
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="_Edit" Padding="4">
+                <MenuItem Header="_Reset Selected Tracks" Command="{Binding RevertChangesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Cut _Tags" Command="{Binding CutTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Copy Selected Tags" Command="{Binding CopyTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Paste Tags To Selected" Command="{Binding PasteTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="_Tools" Padding="4">
                 <MenuItem Header="_Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
                     <MenuItem.Icon><TextBlock Text="1-9" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" FontSize="10"/></MenuItem.Icon>

@@ -41,7 +41,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
-    public partial bool HasSelectedTracks { get; set; }
+    [NotifyPropertyChangedFor(nameof(CanPasteTags))]
+    private partial bool HasSelectedTracks { get; set; }
+
+    /// <summary>
+    /// Whether any selected track is Changed
+    /// </summary>
+    [ObservableProperty]
+    private partial bool SelectedTracksHaveChanges { get; set; }
 
     /// <summary>
     /// Message to send SelectedTracks to <see cref="EditPanelViewModel"/>
@@ -102,6 +109,31 @@ public partial class MainWindowViewModel : ViewModelBase
     /// List of <see cref="ThemeVariant"/> values to select from
     /// </summary>
     public ThemeVariant[] Themes { get; } = [ThemeVariant.Default, ThemeVariant.Light, MyThemes.LightGreen, ThemeVariant.Dark, MyThemes.DarkGreen];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanPasteTags))]
+    private partial TrackViewModel? CopiedTrack { get; set; } = null;
+
+    /// <summary>
+    /// The track that we are cutting from. Handles setting the IsCutting property
+    /// </summary>
+    private TrackViewModel? TrackToCutFrom
+    {
+        get;
+        set {
+            field?.IsCutting = false;
+            value?.IsCutting = true;
+            field = value;
+        }
+    } = null;
+
+    /// <summary>
+    /// Whether we can execute the CopyTags Command. Will be set to true when there is one selected track
+    /// </summary>
+    [ObservableProperty]
+    public partial bool CanCopyTags { get; private set; }
+
+    private bool CanPasteTags => CopiedTrack != null && HasSelectedTracks;
 
     /// <summary>
     /// Selected <see cref="ThemeVariant"/>
@@ -231,6 +263,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public void SelectionChanged()
     {
         HasSelectedTracks = SelectedTracks.Count > 0;
+        SelectedTracksHaveChanges = HasSelectedTracks && SelectedTracks.Any(track => track.Changed);
+        CanCopyTags = SelectedTracks.Count == 1;
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
     }
 
@@ -352,7 +386,7 @@ public partial class MainWindowViewModel : ViewModelBase
         SortTracks(CurrentSort, false);
     }
 
-    private void TrackChanged(object? _, PropertyChangedEventArgs args)
+    private void TrackChanged(object? sender, PropertyChangedEventArgs args)
     {
         if (args.PropertyName == nameof(TrackViewModel.Changed))
         {
@@ -361,6 +395,11 @@ public partial class MainWindowViewModel : ViewModelBase
             _changeQueued = true;
             Task.Run(() =>
             {
+                //Changed gets set to false when we reset the TrackViewModel, so we update the rest of the ui
+                if (sender is TrackViewModel { Changed: false })
+                {
+                    SelectionChanged();
+                }
                 Task.Delay(10).Wait();
                 CalculateChangeGroups();
                 _changeQueued = false;
@@ -473,5 +512,60 @@ public partial class MainWindowViewModel : ViewModelBase
         dialog.DataContext = vm;
 
         await dialog.ShowDialog(target);
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectedTracksHaveChanges))]
+    private void RevertChanges()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if(track.Changed) track.RevertChanges();
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanCopyTags))]
+    private void CopyTags()
+    {
+        if (SelectedTracks.Count == 0) return;
+        TrackToCutFrom = null;
+        CopiedTrack = new TrackViewModel(SelectedTracks[0]);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanCopyTags))]
+    private void CutTags()
+    {
+        if (SelectedTracks.Count == 0) return;
+        TrackToCutFrom = SelectedTracks[0];
+        CopiedTrack = new TrackViewModel(SelectedTracks[0]);
+    }
+
+    /// <summary>
+    /// Removes the tags from the track that we were cutting from
+    /// </summary>
+    private void FinishCutting()
+    {
+        TrackToCutFrom?.ClearTags();
+        TrackToCutFrom = null;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanPasteTags))]
+    private void PasteTags()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            CopiedTrack?.CopyTo(track);
+        }
+        FinishCutting();
+        SelectionChanged();
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    private void ClearTags()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            track.ClearTags();
+        }
+        SelectionChanged();
     }
 }

@@ -10,7 +10,7 @@
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
         <!--Overlay changing the colour of the displayed image-->
-        <Style Selector="Image.Cut">
+        <Style Selector="Image.IsCutting">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
@@ -66,7 +66,7 @@
                         <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
-                    <MenuItem Header="Set picture _type" IsEnabled="{Binding SelectedTrackHasPictures}" ItemsSource="{Binding PictureTypes}"
+                    <MenuItem Header="Set pict_ure type" IsEnabled="{Binding SelectedTrackHasPictures}" ItemsSource="{Binding PictureTypes}"
                               ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedPictureType}" Command="{Binding ChangePictureTypeCommand}">
                         <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                     </MenuItem>
@@ -74,7 +74,7 @@
                         <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
-                    <MenuItem Header="C_ut picture" Command="{Binding CutCoverImageCommand}">
+                    <MenuItem Header="Cu_t picture" Command="{Binding CutCoverImageCommand}">
                         <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Copy picture" Command="{Binding CopyCoverImageCommand}">
@@ -88,7 +88,7 @@
                     </MenuItem>
                 </ContextMenu>
             </Panel.ContextMenu>
-            <Image IsVisible="{Binding HasDisplayedPicture}" Classes.Cut="{Binding DisplayedPictureIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"
+            <Image IsVisible="{Binding HasDisplayedPicture}" Classes.IsCutting="{Binding DisplayedPictureIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"
                    ToolTip.ServiceEnabled="{Binding DisplayedPicture?.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                    ToolTip.Tip="{Binding DisplayedPicture?.Description}"/>
             <Panel IsVisible="{Binding !HasDisplayedPicture}">
