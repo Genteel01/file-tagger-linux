@@ -42,7 +42,7 @@
     </UserControl.KeyBindings>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" Focusable="True" Name="ListScroller"
                   Tapped="ScrollViewerTapped" KeyDown="Root_OnKeyDown">
-        <Panel Grid.IsSharedSizeScope="True">
+        <Panel Grid.IsSharedSizeScope="True" HorizontalAlignment="Left">
             <Grid RowDefinitions="Auto, *">
                 <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->
                 <TextBlock Grid.Row="0" Classes="titleTextBlock"/>
