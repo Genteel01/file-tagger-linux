@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -323,7 +324,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Task task = Task.Run(() =>
             {
                 //WMA files can hit an error if you try to make two tracks at the same time, so run an extra Lock on them
-                string extension = "." + file.Name.Split(".").Last().ToLower();
+                string extension = Path.GetExtension(file.Name);
                 if (_concurrentFileExtensions.Contains(extension))
                 {
                     Track track;
