@@ -435,7 +435,12 @@ public partial class MainWindowViewModel : ViewModelBase
         if (_getDialogTarget.Invoke() is not Window target) return;
 
         AutoNumberDialog dialog = new AutoNumberDialog();
-        int initialValue = 1;
+        int initialValue = int.MaxValue;
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if(track.TrackNumber != null) initialValue = Math.Min(initialValue, track.TrackNumber.Value);
+        }
+        if(initialValue == int.MaxValue) initialValue = 1;
         AutoNumberViewModel vm = new AutoNumberViewModel(dialog, SelectedTracks.ToList(), initialValue);
         dialog.DataContext = vm;
 
