@@ -115,6 +115,19 @@ public partial class MainWindowViewModel : ViewModelBase
     private partial TrackViewModel? CopiedTrack { get; set; } = null;
 
     /// <summary>
+    /// The track that we are cutting from. Handles setting the IsCutting property
+    /// </summary>
+    private TrackViewModel? TrackToCutFrom
+    {
+        get;
+        set {
+            field?.IsCutting = false;
+            value?.IsCutting = true;
+            field = value;
+        }
+    } = null;
+
+    /// <summary>
     /// Whether we can execute the CopyTags Command. Will be set to true when there is one selected track
     /// </summary>
     [ObservableProperty]
@@ -514,7 +527,25 @@ public partial class MainWindowViewModel : ViewModelBase
     private void CopyTags()
     {
         if (SelectedTracks.Count == 0) return;
+        TrackToCutFrom = null;
         CopiedTrack = new TrackViewModel(SelectedTracks[0]);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanCopyTags))]
+    private void CutTags()
+    {
+        if (SelectedTracks.Count == 0) return;
+        TrackToCutFrom = SelectedTracks[0];
+        CopiedTrack = new TrackViewModel(SelectedTracks[0]);
+    }
+
+    /// <summary>
+    /// Removes the tags from the track that we were cutting from
+    /// </summary>
+    private void FinishCutting()
+    {
+        TrackToCutFrom?.ClearTags();
+        TrackToCutFrom = null;
     }
 
     [RelayCommand(CanExecute = nameof(CanPasteTags))]
@@ -524,6 +555,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             CopiedTrack?.CopyTo(track);
         }
+        FinishCutting();
         SelectionChanged();
     }
 }

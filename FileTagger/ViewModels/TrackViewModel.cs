@@ -134,12 +134,17 @@ public partial class TrackViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] public partial bool IsChangeEnd { get; set; } = false;
 
+    /// <summary>
+    /// Whether this track's tags are being cut
+    /// </summary>
+    [ObservableProperty] public partial bool IsCutting { get; set; } = false;
+
     private bool _finishedSetup = false;
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (_finishedSetup && e.PropertyName != nameof(Changed) && e.PropertyName != nameof(IsChangeStart) && e.PropertyName != nameof(IsChangeEnd))
+        if (_finishedSetup && e.PropertyName != nameof(Changed) && e.PropertyName != nameof(IsChangeStart) && e.PropertyName != nameof(IsChangeEnd) && e.PropertyName != nameof(IsCutting))
         {
             Changed = true;
         }
@@ -290,5 +295,22 @@ public partial class TrackViewModel : ViewModelBase
         {
             copy.EmbeddedPictures.Add(new PictureInfo(picture));
         }
+    }
+
+    /// <summary>
+    /// Clears all tags from this track
+    /// </summary>
+    public void ClearTags()
+    {
+        Title = "";
+        Album = "";
+        Artist = "";
+        TrackNumber = null;
+        DiscNumber = null;
+        Year = null;
+        Genre = "";
+        AlbumArtist = "";
+        Composer = "";
+        Comment = "";
     }
 }

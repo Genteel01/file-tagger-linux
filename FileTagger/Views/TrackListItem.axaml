@@ -38,6 +38,9 @@
             <Setter Property="BorderThickness" Value="1 0" />
             <Setter Property="Background" Value="{DynamicResource TrackChangedBackgroundBrush}"/>
         </Style>
+        <Style Selector="Border#SelectionGroupBorder.IsCutting">
+            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
+        </Style>
         <Style Selector="Border#SelectionGroupBorder.changeStart">
             <Setter Property="BorderThickness" Value="1 1 1 0" />
         </Style>
@@ -48,8 +51,9 @@
             <Setter Property="BorderThickness" Value="1" />
         </Style>
     </UserControl.Styles>
-    <Border Name="SelectionGroupBorder" Classes.isChanged="{Binding Changed}" Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-    <Border Name="RowBorder" Classes.changeEnd="{Binding IsChangeEnd}">
+    <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
+            Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
+    <Border Name="RowBorder" Classes.changeEnd="{Binding IsChangeEnd}" >
         <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />

@@ -30,6 +30,9 @@
                 <MenuItem Header="_Reset Selected Tracks" Command="{Binding RevertChangesCommand}">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="Cut _Tags" Command="{Binding CutTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_Copy Selected Tags" Command="{Binding CopyTagsCommand}">
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                 </MenuItem>
