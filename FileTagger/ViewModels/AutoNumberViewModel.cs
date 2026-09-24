@@ -8,16 +8,44 @@ namespace FileTagger.ViewModels;
 
 public partial class AutoNumberViewModel(Window dialog, List<TrackViewModel> tracks) : ViewModelBase
 {
-    [ObservableProperty] public partial int FirstValue { get; set; } = 1;
+    public int? FirstValue
+    {
+        get
+        {
+            if (int.TryParse(FirstValueString, out int result)) return result;
+            return null;
+        }
+        set => FirstValueString = value.ToString() ?? "";
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
+    public partial string FirstValueString { get; set; } = "1";
+
+    public int? DiscNumber
+    {
+        get
+        {
+            if (int.TryParse(DiscNumberString, out int result)) return result;
+            return null;
+        }
+        set => DiscNumberString = value.ToString() ?? "";
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
+    public partial string DiscNumberString { get; set; } = "1";
+
     [ObservableProperty] public partial bool SetDiscNumber { get; set; }
     [ObservableProperty] public partial bool ChangeDiscOnFolderChange { get; set; } = true;
-    [ObservableProperty] public partial int DiscNumber { get; set; } = 1;
 
-    [RelayCommand]
+    private bool CanConfirm => FirstValue != null && (!SetDiscNumber || DiscNumber != null);
+
+    [RelayCommand(CanExecute = nameof(CanConfirm))]
     private void Confirm()
     {
         string? previousDirectory = null;
-        int newDiscNumber = DiscNumber;
+        int? newDiscNumber = DiscNumber;
         foreach (TrackViewModel track in tracks)
         {
             track.TrackNumber = FirstValue++;

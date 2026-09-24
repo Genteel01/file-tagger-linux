@@ -29,13 +29,13 @@
         <StackPanel Margin="8" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Margin="0 8">
                 <Label Target="{Binding #InitialFocus}" Content="First Track Number: " VerticalAlignment="Center"/>
-                <TextBox Name="InitialFocus" Text="{Binding FirstValue}"
+                <TextBox Name="InitialFocus" Text="{Binding FirstValueString}"
                          TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
             </StackPanel>
             <CheckBox Content="Set Disc Number" IsChecked="{Binding SetDiscNumber}" Margin="0 8 0 0"/>
             <StackPanel IsEnabled="{Binding SetDiscNumber}" Orientation="Horizontal" Margin="16 4">
                 <Label Target="{Binding #DiscNumberBox}" Content="First Disc Number: " VerticalAlignment="Center"/>
-                <TextBox Name="DiscNumberBox" Text="{Binding DiscNumber}"
+                <TextBox Name="DiscNumberBox" Text="{Binding DiscNumberString}"
                          TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="16 4" Spacing="4">
