@@ -27,7 +27,6 @@
 
             <Color x:Key="TrackChangedBorderColor">Red</Color>
             <Color x:Key="TrackChangedBackgroundColor">#0BFF0000</Color>
-            <Color x:Key='CutOverlayColor'>#80FFFFFF</Color>
 
             <Color x:Key="CancelHoverColor">#66ff0000</Color>
             <Color x:Key="CancelPressedColor">#99ff0000</Color>
@@ -63,7 +62,6 @@
 
             <SolidColorBrush x:Key="TrackChangedBorderBrush" Color="{StaticResource TrackChangedBorderColor}"/>
             <SolidColorBrush x:Key="TrackChangedBackgroundBrush" Color="{StaticResource TrackChangedBackgroundColor}"/>
-            <SolidColorBrush x:Key="CutOverlayBrush" Color="{StaticResource CutOverlayColor}"/>
 
             <SolidColorBrush x:Key="CancelHoverBrush" Color="{StaticResource CancelHoverColor}"/>
             <SolidColorBrush x:Key="CancelPressedBrush" Color="{StaticResource CancelPressedColor}"/>
