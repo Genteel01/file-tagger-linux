@@ -16,12 +16,12 @@
                                  ConfirmCommand="{Binding ConfirmCommand}" ConfirmContent="Confirm"
                                  CancelCommand="{Binding CancelCommand}" CancelContent="Cancel"/>
         <StackPanel Margin="8" VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal" Height="{DynamicResource AutoNumberDialogRowHeight}">
-                <Label Content="First Track Number: " VerticalAlignment="Center"/>
-                <TextBox Name="InitialFocus" Text="{Binding FirstValue}" HorizontalAlignment="Stretch"
+            <Grid ColumnDefinitions="Auto, *" Height="{DynamicResource AutoNumberDialogRowHeight}">
+                <Label Grid.Column="0" Content="First Track Number: " VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Name="InitialFocus" Text="{Binding FirstValue}"
                          TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"
                          LineHeight="{DynamicResource AutoNumberDialogLineHeight}"/>
-            </StackPanel>
+            </Grid>
         </StackPanel>
 
     </DockPanel>
