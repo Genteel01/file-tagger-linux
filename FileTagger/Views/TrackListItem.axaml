@@ -49,13 +49,6 @@
         </Style>
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.isChanged="{Binding Changed}" Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Border.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="_Undo Changes" Command="{Binding RevertChangesCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-        </Border.ContextMenu>
     <Border Name="RowBorder" Classes.changeEnd="{Binding IsChangeEnd}">
         <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
             <Grid.ColumnDefinitions>

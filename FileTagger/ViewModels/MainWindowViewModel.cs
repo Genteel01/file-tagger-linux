@@ -41,7 +41,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
-    public partial bool HasSelectedTracks { get; set; }
+    private partial bool HasSelectedTracks { get; set; }
+
+    /// <summary>
+    /// Whether any selected track is Changed
+    /// </summary>
+    [ObservableProperty]
+    private partial bool SelectedTracksHaveChanges { get; set; }
 
     /// <summary>
     /// Message to send SelectedTracks to <see cref="EditPanelViewModel"/>
@@ -231,6 +237,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public void SelectionChanged()
     {
         HasSelectedTracks = SelectedTracks.Count > 0;
+        SelectedTracksHaveChanges = HasSelectedTracks && SelectedTracks.Any(track => track.Changed);
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
     }
 
@@ -478,5 +485,14 @@ public partial class MainWindowViewModel : ViewModelBase
         dialog.DataContext = vm;
 
         await dialog.ShowDialog(target);
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectedTracksHaveChanges))]
+    private void RevertChanges()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            if(track.Changed) track.RevertChanges();
+        }
     }
 }

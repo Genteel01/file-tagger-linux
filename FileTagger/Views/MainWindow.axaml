@@ -26,6 +26,11 @@
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="_Edit" Padding="4">
+                <MenuItem Header="_Undo Changes" Command="{Binding RevertChangesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="_Tools" Padding="4">
                 <MenuItem Header="_Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
                     <MenuItem.Icon><TextBlock Text="1-9" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" FontSize="10"/></MenuItem.Icon>

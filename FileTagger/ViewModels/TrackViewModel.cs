@@ -255,8 +255,7 @@ public partial class TrackViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand(CanExecute = nameof(Changed))]
-    private void RevertChanges()
+    public void RevertChanges()
     {
         SetUpViewModel();
     }
