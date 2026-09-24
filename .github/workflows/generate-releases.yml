@@ -29,7 +29,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v7.0.1
       with:
-        fetch-depth: 0
+        ref: ${{ github.event.pull_request.base.sha }}
 
     # Install the .NET Core workload
     - name: Setup .NET

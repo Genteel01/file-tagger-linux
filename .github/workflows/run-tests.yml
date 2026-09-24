@@ -9,7 +9,7 @@ on:
 
 jobs:
   #Need a job to check changes, because we can't check for pushes to Master OR pushes in FileTaggerTests/ in the on: push: section
-  changes:
+  checkchanges:
     if: github.event_name != 'pull_request'
     runs-on: windows-latest
     env:
@@ -50,7 +50,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "run_tests=$($runTests.ToString().ToLowerInvariant())"
 
   test:
-    needs: changes
+    needs: checkchanges
     if: always() && (github.event_name == 'pull_request' || needs.changes.outputs.run_tests == 'true')
     runs-on: windows-latest  # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -61,8 +61,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1
-        with:
-          fetch-depth: 0
 
       # Install the .NET Core workload
       - name: Setup .NET
