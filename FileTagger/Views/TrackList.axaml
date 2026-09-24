@@ -64,6 +64,9 @@
                             <MenuItem Header="_Paste Tags" Command="{Binding PasteTagsCommand}">
                                 <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                             </MenuItem>
+                            <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                            </MenuItem>
                         </ContextMenu>
                     </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>

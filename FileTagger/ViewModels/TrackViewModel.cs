@@ -317,5 +317,6 @@ public partial class TrackViewModel : ViewModelBase
         AlbumArtist = "";
         Composer = "";
         Comment = "";
+        EmbeddedPictures.Clear();
     }
 }

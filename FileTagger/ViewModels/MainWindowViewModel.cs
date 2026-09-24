@@ -558,4 +558,14 @@ public partial class MainWindowViewModel : ViewModelBase
         FinishCutting();
         SelectionChanged();
     }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    private void ClearTags()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            track.ClearTags();
+        }
+        SelectionChanged();
+    }
 }
