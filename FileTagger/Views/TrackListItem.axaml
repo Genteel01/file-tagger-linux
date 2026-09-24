@@ -24,11 +24,11 @@
             <Setter Property="Background" Value="{DynamicResource FocusedTextBoxTrackBrush}" />
         </Style>
         <Style Selector="Border#SelectionGroupBorder">
-            <Setter Property="BorderThickness" Value="0 0" />
-            <Setter Property="BorderBrush" Value="{DynamicResource TrackChangedBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1 0" />
+            <Setter Property="BorderBrush" Value="Transparent"/>
         </Style>
         <Style Selector="Border#SelectionGroupBorder.isChanged">
-            <Setter Property="BorderThickness" Value="1 0" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TrackChangedBorderBrush}"/>
             <Setter Property="Background" Value="{DynamicResource TrackChangedBackgroundBrush}"/>
         </Style>
         <Style Selector="Border#SelectionGroupBorder.IsCutting">
