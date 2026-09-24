@@ -436,12 +436,26 @@ public partial class MainWindowViewModel : ViewModelBase
 
         AutoNumberDialog dialog = new AutoNumberDialog();
         int initialValue = int.MaxValue;
+        int initialDiscNumber = int.MaxValue;
+        bool setDiscNumber = true;
+
         foreach (TrackViewModel track in SelectedTracks)
         {
             if(track.TrackNumber != null) initialValue = Math.Min(initialValue, track.TrackNumber.Value);
+            if(track.DiscNumber != null) initialDiscNumber = Math.Min(initialDiscNumber, track.DiscNumber.Value);
         }
         if(initialValue == int.MaxValue) initialValue = 1;
-        AutoNumberViewModel vm = new AutoNumberViewModel(dialog, SelectedTracks.ToList(), initialValue);
+        if (initialDiscNumber == int.MaxValue)
+        {
+            setDiscNumber = false;
+            initialDiscNumber = 1;
+        }
+        AutoNumberViewModel vm = new AutoNumberViewModel(dialog, SelectedTracks.ToList())
+        {
+            FirstValue = initialValue,
+            DiscNumber = initialDiscNumber,
+            SetDiscNumber = setDiscNumber
+        };
         dialog.DataContext = vm;
 
         await dialog.ShowDialog(target);
