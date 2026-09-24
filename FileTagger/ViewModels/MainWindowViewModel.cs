@@ -371,11 +371,37 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _changeQueued = false;
 
     /// <summary>
-    /// Sorts tracks by the fields in the order given
+    /// Sorts Tracks by the fields in the order given
     /// </summary>
-    /// <param name="fields">String of fields separated by "_", e.g. Album_TrackNumber_Path</param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
     /// <param name="swapDirection">Whether to swap the direction between ascending and descending</param>
     public void SortTracks(string fields, bool swapDirection)
+    {
+        if (swapDirection)
+        {
+            if (CurrentSort != fields)
+            {
+                SortDescending = false;
+            }
+            else
+            {
+                SortDescending = !SortDescending;
+            }
+        }
+        CurrentSort = fields;
+        PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
+        _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
+        Tracks = SortGivenTracks(Tracks, fields, SortDescending);
+        CalculateChangeGroups();
+    }
+
+    /// <summary>
+    /// Returns the given tracks sorted by the fields in the order given
+    /// </summary>
+    /// <param name="tracks">The tracks to sort</param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
+    /// <param name="sortDescending">Whether to sort in descending order</param>
+    private List<TrackViewModel> SortGivenTracks(List<TrackViewModel> tracks, string fields, bool sortDescending)
     {
         string[] sortOrder = fields.Split("_");
         List<PropertyInfo> properties = [];
@@ -391,7 +417,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (properties.Count == 0)
         {
             ErrorMessages?.Add("Sorting by input " + fields + ", which has no valid fields");
-            return;
+            return [];
         }
 
         IOrderedEnumerable<TrackViewModel>? sortedTracks = null;
@@ -404,7 +430,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             if (sortedTracks == null)
             {
-                sortedTracks = Tracks.OrderBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
+                sortedTracks = tracks.OrderBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
             }
             else
             {
@@ -412,22 +438,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
 
-        if (swapDirection)
-        {
-            if (CurrentSort != fields)
-            {
-                SortDescending = false;
-            }
-            else
-            {
-                SortDescending = !SortDescending;
-            }
-        }
-        CurrentSort = fields;
-        PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
-        _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
-        Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
-        CalculateChangeGroups();
+        return (sortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
     }
 
     [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
