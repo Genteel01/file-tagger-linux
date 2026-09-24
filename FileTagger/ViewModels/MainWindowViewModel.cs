@@ -462,7 +462,9 @@ public partial class MainWindowViewModel : ViewModelBase
             setDiscNumber = false;
             initialDiscNumber = 1;
         }
-        AutoNumberViewModel vm = new AutoNumberViewModel(dialog, SelectedTracks.ToList())
+
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, false);
+        AutoNumberViewModel vm = new AutoNumberViewModel(dialog, sortedSelected)
         {
             FirstValue = initialValue,
             DiscNumber = initialDiscNumber,
