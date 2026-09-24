@@ -1,0 +1,60 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:FileTagger.Controls">
+    <ControlTheme x:Key="{x:Type controls:DialogControls}" TargetType="controls:DialogControls">
+        <Style Selector="^">
+            <Style Selector="^ Button">
+                <Setter Property="BorderThickness" Value="0 1 0 0"/>
+            </Style>
+            <Style Selector="^ Grid#ButtonGrid:pointerover Panel">
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+        </Style>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Name="ButtonGrid" ColumnDefinitions="*, Auto *" Height="{StaticResource DialogButtonsHeight}">
+                    <Button Grid.Column="0" Name="PART_CancelButton" IsCancel="True"
+                            Content="{TemplateBinding CancelContent}"
+                            Command="{TemplateBinding CancelCommand}"
+                            CommandParameter="{TemplateBinding  CancelCommandParameter}">
+                        <Button.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeBorderHighBrush}"/>
+                            </Style>
+                            <Style Selector="Button:pointerover">
+                                <Setter Property="Background" Value="{DynamicResource CancelHoverBrush}" />
+                            </Style>
+                            <Style Selector="Button:pointerover ContentPresenter">
+                                <Setter Property="BorderBrush" Value="{DynamicResource CancelSolidBrush}" />
+                                <Setter Property="BorderThickness" Value="0 1 1 0"/>
+                            </Style>
+                            <Style Selector="Button:pressed ContentPresenter">
+                                <Setter Property="Background" Value="{DynamicResource CancelPressedBrush}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource CancelSolidBrush}" />
+                                <Setter Property="BorderThickness" Value="0 1 1 0"/>
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+                    <Panel Grid.Column="1" Width="1" Background="{DynamicResource ThemeBorderLowBrush}"/>
+                    <Button Grid.Column="2" Name="PART_ConfirmButton" IsDefault="True"
+                            Content="{TemplateBinding ConfirmContent}"
+                            Command="{TemplateBinding ConfirmCommand}"
+                            CommandParameter="{TemplateBinding ConfirmCommandParameter}">
+                        <Button.Styles>
+                            <Style Selector="Button:pointerover ContentPresenter, Button:pressed ContentPresenter">
+                                <Setter Property="BorderThickness" Value="1 1 0 0"/>
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <Design.PreviewWith>
+        <Border Width="150" Padding="0 5 0 0">
+            <StackPanel Spacing="20">
+                <controls:DialogControls ConfirmContent="Save" CancelContent="Cancel"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+</ResourceDictionary>

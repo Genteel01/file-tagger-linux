@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -18,7 +19,8 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
+using FileTagger.Dialogs;
 using FileTagger.Extensions;
 using FileTagger.Models;
 
@@ -36,6 +38,10 @@ public partial class MainWindowViewModel : ViewModelBase
     /// All the tracks that are currently selected
     /// </summary>
     public ObservableCollection<TrackViewModel> SelectedTracks { get; } = [];
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
+    public partial bool HasSelectedTracks { get; set; }
 
     /// <summary>
     /// Message to send SelectedTracks to <see cref="EditPanelViewModel"/>
@@ -131,11 +137,17 @@ public partial class MainWindowViewModel : ViewModelBase
         _preferenceService.ResetUserPreferences();
     }
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel)
+    /// <summary>
+    /// Function to get the target to use to display a dialog
+    /// </summary>
+    private readonly Func<TopLevel?> _getDialogTarget;
+
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
+        _getDialogTarget = getDialogTarget;
         _supportedFileExtensions = [];
 
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
@@ -206,9 +218,10 @@ public partial class MainWindowViewModel : ViewModelBase
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
         _supportedFileExtensions = [];
-        CurrentSort = nameof(TrackViewModel.Path);
+        CurrentSort = Sorts.PathSort;
         ListColumnWidths = new AvaloniaDictionary<string, double>();
         SelectedTheme = ThemeVariant.Default;
+        _getDialogTarget = () => null;
     }
     #endif
 
@@ -217,6 +230,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void SelectionChanged()
     {
+        HasSelectedTracks = SelectedTracks.Count > 0;
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
     }
 
@@ -310,7 +324,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Task task = Task.Run(() =>
             {
                 //WMA files can hit an error if you try to make two tracks at the same time, so run an extra Lock on them
-                string extension = "." + file.Name.Split(".").Last().ToLower();
+                string extension = Path.GetExtension(file.Name);
                 if (_concurrentFileExtensions.Contains(extension))
                 {
                     Track track;
@@ -357,11 +371,37 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _changeQueued = false;
 
     /// <summary>
-    /// Sorts tracks by the fields in the order given
+    /// Sorts Tracks by the fields in the order given
     /// </summary>
-    /// <param name="fields">String of fields separated by "_", e.g. Album_TrackNumber_Path</param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
     /// <param name="swapDirection">Whether to swap the direction between ascending and descending</param>
     public void SortTracks(string fields, bool swapDirection)
+    {
+        if (swapDirection)
+        {
+            if (CurrentSort != fields)
+            {
+                SortDescending = false;
+            }
+            else
+            {
+                SortDescending = !SortDescending;
+            }
+        }
+        CurrentSort = fields;
+        PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
+        _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
+        Tracks = SortGivenTracks(Tracks, fields, SortDescending);
+        CalculateChangeGroups();
+    }
+
+    /// <summary>
+    /// Returns the given tracks sorted by the fields in the order given
+    /// </summary>
+    /// <param name="tracks">The tracks to sort</param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
+    /// <param name="sortDescending">Whether to sort in descending order</param>
+    private List<TrackViewModel> SortGivenTracks(List<TrackViewModel> tracks, string fields, bool sortDescending)
     {
         string[] sortOrder = fields.Split("_");
         List<PropertyInfo> properties = [];
@@ -377,7 +417,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (properties.Count == 0)
         {
             ErrorMessages?.Add("Sorting by input " + fields + ", which has no valid fields");
-            return;
+            return [];
         }
 
         IOrderedEnumerable<TrackViewModel>? sortedTracks = null;
@@ -390,7 +430,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             if (sortedTracks == null)
             {
-                sortedTracks = Tracks.OrderBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
+                sortedTracks = tracks.OrderBy(x => property.GetValue(x), stringComparer as IComparer<object?>);
             }
             else
             {
@@ -398,21 +438,40 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
 
-        if (swapDirection)
+        return (sortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    public async Task OpenAutoNumber()
+    {
+        if (_getDialogTarget.Invoke() is not Window target) return;
+
+        AutoNumberDialog dialog = new AutoNumberDialog();
+        int initialValue = int.MaxValue;
+        int initialDiscNumber = int.MaxValue;
+        bool setDiscNumber = true;
+
+        foreach (TrackViewModel track in SelectedTracks)
         {
-            if (CurrentSort != fields)
-            {
-                SortDescending = false;
-            }
-            else
-            {
-                SortDescending = !SortDescending;
-            }
+            if(track.TrackNumber != null) initialValue = Math.Min(initialValue, track.TrackNumber.Value);
+            if(track.DiscNumber != null) initialDiscNumber = Math.Min(initialDiscNumber, track.DiscNumber.Value);
         }
-        CurrentSort = fields;
-        PropertyInfo sortOrderProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.SortOrder))!;
-        _preferenceService.StorePreferenceItem(sortOrderProperty, (CurrentSort, SortDescending));
-        Tracks = (SortDescending ? sortedTracks?.Reverse().ToList() : sortedTracks?.ToList()) ?? [];
-        CalculateChangeGroups();
+        if(initialValue == int.MaxValue) initialValue = 1;
+        if (initialDiscNumber == int.MaxValue)
+        {
+            setDiscNumber = false;
+            initialDiscNumber = 1;
+        }
+
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, false);
+        AutoNumberViewModel vm = new AutoNumberViewModel(dialog, sortedSelected)
+        {
+            FirstValue = initialValue,
+            DiscNumber = initialDiscNumber,
+            SetDiscNumber = setDiscNumber
+        };
+        dialog.DataContext = vm;
+
+        await dialog.ShowDialog(target);
     }
 }

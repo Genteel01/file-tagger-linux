@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using Avalonia.Controls;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 
-namespace FileTagger.SharedEventHandlers;
+namespace FileTagger.Statics;
 
 [Flags]
 public enum NumberValidationFlags

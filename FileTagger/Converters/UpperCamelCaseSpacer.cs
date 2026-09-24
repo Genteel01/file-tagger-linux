@@ -6,7 +6,7 @@ using System.Text;
 using ATL;
 using Avalonia.Data.Converters;
 using Avalonia.Styling;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 
 namespace FileTagger.Converters;
 

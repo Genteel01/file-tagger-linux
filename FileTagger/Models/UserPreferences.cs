@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Styling;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Models;
@@ -15,7 +15,7 @@ public class UserPreferences
 {
     public UserPreferences()
     {
-        SortOrder = (nameof(TrackViewModel.Path), false);
+        SortOrder = (Sorts.PathSort, false);
         _storedTheme = ThemeVariant.Default.ToString();
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();

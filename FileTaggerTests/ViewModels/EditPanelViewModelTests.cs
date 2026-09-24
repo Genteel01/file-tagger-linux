@@ -1,4 +1,4 @@
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.Services;
 using FileTagger.ViewModels;
 using FileTaggerTests.Fakers;

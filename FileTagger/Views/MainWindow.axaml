@@ -26,6 +26,11 @@
                     <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="_Tools" Padding="4">
+                <MenuItem Header="_Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
+                    <MenuItem.Icon><TextBlock Text="1-9" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" FontSize="10"/></MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="_Settings" Padding="4">
                 <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}"
                           ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedTheme}" Command="{Binding ChangeSelectedThemeCommand}"/>
@@ -54,6 +59,9 @@
                 </Button>
                 <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">
                     <PathIcon Classes="horizontal" Data="{StaticResource ThemeIcon}"/>
+                </Button>
+                <Button ToolTip.Tip="Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
+                    <TextBlock Text="1-9" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
                 </Button>
             </StackPanel>
         </Border>

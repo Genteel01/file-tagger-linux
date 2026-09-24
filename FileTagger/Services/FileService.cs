@@ -81,7 +81,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
                 if (item is IStorageFile file)
                 {
                     string fileName = file.Name.ToLower();
-                    string extension = "." + fileName.Split(".").Last().ToLower();
+                    string extension = Path.GetExtension(fileName);
                     if (extensions.Contains(extension))
                     {
                         files.Add(file);

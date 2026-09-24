@@ -12,7 +12,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using FileTagger.Assets.Statics;
+using FileTagger.Statics;
 using FileTagger.Dialogs;
 using FileTagger.Extensions;
 using FileTagger.Models;
@@ -146,7 +146,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// <summary>
     /// Function to get the target to use to display a dialog
     /// </summary>
-    private readonly Func<TopLevel?>? _getDialogTarget = null;
+    private readonly Func<TopLevel?> _getDialogTarget;
 
     public EmbeddedPictureViewModel(IFileService fileService, IImageService imageService, IPreferenceService preferenceService, Func<TopLevel?> getDialogTarget)
     {
@@ -165,6 +165,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         _fileService = new FileService(() => null);
         _imageService = new ImageService();
         _preferenceService = new PreferenceService(_fileService);
+        _getDialogTarget = () => null;
     }
     #endif
 
