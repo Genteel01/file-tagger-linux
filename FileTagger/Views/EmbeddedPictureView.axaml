@@ -10,7 +10,7 @@
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
         <!--Overlay changing the colour of the displayed image-->
-        <Style Selector="Image.Cut">
+        <Style Selector="Image.IsCutting">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
@@ -88,7 +88,7 @@
                     </MenuItem>
                 </ContextMenu>
             </Panel.ContextMenu>
-            <Image IsVisible="{Binding HasDisplayedPicture}" Classes.Cut="{Binding DisplayedPictureIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"
+            <Image IsVisible="{Binding HasDisplayedPicture}" Classes.IsCutting="{Binding DisplayedPictureIsBeingCut}" Source="{Binding DisplayedPictureBitmap}"
                    ToolTip.ServiceEnabled="{Binding DisplayedPicture?.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                    ToolTip.Tip="{Binding DisplayedPicture?.Description}"/>
             <Panel IsVisible="{Binding !HasDisplayedPicture}">
