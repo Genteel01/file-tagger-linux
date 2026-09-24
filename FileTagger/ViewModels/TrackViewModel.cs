@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using ATL;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using FileTagger.Extensions;
 
 namespace FileTagger.ViewModels;
@@ -159,6 +158,17 @@ public partial class TrackViewModel : ViewModelBase
         SetUpViewModel();
     }
 
+    /// <summary>
+    /// Creates a new TrackViewModel as a copy of an existing one. Will only contain the editable tags of the track
+    /// </summary>
+    public TrackViewModel(TrackViewModel original)
+    {
+        Directory = "";
+        FileName = "";
+        _originalTrack = new Track();
+        original.CopyTo(this);
+    }
+
     private void SetUpViewModel()
     {
         _finishedSetup = false;
@@ -258,5 +268,27 @@ public partial class TrackViewModel : ViewModelBase
     public void RevertChanges()
     {
         SetUpViewModel();
+    }
+
+    /// <summary>
+    /// Copies the editable Properties of this TrackViewModel to another one
+    /// </summary>
+    public void CopyTo(TrackViewModel copy)
+    {
+        copy.Title = Title;
+        copy.Album = Album;
+        copy.Artist = Artist;
+        copy.TrackNumber = TrackNumber;
+        copy.DiscNumber = DiscNumber;
+        copy.Year = Year;
+        copy.Genre = Genre;
+        copy.AlbumArtist = AlbumArtist;
+        copy.Composer = Composer;
+        copy.Comment = Comment;
+        copy.EmbeddedPictures.Clear();
+        foreach (PictureInfo picture in EmbeddedPictures)
+        {
+            copy.EmbeddedPictures.Add(new PictureInfo(picture));
+        }
     }
 }

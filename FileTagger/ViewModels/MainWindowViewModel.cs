@@ -41,6 +41,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
+    [NotifyPropertyChangedFor(nameof(CanPasteTags))]
     private partial bool HasSelectedTracks { get; set; }
 
     /// <summary>
@@ -108,6 +109,18 @@ public partial class MainWindowViewModel : ViewModelBase
     /// List of <see cref="ThemeVariant"/> values to select from
     /// </summary>
     public ThemeVariant[] Themes { get; } = [ThemeVariant.Default, ThemeVariant.Light, MyThemes.LightGreen, ThemeVariant.Dark, MyThemes.DarkGreen];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanPasteTags))]
+    private partial TrackViewModel? CopiedTrack { get; set; } = null;
+
+    /// <summary>
+    /// Whether we can execute the CopyTags Command. Will be set to true when there is one selected track
+    /// </summary>
+    [ObservableProperty]
+    public partial bool CanCopyTags { get; private set; }
+
+    private bool CanPasteTags => CopiedTrack != null && HasSelectedTracks;
 
     /// <summary>
     /// Selected <see cref="ThemeVariant"/>
@@ -238,6 +251,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         HasSelectedTracks = SelectedTracks.Count > 0;
         SelectedTracksHaveChanges = HasSelectedTracks && SelectedTracks.Any(track => track.Changed);
+        CanCopyTags = SelectedTracks.Count == 1;
         WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
     }
 
@@ -494,5 +508,22 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if(track.Changed) track.RevertChanges();
         }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanCopyTags))]
+    private void CopyTags()
+    {
+        if (SelectedTracks.Count == 0) return;
+        CopiedTrack = new TrackViewModel(SelectedTracks[0]);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanPasteTags))]
+    private void PasteTags()
+    {
+        foreach (TrackViewModel track in SelectedTracks)
+        {
+            CopiedTrack?.CopyTo(track);
+        }
+        SelectionChanged();
     }
 }
