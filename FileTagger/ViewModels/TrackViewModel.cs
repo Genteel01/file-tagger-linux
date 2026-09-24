@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using ATL;
 using Commons;
@@ -15,7 +16,17 @@ public partial class TrackViewModel : ViewModelBase
     /// <summary>
     /// Gets the path
     /// </summary>
-    public string Path { get; }
+    public string Path => Directory + FileName;
+
+    /// <summary>
+    /// Gets the path
+    /// </summary>
+    public string Directory { get; }
+
+    /// <summary>
+    /// Gets the path
+    /// </summary>
+    public string FileName { get; }
 
     /// <summary>
     /// Gets or sets the title
@@ -142,7 +153,9 @@ public partial class TrackViewModel : ViewModelBase
     public TrackViewModel(Track track)
     {
         _originalTrack = track;
-        Path = track.Path;
+        string? directory = System.IO.Path.GetDirectoryName(track.Path);
+        Directory = directory == null ? "" : directory + System.IO.Path.DirectorySeparatorChar;
+        FileName = System.IO.Path.GetFileName(track.Path);
         Title = track.Title;
         Album = track.Album;
         Artist = track.Artist;
