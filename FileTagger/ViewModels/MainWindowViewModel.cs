@@ -352,7 +352,7 @@ public partial class MainWindowViewModel : ViewModelBase
         SortTracks(CurrentSort, false);
     }
 
-    private void TrackChanged(object? _, PropertyChangedEventArgs args)
+    private void TrackChanged(object? sender, PropertyChangedEventArgs args)
     {
         if (args.PropertyName == nameof(TrackViewModel.Changed))
         {
@@ -361,6 +361,11 @@ public partial class MainWindowViewModel : ViewModelBase
             _changeQueued = true;
             Task.Run(() =>
             {
+                //Changed gets set to false when we reset the TrackViewModel, so we update the rest of the ui
+                if (sender is TrackViewModel { Changed: false })
+                {
+                    SelectionChanged();
+                }
                 Task.Delay(10).Wait();
                 CalculateChangeGroups();
                 _changeQueued = false;

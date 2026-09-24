@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using ATL;
-using Commons;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FileTagger.Extensions;
 
 namespace FileTagger.ViewModels;
 
@@ -135,7 +135,7 @@ public partial class TrackViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty] public partial bool IsChangeEnd { get; set; } = false;
 
-    private readonly bool _finishedSetup;
+    private bool _finishedSetup = false;
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -156,16 +156,31 @@ public partial class TrackViewModel : ViewModelBase
         string? directory = System.IO.Path.GetDirectoryName(track.Path);
         Directory = directory == null ? "" : directory + System.IO.Path.DirectorySeparatorChar;
         FileName = System.IO.Path.GetFileName(track.Path);
-        Title = track.Title;
-        Album = track.Album;
-        Artist = track.Artist;
-        TrackNumber = track.TrackNumber;
-        DiscNumber = track.DiscNumber;
-        Year = track.Year;
-        Genre = track.Genre;
-        AlbumArtist = track.AlbumArtist;
-        Composer = track.Composer;
-        Comment = track.Comment;
+        SetUpViewModel();
+    }
+
+    private void SetUpViewModel()
+    {
+        _finishedSetup = false;
+        Title = _originalTrack.Title;
+        Album = _originalTrack.Album;
+        Artist = _originalTrack.Artist;
+        TrackNumber = _originalTrack.TrackNumber;
+        DiscNumber = _originalTrack.DiscNumber;
+        Year = _originalTrack.Year;
+        Genre = _originalTrack.Genre;
+        AlbumArtist = _originalTrack.AlbumArtist;
+        Composer = _originalTrack.Composer;
+        Comment = _originalTrack.Comment;
+
+        if(_isCoverSet)
+        {
+            EmbeddedPictures.Clear();
+            EmbeddedPictures.AddRange(GetOriginalTrackImages());
+        }
+        Changed = false;
+        IsChangeStart = false;
+        IsChangeEnd = false;
         _finishedSetup = true;
     }
 
@@ -175,7 +190,7 @@ public partial class TrackViewModel : ViewModelBase
     /// <returns></returns>
     private ObservableCollection<PictureInfo> GetOriginalTrackImages()
     {
-        return [.. _originalTrack.EmbeddedPictures.Where(pic => pic.NativeFormat != ImageFormat.Unsupported)];
+        return [.. _originalTrack.EmbeddedPictures.Select(pic => new PictureInfo(pic))];
     }
 
     /// <summary>
@@ -204,26 +219,25 @@ public partial class TrackViewModel : ViewModelBase
     /// <returns>The Track</returns>
     private Track GetTrack()
     {
-        Track thisTrack = _originalTrack;
-        thisTrack.Title = Title;
-        thisTrack.Album = Album;
-        thisTrack.Artist = Artist;
-        thisTrack.TrackNumber = TrackNumber;
-        thisTrack.DiscNumber = DiscNumber;
-        thisTrack.Year = Year;
-        thisTrack.Genre = Genre;
-        thisTrack.AlbumArtist = AlbumArtist;
-        thisTrack.Composer = Composer;
-        thisTrack.Comment = Comment;
+        _originalTrack.Title = Title;
+        _originalTrack.Album = Album;
+        _originalTrack.Artist = Artist;
+        _originalTrack.TrackNumber = TrackNumber;
+        _originalTrack.DiscNumber = DiscNumber;
+        _originalTrack.Year = Year;
+        _originalTrack.Genre = Genre;
+        _originalTrack.AlbumArtist = AlbumArtist;
+        _originalTrack.Composer = Composer;
+        _originalTrack.Comment = Comment;
         if (_isCoverSet)
         {
-            thisTrack.EmbeddedPictures.Clear();
+            _originalTrack.EmbeddedPictures.Clear();
             foreach (PictureInfo picture in EmbeddedPictures)
             {
-                thisTrack.EmbeddedPictures.Add(picture);
+                _originalTrack.EmbeddedPictures.Add(picture);
             }
         }
-        return thisTrack;
+        return _originalTrack;
     }
 
 
@@ -239,5 +253,11 @@ public partial class TrackViewModel : ViewModelBase
             IsChangeStart = false;
             IsChangeEnd = false;
         }
+    }
+
+    [RelayCommand(CanExecute = nameof(Changed))]
+    private void RevertChanges()
+    {
+        SetUpViewModel();
     }
 }
