@@ -15,7 +15,7 @@ public class UserPreferences
 {
     public UserPreferences()
     {
-        SortOrder = (nameof(TrackViewModel.Path), false);
+        SortOrder = ($"{nameof(TrackViewModel.Directory)}_{nameof(TrackViewModel.FileName)}", false);
         _storedTheme = ThemeVariant.Default.ToString();
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();

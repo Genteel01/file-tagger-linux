@@ -83,39 +83,39 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="Title_Path"
+                <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="Title_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Title_Path}"/>
-                <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="Album_DiscNumber_TrackNumber_Title_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Title_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="Album_DiscNumber_TrackNumber_Title_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Album_DiscNumber_TrackNumber_Title_Path}"/>
-                <controls:ListColumnHeader Grid.Column="4" Text="Artist" Tapped="ColumnHeaderTapped" Name="Artist_Album_DiscNumber_TrackNumber_Title_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Album_DiscNumber_TrackNumber_Title_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="4" Text="Artist" Tapped="ColumnHeaderTapped" Name="Artist_Album_DiscNumber_TrackNumber_Title_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Artist_Album_DiscNumber_TrackNumber_Title_Path}"/>
-                <controls:ListColumnHeader Grid.Column="6" Text="Album Artist" Tapped="ColumnHeaderTapped" Name="AlbumArtist_Album_DiscNumber_TrackNumber_Title_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Artist_Album_DiscNumber_TrackNumber_Title_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="6" Text="Album Artist" Tapped="ColumnHeaderTapped" Name="AlbumArtist_Album_DiscNumber_TrackNumber_Title_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=AlbumArtist_Album_DiscNumber_TrackNumber_Title_Path}"/>
-                <controls:ListColumnHeader Grid.Column="8" Text="Track" Tapped="ColumnHeaderTapped" Name="TrackNumber_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=AlbumArtist_Album_DiscNumber_TrackNumber_Title_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="8" Text="Track" Tapped="ColumnHeaderTapped" Name="TrackNumber_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=TrackNumber_Path}"/>
-                <controls:ListColumnHeader Grid.Column="10" Text="Disc" Tapped="ColumnHeaderTapped" Name="DiscNumber_TrackNumber_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=TrackNumber_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="10" Text="Disc" Tapped="ColumnHeaderTapped" Name="DiscNumber_TrackNumber_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=DiscNumber_TrackNumber_Path}"/>
-                <controls:ListColumnHeader Grid.Column="12" Text="Year" Tapped="ColumnHeaderTapped" Name="Year_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=DiscNumber_TrackNumber_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="12" Text="Year" Tapped="ColumnHeaderTapped" Name="Year_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Year_Path}"/>
-                <controls:ListColumnHeader Grid.Column="14" Text="Genre" Tapped="ColumnHeaderTapped" Name="Genre_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Year_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="14" Text="Genre" Tapped="ColumnHeaderTapped" Name="Genre_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Genre_Path}"/>
-                <controls:ListColumnHeader Grid.Column="16" Text="Composer" Tapped="ColumnHeaderTapped" Name="Composer_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Genre_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="16" Text="Composer" Tapped="ColumnHeaderTapped" Name="Composer_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Composer_Path}"/>
-                <controls:ListColumnHeader Grid.Column="18" Text="Comment" Tapped="ColumnHeaderTapped" Name="Comment_Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Composer_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="18" Text="Comment" Tapped="ColumnHeaderTapped" Name="Comment_Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Comment_Path}"/>
-                <controls:ListColumnHeader Grid.Column="20" Text="Path" Tapped="ColumnHeaderTapped" Name="Path"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Comment_Directory_FileName}"/>
+                <controls:ListColumnHeader Grid.Column="20" Text="Path" Tapped="ColumnHeaderTapped" Name="Directory_FileName"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Path}"/>
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter=Directory_FileName}"/>
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
