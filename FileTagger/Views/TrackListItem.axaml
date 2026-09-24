@@ -23,13 +23,6 @@
             <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="Background" Value="{DynamicResource FocusedTextBoxTrackBrush}" />
         </Style>
-        <Style Selector="Border#RowBorder">
-            <Setter Property="BorderThickness" Value="0 0 0 1" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorBrush}"/>
-        </Style>
-        <Style Selector="Border#RowBorder.lastChanged">
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
         <Style Selector="Border#SelectionGroupBorder">
             <Setter Property="BorderThickness" Value="0 0" />
             <Setter Property="BorderBrush" Value="{DynamicResource TrackChangedBorderBrush}"/>
@@ -53,7 +46,6 @@
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-    <Border Name="RowBorder" Classes.changeEnd="{Binding IsChangeEnd}" >
         <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
@@ -137,6 +129,5 @@
                      KeyDown="TextBoxEnterPressed" Name="PathBox"/>
             <Panel Grid.Column="11" Classes="buffer"/>
         </Grid>
-    </Border>
     </Border>
 </UserControl>

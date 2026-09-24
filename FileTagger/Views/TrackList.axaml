@@ -18,6 +18,9 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="Height" Value="{DynamicResource RowHeight}"/>
         </Style>
+        <Style Selector="ListBoxItem:nth-child(even) views|TrackListItem">
+            <Setter Property="Background" Value="{DynamicResource AlternateListItemBrush}" />
+        </Style>
         <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
             <Setter Property="Height" Value="42"/>
         </Style>
