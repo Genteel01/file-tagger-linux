@@ -458,7 +458,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     [RelayCommand(CanExecute = nameof(SelectedTrackHasPictures))]
     private async Task OpenPictureDescriptionDialog()
     {
-        if (_getDialogTarget?.Invoke() is not Window target) return;
+        if (_getDialogTarget.Invoke() is not Window target) return;
 
         PicDescriptionDialog dialog = new PicDescriptionDialog();
         string initialText = "";
