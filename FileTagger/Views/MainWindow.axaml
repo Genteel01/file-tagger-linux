@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon/tag-edit-outline.ico"
         Title="FileTagger">
     <Design.DataContext>
         <vm:MainWindowViewModel/>
