@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Styling;
 using FileTagger.ViewModels;
 
@@ -7,6 +8,21 @@ public static class MyThemes
 {
     public static readonly ThemeVariant LightGreen = new ThemeVariant(nameof(LightGreen), ThemeVariant.Light);
     public static readonly ThemeVariant DarkGreen = new ThemeVariant(nameof(DarkGreen), ThemeVariant.Dark);
+
+    private static readonly Uri OutlineIconUri = new Uri("avares://FileTagger/Assets/icon/tag-edit-outline.ico", UriKind.Absolute);
+    private static readonly Uri BlueIconUri = new Uri("avares://FileTagger/Assets/icon/tag-edit-blue.ico", UriKind.Absolute);
+    private static readonly Uri GreenIconUri = new Uri("avares://FileTagger/Assets/icon/tag-edit-green.ico", UriKind.Absolute);
+
+    public static Uri ThemeIcon(ThemeVariant theme) => ThemeIcon(theme.ToString());
+
+    private static Uri ThemeIcon(string themeName) => themeName switch
+    {
+        nameof(ThemeVariant.Light) => BlueIconUri,
+        nameof(ThemeVariant.Dark) => BlueIconUri,
+        nameof(LightGreen) => GreenIconUri,
+        nameof(DarkGreen) => GreenIconUri,
+        _ => OutlineIconUri
+    };
 
     public static ThemeVariant StringToTheme(string themeName) => themeName switch
     {

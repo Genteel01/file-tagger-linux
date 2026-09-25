@@ -16,6 +16,7 @@ using ATL.Logging;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -141,6 +142,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial ThemeVariant SelectedTheme { get; private set; } = ThemeVariant.Default;
 
+    [ObservableProperty]
+    public partial WindowIcon AppIcon { get; set; }
+
     [RelayCommand]
     private void ChangeSelectedTheme(ThemeVariant value)
     {
@@ -148,6 +152,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             app.RequestedThemeVariant = value;
             SelectedTheme = value;
+            AppIcon = new WindowIcon(AssetLoader.Open(MyThemes.ThemeIcon(value)));
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }

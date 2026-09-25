@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/icon/tag-edit-outline.ico"
+        Icon="{Binding AppIcon}"
         Title="FileTagger">
     <Design.DataContext>
         <vm:MainWindowViewModel/>
