@@ -164,7 +164,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SwitchTheme()
     {
-        ThemeVariant newTheme = MyThemes.GetOppositeTheme(SelectedTheme.ToString());
+        ThemeVariant newTheme = MyThemes.GetOppositeTheme(SelectedTheme);
         ChangeSelectedTheme(newTheme);
     }
 

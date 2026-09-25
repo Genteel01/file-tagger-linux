@@ -33,7 +33,9 @@ public static class MyThemes
         _ => ThemeVariant.Default
     };
 
-    public static ThemeVariant GetOppositeTheme(string themeName) => themeName switch
+    public static ThemeVariant GetOppositeTheme(ThemeVariant theme) => GetOppositeTheme(theme.ToString());
+
+    private static ThemeVariant GetOppositeTheme(string themeName) => themeName switch
     {
         nameof(ThemeVariant.Light) => ThemeVariant.Dark,
         nameof(ThemeVariant.Dark) => ThemeVariant.Light,
