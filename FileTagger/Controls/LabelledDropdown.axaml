@@ -40,6 +40,12 @@
                 <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
             </Style>
         </Style>
+        <Style Selector="Grid.IsShort ^">
+            <!--Handle sizing based on height of container-->
+            <Style Selector="^ AutoCompleteBox">
+                <Setter Property="Height" Value="{StaticResource SmallEditControlHeight}"/>
+            </Style>
+        </Style>
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Name="LabelledDropdown">
