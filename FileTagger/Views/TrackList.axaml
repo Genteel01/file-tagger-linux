@@ -10,19 +10,23 @@
              x:DataType="viewModels:MainWindowViewModel"
              x:Class="FileTagger.Views.TrackList">
     <UserControl.Styles>
-        <Style Selector="Grid.IsShort TextBlock.titleTextBlock, Grid.IsShort controls|ListColumnHeader">
+        <Style Selector="Grid.IsShort TextBlock#TitleTextBlock, Grid.IsShort controls|ListColumnHeader">
             <Setter Property="Height" Value="36"/>
         </Style>
-        <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
+        <Style Selector="TextBlock#TitleTextBlock, controls|ListColumnHeader">
             <Setter Property="Height" Value="42"/>
         </Style>
-        <Style Selector="ListBox">
+        <Style Selector="Grid.IsShort ListBoxItem">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Height" Value="{DynamicResource SmallRowHeight}"/>
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="0" />
             <Setter Property="Height" Value="{DynamicResource RowHeight}"/>
+        </Style>
+        <Style Selector="ListBox">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
         </Style>
         <Style Selector="ListBoxItem:nth-child(even) views|TrackListItem">
             <Setter Property="Background" Value="{DynamicResource AlternateListItemBrush}" />
@@ -51,7 +55,7 @@
         <Panel Grid.IsSharedSizeScope="True" HorizontalAlignment="Left">
             <Grid RowDefinitions="Auto, *">
                 <!--Dummy TextBlock to make us leave the top empty, because the title row appears on top of it-->
-                <TextBlock Grid.Row="0" Classes="titleTextBlock"/>
+                <TextBlock Grid.Row="0" Name="TitleTextBlock"/>
                 <!--Items rows of list-->
                 <ListBox Grid.Row="1" ItemsSource="{Binding Tracks}" SelectionMode="Multiple"
                          SelectedItems="{Binding SelectedTracks}"

@@ -7,15 +7,35 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FileTagger.Views.TrackListItem" x:DataType="viewModels:TrackViewModel">
     <UserControl.Styles>
+        <!--Sizing-->
+        <Style Selector="Grid.IsShort TextBlock">
+            <Setter Property="Height" Value="{StaticResource SmallRowHeight}" />
+            <Setter Property="LineHeight" Value="{StaticResource SmallRowHeight}" />
+        </Style>
+        <Style Selector="Grid.IsShort TextBox">
+            <Setter Property="Height" Value="{StaticResource SmallRowHeight}" />
+            <Setter Property="LineHeight" Value="{StaticResource SmallRowHeight}" />
+        </Style>
+        <Style Selector="Grid.IsShort Grid.TrackGrid">
+            <Setter Property="Height" Value="{StaticResource SmallRowHeight}"/>
+        </Style>
         <Style Selector="TextBlock">
             <Setter Property="Height" Value="{StaticResource RowHeight}" />
             <Setter Property="LineHeight" Value="{StaticResource RowHeight}" />
-            <Setter Property="Padding" Value="4 0"/>
-            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="TextBox">
             <Setter Property="Height" Value="{StaticResource RowHeight}"/>
             <Setter Property="LineHeight" Value="{StaticResource RowLineHeight}"/>
+        </Style>
+        <Style Selector="Grid.IsShort Grid.TrackGrid">
+            <Setter Property="Height" Value="{StaticResource RowHeight}"/>
+        </Style>
+        <!--End Sizing-->
+        <Style Selector="TextBlock">
+            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TextBox">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
@@ -43,7 +63,7 @@
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
+        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
