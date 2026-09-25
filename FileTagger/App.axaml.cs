@@ -64,6 +64,7 @@ public class App : Application
             mainWindow.TemplateApplied += (_, _) => { mainWindow.Hide(); };
             desktop.MainWindow = mainWindow;
             await mainWindowViewModel.OpenInitialFiles();
+            mainWindowViewModel.CheckScreenHeight();
             desktop.MainWindow.Show();
             desktop.ShutdownRequested += DesktopOnShutdownRequested;
         }

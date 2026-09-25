@@ -16,7 +16,7 @@
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenMusicFilesCommand}" />
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveMusicFilesCommand}" />
     </Window.KeyBindings>
-    <Grid RowDefinitions="Auto, Auto, *" Name="Root">
+    <Grid RowDefinitions="Auto, Auto, *" Name="Root" Classes.IsShort="{Binding IsShort}">
         <Menu Grid.Row="0">
             <MenuItem Header="_File" Padding="4">
                 <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}" InputGesture="Ctrl+O">

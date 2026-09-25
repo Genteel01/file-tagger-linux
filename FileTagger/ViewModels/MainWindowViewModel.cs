@@ -27,7 +27,7 @@ using FileTagger.Models;
 
 namespace FileTagger.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : DynamicSizingViewModel
 {
     /// <summary>
     /// All the tracks that have been loaded in
@@ -169,7 +169,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private readonly Func<TopLevel?> _getDialogTarget;
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -239,7 +239,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Default Constructor for design time
     /// </summary>
-    public MainWindowViewModel()
+    public MainWindowViewModel() : base(() => null)
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(() => null);
