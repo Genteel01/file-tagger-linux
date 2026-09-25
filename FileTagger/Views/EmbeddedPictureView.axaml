@@ -6,6 +6,27 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
              x:Class="FileTagger.Views.EmbeddedPictureView" x:DataType="viewModels:EmbeddedPictureViewModel">
     <UserControl.Styles>
+        <!--Handle image sizing based on height of screen-->
+        <Style Selector="Grid.IsShort Panel#ImagePanel">
+            <Setter Property="Height" Value="{StaticResource SmallImageSize}"/>
+        </Style>
+        <Style Selector="Grid.IsShort Panel#PicTypeControl, Grid.IsShort Border#FallbackImage">
+            <Setter Property="MaxWidth" Value="{StaticResource SmallImageSize}"/>
+        </Style>
+        <Style Selector="Grid.IsShort Panel#PicTypeControl">
+            <Setter Property="Height" Value="{StaticResource SmallEditControlHeight}"/>
+        </Style>
+        <!--Default values-->
+        <Style Selector="Panel#ImagePanel">
+            <Setter Property="Height" Value="{StaticResource BaseImageSize}"/>
+        </Style>
+        <Style Selector="Panel#PicTypeControl, Border#FallbackImage">
+            <Setter Property="MaxWidth" Value="{StaticResource BaseImageSize}"/>
+        </Style>
+        <Style Selector="Panel#PicTypeControl">
+            <Setter Property="Height" Value="{StaticResource EditControlHeight}"/>
+        </Style>
+        <!--End Dynamic Sizing Section-->
         <Style Selector="Border#FallbackImage:disabled">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
@@ -46,7 +67,7 @@
         </Style>
     </UserControl.Styles>
     <StackPanel>
-        <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch">
+        <Panel Name="ImagePanel" HorizontalAlignment="Stretch">
             <Panel.ContextMenu>
                 <ContextMenu IsEnabled="{Binding SelectedTracks.Count}">
                     <MenuItem Header="_Add picture" Command="{Binding AddCoverImagesCommand}">
@@ -90,7 +111,7 @@
             <Panel IsVisible="{Binding !HasDisplayedPicture}">
                 <Border Name="FallbackImage" Background="{DynamicResource ThemeBackgroundBrush}"
                         CornerRadius="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.05}"
-                        MaxWidth="{StaticResource BaseImageSize}" Height="{Binding #FallbackImage.Bounds.Width}"/>
+                        Height="{Binding #FallbackImage.Bounds.Width}"/>
                 <PathIcon Width="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                           Height="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                           Foreground="{DynamicResource EditPanelBackgroundBrush}" Classes.One="{Binding !SelectedTrackHasPictures}">
@@ -121,8 +142,8 @@
                 </TextBlock.IsVisible>
             </TextBlock>
         </StackPanel>
-        <Panel Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
-               MaxWidth="{StaticResource BaseImageSize}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
+        <Panel Name="PicTypeControl"
+               Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
             <ComboBox ItemsSource="{Binding PictureTypes, Converter={StaticResource UpperCamelCaseSpacer}}" SelectedItem="{Binding SelectedPictureType, Converter={StaticResource UpperCamelCaseSpacer}}" Name="PicTypeSelector"/>
             <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="Vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
             <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="Vertical" Data="{StaticResource RightChevronIcon}"/></Button>
