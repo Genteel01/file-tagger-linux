@@ -52,7 +52,7 @@
                             Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" ClearSelectionOnLostFocus="True"
                             MinimumPrefixLength="0" TextFilter="{TemplateBinding TextFilter}"/>
                         <Button x:Name="PART_Button" Width="24" HorizontalAlignment="Right" Background="{TemplateBinding ButtonBackground}">
-                            <PathIcon Classes="horizontal" Data="{StaticResource DownChevronIcon}"/>
+                            <PathIcon Classes="Horizontal" Data="{StaticResource DownChevronIcon}"/>
                         </Button>
                     </Panel>
                 </StackPanel>

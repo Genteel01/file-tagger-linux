@@ -56,19 +56,19 @@
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="_Undo Changes" Command="{Binding RevertChangesCommand}">
-                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Cut _Tags" Command="{Binding CutTagsCommand}" IsVisible="{Binding CanCopyTags}">
-                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="_Copy Tags" Command="{Binding CopyTagsCommand}" IsVisible="{Binding CanCopyTags}">
-                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="_Paste Tags" Command="{Binding PasteTagsCommand}">
-                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
-                                <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                             </MenuItem>
                         </ContextMenu>
                     </ListBox.ContextMenu>

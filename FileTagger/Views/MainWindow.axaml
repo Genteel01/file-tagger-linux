@@ -20,27 +20,27 @@
         <Menu Grid.Row="0">
             <MenuItem Header="_File" Padding="4">
                 <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}" InputGesture="Ctrl+O">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}" InputGesture="Ctrl+S">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Edit" Padding="4">
                 <MenuItem Header="_Reset Selected Tracks" Command="{Binding RevertChangesCommand}">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource UndoIcon}"/></MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Cut _Tags" Command="{Binding CutTagsCommand}">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Copy Selected Tags" Command="{Binding CopyTagsCommand}">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Paste Tags To Selected" Command="{Binding PasteTagsCommand}">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Tools" Padding="4">
@@ -52,7 +52,7 @@
                 <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}"
                           ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedTheme}" Command="{Binding ChangeSelectedThemeCommand}"/>
                 <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
-                    <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
         </Menu>
@@ -69,13 +69,13 @@
                 <!-- This is our title text block.  -->
                 <TextBlock Classes="h1" Text="Music Tagger" />
                 <Button ToolTip.Tip="Open Files (Ctrl+O)" Command="{Binding OpenMusicFilesCommand}">
-                    <PathIcon Classes="horizontal" Data="{StaticResource OpenIcon}"/>
+                    <PathIcon Classes="Horizontal" Data="{StaticResource OpenIcon}"/>
                 </Button>
                 <Button ToolTip.Tip="Save Changed Files (Ctrl+S)" Command="{Binding SaveMusicFilesCommand}">
-                    <PathIcon Classes="horizontal" Data="{StaticResource SaveIcon}"/>
+                    <PathIcon Classes="Horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
                 <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">
-                    <PathIcon Classes="horizontal" Data="{StaticResource ThemeIcon}"/>
+                    <PathIcon Classes="Horizontal" Data="{StaticResource ThemeIcon}"/>
                 </Button>
                 <Button ToolTip.Tip="Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
                     <TextBlock Text="1-9" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
