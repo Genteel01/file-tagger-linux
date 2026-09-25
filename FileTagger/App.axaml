@@ -41,6 +41,9 @@
             <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
             <Setter Property="Margin" Value="5" />
         </Style>
+        <Style Selector="Grid.IsShort TextBlock.h1">
+            <Setter Property="Margin" Value="5 2" />
+        </Style>
 
         <Style Selector="TextBox ScrollBar">
             <Setter Property="Visibility" Value="Hidden" />

@@ -10,6 +10,12 @@
              x:DataType="viewModels:MainWindowViewModel"
              x:Class="FileTagger.Views.TrackList">
     <UserControl.Styles>
+        <Style Selector="Grid.IsShort TextBlock.titleTextBlock, Grid.IsShort controls|ListColumnHeader">
+            <Setter Property="Height" Value="36"/>
+        </Style>
+        <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
+            <Setter Property="Height" Value="42"/>
+        </Style>
         <Style Selector="ListBox">
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
@@ -20,9 +26,6 @@
         </Style>
         <Style Selector="ListBoxItem:nth-child(even) views|TrackListItem">
             <Setter Property="Background" Value="{DynamicResource AlternateListItemBrush}" />
-        </Style>
-        <Style Selector="TextBlock.titleTextBlock, controls|ListColumnHeader">
-            <Setter Property="Height" Value="42"/>
         </Style>
         <Style Selector="controls|ListColumnHeader">
             <Setter Property="VerticalAlignment" Value="Top"/>
