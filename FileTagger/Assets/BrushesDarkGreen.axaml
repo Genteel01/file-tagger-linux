@@ -3,6 +3,7 @@
                     xmlns:statics="clr-namespace:FileTagger.Statics">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="{x:Static statics:MyThemes.DarkGreen}">
+            <Color x:Key="ThemeAccentColor0">#FF00e645</Color>
             <Color x:Key="ThemeAccentColor">#CC00e645</Color>
             <Color x:Key="ThemeAccentColor2">#9900e645</Color>
             <Color x:Key="ThemeAccentColor3">#6600e645</Color>
@@ -26,7 +27,7 @@
             <!--ScrollBar:pressed-->
             <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{StaticResource ThemeAccentColor}"/>
             <!--ScrollBar arrow pressed-->
-            <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource ThemeAccentColor}"/>
+            <SolidColorBrush x:Key='ThemeAccentBrush' Color="{StaticResource ThemeAccentColor0}"/>
 
             <!--Text Highlight-->
             <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
