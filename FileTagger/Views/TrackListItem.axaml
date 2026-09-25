@@ -31,9 +31,6 @@
             <Setter Property="BorderBrush" Value="{DynamicResource TrackChangedBorderBrush}"/>
             <Setter Property="Background" Value="{DynamicResource TrackChangedBackgroundBrush}"/>
         </Style>
-        <Style Selector="Border#SelectionGroupBorder.IsCutting">
-            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
-        </Style>
         <Style Selector="Border#SelectionGroupBorder.changeStart">
             <Setter Property="BorderThickness" Value="1 1 1 0" />
         </Style>

@@ -9,10 +9,6 @@
         <Style Selector="Border#FallbackImage:disabled">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
-        <!--Overlay changing the colour of the displayed image-->
-        <Style Selector="Image.IsCutting">
-            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
-        </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
         <Style Selector="Panel#PicTypeControl PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource ThemeBorderLowBrush}" />

@@ -91,5 +91,8 @@
         <Style Selector="PathIcon.Vertical">
             <Setter Property="Height" Value="{DynamicResource SmallIconWidth}" />
         </Style>
+        <Style Selector=":is(Control).IsCutting">
+            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
+        </Style>
     </Application.Styles>
 </Application>
