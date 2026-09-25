@@ -38,7 +38,7 @@
         <!--  Some custom Styles  -->
         <Style Selector="TextBlock.h1">
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
             <Setter Property="Margin" Value="5" />
         </Style>
 
