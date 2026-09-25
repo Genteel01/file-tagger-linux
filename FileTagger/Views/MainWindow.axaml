@@ -74,9 +74,6 @@
                 <Button ToolTip.Tip="Save Changed Files (Ctrl+S)" Command="{Binding SaveMusicFilesCommand}">
                     <PathIcon Classes="Horizontal" Data="{StaticResource SaveIcon}"/>
                 </Button>
-                <Button ToolTip.Tip="Switch Theme" Command="{Binding SwitchThemeCommand}">
-                    <PathIcon Classes="Horizontal" Data="{StaticResource ThemeIcon}"/>
-                </Button>
                 <Button ToolTip.Tip="Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
                     <TextBlock Text="1-9" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
                 </Button>

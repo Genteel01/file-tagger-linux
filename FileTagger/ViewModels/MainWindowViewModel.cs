@@ -146,7 +146,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public partial WindowIcon AppIcon { get; set; }
 
     [RelayCommand]
-    private void ChangeSelectedTheme(ThemeVariant value)
+    public void ChangeSelectedTheme(ThemeVariant value)
     {
         if (Application.Current is { } app)
         {
@@ -156,16 +156,6 @@ public partial class MainWindowViewModel : ViewModelBase
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
-    }
-
-    /// <summary>
-    /// Switches between light and dark theme
-    /// </summary>
-    [RelayCommand]
-    private void SwitchTheme()
-    {
-        ThemeVariant newTheme = MyThemes.GetOppositeTheme(SelectedTheme);
-        ChangeSelectedTheme(newTheme);
     }
 
     [RelayCommand]
