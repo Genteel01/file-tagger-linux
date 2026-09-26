@@ -1,13 +1,16 @@
 using System;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FileTagger.Models;
+using FileTagger.Services;
 using FileTagger.Statics;
 
 namespace FileTagger.ViewModels;
 
-public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel) : ViewModelBase
+public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel, IPreferenceService preferenceService) : ViewModelBase
 {
     [ObservableProperty]
     public partial bool IsShort { get; set; }
@@ -18,6 +21,8 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     partial void OnSelectedLayoutSizeChanged(MyThemes.LayoutSize value)
     {
         CheckScreenHeight();
+        PropertyInfo compactLayoutProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedLayoutSize))!;
+        preferenceService.StorePreferenceItem(compactLayoutProperty, value);
     }
 
     [ObservableProperty]

@@ -177,7 +177,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// </summary>
     private readonly Func<TopLevel?> _getDialogTarget;
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget, preferenceService)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -229,13 +229,14 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         SortDescending = newPreferences.SortOrder.Item2;
         ThemeVariant loadedTheme = newPreferences.RequestedTheme;
         if (loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
+        SelectedLayoutSize = newPreferences.RequestedLayoutSize;
     }
 
     #if DEBUG
     /// <summary>
     /// Default Constructor for design time
     /// </summary>
-    public MainWindowViewModel() : base(() => null)
+    public MainWindowViewModel() : base(() => null, new PreferenceService(new FileService(() => null)))
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(() => null);

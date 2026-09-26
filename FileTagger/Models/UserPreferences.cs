@@ -19,6 +19,7 @@ public class UserPreferences
         _storedTheme = ThemeVariant.Default.ToString();
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
+        RequestedLayoutSize = MyThemes.LayoutSize.Automatic;
     }
     /// <summary>
     /// String defining which fields the track list is sorted by,
@@ -50,6 +51,8 @@ public class UserPreferences
     /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
     /// </summary>
     public double EditPanelWidth { get; set; }
+
+    public MyThemes.LayoutSize RequestedLayoutSize { get; set; }
 
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>
