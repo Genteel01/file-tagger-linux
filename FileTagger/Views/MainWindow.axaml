@@ -51,6 +51,8 @@
             <MenuItem Header="_Settings" Padding="4">
                 <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}"
                           ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedTheme}" Command="{Binding ChangeSelectedThemeCommand}"/>
+                <MenuItem Header="_Change Layout" ItemsSource="{Binding Layouts}"
+                          ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedLayoutSize}" Command="{Binding ChangeLayoutCommand}"/>
                 <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
                     <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                 </MenuItem>

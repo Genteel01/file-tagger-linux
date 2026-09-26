@@ -6,6 +6,14 @@ namespace FileTagger.Statics;
 
 public static class MyThemes
 {
+
+    public enum LayoutSize
+    {
+        Default,
+        Standard,
+        Compact,
+    }
+
     public static readonly ThemeVariant LightGreen = new ThemeVariant(nameof(LightGreen), ThemeVariant.Light);
     public static readonly ThemeVariant DarkGreen = new ThemeVariant(nameof(DarkGreen), ThemeVariant.Dark);
 

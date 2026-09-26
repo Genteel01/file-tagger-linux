@@ -1,7 +1,10 @@
 using System;
+using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using FileTagger.Statics;
 
 namespace FileTagger.ViewModels;
 
@@ -10,15 +13,48 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     [ObservableProperty]
     public partial bool IsShort { get; set; }
 
+    [ObservableProperty]
+    public partial MyThemes.LayoutSize SelectedLayoutSize { get; set; }
+
+    [ObservableProperty]
+    public partial MyThemes.LayoutSize[] Layouts { get; set; } = Enum.GetValues<MyThemes.LayoutSize>();
+
+
     private const int HeightThreshold = 850;
 
     public void CheckScreenHeight()
     {
-        TopLevel? topLevel = getTopLevel();
-        if (topLevel?.Screens == null) return;
-        Screen? activeScreen = topLevel.Screens.ScreenFromTopLevel(topLevel);
-        if (activeScreen == null) return;
-        int height = activeScreen.Bounds.Height;
-        if (height < HeightThreshold) IsShort = true;
+        switch (SelectedLayoutSize)
+        {
+            case MyThemes.LayoutSize.Compact:
+                IsShort = true;
+                return;
+            case MyThemes.LayoutSize.Standard:
+                IsShort = false;
+                return;
+            case MyThemes.LayoutSize.Default:
+            default:
+            {
+                TopLevel? topLevel = getTopLevel();
+                if (topLevel?.Screens == null) return;
+                Screen? activeScreen = topLevel.Screens.ScreenFromTopLevel(topLevel);
+                if (activeScreen == null) return;
+                int height = activeScreen.Bounds.Height;
+                IsShort = height < HeightThreshold;
+                break;
+            }
+        }
+    }
+
+    [RelayCommand]
+    private void ChangeLayout(MyThemes.LayoutSize value) => SelectedLayoutSize = value;
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(SelectedLayoutSize))
+        {
+            CheckScreenHeight();
+        }
     }
 }
