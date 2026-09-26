@@ -36,7 +36,7 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
             case MyThemes.LayoutSize.Standard:
                 IsShort = false;
                 return;
-            case MyThemes.LayoutSize.Default:
+            case MyThemes.LayoutSize.Automatic:
             default:
             {
                 TopLevel? topLevel = getTopLevel();

@@ -9,7 +9,7 @@ public static class MyThemes
 
     public enum LayoutSize
     {
-        Default,
+        Automatic,
         Standard,
         Compact,
     }
