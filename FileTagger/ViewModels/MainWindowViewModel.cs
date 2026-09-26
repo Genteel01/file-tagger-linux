@@ -106,6 +106,13 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     [ObservableProperty]
     public partial GridLength EditPanelWidth { get; set; }
 
+    partial void OnEditPanelWidthChanged(GridLength value)
+    {
+        PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
+        double newValue = value is { IsStar: true, Value: 1 } ? double.PositiveInfinity : value.Value;
+        _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
+    }
+
     /// <summary>
     /// List of <see cref="ThemeVariant"/> values to select from
     /// </summary>
@@ -146,12 +153,13 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     public partial WindowIcon AppIcon { get; set; }
 
     [RelayCommand]
-    public void ChangeSelectedTheme(ThemeVariant value)
+    public void ChangeSelectedTheme(ThemeVariant value) => SelectedTheme = value;
+
+    partial void OnSelectedThemeChanged(ThemeVariant value)
     {
         if (Application.Current is { } app)
         {
             app.RequestedThemeVariant = value;
-            SelectedTheme = value;
             AppIcon = new WindowIcon(AssetLoader.Open(MyThemes.ThemeIcon(value)));
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
@@ -221,18 +229,6 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         SortDescending = newPreferences.SortOrder.Item2;
         ThemeVariant loadedTheme = newPreferences.RequestedTheme;
         if (loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        if (e.PropertyName == nameof(EditPanelWidth))
-        {
-            //Store EditPanelWidth when it changes
-            PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
-            double newValue = EditPanelWidth is { IsStar: true, Value: 1 } ? double.PositiveInfinity : EditPanelWidth.Value;
-            _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
-        }
     }
 
     #if DEBUG

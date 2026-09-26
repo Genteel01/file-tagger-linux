@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,6 +14,11 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
 
     [ObservableProperty]
     public partial MyThemes.LayoutSize SelectedLayoutSize { get; set; }
+
+    partial void OnSelectedLayoutSizeChanged(MyThemes.LayoutSize value)
+    {
+        CheckScreenHeight();
+    }
 
     [ObservableProperty]
     public partial MyThemes.LayoutSize[] Layouts { get; set; } = Enum.GetValues<MyThemes.LayoutSize>();
@@ -48,13 +52,4 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
 
     [RelayCommand]
     private void ChangeLayout(MyThemes.LayoutSize value) => SelectedLayoutSize = value;
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        if (e.PropertyName == nameof(SelectedLayoutSize))
-        {
-            CheckScreenHeight();
-        }
-    }
 }
