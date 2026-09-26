@@ -8,7 +8,7 @@
         x:Class="FileTagger.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="{Binding AppIcon}"
-        Title="FileTagger">
+        Title="NetTag">
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
