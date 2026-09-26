@@ -29,7 +29,7 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     public partial MyThemes.LayoutSize[] Layouts { get; set; } = Enum.GetValues<MyThemes.LayoutSize>();
 
 
-    private const int HeightThreshold = 850;
+    private const int HeightThreshold = 1080;
 
     public void CheckScreenHeight()
     {
