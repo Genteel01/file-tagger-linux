@@ -13,7 +13,7 @@ namespace FileTagger.ViewModels;
 public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel, IPreferenceService preferenceService) : ViewModelBase
 {
     [ObservableProperty]
-    public partial bool IsShort { get; set; }
+    public partial bool IsCompact { get; set; }
 
     [ObservableProperty]
     public partial MyThemes.LayoutSize SelectedLayoutSize { get; set; }
@@ -36,10 +36,10 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
         switch (SelectedLayoutSize)
         {
             case MyThemes.LayoutSize.Compact:
-                IsShort = true;
+                IsCompact = true;
                 return;
             case MyThemes.LayoutSize.Standard:
-                IsShort = false;
+                IsCompact = false;
                 return;
             case MyThemes.LayoutSize.Automatic:
             default:
@@ -49,7 +49,7 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
                 Screen? activeScreen = topLevel.Screens.ScreenFromTopLevel(topLevel);
                 if (activeScreen == null) return;
                 int height = activeScreen.Bounds.Height;
-                IsShort = height < HeightThreshold;
+                IsCompact = height < HeightThreshold;
                 break;
             }
         }
