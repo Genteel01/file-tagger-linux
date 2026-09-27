@@ -111,11 +111,11 @@ public static class MyExtensions
 
         /// <summary>
         /// Test the equality of two PictureInfo regardless of how they're represented internally (native codes or generic enum)
-        /// , while also testing the equality of their images
+        /// , while also testing the equality of their images and PicTypes. Ignores description
         /// </summary>
         public bool TrueEqual(PictureInfo other)
         {
-            return pictureInfo.PicturesEqual(other) && pictureInfo.EqualsProper(other);
+            return pictureInfo.PicturesEqual(other) && pictureInfo.EqualsProper(other) && pictureInfo.PicType == other.PicType;
         }
     }
 }
