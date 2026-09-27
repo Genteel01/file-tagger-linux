@@ -62,23 +62,24 @@
                    DropDownClosed="AutoCompleteBoxDropdownClosed"
                    SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
                 <controls:LabelledDropdown Grid.Column="2"
-                    Name="GenreField"
-                    LabelText="Genre"
-                    ItemsSource="{Binding FieldOptions[Genre]}"
-                    Text="{Binding FieldTexts[Genre]}"
-                    DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+                   Name="DiscNumberField"
+                   LabelText="Disc Number"
+                   ItemsSource="{Binding FieldOptions[DiscNumber]}"
+                   Text="{Binding FieldTexts[DiscNumber]}"
+                   DropDownClosed="AutoCompleteBoxDropdownClosed"
+                   SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
             </Grid>
-            <controls:LabelledDropdown
-                Name="CommentField"
-                LabelText="Comment"
-                ItemsSource="{Binding FieldOptions[Comment]}"
-                Text="{Binding FieldTexts[Comment]}"
-                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <controls:LabelledDropdown
                 Name="AlbumArtistField"
                 LabelText="Album Artist"
                 ItemsSource="{Binding FieldOptions[AlbumArtist]}"
                 Text="{Binding FieldTexts[AlbumArtist]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="GenreField"
+                LabelText="Genre"
+                ItemsSource="{Binding FieldOptions[Genre]}"
+                Text="{Binding FieldTexts[Genre]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <controls:LabelledDropdown
                 Name="ComposerField"
@@ -87,12 +88,11 @@
                 Text="{Binding FieldTexts[Composer]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <controls:LabelledDropdown
-                Name="DiscNumberField"
-                LabelText="Disc Number"
-                ItemsSource="{Binding FieldOptions[DiscNumber]}"
-                Text="{Binding FieldTexts[DiscNumber]}"
-                DropDownClosed="AutoCompleteBoxDropdownClosed"
-                SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
+                Name="CommentField"
+                LabelText="Comment"
+                ItemsSource="{Binding FieldOptions[Comment]}"
+                Text="{Binding FieldTexts[Comment]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <ContentControl Content="{Binding EmbeddedPicture}" Margin="8"/>
         </StackPanel>
     </ScrollViewer>
