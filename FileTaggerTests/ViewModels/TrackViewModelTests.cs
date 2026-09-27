@@ -9,7 +9,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditField_ChangedChanges()
     {
-        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel viewModel = CreatePopulatedViewModel();
         Assert.False(viewModel.Changed);
         viewModel.Title = "changed";
         Assert.True(viewModel.Changed);
@@ -18,13 +18,103 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditChanged_ChangedDoesntChange()
     {
-        Track track = StubCreators.CreateStubTrack();
-        TrackViewModel viewModel = new TrackViewModel(track)
-        {
-            Changed = true
-        };
+        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
+        viewModel.Changed = true;
         Assert.True(viewModel.Changed);
         viewModel.Changed = false;
         Assert.False(viewModel.Changed);
+    }
+
+    [Fact]
+    public void RevertChanges_RestoresTagsAndPicturesFromTrack()
+    {
+        TrackViewModel viewModel = CreatePopulatedViewModel();
+        viewModel.RevertChanges();
+
+        Assert.Null(viewModel.Title);
+        Assert.Null(viewModel.Album);
+        Assert.Null(viewModel.Artist);
+        Assert.Equal(0, viewModel.TrackNumber);
+        Assert.Null(viewModel.DiscNumber);
+        Assert.Equal(0, viewModel.Year);
+        Assert.Null(viewModel.Genre);
+        Assert.Null(viewModel.AlbumArtist);
+        Assert.Null(viewModel.Composer);
+        Assert.Null(viewModel.Comment);
+        Assert.False(viewModel.Changed);
+        Assert.Empty(viewModel.EmbeddedPictures);
+    }
+
+    [Fact]
+    public void CopyTo_CopiesAllEditableTagsAndPictures()
+    {
+        TrackViewModel source = CreatePopulatedViewModel();
+        TrackViewModel destination = StubCreators.CreateStubTrackViewModel();
+
+        source.CopyTo(destination);
+
+        AssertPopulatedTags(destination);
+        PictureInfo copiedPicture = Assert.Single(destination.EmbeddedPictures);
+        Assert.Equal(PictureInfo.PIC_TYPE.Front, copiedPicture.PicType);
+        Assert.Equal("Cover art", copiedPicture.Description);
+        Assert.NotSame(source.EmbeddedPictures[0], copiedPicture);
+    }
+
+    [Fact]
+    public void ClearTags_ClearsAllTagsAndPictures()
+    {
+        TrackViewModel viewModel = CreatePopulatedViewModel();
+
+        viewModel.ClearTags();
+
+        Assert.Empty(viewModel.Title);
+        Assert.Empty(viewModel.Album);
+        Assert.Empty(viewModel.Artist);
+        Assert.Null(viewModel.TrackNumber);
+        Assert.Null(viewModel.DiscNumber);
+        Assert.Null(viewModel.Year);
+        Assert.Empty(viewModel.Genre);
+        Assert.Empty(viewModel.AlbumArtist);
+        Assert.Empty(viewModel.Composer);
+        Assert.Empty(viewModel.Comment);
+        Assert.Empty(viewModel.EmbeddedPictures);
+        Assert.True(viewModel.Changed);
+    }
+
+    private static TrackViewModel CreatePopulatedViewModel()
+    {
+        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
+        viewModel.Title = "Title";
+        viewModel.Album = "Album";
+        viewModel.Artist = "Artist";
+        viewModel.TrackNumber = 2;
+        viewModel.DiscNumber = 3;
+        viewModel.Year = 2024;
+        viewModel.Genre = "Genre";
+        viewModel.AlbumArtist = "Album artist";
+        viewModel.Composer = "Composer";
+        viewModel.Comment = "Comment";
+
+        PictureInfo picture = new PictureInfo(PictureInfo.PIC_TYPE.Front)
+        {
+            Description = "Cover art"
+        };
+        viewModel.EmbeddedPictures.Add(picture);
+        viewModel.Changed = false;
+        return viewModel;
+    }
+
+    private static void AssertPopulatedTags(TrackViewModel viewModel)
+    {
+        Assert.Equal("Title", viewModel.Title);
+        Assert.Equal("Album", viewModel.Album);
+        Assert.Equal("Artist", viewModel.Artist);
+        Assert.Equal(2, viewModel.TrackNumber);
+        Assert.Equal(3, viewModel.DiscNumber);
+        Assert.Equal(2024, viewModel.Year);
+        Assert.Equal("Genre", viewModel.Genre);
+        Assert.Equal("Album artist", viewModel.AlbumArtist);
+        Assert.Equal("Composer", viewModel.Composer);
+        Assert.Equal("Comment", viewModel.Comment);
     }
 }
