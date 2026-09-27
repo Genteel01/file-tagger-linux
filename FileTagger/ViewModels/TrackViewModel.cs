@@ -31,7 +31,7 @@ public partial class TrackViewModel : ViewModelBase
     /// </summary>
     public string AudioFormat { get; }
 
-    private double _durationMs;
+    private readonly double _durationMs;
     private int DurationSeconds => (int)Math.Floor(_durationMs / 1000.0);
     private int DurationMinutes => DurationSeconds / 60;
 
