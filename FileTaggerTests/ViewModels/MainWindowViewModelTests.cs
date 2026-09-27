@@ -121,4 +121,55 @@ public class MainWindowViewModelTests
         Assert.Equal([secondTrack, firstTrack], viewModel.Tracks);
     }
 
+    [Fact]
+    public void CalculateChangeGroups_MarksBoundariesOfConsecutiveChangedTracks()
+    {
+        MainWindowViewModel viewModel = CreateMockViewModel();
+        TrackViewModel[] tracks = Enumerable.Range(0, 5)
+            .Select(index => StubCreators.CreateStubTrackViewModel())
+            .ToArray();
+        tracks[0].Artist = "A";
+        tracks[1].Artist = "B";
+        tracks[2].Artist = "C";
+        tracks[3].Artist = "D";
+        tracks[4].Artist = "E";
+        foreach (TrackViewModel track in tracks)
+        {
+            track.Changed = false;
+        }
+        tracks[1].Changed = true;
+        tracks[2].Changed = true;
+        tracks[4].Changed = true;
+        viewModel.Tracks = tracks.ToList();
+
+        viewModel.SortTracks(nameof(TrackViewModel.Artist), false);
+
+        Assert.Equal(
+            [(false, false), (true, false), (false, true), (false, false), (true, true)],
+            viewModel.Tracks.Select(track => (track.IsChangeStart, track.IsChangeEnd)));
+    }
+
+    [Fact]
+    public void CalculateChangeGroups_ClearsBoundariesWhenNoTracksHaveChanges()
+    {
+        MainWindowViewModel viewModel = CreateMockViewModel();
+        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        firstTrack.Artist = "A";
+        secondTrack.Artist = "B";
+        secondTrack.Changed = false;
+        firstTrack.Changed = true;
+        viewModel.Tracks = [firstTrack, secondTrack];
+
+        viewModel.SortTracks(nameof(TrackViewModel.Artist), false);
+        firstTrack.Changed = false;
+        viewModel.SortTracks(nameof(TrackViewModel.Artist), false);
+
+        Assert.All(viewModel.Tracks, track =>
+        {
+            Assert.False(track.IsChangeStart);
+            Assert.False(track.IsChangeEnd);
+        });
+    }
+
 }
