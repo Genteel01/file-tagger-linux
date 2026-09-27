@@ -13,8 +13,7 @@ public static class StubCreators
 
     public static TrackViewModel CreateStubTrackViewModel()
     {
-        Track track = CreateStubTrack();
-        TrackViewModel trackViewModel = new TrackViewModel(track);
+        TrackViewModel trackViewModel = new TrackViewModel();
         return trackViewModel;
     }
 }
