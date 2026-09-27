@@ -172,4 +172,73 @@ public class MainWindowViewModelTests
         });
     }
 
+    [Fact]
+    public void CutTags_PasteTags_CopiesTagsThenClearsCutTrack()
+    {
+        MainWindowViewModel viewModel = CreateMockViewModel();
+        TrackViewModel cutTrack = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel destinationTrack = StubCreators.CreateStubTrackViewModel();
+        viewModel.Tracks = [cutTrack, destinationTrack];
+        viewModel.SelectedTracks.Add(cutTrack);
+        viewModel.SelectionChanged();
+
+        viewModel.CutTagsCommand.Execute(null);
+
+        Assert.True(cutTrack.IsCutting);
+        TrackViewModelMocks.AssertOriginalMockFields(cutTrack);
+
+        viewModel.SelectedTracks.Clear();
+        viewModel.SelectedTracks.Add(destinationTrack);
+        viewModel.SelectionChanged();
+
+        Assert.True(viewModel.PasteTagsCommand.CanExecute(null));
+
+        viewModel.PasteTagsCommand.Execute(null);
+
+        TrackViewModelMocks.AssertOriginalMockFields(destinationTrack);
+        TrackViewModelMocks.AssertEmptyMockFields(cutTrack);
+        Assert.False(cutTrack.IsCutting);
+    }
+
+    [Fact]
+    public void CutTags_CutAnotherTrack_CancelsFirstCutMarkerWithoutClearing()
+    {
+        MainWindowViewModel viewModel = CreateMockViewModel();
+        TrackViewModel firstTrack = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelMocks.CreateMockTrackViewModel();
+        viewModel.Tracks = [firstTrack, secondTrack];
+        viewModel.SelectedTracks.Add(firstTrack);
+        viewModel.SelectionChanged();
+
+        viewModel.CutTagsCommand.Execute(null);
+        viewModel.SelectedTracks.Clear();
+        viewModel.SelectedTracks.Add(secondTrack);
+        viewModel.SelectionChanged();
+
+        viewModel.CutTagsCommand.Execute(null);
+
+        Assert.False(firstTrack.IsCutting);
+        Assert.True(secondTrack.IsCutting);
+        TrackViewModelMocks.AssertOriginalMockFields(firstTrack);
+    }
+
+    [Fact]
+    public void CopyTags_WhileCutPending_CancelsCutWithoutClearingOriginal()
+    {
+        MainWindowViewModel viewModel = CreateMockViewModel();
+        TrackViewModel cutTrack = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel copiedTrack = StubCreators.CreateStubTrackViewModel();
+        viewModel.Tracks = [cutTrack, copiedTrack];
+        viewModel.SelectedTracks.Add(cutTrack);
+        viewModel.SelectionChanged();
+        viewModel.CutTagsCommand.Execute(null);
+        viewModel.SelectedTracks.Clear();
+        viewModel.SelectedTracks.Add(copiedTrack);
+        viewModel.SelectionChanged();
+
+        viewModel.CopyTagsCommand.Execute(null);
+
+        Assert.False(cutTrack.IsCutting);
+        TrackViewModelMocks.AssertOriginalMockFields(cutTrack);
+    }
 }
