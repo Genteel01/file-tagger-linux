@@ -1,5 +1,4 @@
 using FileTagger.Statics;
-using FileTagger.Services;
 using FileTagger.ViewModels;
 using FileTaggerTests.Fakers;
 
@@ -30,7 +29,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         const string artistNameString = "Artist";
         track.Artist = artistNameString;
 
@@ -47,7 +46,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         const string artistNameString = "";
         track.Artist = artistNameString;
 
@@ -64,7 +63,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         const int trackNumber = 7;
         track.TrackNumber = trackNumber;
 
@@ -81,7 +80,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         track.TrackNumber = null;
 
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
@@ -97,8 +96,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const string artistNameString = "Artist";
         firstTrack.Artist = secondTrack.Artist = artistNameString;
 
@@ -116,8 +115,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const int trackNumber = 7;
         firstTrack.TrackNumber = secondTrack.TrackNumber = trackNumber;
 
@@ -134,8 +133,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const string firstArtistName = "Artist 1";
         const string secondArtistName = "Artist 2";
         firstTrack.Artist = firstArtistName;
@@ -155,8 +154,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const int firstTrackNumber = 1;
         const int secondTrackNumber = 2;
         firstTrack.TrackNumber = firstTrackNumber;
@@ -175,8 +174,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const string firstArtistName = "";
         const string secondArtistName = "Artist 2";
         firstTrack.Artist = firstArtistName;
@@ -196,8 +195,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         int? firstTrackNumber = null;
         const int secondTrackNumber = 2;
         firstTrack.TrackNumber = firstTrackNumber;
@@ -216,8 +215,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const string artistName = "";
         firstTrack.Artist = artistName;
         secondTrack.Artist = artistName;
@@ -235,8 +234,8 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         int? trackNumber = null;
         firstTrack.TrackNumber = trackNumber;
         secondTrack.TrackNumber = trackNumber;
@@ -255,7 +254,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         const string updatedString = "Updated";
         track.Artist = "Original";
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
@@ -271,7 +270,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.Artist);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         const string fieldValue = "Original";
         track.Artist = fieldValue;
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
@@ -287,7 +286,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         track.TrackNumber = 1;
         const int updatedValue = 7;
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
@@ -303,7 +302,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         track.TrackNumber = 1;
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));
         viewModel.FieldTexts[fieldName] = "";
@@ -318,7 +317,7 @@ public class EditPanelViewModelTests
     {
         EditPanelViewModel viewModel = CreateMockViewModel();
         const string fieldName = nameof(TrackViewModel.TrackNumber);
-        TrackViewModel track = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel track = TrackViewModelFakers.CreateStubTrackViewModel();
         const int fieldValue = 1;
         track.TrackNumber = fieldValue;
         viewModel.Receive(new MainWindowViewModel.SelectedItemsMessage([track]));

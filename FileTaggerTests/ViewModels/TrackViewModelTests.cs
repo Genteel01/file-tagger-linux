@@ -9,7 +9,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditField_ChangedChanges()
     {
-        TrackViewModel viewModel = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel viewModel = TrackViewModelFakers.CreateMockTrackViewModel();
         Assert.False(viewModel.Changed);
         viewModel.Title = "changed";
         Assert.True(viewModel.Changed);
@@ -18,7 +18,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditChanged_ChangedDoesntChange()
     {
-        TrackViewModel viewModel = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel viewModel = TrackViewModelFakers.CreateMockTrackViewModel();
         viewModel.Changed = true;
         Assert.True(viewModel.Changed);
         viewModel.Changed = false;
@@ -28,7 +28,7 @@ public class TrackViewModelTests
     [Fact]
     public void RevertChanges_RestoresTagsAndPicturesFromTrack()
     {
-        TrackViewModel viewModel = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel viewModel = TrackViewModelFakers.CreateMockTrackViewModel();
         viewModel.RevertChanges();
 
         Assert.Null(viewModel.Title);
@@ -48,12 +48,12 @@ public class TrackViewModelTests
     [Fact]
     public void CopyTo_CopiesAllEditableTagsAndPictures()
     {
-        TrackViewModel source = TrackViewModelMocks.CreateMockTrackViewModel();
-        TrackViewModel destination = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel source = TrackViewModelFakers.CreateMockTrackViewModel();
+        TrackViewModel destination = TrackViewModelFakers.CreateStubTrackViewModel();
 
         source.CopyTo(destination);
 
-        TrackViewModelMocks.AssertOriginalMockFields(destination);
+        TrackViewModelFakers.AssertOriginalMockFields(destination);
         PictureInfo copiedPicture = destination.EmbeddedPictures[0];
         Assert.NotSame(source.EmbeddedPictures[0], copiedPicture);
     }
@@ -61,10 +61,10 @@ public class TrackViewModelTests
     [Fact]
     public void ClearTags_ClearsAllTagsAndPictures()
     {
-        TrackViewModel viewModel = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel viewModel = TrackViewModelFakers.CreateMockTrackViewModel();
 
         viewModel.ClearTags();
 
-        TrackViewModelMocks.AssertEmptyMockFields(viewModel);
+        TrackViewModelFakers.AssertEmptyMockFields(viewModel);
     }
 }

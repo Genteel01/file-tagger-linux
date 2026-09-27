@@ -27,9 +27,9 @@ public class MainWindowViewModelTests
     public void SortTracks_SingleField_SortsTracksCorrectly()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel thirdTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel thirdTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         const string sortField = nameof(TrackViewModel.Artist);
         firstTrack.Artist = "B";
         secondTrack.Artist = "A";
@@ -45,9 +45,9 @@ public class MainWindowViewModelTests
     public void SortTracks_MultipleFields_SortsTracksInSequence()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel artistAAlbumZ = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel artistAAlbumA = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel artistBAlbumA = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel artistAAlbumZ = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel artistAAlbumA = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel artistBAlbumA = TrackViewModelFakers.CreateStubTrackViewModel();
         const string sortFields = $"{nameof(TrackViewModel.Artist)}_{nameof(TrackViewModel.Album)}";
         artistAAlbumZ.Artist = "A";
         artistAAlbumZ.Album = "Z";
@@ -66,8 +66,8 @@ public class MainWindowViewModelTests
     public void SortTracks_SwapDirectionFalse_DoesNotChangeDirection()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         firstTrack.Artist = "A";
         secondTrack.Artist = "B";
         viewModel.Tracks = [firstTrack, secondTrack];
@@ -85,8 +85,8 @@ public class MainWindowViewModelTests
     public void SortTracks_SameFieldTwiceWithSwapDirection_SwapsDirection()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         firstTrack.Artist = "A";
         secondTrack.Artist = "B";
         viewModel.Tracks = [firstTrack, secondTrack];
@@ -103,8 +103,8 @@ public class MainWindowViewModelTests
     public void SortTracks_NewFieldWithSwapDirection_ResetsSortDescending()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         firstTrack.Artist = "A";
         firstTrack.Album = "B";
         secondTrack.Artist = "B";
@@ -126,7 +126,7 @@ public class MainWindowViewModelTests
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
         TrackViewModel[] tracks = Enumerable.Range(0, 5)
-            .Select(index => StubCreators.CreateStubTrackViewModel())
+            .Select(index => TrackViewModelFakers.CreateStubTrackViewModel())
             .ToArray();
         tracks[0].Artist = "A";
         tracks[1].Artist = "B";
@@ -153,8 +153,8 @@ public class MainWindowViewModelTests
     public void CalculateChangeGroups_ClearsBoundariesWhenNoTracksHaveChanges()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel firstTrack = StubCreators.CreateStubTrackViewModel();
-        TrackViewModel secondTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateStubTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         firstTrack.Artist = "A";
         secondTrack.Artist = "B";
         secondTrack.Changed = false;
@@ -176,8 +176,8 @@ public class MainWindowViewModelTests
     public void CutTags_PasteTags_CopiesTagsThenClearsCutTrack()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel cutTrack = TrackViewModelMocks.CreateMockTrackViewModel();
-        TrackViewModel destinationTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel cutTrack = TrackViewModelFakers.CreateMockTrackViewModel();
+        TrackViewModel destinationTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         viewModel.Tracks = [cutTrack, destinationTrack];
         viewModel.SelectedTracks.Add(cutTrack);
         viewModel.SelectionChanged();
@@ -185,7 +185,7 @@ public class MainWindowViewModelTests
         viewModel.CutTagsCommand.Execute(null);
 
         Assert.True(cutTrack.IsCutting);
-        TrackViewModelMocks.AssertOriginalMockFields(cutTrack);
+        TrackViewModelFakers.AssertOriginalMockFields(cutTrack);
 
         viewModel.SelectedTracks.Clear();
         viewModel.SelectedTracks.Add(destinationTrack);
@@ -195,8 +195,8 @@ public class MainWindowViewModelTests
 
         viewModel.PasteTagsCommand.Execute(null);
 
-        TrackViewModelMocks.AssertOriginalMockFields(destinationTrack);
-        TrackViewModelMocks.AssertEmptyMockFields(cutTrack);
+        TrackViewModelFakers.AssertOriginalMockFields(destinationTrack);
+        TrackViewModelFakers.AssertEmptyMockFields(cutTrack);
         Assert.False(cutTrack.IsCutting);
     }
 
@@ -204,8 +204,8 @@ public class MainWindowViewModelTests
     public void CutTags_CutAnotherTrack_CancelsFirstCutMarkerWithoutClearing()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel firstTrack = TrackViewModelMocks.CreateMockTrackViewModel();
-        TrackViewModel secondTrack = TrackViewModelMocks.CreateMockTrackViewModel();
+        TrackViewModel firstTrack = TrackViewModelFakers.CreateMockTrackViewModel();
+        TrackViewModel secondTrack = TrackViewModelFakers.CreateMockTrackViewModel();
         viewModel.Tracks = [firstTrack, secondTrack];
         viewModel.SelectedTracks.Add(firstTrack);
         viewModel.SelectionChanged();
@@ -219,15 +219,15 @@ public class MainWindowViewModelTests
 
         Assert.False(firstTrack.IsCutting);
         Assert.True(secondTrack.IsCutting);
-        TrackViewModelMocks.AssertOriginalMockFields(firstTrack);
+        TrackViewModelFakers.AssertOriginalMockFields(firstTrack);
     }
 
     [Fact]
     public void CopyTags_WhileCutPending_CancelsCutWithoutClearingOriginal()
     {
         MainWindowViewModel viewModel = CreateMockViewModel();
-        TrackViewModel cutTrack = TrackViewModelMocks.CreateMockTrackViewModel();
-        TrackViewModel copiedTrack = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel cutTrack = TrackViewModelFakers.CreateMockTrackViewModel();
+        TrackViewModel copiedTrack = TrackViewModelFakers.CreateStubTrackViewModel();
         viewModel.Tracks = [cutTrack, copiedTrack];
         viewModel.SelectedTracks.Add(cutTrack);
         viewModel.SelectionChanged();
@@ -239,6 +239,6 @@ public class MainWindowViewModelTests
         viewModel.CopyTagsCommand.Execute(null);
 
         Assert.False(cutTrack.IsCutting);
-        TrackViewModelMocks.AssertOriginalMockFields(cutTrack);
+        TrackViewModelFakers.AssertOriginalMockFields(cutTrack);
     }
 }

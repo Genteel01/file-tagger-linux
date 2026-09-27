@@ -3,11 +3,17 @@ using FileTagger.ViewModels;
 
 namespace FileTaggerTests.Fakers;
 
-public static class TrackViewModelMocks
+public static class TrackViewModelFakers
 {
+    public static TrackViewModel CreateStubTrackViewModel()
+    {
+        TrackViewModel trackViewModel = new TrackViewModel();
+        return trackViewModel;
+    }
+
     public static TrackViewModel CreateMockTrackViewModel()
     {
-        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel viewModel = CreateStubTrackViewModel();
         viewModel.Title = "Title";
         viewModel.Album = "Album";
         viewModel.Artist = "Artist";
