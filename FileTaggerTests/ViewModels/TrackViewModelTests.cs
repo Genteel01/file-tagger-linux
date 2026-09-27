@@ -9,7 +9,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditField_ChangedChanges()
     {
-        TrackViewModel viewModel = CreatePopulatedViewModel();
+        TrackViewModel viewModel = MockCreators.CreateMockTrackViewModel();
         Assert.False(viewModel.Changed);
         viewModel.Title = "changed";
         Assert.True(viewModel.Changed);
@@ -18,7 +18,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditChanged_ChangedDoesntChange()
     {
-        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
+        TrackViewModel viewModel = MockCreators.CreateMockTrackViewModel();
         viewModel.Changed = true;
         Assert.True(viewModel.Changed);
         viewModel.Changed = false;
@@ -28,7 +28,7 @@ public class TrackViewModelTests
     [Fact]
     public void RevertChanges_RestoresTagsAndPicturesFromTrack()
     {
-        TrackViewModel viewModel = CreatePopulatedViewModel();
+        TrackViewModel viewModel = MockCreators.CreateMockTrackViewModel();
         viewModel.RevertChanges();
 
         Assert.Null(viewModel.Title);
@@ -48,7 +48,7 @@ public class TrackViewModelTests
     [Fact]
     public void CopyTo_CopiesAllEditableTagsAndPictures()
     {
-        TrackViewModel source = CreatePopulatedViewModel();
+        TrackViewModel source = MockCreators.CreateMockTrackViewModel();
         TrackViewModel destination = StubCreators.CreateStubTrackViewModel();
 
         source.CopyTo(destination);
@@ -63,7 +63,7 @@ public class TrackViewModelTests
     [Fact]
     public void ClearTags_ClearsAllTagsAndPictures()
     {
-        TrackViewModel viewModel = CreatePopulatedViewModel();
+        TrackViewModel viewModel = MockCreators.CreateMockTrackViewModel();
 
         viewModel.ClearTags();
 
@@ -79,29 +79,6 @@ public class TrackViewModelTests
         Assert.Empty(viewModel.Comment);
         Assert.Empty(viewModel.EmbeddedPictures);
         Assert.True(viewModel.Changed);
-    }
-
-    private static TrackViewModel CreatePopulatedViewModel()
-    {
-        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
-        viewModel.Title = "Title";
-        viewModel.Album = "Album";
-        viewModel.Artist = "Artist";
-        viewModel.TrackNumber = 2;
-        viewModel.DiscNumber = 3;
-        viewModel.Year = 2024;
-        viewModel.Genre = "Genre";
-        viewModel.AlbumArtist = "Album artist";
-        viewModel.Composer = "Composer";
-        viewModel.Comment = "Comment";
-
-        PictureInfo picture = new PictureInfo(PictureInfo.PIC_TYPE.Front)
-        {
-            Description = "Cover art"
-        };
-        viewModel.EmbeddedPictures.Add(picture);
-        viewModel.Changed = false;
-        return viewModel;
     }
 
     private static void AssertPopulatedTags(TrackViewModel viewModel)
