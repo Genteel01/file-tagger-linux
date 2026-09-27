@@ -34,6 +34,16 @@ public static class TrackViewModelFakers
         return viewModel;
     }
 
+    public static TrackViewModel CreateMockTrackViewModelWithPictures(params PictureInfo[] pictures)
+    {
+        TrackViewModel track = CreateStubTrackViewModel();
+        foreach (PictureInfo picture in pictures)
+        {
+            track.EmbeddedPictures.Add(picture);
+        }
+        return track;
+    }
+
     public static void AssertOriginalMockFields(TrackViewModel viewModel)
     {
         Assert.Equal("Title", viewModel.Title);

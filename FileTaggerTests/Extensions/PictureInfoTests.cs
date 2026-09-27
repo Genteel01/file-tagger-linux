@@ -5,7 +5,7 @@ namespace FileTaggerTests.Extensions;
 
 public class PictureInfoTests
 {
-    private static PictureInfo CreateMockPicture(PictureInfo.PIC_TYPE type, string description)
+    public static PictureInfo CreateMockPicture(PictureInfo.PIC_TYPE type, string description)
     {
         return new PictureInfo(type) { Description = description };
     }
