@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,41 +12,39 @@ using FileTagger.Statics;
 namespace FileTagger.Converters;
 
 /// <summary>
-/// Converts a given <see cref="PictureInfo.PIC_TYPE"/> or <see cref="ThemeVariant"/> into a string with spaces
-/// where the capital letters are, e.g. "LightGreen" to "Light Green". Ignores fully capital words. Also converts back.
+/// Converts a given object into a string with spaces where the capital letters are, e.g. "LightGreen" to "Light Green".
+/// Ignores fully capital words. Handles lists by returning a list of strings.
+/// Also converts back for String, PictureInfo.PIC_TYPE, and ThemeVariant
 /// </summary>
 public class UpperCamelCaseSpacer : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is PictureInfo.PIC_TYPE picType)
-        {
-            return SpaceUpperCamelCaseString(picType.ToString());
-        }
-
-        if (value is IEnumerable<PictureInfo.PIC_TYPE> picTypes)
+        //String is an IEnumerable, so we need to check for that separately
+        if (value is string stringValue) return SpaceUpperCamelCaseString(stringValue);
+        if (value is IEnumerable values)
         {
             List<string> stringList = [];
-            picTypes.ToList().ForEach(pt => stringList.Add(SpaceUpperCamelCaseString(pt.ToString())));
+            foreach (object o in values)
+            {
+                stringList.Add(SpaceUpperCamelCaseString(o.ToString() ?? ""));
+            }
             return stringList;
         }
-
-        if (value is ThemeVariant variant)
-        {
-            return SpaceUpperCamelCaseString(variant.ToString());
-        }
-
-        if (value is IEnumerable<ThemeVariant> variants)
-        {
-            List<string> stringList = [];
-            variants.ToList().ForEach(v => stringList.Add(SpaceUpperCamelCaseString(v.ToString())));
-            return stringList;
-        }
-        return value;
+        if (value?.ToString() is null) return null;
+        return SpaceUpperCamelCaseString(value.ToString()!);
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
+        if (targetType == typeof(string))
+        {
+            if (value is string stringValue)
+            {
+                return stringValue.Replace(" ", "");
+            }
+        }
+
         if (targetType == typeof(PictureInfo.PIC_TYPE))
         {
             if (value is string stringValue)
