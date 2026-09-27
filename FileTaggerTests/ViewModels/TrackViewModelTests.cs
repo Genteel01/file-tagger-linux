@@ -9,8 +9,7 @@ public class TrackViewModelTests
     [Fact]
     public void OnPropertyChanged_EditField_ChangedChanges()
     {
-        Track track = StubCreators.CreateStubTrack();
-        TrackViewModel viewModel =  new TrackViewModel(track);
+        TrackViewModel viewModel = StubCreators.CreateStubTrackViewModel();
         Assert.False(viewModel.Changed);
         viewModel.Title = "changed";
         Assert.True(viewModel.Changed);

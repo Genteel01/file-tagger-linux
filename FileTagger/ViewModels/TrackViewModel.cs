@@ -214,6 +214,7 @@ public partial class TrackViewModel : ViewModelBase
         SampleRate = "";
         AudioFormat = "";
         _originalTrack = new Track();
+        _finishedSetup = true;
     }
 
     /// <summary>
