@@ -65,7 +65,7 @@ public class UserPreferences
             if (!ListColumnWidths.ContainsKey(trackProperty.Name))
             {
                 double columnWidth = trackProperty.PropertyType == typeof(string) ? 200 : 60;
-                if (trackProperty.Name == nameof(TrackViewModel.Genre))
+                if (trackProperty.Name is nameof(TrackViewModel.Genre) or nameof(TrackViewModel.Duration) or nameof(TrackViewModel.Bitrate) or nameof(TrackViewModel.SampleRate))
                 {
                     columnWidth = 100;
                 }

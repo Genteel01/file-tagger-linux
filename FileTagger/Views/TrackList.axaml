@@ -111,6 +111,14 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Path], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Path" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Duration], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Duration" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding ListColumnWidths[Bitrate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Bitrate" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding ListColumnWidths[SampleRate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="SampleRate" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding ListColumnWidths[AudioFormat], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="AudioFormat" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.TitleSort}"
@@ -146,6 +154,18 @@
                 <controls:ListColumnHeader Grid.Column="20" Text="Path" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.PathSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.PathSort}}"/>
+                <controls:ListColumnHeader Grid.Column="22" Text="Duration" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.DurationSort}"
+                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.DurationSort}}"/>
+                <controls:ListColumnHeader Grid.Column="24" Text="Bitrate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.BitrateSort}"
+                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.BitrateSort}}"/>
+                <controls:ListColumnHeader Grid.Column="26" Text="Sample Rate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.SampleRateSort}"
+                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.SampleRateSort}}"/>
+                <controls:ListColumnHeader Grid.Column="28" Text="Audio Format" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AudioFormatSort}"
+                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
+                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AudioFormatSort}}"/>
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
@@ -157,7 +177,11 @@
                 <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="21" ResizeDirection="Columns"/>
-                <Panel Grid.Column="22" Background="Transparent"/>
+                <GridSplitter Grid.Column="23" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="25" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="27" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="29" ResizeDirection="Columns"/>
+                <Panel Grid.Column="30" Background="Transparent"/>
             </Grid>
         </Panel>
     </ScrollViewer>

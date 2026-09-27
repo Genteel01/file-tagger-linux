@@ -73,6 +73,11 @@ public static class Sorts
     public const string GenreSort = $"{nameof(TrackViewModel.Genre)}_{PathSort}";
     public const string ComposerSort = $"{nameof(TrackViewModel.Composer)}_{PathSort}";
     public const string CommentSort = $"{nameof(TrackViewModel.Comment)}_{PathSort}";
+    public const string DurationSort = $"{nameof(TrackViewModel.Duration)}_{PathSort}";
+    public const string BitrateSort = $"{nameof(TrackViewModel.Bitrate)}_{PathSort}";
+    public const string SampleRateSort = $"{nameof(TrackViewModel.SampleRate)}_{PathSort}";
+    public const string AudioFormatSort = $"{nameof(TrackViewModel.AudioFormat)}_{PathSort}";
+
 }
 
 public static class Maths
