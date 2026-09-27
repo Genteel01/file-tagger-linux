@@ -184,6 +184,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
         _getDialogTarget = getDialogTarget;
         _supportedFileExtensions = [];
+        AppIcon = new WindowIcon(AssetLoader.Open(MyThemes.ThemeIcon(SelectedTheme)));
 
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
         {
