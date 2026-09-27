@@ -16,7 +16,6 @@ using ATL.Logging;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Platform;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -72,6 +71,12 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// used for storing and retrieving <see cref="UserPreferences"/> data
     /// </summary>
     private readonly IPreferenceService _preferenceService;
+
+    /// <summary>
+    /// <see cref="IImageService"/> received through Dependency Injection
+    /// used for loading the app icon
+    /// </summary>
+    private readonly IImageService _imageService;
 
     /// <summary>
     /// List of supported file extensions to fetch from folders
@@ -150,7 +155,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     public partial ThemeVariant SelectedTheme { get; private set; } = ThemeVariant.Default;
 
     [ObservableProperty]
-    public partial WindowIcon AppIcon { get; set; }
+    public partial WindowIcon? AppIcon { get; set; }
 
     [RelayCommand]
     public void ChangeSelectedTheme(ThemeVariant value) => SelectedTheme = value;
@@ -160,7 +165,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         if (Application.Current is { } app)
         {
             app.RequestedThemeVariant = value;
-            AppIcon = new WindowIcon(AssetLoader.Open(MyThemes.ThemeIcon(value)));
+            AppIcon = _imageService.LoadAppIcon(MyThemes.ThemeIcon(value));
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
@@ -177,15 +182,15 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// </summary>
     private readonly Func<TopLevel?> _getDialogTarget;
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget, preferenceService)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, IImageService imageService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget, preferenceService)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
+        _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         _getDialogTarget = getDialogTarget;
         _supportedFileExtensions = [];
-        AppIcon = new WindowIcon(AssetLoader.Open(MyThemes.ThemeIcon(SelectedTheme)));
-
+        AppIcon = _imageService.LoadAppIcon(MyThemes.ThemeIcon(SelectedTheme));
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
         {
             if (f.Readable)
@@ -228,8 +233,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         EditPanelWidth = double.IsPositiveInfinity(newPreferences.EditPanelWidth) ? GridLength.Star : new GridLength(newPreferences.EditPanelWidth);
         CurrentSort = newPreferences.SortOrder.Item1;
         SortDescending = newPreferences.SortOrder.Item2;
-        ThemeVariant loadedTheme = newPreferences.RequestedTheme;
-        if (loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
+        SelectedTheme = newPreferences.RequestedTheme;
         SelectedLayoutSize = newPreferences.RequestedLayoutSize;
     }
 
@@ -242,6 +246,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
+        _imageService = new ImageService();
         _supportedFileExtensions = [];
         CurrentSort = Sorts.PathSort;
         ListColumnWidths = new AvaloniaDictionary<string, double>();

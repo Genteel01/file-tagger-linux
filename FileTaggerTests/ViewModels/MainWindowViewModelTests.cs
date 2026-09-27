@@ -11,7 +11,8 @@ public class MainWindowViewModelTests
         IFileService fileService = new FakeFileService();
         PreferenceService preferenceService = new PreferenceService(fileService);
         EditPanelViewModel editPanelViewModel = EditPanelViewModelTests.CreateMockViewModel();
-        MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(fileService, preferenceService, editPanelViewModel, () => null);
+        IImageService imageService = new FakeImageService();
+        MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(fileService, preferenceService, imageService, editPanelViewModel, () => null);
         return mainWindowViewModel;
     }
 
