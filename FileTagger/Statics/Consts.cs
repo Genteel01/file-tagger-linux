@@ -58,6 +58,11 @@ public static class Consts
     /// Value for edit fields that we don't want to change
     /// </summary>
     public const string UnchangedField = "< keep >";
+
+    /// <summary>
+    /// Name of the app, used in the window titlebar and the preferences save location
+    /// </summary>
+    public const string AppName = "NetTag";
 }
 
 public static class Sorts

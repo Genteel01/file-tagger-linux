@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Avalonia.Controls;
@@ -9,6 +8,7 @@ using Avalonia.Platform.Storage;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Commons;
+using FileTagger.Statics;
 
 namespace FileTagger.Services;
 
@@ -17,7 +17,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 {
     private readonly string _folderPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify),
-            "Genteel01.FileTagger");
+            $"Genteel01.{Consts.AppName}");
 
     private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { IncludeFields = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals };
 
