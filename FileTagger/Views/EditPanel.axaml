@@ -11,11 +11,16 @@
              x:DataType="viewModels:EditPanelViewModel"
 >
     <UserControl.Styles>
-        <Style Selector="StackPanel#SidePanel">
-            <Setter Property="Background" Value="{DynamicResource EditPanelBackgroundBrush}" />
+        <!--Handle spacing based on height of container-->
+        <Style Selector="Grid.IsShort StackPanel#SidePanel > :is(Control)">
+            <Setter Property="Margin" Value="8 2" />
         </Style>
+        <!--Default-->
         <Style Selector="StackPanel#SidePanel > :is(Control)">
             <Setter Property="Margin" Value="8 4" />
+        </Style>
+        <Style Selector="StackPanel#SidePanel">
+            <Setter Property="Background" Value="{DynamicResource EditPanelBackgroundBrush}" />
         </Style>
         <Style Selector="controls|LabelledDropdown">
             <Setter Property="OpenOnFocusText" Value="{x:Static statics:Consts.UnchangedField}"/>
@@ -57,23 +62,24 @@
                    DropDownClosed="AutoCompleteBoxDropdownClosed"
                    SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
                 <controls:LabelledDropdown Grid.Column="2"
-                    Name="GenreField"
-                    LabelText="Genre"
-                    ItemsSource="{Binding FieldOptions[Genre]}"
-                    Text="{Binding FieldTexts[Genre]}"
-                    DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+                   Name="DiscNumberField"
+                   LabelText="Disc Number"
+                   ItemsSource="{Binding FieldOptions[DiscNumber]}"
+                   Text="{Binding FieldTexts[DiscNumber]}"
+                   DropDownClosed="AutoCompleteBoxDropdownClosed"
+                   SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
             </Grid>
-            <controls:LabelledDropdown
-                Name="CommentField"
-                LabelText="Comment"
-                ItemsSource="{Binding FieldOptions[Comment]}"
-                Text="{Binding FieldTexts[Comment]}"
-                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <controls:LabelledDropdown
                 Name="AlbumArtistField"
                 LabelText="Album Artist"
                 ItemsSource="{Binding FieldOptions[AlbumArtist]}"
                 Text="{Binding FieldTexts[AlbumArtist]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
+            <controls:LabelledDropdown
+                Name="GenreField"
+                LabelText="Genre"
+                ItemsSource="{Binding FieldOptions[Genre]}"
+                Text="{Binding FieldTexts[Genre]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <controls:LabelledDropdown
                 Name="ComposerField"
@@ -82,12 +88,11 @@
                 Text="{Binding FieldTexts[Composer]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <controls:LabelledDropdown
-                Name="DiscNumberField"
-                LabelText="Disc Number"
-                ItemsSource="{Binding FieldOptions[DiscNumber]}"
-                Text="{Binding FieldTexts[DiscNumber]}"
-                DropDownClosed="AutoCompleteBoxDropdownClosed"
-                SearchFieldChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}"/>
+                Name="CommentField"
+                LabelText="Comment"
+                ItemsSource="{Binding FieldOptions[Comment]}"
+                Text="{Binding FieldTexts[Comment]}"
+                DropDownClosed="AutoCompleteBoxDropdownClosed"/>
             <ContentControl Content="{Binding EmbeddedPicture}" Margin="8"/>
         </StackPanel>
     </ScrollViewer>

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using ATL;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,6 +14,32 @@ namespace FileTagger.ViewModels;
 /// </summary>
 public partial class TrackViewModel : ViewModelBase
 {
+    #region ReadOnlyFields
+
+    /// <summary>
+    /// Bitrate (kilobytes per second)
+    /// </summary>
+    public string Bitrate { get; }
+
+    /// <summary>
+    /// Sample rate (Hz)
+    /// </summary>
+    public string SampleRate { get; }
+
+    /// <summary>
+    /// Format of the audio data
+    /// </summary>
+    public string AudioFormat { get; }
+
+    private readonly double _durationMs;
+    private int DurationSeconds => (int)Math.Floor(_durationMs / 1000.0);
+    private int DurationMinutes => DurationSeconds / 60;
+
+    /// <summary>
+    /// Duration (minutes:seconds)
+    /// </summary>
+    public string Duration => $"{DurationMinutes:D2}:{DurationSeconds - (DurationMinutes * 60):D2}";
+
     /// <summary>
     /// Gets the path
     /// </summary>
@@ -26,6 +54,8 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets the path
     /// </summary>
     public string FileName { get; }
+
+    #endregion
 
     /// <summary>
     /// Gets or sets the title
@@ -156,6 +186,19 @@ public partial class TrackViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// When setting Change to false, also set IsChangeStart and IsChangeEnd
+    /// </summary>
+    /// <param name="value"></param>
+    partial void OnChangedChanged(bool value)
+    {
+        if (!value)
+        {
+            IsChangeEnd = false;
+            IsChangeStart = false;
+        }
+    }
+
+    /// <summary>
     /// Creates a new TrackViewModel for the given <see cref="ATL.Track"/>
     /// </summary>
     /// <param name="track">The Track to load</param>
@@ -165,17 +208,34 @@ public partial class TrackViewModel : ViewModelBase
         string? directory = System.IO.Path.GetDirectoryName(track.Path);
         Directory = directory == null ? "" : directory + System.IO.Path.DirectorySeparatorChar;
         FileName = System.IO.Path.GetFileName(track.Path);
+        Bitrate = track.Bitrate.ToString(CultureInfo.CurrentCulture) + " kbit/s";
+        SampleRate = track.SampleRate.ToString(CultureInfo.CurrentCulture) + " Hz";
+        AudioFormat = track.AudioFormat.Name;
+        _durationMs = track.DurationMs;
         SetUpViewModel();
     }
 
     /// <summary>
-    /// Creates a new TrackViewModel as a copy of an existing one. Will only contain the editable tags of the track
+    /// Creates an empty TrackViewModel.
     /// </summary>
-    public TrackViewModel(TrackViewModel original)
+    public TrackViewModel()
     {
         Directory = "";
         FileName = "";
+        _durationMs = 0;
+        Bitrate = "";
+        SampleRate = "";
+        AudioFormat = "";
         _originalTrack = new Track();
+        _finishedSetup = true;
+    }
+
+    /// <summary>
+    /// Creates a new TrackViewModel as a copy of an existing one. Will only contain the editable tags of the track.
+    /// Only used as an intermediary when copying between existing TrackViewModels.
+    /// </summary>
+    public TrackViewModel(TrackViewModel original) : this()
+    {
         original.CopyTo(this);
     }
 
@@ -199,8 +259,6 @@ public partial class TrackViewModel : ViewModelBase
             EmbeddedPictures.AddRange(GetOriginalTrackImages());
         }
         Changed = false;
-        IsChangeStart = false;
-        IsChangeEnd = false;
         _finishedSetup = true;
     }
 
@@ -270,8 +328,6 @@ public partial class TrackViewModel : ViewModelBase
         {
             GetTrack().Save();
             Changed = false;
-            IsChangeStart = false;
-            IsChangeEnd = false;
         }
     }
 

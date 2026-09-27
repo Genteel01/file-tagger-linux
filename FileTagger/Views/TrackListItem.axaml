@@ -7,15 +7,35 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FileTagger.Views.TrackListItem" x:DataType="viewModels:TrackViewModel">
     <UserControl.Styles>
+        <!--Sizing-->
+        <Style Selector="Grid.IsShort TextBlock">
+            <Setter Property="Height" Value="{StaticResource SmallRowHeight}" />
+            <Setter Property="LineHeight" Value="{StaticResource SmallRowHeight}" />
+        </Style>
+        <Style Selector="Grid.IsShort TextBox">
+            <Setter Property="Height" Value="{StaticResource SmallRowHeight}" />
+            <Setter Property="LineHeight" Value="{StaticResource SmallRowHeight}" />
+        </Style>
+        <Style Selector="Grid.IsShort Grid.TrackGrid">
+            <Setter Property="Height" Value="{StaticResource SmallRowHeight}"/>
+        </Style>
         <Style Selector="TextBlock">
             <Setter Property="Height" Value="{StaticResource RowHeight}" />
             <Setter Property="LineHeight" Value="{StaticResource RowHeight}" />
-            <Setter Property="Padding" Value="4 0"/>
-            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="TextBox">
             <Setter Property="Height" Value="{StaticResource RowHeight}"/>
             <Setter Property="LineHeight" Value="{StaticResource RowLineHeight}"/>
+        </Style>
+        <Style Selector="Grid.IsShort Grid.TrackGrid">
+            <Setter Property="Height" Value="{StaticResource RowHeight}"/>
+        </Style>
+        <!--End Sizing-->
+        <Style Selector="TextBlock">
+            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="TextBox">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
@@ -31,9 +51,6 @@
             <Setter Property="BorderBrush" Value="{DynamicResource TrackChangedBorderBrush}"/>
             <Setter Property="Background" Value="{DynamicResource TrackChangedBackgroundBrush}"/>
         </Style>
-        <Style Selector="Border#SelectionGroupBorder.IsCutting">
-            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
-        </Style>
         <Style Selector="Border#SelectionGroupBorder.changeStart">
             <Setter Property="BorderThickness" Value="1 1 1 0" />
         </Style>
@@ -46,7 +63,7 @@
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Height="{StaticResource RowHeight}">
+        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
@@ -59,6 +76,10 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Duration" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Bitrate" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="SampleRate" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="AudioFormat" MinWidth="19" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <!--Title-->
@@ -127,7 +148,31 @@
             <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="PathBox"/>
-            <Panel Grid.Column="11" Classes="buffer"/>
+            <!--Path-->
+            <TextBlock Grid.Column="11" Text="{Binding Duration}" Name="DurationBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="11" Text="{Binding Duration, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="DurationBox"/>
+            <!--Path-->
+            <TextBlock Grid.Column="12" Text="{Binding Bitrate}" Name="BitrateBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="12" Text="{Binding Bitrate, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="BitrateBox"/>
+            <!--Path-->
+            <TextBlock Grid.Column="13" Text="{Binding SampleRate}" Name="SampleRateBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="13" Text="{Binding SampleRate, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="SampleRateBox"/>
+            <!--Path-->
+            <TextBlock Grid.Column="14" Text="{Binding AudioFormat}" Name="AudioFormatBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="14" Text="{Binding AudioFormat, UpdateSourceTrigger=LostFocus}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="AudioFormatBox"/>
+            <Panel Grid.Column="15" Classes="buffer"/>
         </Grid>
     </Border>
 </UserControl>

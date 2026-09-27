@@ -16,6 +16,7 @@ using ATL.Logging;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -26,7 +27,7 @@ using FileTagger.Models;
 
 namespace FileTagger.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : DynamicSizingViewModel
 {
     /// <summary>
     /// All the tracks that have been loaded in
@@ -105,6 +106,13 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial GridLength EditPanelWidth { get; set; }
 
+    partial void OnEditPanelWidthChanged(GridLength value)
+    {
+        PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
+        double newValue = value is { IsStar: true, Value: 1 } ? double.PositiveInfinity : value.Value;
+        _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
+    }
+
     /// <summary>
     /// List of <see cref="ThemeVariant"/> values to select from
     /// </summary>
@@ -141,26 +149,21 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public partial ThemeVariant SelectedTheme { get; private set; } = ThemeVariant.Default;
 
+    [ObservableProperty]
+    public partial WindowIcon AppIcon { get; set; }
+
     [RelayCommand]
-    private void ChangeSelectedTheme(ThemeVariant value)
+    public void ChangeSelectedTheme(ThemeVariant value) => SelectedTheme = value;
+
+    partial void OnSelectedThemeChanged(ThemeVariant value)
     {
         if (Application.Current is { } app)
         {
             app.RequestedThemeVariant = value;
-            SelectedTheme = value;
+            AppIcon = new WindowIcon(AssetLoader.Open(MyThemes.ThemeIcon(value)));
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
-    }
-
-    /// <summary>
-    /// Switches between light and dark theme
-    /// </summary>
-    [RelayCommand]
-    private void SwitchTheme()
-    {
-        ThemeVariant newTheme = MyThemes.GetOppositeTheme(SelectedTheme.ToString());
-        ChangeSelectedTheme(newTheme);
     }
 
     [RelayCommand]
@@ -174,7 +177,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private readonly Func<TopLevel?> _getDialogTarget;
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget, preferenceService)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -226,25 +229,14 @@ public partial class MainWindowViewModel : ViewModelBase
         SortDescending = newPreferences.SortOrder.Item2;
         ThemeVariant loadedTheme = newPreferences.RequestedTheme;
         if (loadedTheme != SelectedTheme) ChangeSelectedTheme(loadedTheme);
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        if (e.PropertyName == nameof(EditPanelWidth))
-        {
-            //Store EditPanelWidth when it changes
-            PropertyInfo editPanelWidthProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.EditPanelWidth))!;
-            double newValue = EditPanelWidth is { IsStar: true, Value: 1 } ? double.PositiveInfinity : EditPanelWidth.Value;
-            _preferenceService.StorePreferenceItem(editPanelWidthProperty, newValue);
-        }
+        SelectedLayoutSize = newPreferences.RequestedLayoutSize;
     }
 
     #if DEBUG
     /// <summary>
     /// Default Constructor for design time
     /// </summary>
-    public MainWindowViewModel()
+    public MainWindowViewModel() : base(() => null, new PreferenceService(new FileService(() => null)))
     {
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(() => null);

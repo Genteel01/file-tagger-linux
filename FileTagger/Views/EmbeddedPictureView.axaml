@@ -6,11 +6,28 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
              x:Class="FileTagger.Views.EmbeddedPictureView" x:DataType="viewModels:EmbeddedPictureViewModel">
     <UserControl.Styles>
-        <Style Selector="Border#FallbackImage:disabled">
-            <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
+        <!--Handle image sizing based on height of screen-->
+        <Style Selector="Grid.IsShort Panel#ImagePanel">
+            <Setter Property="Height" Value="{StaticResource SmallImageSize}"/>
         </Style>
-        <!--Overlay changing the colour of the displayed image-->
-        <Style Selector="Image.IsCutting">
+        <Style Selector="Grid.IsShort Panel#PicTypeControl, Grid.IsShort Border#FallbackImage">
+            <Setter Property="MaxWidth" Value="{StaticResource SmallImageSize}"/>
+        </Style>
+        <Style Selector="Grid.IsShort Panel#PicTypeControl">
+            <Setter Property="Height" Value="{StaticResource SmallEditControlHeight}"/>
+        </Style>
+        <!--Default values-->
+        <Style Selector="Panel#ImagePanel">
+            <Setter Property="Height" Value="{StaticResource BaseImageSize}"/>
+        </Style>
+        <Style Selector="Panel#PicTypeControl, Border#FallbackImage">
+            <Setter Property="MaxWidth" Value="{StaticResource BaseImageSize}"/>
+        </Style>
+        <Style Selector="Panel#PicTypeControl">
+            <Setter Property="Height" Value="{StaticResource EditControlHeight}"/>
+        </Style>
+        <!--End Dynamic Sizing Section-->
+        <Style Selector="Border#FallbackImage:disabled">
             <Setter Property="Opacity" Value="{StaticResource ThemeDisabledOpacity}"/>
         </Style>
         <!--Colour the combobox and button borders and icons based on the pointer/focus state of them-->
@@ -50,41 +67,41 @@
         </Style>
     </UserControl.Styles>
     <StackPanel>
-        <Panel Name="ImagePanel" Height="{StaticResource BaseImageSize}" HorizontalAlignment="Stretch">
+        <Panel Name="ImagePanel" HorizontalAlignment="Stretch">
             <Panel.ContextMenu>
                 <ContextMenu IsEnabled="{Binding SelectedTracks.Count}">
                     <MenuItem Header="_Add picture" Command="{Binding AddCoverImagesCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PlusIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Remove picture" Command="{Binding RemoveCoverImageCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource MinusIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource MinusIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Replace p_ictures" Command="{Binding ReplaceCoverImageCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource ReplaceIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Extract picture" Command="{Binding ExtractCoverImageCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource ExtractIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
                     <MenuItem Header="Set pict_ure type" IsEnabled="{Binding SelectedTrackHasPictures}" ItemsSource="{Binding PictureTypes}"
                               ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedPictureType}" Command="{Binding ChangePictureTypeCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PicTypeIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Set picture _description" Command="{Binding OpenPictureDescriptionDialogCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PicDescriptionIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
                     <MenuItem Header="Cu_t picture" Command="{Binding CutCoverImageCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource CutIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Copy picture" Command="{Binding CopyCoverImageCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource CopyIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Paste picture as replacement" Command="{Binding PasteCoverImageAsReplacementCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Paste picture as _new" Command="{Binding PasteCoverImageAsNewCommand}">
-                        <MenuItem.Icon><PathIcon Classes="horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
+                        <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource PasteIcon}"/></MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
             </Panel.ContextMenu>
@@ -94,7 +111,7 @@
             <Panel IsVisible="{Binding !HasDisplayedPicture}">
                 <Border Name="FallbackImage" Background="{DynamicResource ThemeBackgroundBrush}"
                         CornerRadius="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.05}"
-                        MaxWidth="{StaticResource BaseImageSize}" Height="{Binding #FallbackImage.Bounds.Width}"/>
+                        Height="{Binding #FallbackImage.Bounds.Width}"/>
                 <PathIcon Width="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                           Height="{Binding #FallbackImage.Bounds.Width, Converter={StaticResource NumberPercentageConverter}, ConverterParameter=0.75}"
                           Foreground="{DynamicResource EditPanelBackgroundBrush}" Classes.One="{Binding !SelectedTrackHasPictures}">
@@ -125,11 +142,11 @@
                 </TextBlock.IsVisible>
             </TextBlock>
         </StackPanel>
-        <Panel Name="PicTypeControl" Height="{StaticResource EditControlHeight}"
-               MaxWidth="{StaticResource BaseImageSize}" Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
+        <Panel Name="PicTypeControl"
+               Classes.open="{Binding #PicTypeSelector.IsDropDownOpen}">
             <ComboBox ItemsSource="{Binding PictureTypes, Converter={StaticResource UpperCamelCaseSpacer}}" SelectedItem="{Binding SelectedPictureType, Converter={StaticResource UpperCamelCaseSpacer}}" Name="PicTypeSelector"/>
-            <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
-            <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="vertical" Data="{StaticResource RightChevronIcon}"/></Button>
+            <Button HorizontalAlignment="Left" Command="{Binding PreviousPicTypeCommand}"><PathIcon Classes="Vertical" Data="{StaticResource LeftChevronIcon}"/></Button>
+            <Button HorizontalAlignment="Right" Command="{Binding NextPicTypeCommand}"><PathIcon Classes="Vertical" Data="{StaticResource RightChevronIcon}"/></Button>
         </Panel>
     </StackPanel>
 </UserControl>

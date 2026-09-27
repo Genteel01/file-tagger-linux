@@ -9,7 +9,7 @@
         <Setter Property="Icon">
             <Setter.Value>
                 <Template>
-                    <PathIcon Classes="horizontal" Data="{StaticResource Tick}">
+                    <PathIcon Classes="Horizontal" Data="{StaticResource TickIcon}">
                         <PathIcon.IsVisible>
                             <MultiBinding Converter="{StaticResource AreEqualConverter}">
                                 <Binding Path="." />

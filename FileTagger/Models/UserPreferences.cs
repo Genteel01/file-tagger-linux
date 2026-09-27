@@ -19,6 +19,7 @@ public class UserPreferences
         _storedTheme = ThemeVariant.Default.ToString();
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
+        RequestedLayoutSize = MyThemes.LayoutSize.Automatic;
     }
     /// <summary>
     /// String defining which fields the track list is sorted by,
@@ -51,6 +52,8 @@ public class UserPreferences
     /// </summary>
     public double EditPanelWidth { get; set; }
 
+    public MyThemes.LayoutSize RequestedLayoutSize { get; set; }
+
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>
     /// </summary>
@@ -62,7 +65,7 @@ public class UserPreferences
             if (!ListColumnWidths.ContainsKey(trackProperty.Name))
             {
                 double columnWidth = trackProperty.PropertyType == typeof(string) ? 200 : 60;
-                if (trackProperty.Name == nameof(TrackViewModel.Genre))
+                if (trackProperty.Name is nameof(TrackViewModel.Genre) or nameof(TrackViewModel.Duration) or nameof(TrackViewModel.Bitrate) or nameof(TrackViewModel.SampleRate))
                 {
                     columnWidth = 100;
                 }

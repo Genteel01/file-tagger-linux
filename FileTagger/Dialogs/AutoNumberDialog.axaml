@@ -9,7 +9,7 @@
         Width="200" Height="200"
         d:DesignWidth="200" d:DesignHeight="200"
         x:Class="FileTagger.Dialogs.AutoNumberDialog" x:DataType="viewModels:AutoNumberViewModel" CanMinimize="False"
-        Title="Auto Track Numbers"
+        Title="Track Numbers"
         WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False">
     <Window.Styles>
         <Style Selector="TextBox">

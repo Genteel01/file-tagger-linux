@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Styling;
 using FileTagger.ViewModels;
 
@@ -5,8 +6,30 @@ namespace FileTagger.Statics;
 
 public static class MyThemes
 {
+
+    public enum LayoutSize
+    {
+        Automatic,
+        Standard,
+        Compact,
+    }
+
     public static readonly ThemeVariant LightGreen = new ThemeVariant(nameof(LightGreen), ThemeVariant.Light);
     public static readonly ThemeVariant DarkGreen = new ThemeVariant(nameof(DarkGreen), ThemeVariant.Dark);
+
+    private static readonly Uri BlueIconUri = new Uri("avares://FileTagger/Assets/icon/tag-edit-blue.ico", UriKind.Absolute);
+    private static readonly Uri GreenIconUri = new Uri("avares://FileTagger/Assets/icon/tag-edit-green.ico", UriKind.Absolute);
+
+    public static Uri ThemeIcon(ThemeVariant theme) => ThemeIcon(theme.ToString());
+
+    private static Uri ThemeIcon(string themeName) => themeName switch
+    {
+        nameof(ThemeVariant.Light) => BlueIconUri,
+        nameof(ThemeVariant.Dark) => BlueIconUri,
+        nameof(LightGreen) => GreenIconUri,
+        nameof(DarkGreen) => GreenIconUri,
+        _ => BlueIconUri
+    };
 
     public static ThemeVariant StringToTheme(string themeName) => themeName switch
     {
@@ -17,7 +40,9 @@ public static class MyThemes
         _ => ThemeVariant.Default
     };
 
-    public static ThemeVariant GetOppositeTheme(string themeName) => themeName switch
+    public static ThemeVariant GetOppositeTheme(ThemeVariant theme) => GetOppositeTheme(theme.ToString());
+
+    private static ThemeVariant GetOppositeTheme(string themeName) => themeName switch
     {
         nameof(ThemeVariant.Light) => ThemeVariant.Dark,
         nameof(ThemeVariant.Dark) => ThemeVariant.Light,
@@ -48,6 +73,11 @@ public static class Sorts
     public const string GenreSort = $"{nameof(TrackViewModel.Genre)}_{PathSort}";
     public const string ComposerSort = $"{nameof(TrackViewModel.Composer)}_{PathSort}";
     public const string CommentSort = $"{nameof(TrackViewModel.Comment)}_{PathSort}";
+    public const string DurationSort = $"{nameof(TrackViewModel.Duration)}_{PathSort}";
+    public const string BitrateSort = $"{nameof(TrackViewModel.Bitrate)}_{PathSort}";
+    public const string SampleRateSort = $"{nameof(TrackViewModel.SampleRate)}_{PathSort}";
+    public const string AudioFormatSort = $"{nameof(TrackViewModel.AudioFormat)}_{PathSort}";
+
 }
 
 public static class Maths
