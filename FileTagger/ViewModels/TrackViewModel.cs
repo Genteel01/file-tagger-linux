@@ -203,10 +203,9 @@ public partial class TrackViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Creates a new TrackViewModel as a copy of an existing one. Will only contain the editable tags of the track.
-    /// Only used as an intermediary when copying between existing TrackViewModels.
+    /// Creates an empty TrackViewModel.
     /// </summary>
-    public TrackViewModel(TrackViewModel original)
+    public TrackViewModel()
     {
         Directory = "";
         FileName = "";
@@ -215,6 +214,14 @@ public partial class TrackViewModel : ViewModelBase
         SampleRate = "";
         AudioFormat = "";
         _originalTrack = new Track();
+    }
+
+    /// <summary>
+    /// Creates a new TrackViewModel as a copy of an existing one. Will only contain the editable tags of the track.
+    /// Only used as an intermediary when copying between existing TrackViewModels.
+    /// </summary>
+    public TrackViewModel(TrackViewModel original) : this()
+    {
         original.CopyTo(this);
     }
 
