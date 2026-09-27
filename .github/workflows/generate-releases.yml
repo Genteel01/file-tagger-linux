@@ -81,8 +81,8 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: FileTagger-${{ matrix.runtimes }}
-        path: ./publish/FileTagger-${{ matrix.runtimes }}*
+        name: NetTag-${{ matrix.runtimes }}
+        path: ./publish/NetTag-${{ matrix.runtimes }}*
 
   release:
     if: github.event.pull_request.merged == true
@@ -116,7 +116,7 @@ jobs:
         with:
           files: ./artifacts/*
           tag_name: AutomatedRelease${{ steps.release.outputs.number }}
-          name: FileTagger ${{ steps.release.outputs.number }}
+          name: NetTag ${{ steps.release.outputs.number }}
           body: |
             ## ${{ github.event.pull_request.title }}
 
