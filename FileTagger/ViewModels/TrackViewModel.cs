@@ -186,6 +186,19 @@ public partial class TrackViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// When setting Change to false, also set IsChangeStart and IsChangeEnd
+    /// </summary>
+    /// <param name="value"></param>
+    partial void OnChangedChanged(bool value)
+    {
+        if (!value)
+        {
+            IsChangeEnd = false;
+            IsChangeStart = false;
+        }
+    }
+
+    /// <summary>
     /// Creates a new TrackViewModel for the given <see cref="ATL.Track"/>
     /// </summary>
     /// <param name="track">The Track to load</param>
@@ -246,8 +259,6 @@ public partial class TrackViewModel : ViewModelBase
             EmbeddedPictures.AddRange(GetOriginalTrackImages());
         }
         Changed = false;
-        IsChangeStart = false;
-        IsChangeEnd = false;
         _finishedSetup = true;
     }
 
@@ -317,8 +328,6 @@ public partial class TrackViewModel : ViewModelBase
         {
             GetTrack().Save();
             Changed = false;
-            IsChangeStart = false;
-            IsChangeEnd = false;
         }
     }
 
