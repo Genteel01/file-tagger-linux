@@ -12,6 +12,14 @@
         Title="Text to Tags"
         WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False">
     <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Padding" Value="4 4 24 4" />
+        </Style>
+        <Style Selector="Button#InsertButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4 0" />
+        </Style>
         <Style Selector="ItemsControl">
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
@@ -28,7 +36,21 @@
                                  ConfirmCommand="{Binding ApplyChangesCommand}" ConfirmContent="Apply"
                                  CancelCommand="{Binding CancelCommand}" CancelContent="Cancel"/>
         <StackPanel HorizontalAlignment="Stretch" Margin="8" Spacing="8">
-            <TextBox Text="{Binding FormatString}" Height="32" LineHeight="24" PlaceholderText="%Format%"/>
+            <Panel>
+                <TextBox Name="FormatField" Text="{Binding FormatString}" Height="32" LineHeight="24" PlaceholderText="%Format%"/>
+                <Button Width="24" HorizontalAlignment="Right" Name="InsertButton">
+                    <PathIcon Classes="Horizontal" Data="{StaticResource DownChevronIcon}"/>
+                    <Button.Flyout>
+                        <Flyout>
+                            <ListBox
+                                ItemsSource="{Binding TrackPropertyNames, Converter={StaticResource UpperCamelCaseSpacer}}"
+                                SelectionChanged="NewPropertySelected"
+                                BorderThickness="0"/>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </Panel>
+
             <ScrollViewer HorizontalScrollBarVisibility="Auto" MaxHeight="100">
                 <ItemsControl ItemsSource="{Binding ErrorMessages}" Classes="Error"/>
             </ScrollViewer>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,6 +14,13 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
 {
     private const string InvalidFormatMessage = "Invalid format: ({0})";
     private const char PlaceholderChar = '%';
+
+    /// <summary>
+    /// Array of properties of TrackViewModel that we want to valid in the format
+    /// </summary>
+    private PropertyInfo[] TrackProperties { get; } = TrackViewModel.GetEditableProperties();
+
+    public string[] TrackPropertyNames => TrackProperties.Select(property => property.Name).ToArray();
 
     /// <summary>
     /// The string defining the format to parse
@@ -126,15 +134,9 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
             }
             PropertyInfo? property = PropertyHelpers.GetProperty<TrackViewModel>(placeholderName);
 
-            if (property == null)
+            if (property == null || !TrackProperties.Contains(property))
             {
                 ErrorMessages.Add(string.Format(InvalidFormatMessage, $"Invalid Tag Name \"{placeholderName}\""));
-                return null;
-            }
-
-            if (!property.CanWrite)
-            {
-                ErrorMessages.Add(string.Format(InvalidFormatMessage, $"Tag \"{placeholderName}\" Cannot Be Written"));
                 return null;
             }
 
@@ -200,6 +202,14 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
         }
 
         return values;
+    }
+
+    /// <summary>
+    /// Adds the given string to the format string, surrounded by the Placeholder Character
+    /// </summary>
+    public void AddProperty(string propertyName)
+    {
+        FormatString += $"{PlaceholderChar}{propertyName}{PlaceholderChar}";
     }
 
     /// <summary>
