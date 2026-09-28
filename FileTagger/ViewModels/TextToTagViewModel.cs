@@ -297,12 +297,15 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     [RelayCommand(CanExecute = nameof(HasValidFormat))]
     private void ApplyChanges()
     {
-        foreach (TrackViewModel track in tracks)
+        int numberOfEntries = LoadFromFile ? Math.Min(tracks.Count, FileLines!.Count) : tracks.Count;
+        for (int i = 0; i < numberOfEntries; i++)
         {
-            string fileNameNoExtension = Path.GetFileNameWithoutExtension(track.FileName);
+            TrackViewModel track = tracks[i];
+            string textSource = LoadFromFile ? FileLines![i] : Path.GetFileNameWithoutExtension(track.FileName);
+
             List<(PropertyInfo property, string delimiter)>? placeholders = ParseFormat(FormatString);
             if (placeholders == null) continue;
-            Dictionary<PropertyInfo, string>? properties = TextToTags(placeholders, fileNameNoExtension);
+            Dictionary<PropertyInfo, string>? properties = TextToTags(placeholders, textSource);
             if (properties == null) continue;
             foreach (PropertyInfo property in properties.Keys)
             {
