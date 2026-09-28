@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Avalonia.Controls;
@@ -113,15 +114,28 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         //Use pictures folder if there is no bookmark
         IStorageFolder? initialLocation = bookmarkFolder ?? await target.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Pictures);
 
+        FilePickerFileType fileTypes = FilePickerFileTypes.ImageAll;
         IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Open Images",
             AllowMultiple = true,
             SuggestedStartLocation = initialLocation,
-            FileTypeFilter = [FilePickerFileTypes.ImageAll]
+            FileTypeFilter = [fileTypes]
         });
 
-        return files;
+        //Only return files that have valid extensions
+        List<IStorageFile> imageFiles = [];
+        foreach (IStorageFile file in files)
+        {
+            string fileExtension = Path.GetExtension(file.Name);
+            if (fileTypes.Patterns == null) continue;
+            if (fileTypes.Patterns.Any(pattern =>
+                    string.Equals(pattern.Replace("*", ""), fileExtension, StringComparison.OrdinalIgnoreCase)))
+            {
+                imageFiles.Add(file);
+            }
+        }
+        return imageFiles;
     }
 
     public async Task<string?> SaveImageFile(Bitmap bitmap, ImageFormat format, string suggestedName, string? bookmarkId)
@@ -223,6 +237,18 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
             FileTypeFilter = [csvType],
         });
 
-        return files.Count == 0 ? null : files[0];
+        //Only return the file if it has a valid extension
+        if (files.Count > 0)
+        {
+            IStorageFile file = files[0];
+            string fileExtension = Path.GetExtension(file.Name);
+            if (csvType.Patterns.Any(pattern =>
+                    string.Equals(pattern.Replace("*", ""), fileExtension, StringComparison.OrdinalIgnoreCase)))
+            {
+                return file;
+            }
+        }
+
+        return null;
     }
 }
