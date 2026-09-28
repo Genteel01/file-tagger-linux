@@ -13,9 +13,9 @@ namespace FileTagger.Extensions;
 public static class MyExtensions
 {
     /// <summary>
-    /// Extensions for List
+    /// Extensions for IEnumerable
     /// </summary>
-    extension<T>(List<T> collection)
+    extension<T>(IEnumerable<T> collection)
     {
         /// <summary>
         /// Returns the indices of all items that match the predicate.
@@ -23,9 +23,10 @@ public static class MyExtensions
         public IEnumerable<int> FindIndices(Func<T, bool> match)
         {
             IEnumerable<int> indices = [];
-            for (int i = 0; i < collection.Count; i++)
+            List<T> enumeratedItems = collection.ToList();
+            for (int i = 0; i < enumeratedItems.Count; i++)
             {
-                if (match(collection[i])) indices = indices.Append(i);
+                if (match(enumeratedItems[i])) indices = indices.Append(i);
             }
 
             return indices;
