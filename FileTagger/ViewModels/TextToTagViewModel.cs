@@ -279,7 +279,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
             // If it's an int field and the value can't be parsed, the format is not valid
             if (property.PropertyType == typeof(int?))
             {
-                bool parsed = int.TryParse(value, out int parsedInt);
+                bool parsed = int.TryParse(value, out int _);
                 if (!parsed)
                 {
                     ErrorMessages.Add($"Format doesn't match \"{text}\":");
