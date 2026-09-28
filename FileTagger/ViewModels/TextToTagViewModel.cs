@@ -52,7 +52,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// The lines of the loaded text file
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(PreviewText))]
     [NotifyPropertyChangedFor(nameof(HasFile))]
     [NotifyPropertyChangedFor(nameof(ViewHeight))]
     private partial List<string>? FileLines { get; set; } = null;
@@ -86,9 +85,13 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// The string defining the format to parse
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(PreviewText))]
     [NotifyPropertyChangedFor(nameof(ViewHeight))]
     public partial string FormatString { get; set; } = "";
+
+    partial void OnFormatStringChanged(string value)
+    {
+        UpdatePreview();
+    }
 
     /// <summary>
     /// The file name of the displayed preview track
@@ -96,57 +99,11 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     public string PreviewFileName => tracks[PreviewIndex].FileName;
 
     /// <summary>
-    /// Gets the preview text for the current format string and selected track index.
-    /// Also loads error messages for other tracks
+    /// Text displaying a preview of the new fields to be applied
     /// </summary>
-    public Dictionary<PropertyInfo, string>? PreviewText {
-       get {
-            HasValidFormat = false;
-            ErrorMessages.Clear();
-            Dictionary<PropertyInfo, string>? newPreview = null;
-            if (tracks.Count == 0) return newPreview;
-
-            if (LoadFromFile)
-            {
-                if (FileLines == null)
-                {
-                    ErrorMessages.Add("No file selected");
-                    return newPreview;
-                }
-                if (FileLines.Count == 0)
-                {
-                    ErrorMessages.Add("File is empty");
-                    return newPreview;
-                }
-            }
-
-            List<(PropertyInfo property, string delimiter)>? placeholders = ParseFormat(FormatString);
-            //With no placeholders the format is invalid
-            if (placeholders == null) return newPreview;
-
-            //Check all the tracks for errors
-            int numberOfEntries = LoadFromFile ? Math.Min(tracks.Count, FileLines!.Count) : tracks.Count;
-            for (int i = 0; i < numberOfEntries; i++)
-            {
-                TrackViewModel track = tracks[i];
-                string textSource = LoadFromFile ? FileLines![i] : Path.GetFileNameWithoutExtension(track.FileName);
-                Dictionary<PropertyInfo, string>? trackPreview = TextToTags(placeholders, textSource);
-                if (trackPreview != null) HasValidFormat = true;
-                //Load the correct track preview
-                if (i == PreviewIndex) newPreview = trackPreview;
-            }
-
-            //If any tracks have errors, notify the user that they will be skipped.
-            //If there is only one track and it has errors, we can't proceed, so don't say it will be skipped.
-            if (ErrorMessages.Count > 0 && tracks.Count > 1)
-            {
-                string counter = ErrorMessages.Count == 1 ? "It" : "They";
-                ErrorMessages.Add("");
-                ErrorMessages.Add($"{counter} will be skipped");
-            }
-            return newPreview;
-        }
-    }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ViewHeight))]
+    public partial Dictionary<PropertyInfo, string>? PreviewText { get; set; }
 
     /// <summary>
     /// The format is considered valid if at least one track can parse it without errors
@@ -159,10 +116,14 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// The index of the track to preview
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(PreviewText))]
     [NotifyPropertyChangedFor(nameof(ViewHeight))]
     [NotifyPropertyChangedFor(nameof(PreviewFileName))]
     private partial int PreviewIndex { get; set; } = 0;
+    // ReSharper disable once UnusedParameterInPartialMethod
+    partial void OnPreviewIndexChanged(int value)
+    {
+        UpdatePreview();
+    }
 
     public bool ShowNavigationButtons => tracks.Count > 1;
     [RelayCommand]
@@ -170,6 +131,58 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     [RelayCommand]
     private void PreviewPrevious() => PreviewIndex = Maths.ChangeCollectionIndex(PreviewIndex, tracks.Count, -1);
 
+
+    /// <summary>
+    /// Gets the preview text for the current format string and selected track index.
+    /// Also loads error messages for other tracks
+    /// </summary>
+    private void UpdatePreview()
+    {
+        HasValidFormat = false;
+        ErrorMessages.Clear();
+        PreviewText = null;
+        if (tracks.Count == 0) return;
+
+        if (LoadFromFile)
+        {
+            if (FileLines == null)
+            {
+                ErrorMessages.Add("No file selected");
+                return;
+            }
+
+            if (FileLines.Count == 0)
+            {
+                ErrorMessages.Add("File is empty");
+                return;
+            }
+        }
+
+        List<(PropertyInfo property, string delimiter)>? placeholders = ParseFormat(FormatString);
+        //With no placeholders the format is invalid
+        if (placeholders == null) return;
+
+        //Check all the tracks for errors
+        int numberOfEntries = LoadFromFile ? Math.Min(tracks.Count, FileLines!.Count) : tracks.Count;
+        for (int i = 0; i < numberOfEntries; i++)
+        {
+            TrackViewModel track = tracks[i];
+            string textSource = LoadFromFile ? FileLines![i] : Path.GetFileNameWithoutExtension(track.FileName);
+            Dictionary<PropertyInfo, string>? trackPreview = TextToTags(placeholders, textSource);
+            if (trackPreview != null) HasValidFormat = true;
+            //Load the correct track preview
+            if (i == PreviewIndex) PreviewText = trackPreview;
+        }
+
+        //If any tracks have errors, notify the user that they will be skipped.
+        //If there is only one track and it has errors, we can't proceed, so don't say it will be skipped.
+        if (ErrorMessages.Count > 0 && tracks.Count > 1)
+        {
+            string counter = ErrorMessages.Count == 1 ? "It" : "They";
+            ErrorMessages.Add("");
+            ErrorMessages.Add($"{counter} will be skipped");
+        }
+    }
 
     /// <summary>
     /// Extracts the placeholders from the format string and returns a list of their property and delimiter
@@ -386,6 +399,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
         }
 
         FileLines = newFileLines;
+        UpdatePreview();
     }
 
     /// <summary>
