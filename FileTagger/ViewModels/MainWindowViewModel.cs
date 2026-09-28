@@ -501,7 +501,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             initialDiscNumber = 1;
         }
 
-        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, false);
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
         AutoNumberViewModel vm = new AutoNumberViewModel(dialog, sortedSelected)
         {
             FirstValue = initialValue,
