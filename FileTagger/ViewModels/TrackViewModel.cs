@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using ATL;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FileTagger.Extensions;
@@ -374,5 +375,13 @@ public partial class TrackViewModel : ViewModelBase
         Composer = "";
         Comment = "";
         EmbeddedPictures.Clear();
+    }
+
+    public static PropertyInfo[] GetEditableProperties()
+    {
+        return
+        [
+            .. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
+                (property.PropertyType == typeof(string) || property.PropertyType == typeof(int?)))];
     }
 }

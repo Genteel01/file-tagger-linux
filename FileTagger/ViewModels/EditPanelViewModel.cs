@@ -31,7 +31,7 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// <summary>
     /// Array of properties of TrackViewModel that we want to be editable
     /// </summary>
-    private readonly PropertyInfo[] _trackProperties;
+    private readonly PropertyInfo[] _trackProperties = TrackViewModel.GetEditableProperties();
 
     /// <summary>
     /// Reference to EmbeddedPictureViewModel so we can bind it in our view
@@ -43,9 +43,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
         EmbeddedPicture = embeddedPictureViewModel ?? throw new ArgumentNullException(nameof(embeddedPictureViewModel));
         IsActive = true;
 
-        //Select properties that are writable and are either string or int?
-        _trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.CanWrite &&
-            (property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?)) )];
         FieldTexts = SetUpFieldTexts();
         FieldOptions = SetUpFieldOptions();
     }
@@ -56,7 +53,6 @@ public partial class EditPanelViewModel: ViewModelBase, IRecipient<MainWindowVie
     /// </summary>
     public EditPanelViewModel()
     {
-        _trackProperties = [];
         EmbeddedPicture = new EmbeddedPictureViewModel();
     }
     #endif
