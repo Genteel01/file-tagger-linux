@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +19,30 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     private const string InvalidFormatMessage = "Invalid format: ({0})";
     private const char PlaceholderChar = '%';
 
+    public const double FileButtonHeight = 32;
+    public const double PreviewHeight = 20;
+    public const double MessageHeight = 16;
+    public const double Spacing = 4;
+
+    public double ViewHeight
+    {
+        get
+        {
+            double baseHeight = 150;
+            if (LoadFromFile)
+            {
+                baseHeight += FileButtonHeight + Spacing;
+            }
+            baseHeight += MessageHeight * ErrorMessages.Count;
+            baseHeight += MessageHeight * FileWarnings.Count;
+            baseHeight += MessageHeight * ParseMessages.Count;
+            baseHeight += PreviewHeight * PreviewText?.Count ?? 0;
+            if (ShowNavigationButtons) baseHeight += MessageHeight + (Spacing * 2);
+
+            return baseHeight;
+        }
+    }
+
     /// <summary>
     /// Whether we are loading tags from a text file
     /// </summary>
@@ -29,6 +54,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PreviewText))]
     [NotifyPropertyChangedFor(nameof(HasFile))]
+    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     private partial List<string>? FileLines { get; set; } = null;
 
     /// <summary>
@@ -61,6 +87,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PreviewText))]
+    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     public partial string FormatString { get; set; } = "";
 
     /// <summary>
@@ -133,6 +160,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PreviewText))]
+    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     [NotifyPropertyChangedFor(nameof(PreviewFileName))]
     private partial int PreviewIndex { get; set; } = 0;
 
