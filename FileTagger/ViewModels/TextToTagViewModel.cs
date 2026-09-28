@@ -48,6 +48,8 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// </summary>
     public bool LoadFromFile { get; set; } = false;
 
+    public string? InitialFileLocation { get; set; } = null;
+
     /// <summary>
     /// The lines of the loaded text file
     /// </summary>
@@ -347,7 +349,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     [RelayCommand]
     private async Task OpenTextFile()
     {
-        IStorageFile? textFile = await fileService.OpenTextFile(null);
+        IStorageFile? textFile = await fileService.OpenTextFile(InitialFileLocation);
         if (textFile == null) return;
 
         FileName = textFile.Name;

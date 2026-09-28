@@ -593,10 +593,12 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
 
         List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
         string startingFormat = _preferenceService.UserPreferenceData.FormatString;
+        string? initialFileLocation = _preferenceService.SystemPreferenceData.LastDirectory;
         TextToTagViewModel vm = new TextToTagViewModel(dialog, sortedSelected, _fileService)
         {
             FormatString = startingFormat,
-            LoadFromFile = loadFile
+            LoadFromFile = loadFile,
+            InitialFileLocation = initialFileLocation
         };
         dialog.DataContext = vm;
 
