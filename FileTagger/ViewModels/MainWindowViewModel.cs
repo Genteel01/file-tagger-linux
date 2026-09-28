@@ -263,7 +263,8 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         HasSelectedTracks = SelectedTracks.Count > 0;
         SelectedTracksHaveChanges = HasSelectedTracks && SelectedTracks.Any(track => track.Changed);
         CanCopyTags = SelectedTracks.Count == 1;
-        WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
+        WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(sortedSelected));
     }
 
     /// <summary>
