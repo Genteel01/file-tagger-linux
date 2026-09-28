@@ -242,12 +242,13 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
     /// </summary>
     private async Task<List<PictureInfo>> SelectImageFiles(PictureInfo.PIC_TYPE pictureType)
     {
-        ErrorMessages?.Clear();
+        ErrorMessages.Clear();
         try
         {
             if (_fileService is null) throw new NullReferenceException("Missing File Service instance.");
 
-            IReadOnlyList<IStorageFile> files = await _fileService.OpenImageFiles();
+            string? bookmarkId = _preferenceService.SystemPreferenceData.LastDirectory;
+            IReadOnlyList<IStorageFile> files = await _fileService.OpenImageFiles(bookmarkId);
 
             List<PictureInfo> images = [];
 
@@ -262,7 +263,7 @@ public partial class EmbeddedPictureViewModel : ViewModelBase, IRecipient<MainWi
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ErrorMessages.Add(e.Message);
             throw;
         }
     }

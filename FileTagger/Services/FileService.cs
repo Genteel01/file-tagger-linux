@@ -101,14 +101,23 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         }
     }
 
-    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
+    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles(string? bookmarkId)
     {
         TopLevel? target = getTarget();
         if (target == null) return [];
+
+        //Get initial location from bookmark
+        IStorageBookmarkFolder? bookmarkFolder = null;
+        if (bookmarkId != null) bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+
+        //Use pictures folder if there is no bookmark
+        IStorageFolder? initialLocation = bookmarkFolder ?? await target.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Pictures);
+
         IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open Folders",
+            Title = "Open Images",
             AllowMultiple = true,
+            SuggestedStartLocation = initialLocation,
             FileTypeFilter = [FilePickerFileTypes.ImageAll]
         });
 

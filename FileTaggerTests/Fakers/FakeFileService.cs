@@ -21,7 +21,7 @@ public class FakeFileService : IFileService
         return ([], false, null);
     }
 
-    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
+    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles(string? bookmarkId)
     {
         return [];
     }
