@@ -23,10 +23,11 @@ public static class MyExtensions
         public IEnumerable<int> FindIndices(Func<T, bool> match)
         {
             IEnumerable<int> indices = [];
-            List<T> enumeratedItems = collection.ToList();
-            for (int i = 0; i < enumeratedItems.Count; i++)
+            int index = 0;
+            foreach (T item in collection)
             {
-                if (match(enumeratedItems[i])) indices = indices.Append(i);
+                if (match(item)) indices = indices.Append(index);
+                index++;
             }
 
             return indices;
