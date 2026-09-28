@@ -41,6 +41,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OpenTextToTagsCommand))]
     [NotifyPropertyChangedFor(nameof(CanPasteTags))]
     private partial bool HasSelectedTracks { get; set; }
 
@@ -566,5 +567,19 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             track.ClearTags();
         }
         SelectionChanged();
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    public async Task OpenTextToTags()
+    {
+        if (_getDialogTarget.Invoke() is not Window target) return;
+
+        TextToTagsDialog dialog = new TextToTagsDialog();
+
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
+        TextToTagViewModel vm = new TextToTagViewModel(dialog, sortedSelected);
+        dialog.DataContext = vm;
+
+        await dialog.ShowDialog(target);
     }
 }
