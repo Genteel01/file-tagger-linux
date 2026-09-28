@@ -592,12 +592,19 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         TextToTagsDialog dialog = new TextToTagsDialog();
 
         List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
+        string startingFormat = _preferenceService.UserPreferenceData.FormatString;
         TextToTagViewModel vm = new TextToTagViewModel(dialog, sortedSelected, _fileService)
         {
+            FormatString = startingFormat,
             LoadFromFile = loadFile
         };
         dialog.DataContext = vm;
 
-        await dialog.ShowDialog(target);
+        string? finalFormat = await dialog.ShowDialog<string?>(target);
+        if (finalFormat != null)
+        {
+            PropertyInfo formatProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.FormatString))!;
+            _preferenceService.StorePreferenceItem(formatProperty, finalFormat);
+        }
     }
 }

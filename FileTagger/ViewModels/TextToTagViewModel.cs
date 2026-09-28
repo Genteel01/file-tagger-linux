@@ -17,7 +17,7 @@ namespace FileTagger.ViewModels;
 public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> tracks, IFileService fileService) : ViewModelBase
 {
     private const string InvalidFormatMessage = "Invalid format: ({0})";
-    private const char PlaceholderChar = '%';
+    public const char PlaceholderChar = '%';
 
     public const double FileButtonHeight = 32;
     public const double PreviewHeight = 20;
@@ -319,7 +319,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
             }
         }
 
-        dialog.Close();
+        dialog.Close(FormatString);
     }
 
     [RelayCommand]
