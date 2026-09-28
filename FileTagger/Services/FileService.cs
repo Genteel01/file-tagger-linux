@@ -208,12 +208,19 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         IStorageBookmarkFolder? bookmarkFolder = null;
         if (bookmarkId != null) bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
 
+        string[] plainTextPatterns = [.. FilePickerFileTypes.TextPlain.Patterns ?? ["*.txt"]];
+        string[] plainTextMime = [.. FilePickerFileTypes.TextPlain.MimeTypes ?? ["text/plain"]];
+        FilePickerFileType csvType = new FilePickerFileType("Plain Text or CSV")
+        {
+            Patterns = [..plainTextPatterns, "*.csv"],
+            MimeTypes = [..plainTextMime, "text/csv"]
+        };
         IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Open Text File",
             AllowMultiple = false,
             SuggestedStartLocation = bookmarkFolder,
-            FileTypeFilter = [FilePickerFileTypes.TextPlain]
+            FileTypeFilter = [csvType],
         });
 
         return files.Count == 0 ? null : files[0];
