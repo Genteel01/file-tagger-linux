@@ -72,6 +72,9 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// </summary>
     public ObservableCollection<string> FileWarnings { get; set; } = [];
 
+    /// <summary>
+    /// List of messages relating to parsing a CSV header
+    /// </summary>
     public ObservableCollection<Message> ParseMessages { get; set; } = [];
 
     /// <summary>
