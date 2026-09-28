@@ -301,7 +301,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     [RelayCommand]
     private async Task OpenMusicFiles(CancellationToken token)
     {
-        ErrorMessages?.Clear();
+        ErrorMessages.Clear();
         try
         {
             string? lastDirectory = _preferenceService.SystemPreferenceData.LastDirectory;
@@ -316,7 +316,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ErrorMessages.Add(e.Message);
             throw;
         }
     }
@@ -326,7 +326,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// </summary>
     public async Task OpenInitialFiles()
     {
-        ErrorMessages?.Clear();
+        ErrorMessages.Clear();
         try
         {
             string? lastDirectory = _preferenceService.SystemPreferenceData.LastDirectory;
@@ -337,7 +337,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ErrorMessages.Add(e.Message);
             throw;
         }
     }
@@ -455,7 +455,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
         if (properties.Count == 0)
         {
-            ErrorMessages?.Add("Sorting by input " + fields + ", which has no valid fields");
+            ErrorMessages.Add("Sorting by input " + fields + ", which has no valid fields");
             return [];
         }
 
