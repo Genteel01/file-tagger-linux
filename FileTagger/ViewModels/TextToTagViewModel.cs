@@ -45,12 +45,9 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// <summary>
     /// List of warning messages regarding the loaded file
     /// </summary>
-    [ObservableProperty]
-    public partial List<string> FileWarnings { get; set; } = [];
+    public ObservableCollection<string> FileWarnings { get; set; } = [];
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ViewHeight))]
-    public partial List<Message> ParseMessages { get; set; } = [];
+    public ObservableCollection<Message> ParseMessages { get; set; } = [];
 
     /// <summary>
     /// Array of properties of TrackViewModel that we want to be valid in the format
@@ -69,7 +66,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// <summary>
     /// The file name of the displayed preview track
     /// </summary>
-    public string PreviewFileName => $"\"{Path.GetFileNameWithoutExtension(tracks[PreviewIndex].FileName)}\" Preview";
+    public string PreviewFileName => tracks[PreviewIndex].FileName;
 
     /// <summary>
     /// Gets the preview text for the current format string and selected track index.
@@ -308,7 +305,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
 
         FileName = textFile.Name;
         List<string> newFileLines = [];
-        List<string> warnings = [];
+        FileWarnings.Clear();
         await using Stream stream = await textFile.OpenReadAsync();
         using StreamReader reader = new StreamReader(stream);
         while (await reader.ReadLineAsync() is { } line)
@@ -334,8 +331,8 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
                     newFileLines.RemoveAt(0);
                     if (ParseMessages.Count > 0 && ParseMessages.Any(m => m.IsError))
                     {
-                        warnings.Add("CSV header will be ignored");
-                        warnings.Add("");
+                        FileWarnings.Add("CSV header will be ignored");
+                        FileWarnings.Add("");
                     }
                 }
             }
@@ -345,19 +342,18 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
         if (newFileLines.Count < tracks.Count)
         {
             int skippedTracks = tracks.Count - newFileLines.Count;
-            warnings.Add($"File has fewer lines than the number of selected tracks");
+            FileWarnings.Add($"File has fewer lines than the number of selected tracks");
             string counter = skippedTracks == 1 ? "track" : "tracks";
-            warnings.Add($"    {skippedTracks} {counter} will be skipped");
+            FileWarnings.Add($"    {skippedTracks} {counter} will be skipped");
         }
         if (newFileLines.Count > tracks.Count)
         {
             int skippedLines = newFileLines.Count - tracks.Count;
-            warnings.Add($"File has more lines than the number of selected tracks");
+            FileWarnings.Add($"File has more lines than the number of selected tracks");
             string counter = skippedLines == 1 ? "line" : "lines";
-            warnings.Add($"    {skippedLines} {counter} will be skipped");
+            FileWarnings.Add($"    {skippedLines} {counter} will be skipped");
         }
 
-        FileWarnings = warnings;
         FileLines = newFileLines;
     }
 
@@ -369,7 +365,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     {
         string[] columns = headerLine.Split(',');
         List<(string column, bool isValid)> parsedColumns = [];
-        List<Message> messages = [];
+        ParseMessages.Clear();
 
         foreach (string column in columns)
         {
@@ -393,21 +389,18 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
         //If there is a header and some columns were invalid, inform the user about which columns were valid and which were invalid
         if (invalidCount > 0 && !hasNoHeader)
         {
-            messages.Add(new Message("Failed to parse CSV header:", true));
+            ParseMessages.Add(new Message("Failed to parse CSV header:", true));
             foreach ((string column, bool isValid) in parsedColumns)
             {
                 string validity = isValid ? "valid" : "invalid";
-                messages.Add(new Message($"    Column \"{column}\" is {validity}", !isValid));
+                ParseMessages.Add(new Message($"    Column \"{column}\" is {validity}", !isValid));
             }
         }
 
-        //If there were no invalid columns, inform the user that the format was set from the header
-        if (invalidCount == 0) messages.Add(new Message("Format set from CSV header", false));
-
-        ParseMessages = messages;
-
         if (invalidCount > 0) return null;
 
+        //If there were no invalid columns, inform the user that the format was set from the header
+        ParseMessages.Add(new Message("Format set from CSV header", false));
         // Build format string with placeholders and comma delimiters
         return string.Join(",", parsedColumns.Select(col => $"{PlaceholderChar}{col.column}{PlaceholderChar}"));
     }
