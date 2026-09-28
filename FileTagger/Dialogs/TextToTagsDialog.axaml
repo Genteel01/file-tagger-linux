@@ -5,8 +5,8 @@
         xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
         xmlns:controls="clr-namespace:FileTagger.Controls"
         mc:Ignorable="d"
-        Width="600" Height="400"
-        d:DesignWidth="600" d:DesignHeight="400"
+        Width="400" Height="300"
+        d:DesignWidth="400" d:DesignHeight="300"
         x:Class="FileTagger.Dialogs.TextToTagsDialog"
         x:DataType="viewModels:TextToTagViewModel" CanMinimize="False"
         Title="Text to Tags"
@@ -19,33 +19,38 @@
             <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}"/>
         </Style>
         <Style Selector="ItemsControl.Preview TextBlock">
-            <Setter Property="LineHeight" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
         </Style>
     </Window.Styles>
     <DockPanel>
         <controls:DialogControls DockPanel.Dock="Bottom"
                                  ConfirmCommand="{Binding ApplyChangesCommand}" ConfirmContent="Apply"
                                  CancelCommand="{Binding CancelCommand}" CancelContent="Cancel"/>
-        <StackPanel HorizontalAlignment="Stretch" Margin="8" Spacing="4">
+        <StackPanel HorizontalAlignment="Stretch" Margin="8" Spacing="8">
             <TextBox Text="{Binding FormatString}" Height="32" LineHeight="24" PlaceholderText="%Format%"/>
-            <ItemsControl ItemsSource="{Binding ErrorMessages}" Classes="Error"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" MaxHeight="100">
+                <ItemsControl ItemsSource="{Binding ErrorMessages}" Classes="Error"/>
+            </ScrollViewer>
 
             <Grid IsVisible="{Binding ShowNavigationButtons}" ColumnDefinitions="Auto, *, Auto" Height="16">
                 <Button Grid.Column="0" Command="{Binding PreviewPreviousCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource LeftChevronIcon}"/></Button>
                 <TextBlock Grid.Column="1" Text="{Binding PreviewFileName}" HorizontalAlignment="Stretch" TextAlignment="Center" LineHeight="16"/>
                 <Button Grid.Column="2" Command="{Binding PreviewNextCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
             </Grid>
-            <ItemsControl ItemsSource="{Binding PreviewText}" IsEnabled="False" Classes="Preview">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Height="16">
-                            <TextBlock Text="{Binding Key.Name, Converter={StaticResource UpperCamelCaseSpacer}}"/>
-                            <TextBlock Text=": " />
-                            <TextBlock Text="{Binding Value}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" MaxHeight="100">
+                <ItemsControl ItemsSource="{Binding PreviewText}" Classes="Preview">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Height="20">
+                                <TextBlock FontWeight="Bold" Text="{Binding Key.Name, Converter={StaticResource UpperCamelCaseSpacer}}"/>
+                                <TextBlock Text=": " />
+                                <TextBlock Text="{Binding Value}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </StackPanel>
 
     </DockPanel>

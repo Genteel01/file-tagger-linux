@@ -52,11 +52,13 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
                 if (i == PreviewIndex) newPreview = trackPreview;
             }
 
-            //If any tracks have errors, notify the user that they will be skipped
-            if (ErrorMessages.Count > 0)
+            //If any tracks have errors, notify the user that they will be skipped.
+            //If there is only one track and it has errors, we can't proceed, so don't say it will be skipped.
+            if (ErrorMessages.Count > 0 && tracks.Count > 1)
             {
+                string counter = ErrorMessages.Count == 1 ? "It" : "They";
                 ErrorMessages.Add("");
-                ErrorMessages.Add("They will be skipped");
+                ErrorMessages.Add($"{counter} will be skipped");
             }
             return newPreview;
         }
@@ -188,7 +190,8 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
                 bool parsed = int.TryParse(value, out int parsedInt);
                 if (!parsed)
                 {
-                    ErrorMessages.Add($"Format doesn't match \"{text}\": Invalid value for \"{property.Name}\"");
+                    ErrorMessages.Add($"Format doesn't match \"{text}\":");
+                    ErrorMessages.Add($"    Invalid value for \"{property.Name}\"");
                     return null;
                 }
             }
