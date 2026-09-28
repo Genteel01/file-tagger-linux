@@ -87,7 +87,7 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ViewHeight))]
     public partial string FormatString { get; set; } = "";
-
+    // ReSharper disable once UnusedParameterInPartialMethod
     partial void OnFormatStringChanged(string value)
     {
         UpdatePreview();
