@@ -34,6 +34,7 @@
             <Color x:Key="CancelSolidColor">#FFff0000</Color>
 
             <Color x:Key="WarningColor">#e19f23</Color>
+            <Color x:Key="SuccessColor">#FF00e645</Color>
 
             <!--Text Colour, PathIcon colour-->
             <SolidColorBrush x:Key='ThemeForegroundBrush' Color="{StaticResource ThemeForegroundColor}"/>
@@ -78,6 +79,7 @@
             <SolidColorBrush x:Key='SortArrowBrush' Color="{StaticResource SortArrowColor}"/>
 
             <SolidColorBrush x:Key='WarningBrush' Color="{StaticResource WarningColor}"/>
+            <SolidColorBrush x:Key='SuccessBrush' Color="{StaticResource SuccessColor}"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

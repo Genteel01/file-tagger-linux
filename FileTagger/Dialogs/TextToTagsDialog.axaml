@@ -18,6 +18,9 @@
         <Style Selector="TextBlock.Error">
             <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}"/>
         </Style>
+        <Style Selector="TextBlock.Success">
+            <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
+        </Style>
         <Style Selector="Button#InsertButton">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0" />
@@ -53,6 +56,16 @@
                     <PathIcon Classes="Horizontal" Data="{StaticResource TextFileIcon}"/>
                 </StackPanel>
             </Button>
+            <ScrollViewer IsVisible="{Binding LoadFromFile}" HorizontalScrollBarVisibility="Auto" Classes="Messages">
+                <ItemsControl ItemsSource="{Binding ParseMessages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Text}"
+                                       Classes.Error="{Binding IsError}" Classes.Success="{Binding !IsError}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
             <ScrollViewer IsVisible="{Binding LoadFromFile}" HorizontalScrollBarVisibility="Auto" Classes="Messages">
                 <ItemsControl ItemsSource="{Binding FileWarnings}" Classes="Warning"/>
             </ScrollViewer>

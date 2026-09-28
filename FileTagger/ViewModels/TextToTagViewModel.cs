@@ -28,7 +28,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PreviewText))]
-    [NotifyPropertyChangedFor(nameof(FileWarnings))]
     [NotifyPropertyChangedFor(nameof(HasFile))]
     private partial List<string>? FileLines { get; set; } = null;
 
@@ -46,29 +45,12 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// <summary>
     /// List of warning messages regarding the loaded file
     /// </summary>
-    public List<string> FileWarnings
-    {
-        get
-        {
-            List<string> warnings = [];
-            if (FileLines == null) return warnings;
-            if (FileLines.Count < tracks.Count)
-            {
-                int skippedTracks = tracks.Count - FileLines.Count;
-                warnings.Add($"File has fewer lines than the number of selected tracks");
-                string counter = skippedTracks == 1 ? "track" : "tracks";
-                warnings.Add($"    {skippedTracks} {counter} will be skipped");
-            }
-            if (FileLines.Count > tracks.Count)
-            {
-                int skippedLines = FileLines.Count - tracks.Count;
-                warnings.Add($"File has more lines than the number of selected tracks");
-                string counter = skippedLines == 1 ? "line" : "lines";
-                warnings.Add($"    {skippedLines} {counter} will be skipped");
-            }
-            return warnings;
-        }
-    }
+    [ObservableProperty]
+    public partial List<string> FileWarnings { get; set; } = [];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ViewHeight))]
+    public partial List<Message> ParseMessages { get; set; } = [];
 
     /// <summary>
     /// Array of properties of TrackViewModel that we want to be valid in the format
@@ -326,12 +308,117 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
 
         FileName = textFile.Name;
         List<string> newFileLines = [];
+        List<string> warnings = [];
         await using Stream stream = await textFile.OpenReadAsync();
         using StreamReader reader = new StreamReader(stream);
         while (await reader.ReadLineAsync() is { } line)
         {
             newFileLines.Add(line);
         }
+
+        //If the file is a CSV we want to try getting a format string from the header
+        if (newFileLines.Count > 0)
+        {
+            bool isCsv = Path.GetExtension(textFile.Name).Equals(".csv", StringComparison.OrdinalIgnoreCase);
+            if (isCsv)
+            {
+                // Parse header to generate format string
+                string? generatedFormat = ParseCsvHeader(newFileLines[0], out bool hasNoHeader);
+                if (generatedFormat != null)
+                {
+                    FormatString = generatedFormat;
+                }
+
+                if (!hasNoHeader)
+                {
+                    newFileLines.RemoveAt(0);
+                    if (ParseMessages.Count > 0 && ParseMessages.Any(m => m.IsError))
+                    {
+                        warnings.Add("CSV header will be ignored");
+                        warnings.Add("");
+                    }
+                }
+            }
+        }
+
+        //Add warnings if there is a mismatch between the number of lines in the file and the number of selected tracks
+        if (newFileLines.Count < tracks.Count)
+        {
+            int skippedTracks = tracks.Count - newFileLines.Count;
+            warnings.Add($"File has fewer lines than the number of selected tracks");
+            string counter = skippedTracks == 1 ? "track" : "tracks";
+            warnings.Add($"    {skippedTracks} {counter} will be skipped");
+        }
+        if (newFileLines.Count > tracks.Count)
+        {
+            int skippedLines = newFileLines.Count - tracks.Count;
+            warnings.Add($"File has more lines than the number of selected tracks");
+            string counter = skippedLines == 1 ? "line" : "lines";
+            warnings.Add($"    {skippedLines} {counter} will be skipped");
+        }
+
+        FileWarnings = warnings;
         FileLines = newFileLines;
+    }
+
+    /// <summary>
+    /// Parses CSV header and generates format string from column names. Returns null if there are any invalid column names.
+    /// If it finds no valid column names, it assumes the header is data rather than a header and sets hasNoHeader to true.
+    /// </summary>
+    private string? ParseCsvHeader(string headerLine, out bool hasNoHeader)
+    {
+        string[] columns = headerLine.Split(',');
+        List<(string column, bool isValid)> parsedColumns = [];
+        List<Message> messages = [];
+
+        foreach (string column in columns)
+        {
+            string trimmedColumn = column.Trim();
+            PropertyInfo? property = PropertyHelpers.GetProperty<TrackViewModel>(trimmedColumn);
+            if (property == null || !TrackProperties.Contains(property))
+            {
+                parsedColumns.Add((trimmedColumn, false));
+                continue;
+            }
+
+            parsedColumns.Add((property.Name, true));
+        }
+
+        int validCount = parsedColumns.Count(col => col.isValid);
+        int invalidCount = parsedColumns.Count - validCount;
+
+        //If there are no valid columns, assume they're data rather than a header
+        hasNoHeader = validCount == 0;
+
+        //If there is a header and some columns were invalid, inform the user about which columns were valid and which were invalid
+        if (invalidCount > 0 && !hasNoHeader)
+        {
+            messages.Add(new Message("Failed to parse CSV header:", true));
+            foreach ((string column, bool isValid) in parsedColumns)
+            {
+                string validity = isValid ? "valid" : "invalid";
+                messages.Add(new Message($"    Column \"{column}\" is {validity}", !isValid));
+            }
+        }
+
+        //If there were no invalid columns, inform the user that the format was set from the header
+        if (invalidCount == 0) messages.Add(new Message("Format set from CSV header", false));
+
+        ParseMessages = messages;
+
+        if (invalidCount > 0) return null;
+
+        // Build format string with placeholders and comma delimiters
+        return string.Join(",", parsedColumns.Select(col => $"{PlaceholderChar}{col.column}{PlaceholderChar}"));
+    }
+
+    /// <summary>
+    /// Class to hold a message and whether it's an error.
+    /// Needs to be a class rather than a tuple/struct because it's bound in an ItemsControl
+    /// </summary>
+    public class Message(string text, bool isError)
+    {
+        public string Text { get; set; } = text;
+        public bool IsError { get; set; } = isError;
     }
 }
