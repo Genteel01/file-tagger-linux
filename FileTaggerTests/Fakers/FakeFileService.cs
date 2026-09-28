@@ -52,4 +52,9 @@ public class FakeFileService : IFileService
         string typeName = data.GetType().Name;
         _documents[typeName] = JsonSerializer.SerializeToDocument(data, _jsonOptions);
     }
+
+    public async Task<IStorageFile?> OpenTextFile(string? bookmarkId)
+    {
+        return null;
+    }
 }
