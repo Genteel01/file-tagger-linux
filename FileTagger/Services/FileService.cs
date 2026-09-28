@@ -198,4 +198,24 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
         await using FileStream fs = File.Create(filePath);
         await JsonSerializer.SerializeAsync(fs, data, _jsonOptions);
     }
+
+    public async Task<IStorageFile?> OpenTextFile(string? bookmarkId)
+    {
+        TopLevel? target = getTarget();
+        if (target == null) return null;
+
+        //Get initial location from bookmark
+        IStorageBookmarkFolder? bookmarkFolder = null;
+        if (bookmarkId != null) bookmarkFolder = await target.StorageProvider.OpenFolderBookmarkAsync(bookmarkId);
+
+        IReadOnlyList<IStorageFile> files = await target.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Open Text File",
+            AllowMultiple = false,
+            SuggestedStartLocation = bookmarkFolder,
+            FileTypeFilter = [FilePickerFileTypes.TextPlain]
+        });
+
+        return files.Count == 0 ? null : files[0];
+    }
 }

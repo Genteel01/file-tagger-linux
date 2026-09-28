@@ -33,6 +33,8 @@
             <Color x:Key="CancelPressedColor">#99ff0000</Color>
             <Color x:Key="CancelSolidColor">#FFff0000</Color>
 
+            <Color x:Key="WarningColor">#e19f23</Color>
+
             <!--Text Colour, PathIcon colour-->
             <SolidColorBrush x:Key='ThemeForegroundBrush' Color="{StaticResource ThemeForegroundColor}"/>
 
@@ -74,6 +76,8 @@
             <SolidColorBrush x:Key='MenuBorderBrush' Color="{StaticResource MenuBorderColor}"/>
             <SolidColorBrush x:Key='SectionBorderBrush' Color="{StaticResource SectionBorderColor}"/>
             <SolidColorBrush x:Key='SortArrowBrush' Color="{StaticResource SortArrowColor}"/>
+
+            <SolidColorBrush x:Key='WarningBrush' Color="{StaticResource WarningColor}"/>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

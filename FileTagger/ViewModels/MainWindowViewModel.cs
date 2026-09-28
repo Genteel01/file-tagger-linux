@@ -572,12 +572,30 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
     public async Task OpenTextToTags()
     {
+        await OpenTextImportDialog(true);
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    public async Task OpenFilenameToTags()
+    {
+        await OpenTextImportDialog(false);
+    }
+
+    /// <summary>
+    /// Opens the dialog to load tags either from a text file or from the tracks' filenames
+    /// </summary>
+    /// <param name="loadFile">True to load from text file, false to load from filename</param>
+    private async Task OpenTextImportDialog(bool loadFile)
+    {
         if (_getDialogTarget.Invoke() is not Window target) return;
 
         TextToTagsDialog dialog = new TextToTagsDialog();
 
         List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
-        TextToTagViewModel vm = new TextToTagViewModel(dialog, sortedSelected);
+        TextToTagViewModel vm = new TextToTagViewModel(dialog, sortedSelected, _fileService)
+        {
+            LoadFromFile = loadFile
+        };
         dialog.DataContext = vm;
 
         await dialog.ShowDialog(target);

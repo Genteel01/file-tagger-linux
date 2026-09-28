@@ -3,20 +3,75 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FileTagger.Services;
 using FileTagger.Statics;
 
 namespace FileTagger.ViewModels;
 
-public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> tracks) : ViewModelBase
+public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> tracks, IFileService fileService) : ViewModelBase
 {
     private const string InvalidFormatMessage = "Invalid format: ({0})";
     private const char PlaceholderChar = '%';
 
     /// <summary>
-    /// Array of properties of TrackViewModel that we want to valid in the format
+    /// Whether we are loading tags from a text file
+    /// </summary>
+    public bool LoadFromFile { get; set; } = false;
+
+    /// <summary>
+    /// The lines of the loaded text file
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PreviewText))]
+    [NotifyPropertyChangedFor(nameof(FileWarnings))]
+    [NotifyPropertyChangedFor(nameof(HasFile))]
+    private partial List<string>? FileLines { get; set; } = null;
+
+    /// <summary>
+    /// Whether we have loaded a file
+    /// </summary>
+    public bool HasFile => FileLines != null;
+
+    /// <summary>
+    /// The name of the loaded file
+    /// </summary>
+    [ObservableProperty]
+    public partial string FileName { get; set; } = "No File Selected";
+
+    /// <summary>
+    /// List of warning messages regarding the loaded file
+    /// </summary>
+    public List<string> FileWarnings
+    {
+        get
+        {
+            List<string> warnings = [];
+            if (FileLines == null) return warnings;
+            if (FileLines.Count < tracks.Count)
+            {
+                int skippedTracks = tracks.Count - FileLines.Count;
+                warnings.Add($"File has fewer lines than the number of selected tracks");
+                string counter = skippedTracks == 1 ? "track" : "tracks";
+                warnings.Add($"    {skippedTracks} {counter} will be skipped");
+            }
+            if (FileLines.Count > tracks.Count)
+            {
+                int skippedLines = FileLines.Count - tracks.Count;
+                warnings.Add($"File has more lines than the number of selected tracks");
+                string counter = skippedLines == 1 ? "line" : "lines";
+                warnings.Add($"    {skippedLines} {counter} will be skipped");
+            }
+            return warnings;
+        }
+    }
+
+    /// <summary>
+    /// Array of properties of TrackViewModel that we want to be valid in the format
     /// </summary>
     private PropertyInfo[] TrackProperties { get; } = TrackViewModel.GetEditableProperties();
 
@@ -41,20 +96,35 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     public Dictionary<PropertyInfo, string>? PreviewText {
        get {
             HasValidFormat = false;
+            ErrorMessages.Clear();
             Dictionary<PropertyInfo, string>? newPreview = null;
             if (tracks.Count == 0) return newPreview;
+
+            if (LoadFromFile)
+            {
+                if (FileLines == null)
+                {
+                    ErrorMessages.Add("No file selected");
+                    return newPreview;
+                }
+                if (FileLines.Count == 0)
+                {
+                    ErrorMessages.Add("File is empty");
+                    return newPreview;
+                }
+            }
+
             List<(PropertyInfo property, string delimiter)>? placeholders = ParseFormat(FormatString);
             //With no placeholders the format is invalid
             if (placeholders == null) return newPreview;
 
-
             //Check all the tracks for errors
-            ErrorMessages.Clear();
-            for (int i = 0; i < tracks.Count; i++)
+            int numberOfEntries = LoadFromFile ? Math.Min(tracks.Count, FileLines!.Count) : tracks.Count;
+            for (int i = 0; i < numberOfEntries; i++)
             {
                 TrackViewModel track = tracks[i];
-                string fileNameNoExtension = Path.GetFileNameWithoutExtension(track.FileName);
-                Dictionary<PropertyInfo, string>? trackPreview = TextToTags(placeholders, fileNameNoExtension);
+                string textSource = LoadFromFile ? FileLines![i] : Path.GetFileNameWithoutExtension(track.FileName);
+                Dictionary<PropertyInfo, string>? trackPreview = TextToTags(placeholders, textSource);
                 if (trackPreview != null) HasValidFormat = true;
                 //Load the correct track preview
                 if (i == PreviewIndex) newPreview = trackPreview;
@@ -247,4 +317,21 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
 
     [RelayCommand]
     private void Cancel() => dialog.Close();
+
+    [RelayCommand]
+    private async Task OpenTextFile()
+    {
+        IStorageFile? textFile = await fileService.OpenTextFile(null);
+        if (textFile == null) return;
+
+        FileName = textFile.Name;
+        List<string> newFileLines = [];
+        await using Stream stream = await textFile.OpenReadAsync();
+        using StreamReader reader = new StreamReader(stream);
+        while (await reader.ReadLineAsync() is { } line)
+        {
+            newFileLines.Add(line);
+        }
+        FileLines = newFileLines;
+    }
 }

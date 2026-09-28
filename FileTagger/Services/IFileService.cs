@@ -14,4 +14,5 @@ public interface IFileService
     public Task<string?> SaveImageFile(Bitmap bitmap, ImageFormat format, string suggestedName, string? bookmarkId);
     public Task<T?> LoadObjectData<T>() where T : class?;
     public Task SaveJsonData(object data);
+    public Task<IStorageFile?> OpenTextFile(string? bookmarkId);
 }
