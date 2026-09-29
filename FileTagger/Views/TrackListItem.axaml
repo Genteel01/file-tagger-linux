@@ -63,7 +63,7 @@
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
+        <Grid ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
