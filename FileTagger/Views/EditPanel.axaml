@@ -94,7 +94,7 @@
                 ItemsSource="{Binding FieldOptions[Comment]}"
                 Text="{Binding FieldTexts[Comment]}"
                 DropDownClosed="AutoCompleteBoxDropdownClosed"/>
-            <ContentControl Content="{Binding EmbeddedPicture}" Margin="8"/>
+            <ContentControl Content="{Binding EmbeddedPicture}" Margin="0 8"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
