@@ -12,15 +12,16 @@
 >
     <UserControl.Styles>
         <!--Handle spacing based on height of container-->
-        <Style Selector="Grid.IsShort StackPanel#SidePanel > :is(Control)">
-            <Setter Property="Margin" Value="8 2" />
+        <Style Selector="Grid.IsShort StackPanel#SidePanel">
+            <Setter Property="Spacing" Value="4" />
         </Style>
         <!--Default-->
-        <Style Selector="StackPanel#SidePanel > :is(Control)">
-            <Setter Property="Margin" Value="8 4" />
-        </Style>
         <Style Selector="StackPanel#SidePanel">
+            <Setter Property="Spacing" Value="8" />
             <Setter Property="Background" Value="{DynamicResource EditPanelBackgroundBrush}" />
+        </Style>
+        <Style Selector="StackPanel#SidePanel > :is(Control)">
+            <Setter Property="Margin" Value="8 0" />
         </Style>
         <Style Selector="controls|LabelledDropdown">
             <Setter Property="OpenOnFocusText" Value="{x:Static statics:Consts.UnchangedField}"/>
