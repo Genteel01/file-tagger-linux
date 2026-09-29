@@ -3,6 +3,8 @@
         <OutputType>WinExe</OutputType>
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
+        <!-- Compression slows launch, but not to a noticeable extent on my machine. Halved build size, so worth any speed hit.-->
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <ApplicationIcon>Assets/icon/tag-edit-blue.ico</ApplicationIcon>
         <TargetFramework>net10.0</TargetFramework>
