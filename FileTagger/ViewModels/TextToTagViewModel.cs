@@ -19,30 +19,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     private const string InvalidFormatMessage = "Invalid format: ({0})";
     public const char PlaceholderChar = '%';
 
-    public const double FileButtonHeight = 32;
-    public const double PreviewHeight = 20;
-    public const double MessageHeight = 16;
-    public const double Spacing = 4;
-
-    public double ViewHeight
-    {
-        get
-        {
-            double baseHeight = 150;
-            if (LoadFromFile)
-            {
-                baseHeight += FileButtonHeight + Spacing;
-            }
-            baseHeight += MessageHeight * ErrorMessages.Count;
-            baseHeight += MessageHeight * FileWarnings.Count;
-            baseHeight += MessageHeight * ParseMessages.Count;
-            baseHeight += PreviewHeight * PreviewText?.Count ?? 0;
-            if (ShowNavigationButtons) baseHeight += MessageHeight + (Spacing * 2);
-
-            return baseHeight;
-        }
-    }
-
     /// <summary>
     /// Whether we are loading tags from a text file
     /// </summary>
@@ -55,7 +31,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasFile))]
-    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     private partial List<string>? FileLines { get; set; } = null;
 
     /// <summary>
@@ -90,7 +65,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// The string defining the format to parse
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     public partial string FormatString { get; set; } = "";
     // ReSharper disable once UnusedParameterInPartialMethod
     partial void OnFormatStringChanged(string value)
@@ -107,7 +81,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// Text displaying a preview of the new fields to be applied
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     public partial Dictionary<PropertyInfo, string>? PreviewText { get; set; }
 
     /// <summary>
@@ -121,7 +94,6 @@ public partial class TextToTagViewModel(Window dialog, List<TrackViewModel> trac
     /// The index of the track to preview
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ViewHeight))]
     [NotifyPropertyChangedFor(nameof(PreviewFileName))]
     private partial int PreviewIndex { get; set; } = 0;
     // ReSharper disable once UnusedParameterInPartialMethod
