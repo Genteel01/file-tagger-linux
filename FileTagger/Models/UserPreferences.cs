@@ -20,6 +20,7 @@ public class UserPreferences
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
         RequestedLayoutSize = MyThemes.LayoutSize.Automatic;
+        FormatString = $"{TextToTagViewModel.PlaceholderChar}{nameof(TrackViewModel.Title)}{TextToTagViewModel.PlaceholderChar}";
     }
     /// <summary>
     /// String defining which fields the track list is sorted by,
@@ -53,6 +54,8 @@ public class UserPreferences
     public double EditPanelWidth { get; set; }
 
     public MyThemes.LayoutSize RequestedLayoutSize { get; set; }
+
+    public string FormatString { get; set; }
 
     /// <summary>
     /// Makes sure <see cref="ListColumnWidths"/> has an entry for each property on <see cref="TrackViewModel"/>

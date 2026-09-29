@@ -21,7 +21,7 @@ public class FakeFileService : IFileService
         return ([], false, null);
     }
 
-    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles()
+    public async Task<IReadOnlyList<IStorageFile>> OpenImageFiles(string? bookmarkId)
     {
         return [];
     }
@@ -51,5 +51,10 @@ public class FakeFileService : IFileService
     {
         string typeName = data.GetType().Name;
         _documents[typeName] = JsonSerializer.SerializeToDocument(data, _jsonOptions);
+    }
+
+    public async Task<IStorageFile?> OpenTextFile(string? bookmarkId)
+    {
+        return null;
     }
 }

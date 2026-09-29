@@ -11,5 +11,5 @@ public abstract partial class ViewModelBase : ObservableRecipient
     }
 
     [ObservableProperty]
-    private ObservableCollection<string>? _errorMessages;
+    public partial ObservableCollection<string> ErrorMessages { get; set; }
 }

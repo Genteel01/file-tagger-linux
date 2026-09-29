@@ -41,6 +41,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenAutoNumberCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OpenTextToTagsCommand))]
     [NotifyPropertyChangedFor(nameof(CanPasteTags))]
     private partial bool HasSelectedTracks { get; set; }
 
@@ -263,7 +264,8 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         HasSelectedTracks = SelectedTracks.Count > 0;
         SelectedTracksHaveChanges = HasSelectedTracks && SelectedTracks.Any(track => track.Changed);
         CanCopyTags = SelectedTracks.Count == 1;
-        WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(SelectedTracks.ToList()));
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
+        WeakReferenceMessenger.Default.Send(new SelectedItemsMessage(sortedSelected));
     }
 
     /// <summary>
@@ -299,7 +301,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     [RelayCommand]
     private async Task OpenMusicFiles(CancellationToken token)
     {
-        ErrorMessages?.Clear();
+        ErrorMessages.Clear();
         try
         {
             string? lastDirectory = _preferenceService.SystemPreferenceData.LastDirectory;
@@ -314,7 +316,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ErrorMessages.Add(e.Message);
             throw;
         }
     }
@@ -324,7 +326,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// </summary>
     public async Task OpenInitialFiles()
     {
-        ErrorMessages?.Clear();
+        ErrorMessages.Clear();
         try
         {
             string? lastDirectory = _preferenceService.SystemPreferenceData.LastDirectory;
@@ -335,7 +337,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ErrorMessages.Add(e.Message);
             throw;
         }
     }
@@ -453,7 +455,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
         if (properties.Count == 0)
         {
-            ErrorMessages?.Add("Sorting by input " + fields + ", which has no valid fields");
+            ErrorMessages.Add("Sorting by input " + fields + ", which has no valid fields");
             return [];
         }
 
@@ -500,7 +502,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             initialDiscNumber = 1;
         }
 
-        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, false);
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
         AutoNumberViewModel vm = new AutoNumberViewModel(dialog, sortedSelected)
         {
             FirstValue = initialValue,
@@ -565,5 +567,46 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             track.ClearTags();
         }
         SelectionChanged();
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    public async Task OpenTextToTags()
+    {
+        await OpenTextImportDialog(true);
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedTracks))]
+    public async Task OpenFilenameToTags()
+    {
+        await OpenTextImportDialog(false);
+    }
+
+    /// <summary>
+    /// Opens the dialog to load tags either from a text file or from the tracks' filenames
+    /// </summary>
+    /// <param name="loadFile">True to load from text file, false to load from filename</param>
+    private async Task OpenTextImportDialog(bool loadFile)
+    {
+        if (_getDialogTarget.Invoke() is not Window target) return;
+
+        TextToTagsDialog dialog = new TextToTagsDialog();
+
+        List<TrackViewModel> sortedSelected = SortGivenTracks(SelectedTracks.ToList(), CurrentSort, SortDescending);
+        string startingFormat = _preferenceService.UserPreferenceData.FormatString;
+        string? initialFileLocation = _preferenceService.SystemPreferenceData.LastDirectory;
+        TextToTagViewModel vm = new TextToTagViewModel(dialog, sortedSelected, _fileService)
+        {
+            FormatString = startingFormat,
+            LoadFromFile = loadFile,
+            InitialFileLocation = initialFileLocation
+        };
+        dialog.DataContext = vm;
+
+        string? finalFormat = await dialog.ShowDialog<string?>(target);
+        if (finalFormat != null)
+        {
+            PropertyInfo formatProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.FormatString))!;
+            _preferenceService.StorePreferenceItem(formatProperty, finalFormat);
+        }
     }
 }

@@ -1,0 +1,120 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
+        xmlns:controls="clr-namespace:FileTagger.Controls"
+        mc:Ignorable="d"
+        Width="400" Height="{Binding ViewHeight}"
+        d:DesignWidth="400" d:DesignHeight="200"
+        x:Class="FileTagger.Dialogs.TextToTagsDialog"
+        x:DataType="viewModels:TextToTagViewModel" CanMinimize="False"
+        Title="Text to Tags"
+        WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False">
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Padding" Value="4 4 24 4" />
+        </Style>
+        <Style Selector="TextBlock.Error">
+            <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.Success">
+            <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
+        </Style>
+        <Style Selector="Button#InsertButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4 0" />
+        </Style>
+        <Style Selector="ItemsControl">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="ScrollViewer.Messages">
+            <Setter Property="MaxHeight" Value="300"/>
+        </Style>
+        <Style Selector="ScrollViewer.Messages TextBlock">
+            <Setter Property="Height" Value="{x:Static viewModels:TextToTagViewModel.MessageHeight}"/>
+        </Style>
+        <Style Selector="ItemsControl.Error">
+            <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}"/>
+        </Style>
+        <Style Selector="ItemsControl.Warning">
+            <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
+        </Style>
+        <Style Selector="ItemsControl.Preview TextBlock">
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+    </Window.Styles>
+    <DockPanel>
+        <controls:DialogControls DockPanel.Dock="Bottom"
+                                 ConfirmCommand="{Binding ApplyChangesCommand}" ConfirmContent="Apply"
+                                 CancelCommand="{Binding CancelCommand}" CancelContent="Cancel"/>
+        <StackPanel HorizontalAlignment="Stretch" Margin="8" Spacing="{x:Static viewModels:TextToTagViewModel.Spacing}">
+            <!--File controls-->
+            <Button Command="{Binding OpenTextFileCommand}" IsVisible="{Binding LoadFromFile}"
+                    Height="{x:Static viewModels:TextToTagViewModel.FileButtonHeight}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="{Binding FileName}" VerticalAlignment="Center" Classes.Error="{Binding !HasFile}"/>
+                    <PathIcon Classes="Horizontal" Data="{StaticResource TextFileIcon}"/>
+                </StackPanel>
+            </Button>
+            <ScrollViewer IsVisible="{Binding LoadFromFile}" HorizontalScrollBarVisibility="Auto" Classes="Messages">
+                <ItemsControl ItemsSource="{Binding ParseMessages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Text}"
+                                       Classes.Error="{Binding IsError}" Classes.Success="{Binding !IsError}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <ScrollViewer IsVisible="{Binding LoadFromFile}" HorizontalScrollBarVisibility="Auto" Classes="Messages">
+                <ItemsControl ItemsSource="{Binding FileWarnings}" Classes="Warning"/>
+            </ScrollViewer>
+            <!--End file controls-->
+            <StackPanel>
+                <Label Content="Format" Target="FormatField"/>
+                <Panel>
+                    <TextBox Name="FormatField" Text="{Binding FormatString}" Height="{StaticResource EditControlHeight}" LineHeight="24" PlaceholderText="%Format%"/>
+                    <Button Width="24" HorizontalAlignment="Right" Name="InsertButton">
+                        <PathIcon Classes="Horizontal" Data="{StaticResource DownChevronIcon}"/>
+                        <Button.Flyout>
+                            <Flyout>
+                                <ListBox
+                                    ItemsSource="{Binding TrackPropertyNames, Converter={StaticResource UpperCamelCaseSpacer}}"
+                                    SelectionChanged="NewPropertySelected"
+                                    BorderThickness="0"/>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </Panel>
+            </StackPanel>
+
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" Classes="Messages">
+                <ItemsControl ItemsSource="{Binding ErrorMessages}" Classes="Error"/>
+            </ScrollViewer>
+
+            <Grid IsVisible="{Binding ShowNavigationButtons}" ColumnDefinitions="Auto, *, Auto" Height="{x:Static viewModels:TextToTagViewModel.MessageHeight}">
+                <Button Grid.Column="0" Command="{Binding PreviewPreviousCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource LeftChevronIcon}"/></Button>
+                <TextBlock Grid.Column="1" Text="{Binding PreviewFileName}" HorizontalAlignment="Stretch" TextAlignment="Center" LineHeight="16"/>
+                <Button Grid.Column="2" Command="{Binding PreviewNextCommand}" Padding="0"><PathIcon Height="8" Data="{StaticResource RightChevronIcon}"/></Button>
+            </Grid>
+            <TextBlock Height="16" FontWeight="Bold" Text="Preview:"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding PreviewText}" Classes="Preview">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Height="{x:Static viewModels:TextToTagViewModel.PreviewHeight}">
+                                <TextBlock FontWeight="Bold" Text="{Binding Key.Name, Converter={StaticResource UpperCamelCaseSpacer}}"/>
+                                <TextBlock Text=": " />
+                                <TextBlock Text="{Binding Value}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+
+    </DockPanel>
+</Window>

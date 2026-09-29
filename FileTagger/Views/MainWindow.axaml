@@ -48,6 +48,12 @@
                 <MenuItem Header="_Auto Number Tracks" Command="{Binding OpenAutoNumberCommand}">
                     <MenuItem.Icon><TextBlock Text="1-9" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" FontSize="10"/></MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="_Filename To Tags" Command="{Binding OpenFilenameToTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource MusicFileIcon}"/></MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Te_xt To Tags" Command="{Binding OpenTextToTagsCommand}">
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource TextFileIcon}"/></MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings" Padding="4">
                 <MenuItem Header="_Change Theme" ItemsSource="{Binding Themes}"

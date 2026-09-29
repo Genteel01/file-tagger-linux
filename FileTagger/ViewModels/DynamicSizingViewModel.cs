@@ -49,7 +49,7 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
                 Screen? activeScreen = topLevel.Screens.ScreenFromTopLevel(topLevel);
                 if (activeScreen == null) return;
                 int height = activeScreen.Bounds.Height;
-                IsCompact = height < HeightThreshold;
+                IsCompact = height <= HeightThreshold;
                 break;
             }
         }
