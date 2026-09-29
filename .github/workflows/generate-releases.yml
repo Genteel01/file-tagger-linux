@@ -48,7 +48,6 @@ jobs:
         dotnet publish $env:Project_Path
         -c $env:Configuration
         -r $env:Runtimes
-        --self-contained true
         -p:PublishSingleFile=true
         -p:IncludeNativeLibrariesForSelfExtract=true
         -o ./publish
