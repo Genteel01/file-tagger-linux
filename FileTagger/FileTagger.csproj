@@ -14,11 +14,14 @@
         Base build size ~96MB, Compressed build size ~48MB, ReadyToRun+Compressed build size ~63MB
         Compression launch slowdown was not noticeable to me, ReadyToRun+Compression launches faster than base
         Going with ReadyToRun+Compression for faster launch and smaller, but not smallest, size
+        PublishTrimmed is also an option to reduce size, but it breaks things and would need refactoring, mostly reflection and json (which might be reflection)
         -->
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
         <PublishReadyToRun>true</PublishReadyToRun>
     </PropertyGroup>
-
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
