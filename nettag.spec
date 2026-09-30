@@ -8,6 +8,7 @@ Source0:    https://www.example.com/%{name}/releases/%{name}-%{version}.tar.gz
 ExclusiveArch: x86_64
 
 %undefine _debugsource_packages
+%global __strip /bin/true
 
 %description
 Software for editing metadata tags on audio files
