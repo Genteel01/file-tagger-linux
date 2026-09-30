@@ -1,0 +1,12 @@
+[Desktop Entry]
+Categories=Audio;AudioVideo;AudioVideoEditing;
+GenericName=Tag Editor
+Comment=Audio Tag Editor
+Exec=nettag
+Icon=nettag
+Keywords=music;audio;tag;tagging;tagger;metadata;file;
+Name=NetTag
+StartupNotify=true
+StartupWMClass=nettag
+Terminal=false
+Type=Application

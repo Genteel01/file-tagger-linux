@@ -8,6 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <!-- Compression slows launch but lowers build size.
         ReadyToRun speeds up launch, but increases build size.
         Base build size ~96MB, Compressed build size ~48MB, ReadyToRun+Compressed build size ~63MB
