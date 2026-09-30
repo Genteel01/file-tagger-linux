@@ -4,13 +4,15 @@ on:
   pull_request:
     types: [closed]
     branches: [ "master" ]
+  push:
+    branches: [ "building" ]
 
 permissions:
   contents: write
 
 jobs:
   build_portable:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     name: Build Portable ${{ matrix.runtimes }}
 
     strategy:
@@ -28,7 +30,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v7.0.1
       with:
-        ref: ${{ github.event.pull_request.merge_commit_sha }}
+        ref: ${{ github.event_name == 'push' && 'building' || github.event.pull_request.merge_commit_sha }}
 
     # Install the .NET Core workload
     - name: Setup .NET
