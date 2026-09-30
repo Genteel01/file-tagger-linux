@@ -65,12 +65,12 @@ jobs:
         shell: bash
         run: |
           # Rename executable
-          mv "./publish/windows/FileTagger" "./publish/windows/$Package_Name"
-          chmod 755 "./publish/windows/$Package_Name"
+          mv "./publish/windows/FileTagger.exe" "./publish/windows/$Package_Name.exe"
+          chmod 755 "./publish/windows/$Package_Name.exe"
 
           # Create zip archive
           cd ./publish/windows/
-          zip "$Package_Name-$Package_Version-Portable.zip" "$Package_Name"
+          zip "$Package_Name-$Package_Version-Portable.zip" "$Package_Name.exe"
           cd ../..
       
 
