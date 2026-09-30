@@ -93,10 +93,10 @@ jobs:
       uses: actions/upload-artifact@v7.0.1
       with:
         name: NetTag-Portable-${{ matrix.runtimes }}
-        path: ./publish/NetTag-Portable-*
+        path: ./publish/NetTag-Portable-*.zip
 
   release:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     name: Create GitHub Release
     needs: build_portable
     runs-on: windows-latest
