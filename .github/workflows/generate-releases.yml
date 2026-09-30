@@ -11,13 +11,9 @@ permissions:
   contents: write
 
 jobs:
-  build_portable:
-    if: github.event_name == 'pull_request' || github.event.pull_request.merged == true
+  build_windows:
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     name: Build Portable ${{ matrix.runtimes }}
-
-    strategy:
-      matrix:
-        runtimes: [linux-x64, win-x64]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -46,7 +42,7 @@ jobs:
       run: >-
         dotnet publish $env:Project_Path
         -c Release
-        -r $env:Runtimes
+        -r win-x64
         -o ./publish
       env:
         Runtimes: ${{ matrix.runtimes }}
@@ -56,20 +52,9 @@ jobs:
       run: |
         $runtime = "${{ matrix.runtimes }}"
         
-        if ($runtime -eq "linux-x64") {
-         $source = "./publish/FileTagger"
-         $destination = "./publish/NetTag-Portable"
-         $zip = "./publish/NetTag-Portable-Linux.zip"
-        }
-        elseif ($runtime -eq "win-x64") {
-         $source = "./publish/FileTagger.exe"
-         $destination = "./publish/NetTag-Portable.exe"
-         $zip = "./publish/NetTag-Portable-Windows.zip"
-        }
-        else {
-         Write-Error "Unsupported runtime: $runtime"
-         exit 1
-        }
+        $source = "./publish/FileTagger.exe"
+        $destination = "./publish/NetTag-Portable.exe"
+        $zip = "./publish/NetTag-Portable-Windows.zip"
         
         if (-not (Test-Path $source -PathType Leaf)) {
          Write-Error "Executable not found: $source"
@@ -91,8 +76,8 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: NetTag-Portable-${{ matrix.runtimes }}
-        path: ./publish/NetTag-Portable-*.zip
+        name: NetTag-Portable-Windows
+        path: ./publish/NetTag-Portable-Windows.zip
 
   build_rpm:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
@@ -145,7 +130,6 @@ jobs:
           
           #Rename the executable
           mv "./publish/$Package_Name-$Package_Version/FileTagger" "./publish/$Package_Name-$Package_Version/$Package_Name"
-          ls -lh "./publish/$Package_Name-$Package_Version/$Package_Name"
           
           # Copy the desktop file and icons
           mkdir -p "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/"
@@ -165,6 +149,7 @@ jobs:
           sed -i -E "s/^Version:.*/Version:    $Package_Version/; s/^Release:.*/Release:    $RELEASE/" nettag.spec
           
           # Copy the tarball to the SOURCES directory and build the RPM
+          # Manually building these directories because the runner doesn't have the rpmbuild tools installed
           mkdir -p ~/rpmbuild/SOURCES
           mkdir -p ~/rpmbuild/BUILD
           mkdir -p ~/rpmbuild/RPMS
@@ -188,7 +173,13 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: NetTag-RPM
+          name: nettag-rpm
+          path: ./publish/rpm/*.rpm
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: nettag-tar-gz
           path: ./publish/rpm/*.rpm
 
   release:
