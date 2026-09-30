@@ -61,11 +61,13 @@ jobs:
          $directory = "./publish/linux-x64"
          $source = "./publish/FileTagger"
          $destination = "./publish/linux-x64/NetTag-Linux-Portable"
+         $zip = "./publish/linux-x64/NetTag-Linux-Portable.zip"
         }
         elseif ($runtime -eq "win-x64") {
          $directory = "./publish/win-x64"
          $source = "./publish/FileTagger.exe"
          $destination = "./publish/win-x64/NetTag-Windows-Portable.exe"
+         $zip = "./publish/win-x64/NetTag-Windows-Portable.zip"
         }
         else {
          Write-Error "Unsupported runtime: $runtime"
@@ -74,21 +76,27 @@ jobs:
         
         if (-not (Test-Path $source -PathType Leaf)) {
          Write-Error "Executable not found: $source"
-         Write-Host "Contents of publish directory:"
-         Get-ChildItem "./publish" | Format-Table Name, Length
          exit 1
         }
-
+        
         New-Item -Path $directory -Type Directory
         Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
-
+        
+        $compress = @{
+        Path = $destination
+        DestinationPath = $zip
+        }
+        Compress-Archive @compress
+        
+        Write-Host "Contents of publish directory:"
+        Get-ChildItem "./publish" | Format-Table Name, Length
         Write-Host "Created: $destination"
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v7.0.1
       with:
         name: NetTag-${{ matrix.runtimes }}
-        path: ./publish/${{ matrix.runtimes }}/NetTag-*
+        path: ./publish/${{ matrix.runtimes }}/NetTag-*.zip
 
   release:
     if: github.event.pull_request.merged == true
