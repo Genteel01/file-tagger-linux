@@ -1,6 +1,6 @@
 Name:       nettag
-Version:    0.12
-Release:    7
+Version:    0.13
+Release:    8
 Summary:    Software for editing metadata tags on audio files
 License:    FIXME
 
