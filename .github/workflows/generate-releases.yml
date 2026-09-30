@@ -145,6 +145,7 @@ jobs:
           
           #Rename the executable
           mv "./publish/$Package_Name-$Package_Version/FileTagger" "./publish/$Package_Name-$Package_Version/$Package_Name"
+          ls -lh "./publish/$Package_Name-$Package_Version/$Package_Name"
           
           # Copy the desktop file and icons
           mkdir -p "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/"
