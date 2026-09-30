@@ -9,9 +9,13 @@ permissions:
   contents: write
 
 jobs:
-  build_windows:
+  build_portable:
     if: github.event.pull_request.merged == true
-    name: Build Windows
+    name: Build Portable ${{ matrix.runtimes }}
+
+    strategy:
+      matrix:
+        runtimes: [linux-x64, win-x64]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -40,16 +44,32 @@ jobs:
       run: >-
         dotnet publish $env:Project_Path
         -c Release
-        -r win-x64
+        -r $env:Runtimes
         -p:IncludeNativeLibrariesForSelfExtract=true
         -o ./publish
+      env:
+        Runtimes: ${{ matrix.runtimes }}
 
     - name: Rename executable
       shell: pwsh
       run: |
-        $source = "./publish/FileTagger.exe"
-        $destination = "./publish/NetTag-Windows-Portable.exe"
-
+        $runtime = "${{ matrix.runtimes }}"
+        
+        if ($runtime -eq "linux-x64") {
+         $directory = "./publish/linux-x64"
+         $source = "./publish/FileTagger"
+         $destination = "./publish/linux-x64/NetTag-Linux-Portable"
+        }
+        elseif ($runtime -eq "win-x64") {
+         $directory = "./publish/win-x64"
+         $source = "./publish/FileTagger.exe"
+         $destination = "./publish/win-x64/NetTag-Windows-Portable.exe"
+        }
+        else {
+         Write-Error "Unsupported runtime: $runtime"
+         exit 1
+        }
+        
         if (-not (Test-Path $source -PathType Leaf)) {
          Write-Error "Executable not found: $source"
          Write-Host "Contents of publish directory:"
@@ -57,6 +77,7 @@ jobs:
          exit 1
         }
 
+        New-Item -Path $directory -Type Directory
         Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
 
         Write-Host "Created: $destination"
@@ -64,8 +85,8 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: NetTag-Windows-Portable
-        path: ./publish/NetTag-Windows*
+        name: NetTag-${{ matrix.runtimes }}
+        path: ./publish/${{ matrix.runtimes }}/NetTag-*
 
   release:
     if: github.event.pull_request.merged == true
