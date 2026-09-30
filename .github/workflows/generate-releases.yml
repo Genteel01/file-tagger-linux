@@ -11,8 +11,66 @@ permissions:
   contents: write
 
 jobs:
-  build_releases:
+  check_package_version:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
+    name: Check whether PackageVersion changed
+    runs-on: ubuntu-latest
+
+    outputs:
+      changed: ${{ steps.compare.outputs.changed }}
+      package_version: ${{ steps.compare.outputs.package_version }}
+
+    env:
+      Project_Path: FileTagger/FileTagger.csproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event_name == 'push' && 'building' || github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Compare PackageVersion
+        id: compare
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          current_version=$(dotnet msbuild "$Project_Path" -getProperty:PackageVersion)
+
+          if [[ "$EVENT_NAME" == "push" ]]; then
+            previous_sha="$BEFORE_SHA"
+          else
+            previous_sha=$(git rev-parse HEAD^)
+          fi
+
+          if [[ -z "$previous_sha" || "$previous_sha" =~ ^0+$ ]]; then
+            changed=false
+          else
+            previous_dir="$RUNNER_TEMP/package-version-base"
+            git worktree add --detach "$previous_dir" "$previous_sha"
+            previous_version=$(dotnet msbuild "$previous_dir/$Project_Path" -getProperty:PackageVersion)
+            git worktree remove --force "$previous_dir"
+
+            if [[ "$current_version" != "$previous_version" ]]; then
+              changed=true
+            else
+              changed=false
+            fi
+          fi
+
+          echo "package_version=$current_version" >> "$GITHUB_OUTPUT"
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+  build_releases:
+    needs: check_package_version
+    if: needs.check_package_version.outputs.changed == 'true'
     name: Build Windows Executable and Linux .tar.gz and .rpm
 
     runs-on: ubuntu-latest  # For a list of available runner types, refer to
@@ -22,7 +80,7 @@ jobs:
       Solution_Name: FileTagger.sln
       Project_Path: FileTagger/FileTagger.csproj
       Package_Name: nettag
-      Package_Version: 0.1
+      Package_Version: ${{ needs.check_package_version.outputs.package_version }}
 
     steps:
       - name: Checkout
@@ -39,10 +97,6 @@ jobs:
       # Restore the application to populate the obj folder
       - name: Restore the application
         run: dotnet build "$Solution_Name" -c Release
-
-      - name: Set package version
-        shell: bash
-        run: echo "Package_Version=$(dotnet msbuild $Project_Path -getProperty:PackageVersion)" >> "$GITHUB_ENV"
 
       - name: Publish Windows
         run: >-
@@ -142,9 +196,9 @@ jobs:
           path: ./publish/tar/*.tar.gz
 
   release:
-    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    if: needs.check_package_version.outputs.changed == 'true'
     name: Create GitHub Release
-    needs: build_releases
+    needs: [check_package_version, build_releases]
     runs-on: ubuntu-latest
 
     steps:
@@ -158,8 +212,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*
-          tag_name: AutomatedRelease ${{ needs.build_releases.outputs.Package_Version }}
-          name: NetTag ${{ needs.build_releases.outputs.Package_Version }}
+          tag_name: AutomatedRelease ${{ needs.check_package_version.outputs.package_version }}
+          name: NetTag ${{ needs.check_package_version.outputs.package_version }}
           body: |
             ## ${{ github.event.pull_request.title }}
 
