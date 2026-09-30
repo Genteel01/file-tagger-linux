@@ -58,16 +58,14 @@ jobs:
         $runtime = "${{ matrix.runtimes }}"
         
         if ($runtime -eq "linux-x64") {
-         $directory = "./publish/linux-x64"
          $source = "./publish/FileTagger"
-         $destination = "./publish/linux-x64/NetTag-Linux-Portable"
-         $zip = "./publish/linux-x64/NetTag-Linux-Portable.zip"
+         $destination = "./publish/NetTag-Portable-Linux"
+         $zip = "./publish/NetTag-Portable-Linux.zip"
         }
         elseif ($runtime -eq "win-x64") {
-         $directory = "./publish/win-x64"
          $source = "./publish/FileTagger.exe"
-         $destination = "./publish/win-x64/NetTag-Windows-Portable.exe"
-         $zip = "./publish/win-x64/NetTag-Windows-Portable.zip"
+         $destination = "./publish/NetTag-Portable-Windows.exe"
+         $zip = "./publish/NetTag-Portable-Windows.zip"
         }
         else {
          Write-Error "Unsupported runtime: $runtime"
@@ -79,7 +77,6 @@ jobs:
          exit 1
         }
         
-        New-Item -Path $directory -Type Directory
         Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
         
         $compress = @{
@@ -95,8 +92,8 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: NetTag-${{ matrix.runtimes }}
-        path: ./publish/${{ matrix.runtimes }}/NetTag-*.zip
+        name: NetTag-Portable-${{ matrix.runtimes }}
+        path: ./publish/NetTag-Portable-*
 
   release:
     if: github.event.pull_request.merged == true
