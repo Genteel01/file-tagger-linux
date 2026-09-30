@@ -4,15 +4,13 @@ on:
   pull_request:
     types: [closed]
     branches: [ "master" ]
-  push:
-    branches: [ "building" ]
 
 permissions:
   contents: write
 
 jobs:
   check_package_version:
-    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     name: Check whether PackageVersion changed
     runs-on: ubuntu-latest
 
@@ -27,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7.0.1
         with:
-          ref: ${{ github.event_name == 'push' && 'building' || github.event.pull_request.merge_commit_sha }}
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
 
       - name: Setup .NET
@@ -38,17 +36,9 @@ jobs:
       - name: Compare PackageVersion
         id: compare
         shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          BEFORE_SHA: ${{ github.event.before }}
         run: |
           current_version=$(dotnet msbuild "$Project_Path" -getProperty:PackageVersion)
-
-          if [[ "$EVENT_NAME" == "push" ]]; then
-            previous_sha="$BEFORE_SHA"
-          else
-            previous_sha=$(git rev-parse HEAD^)
-          fi
+          previous_sha=$(git rev-parse HEAD^)
 
           if [[ -z "$previous_sha" || "$previous_sha" =~ ^0+$ ]]; then
             changed=false
@@ -86,7 +76,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7.0.1
         with:
-          ref: ${{ github.event_name == 'push' && 'building' || github.event.pull_request.merge_commit_sha }}
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       # Install the .NET Core workload
       - name: Setup .NET
