@@ -1,5 +1,5 @@
 NAME=nettag
-VERSION=0.1
+VERSION="${VERSION:-0.1}"
 
 dotnet publish FileTagger/FileTagger.csproj -c Release -r linux-x64 -o "./publish/$NAME-$VERSION"
 rm "./publish/$NAME-$VERSION"/*.pdb
@@ -14,5 +14,7 @@ cd ./publish/
 tar -cvzf "./tar/$NAME-$VERSION.tar.gz" "./$NAME-$VERSION"
 cd ..
 cp ./publish/tar/* ~/rpmbuild/SOURCES/
+RELEASE=$(awk '/^Release:/ { print $2 + 1; exit }' nettag.spec)
+sed -i -E "s/^Version:.*/Version:    $VERSION/; s/^Release:.*/Release:    $RELEASE/" nettag.spec
 rpmbuild -bb nettag.spec
 mv ~/rpmbuild/RPMS/x86_64/* ./publish/rpm/
