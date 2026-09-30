@@ -9,86 +9,187 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  check_package_version:
     if: github.event.pull_request.merged == true
-    name: Build ${{ matrix.runtimes }}
+    name: Check whether PackageVersion changed
+    runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        configuration: [Release]
-        runtimes: [linux-x64, win-x64]
+    outputs:
+      changed: ${{ steps.compare.outputs.changed }}
+      package_version: ${{ steps.compare.outputs.package_version }}
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    env:
+      Project_Path: FileTagger/FileTagger.csproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Compare PackageVersion
+        id: compare
+        shell: bash
+        run: |
+          current_version=$(dotnet msbuild "$Project_Path" -getProperty:PackageVersion)
+          previous_sha=$(git rev-parse HEAD^)
+
+          if [[ -z "$previous_sha" || "$previous_sha" =~ ^0+$ ]]; then
+            changed=false
+          else
+            previous_dir="$RUNNER_TEMP/package-version-base"
+            git worktree add --detach "$previous_dir" "$previous_sha"
+            previous_version=$(dotnet msbuild "$previous_dir/$Project_Path" -getProperty:PackageVersion)
+            git worktree remove --force "$previous_dir"
+
+            if [[ "$current_version" != "$previous_version" ]]; then
+              changed=true
+            else
+              changed=false
+            fi
+          fi
+
+          echo "package_version=$current_version" >> "$GITHUB_OUTPUT"
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+  build_releases:
+    needs: check_package_version
+    if: needs.check_package_version.outputs.changed == 'true'
+    name: Build Windows Executable and Linux .tar.gz and .rpm
+
+    runs-on: ubuntu-latest  # For a list of available runner types, refer to
+    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
       Solution_Name: FileTagger.sln
       Project_Path: FileTagger/FileTagger.csproj
+      Package_Name: nettag
+      Package_Version: ${{ needs.check_package_version.outputs.package_version }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v7.0.1
-      with:
-        ref: ${{ github.event.pull_request.merge_commit_sha }}
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
-    # Install the .NET Core workload
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v6.0.0
-      with:
-        dotnet-version: 10.0.x
+      # Install the .NET Core workload
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 10.0.x
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
-      run: dotnet build $env:Solution_Name -c $env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+      # Restore the application to populate the obj folder
+      - name: Restore the application
+        run: dotnet build "$Solution_Name" -c Release
 
-    - name: Publish
-      run: dotnet publish $env:Project_Path -c $env:Configuration -r $env:Runtimes --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
-      env:
-        Configuration: ${{ matrix.configuration }}
-        Runtimes: ${{ matrix.runtimes }}
+      - name: Publish Windows
+        run: >-
+          dotnet publish "$Project_Path"
+          -c Release
+          -r win-x64
+          -o ./publish/windows
 
-    - name: Rename executable
-      shell: pwsh
-      run: |
-        $runtime = "${{ matrix.runtimes }}"
+      - name: Publish Linux
+        run: >-
+          dotnet publish "$Project_Path"
+          -c Release
+          -r linux-x64
+          -o "./publish/$Package_Name-$Package_Version"
 
-        if ($runtime -eq "linux-x64") {
-         $source = "./publish/FileTagger"
-         $destination = "./publish/NetTag-linux-x64"
-        }
-        elseif ($runtime -eq "win-x64") {
-         $source = "./publish/FileTagger.exe"
-         $destination = "./publish/NetTag-win-x64.exe"
-        }
-        else {
-         Write-Error "Unsupported runtime: $runtime"
-         exit 1
-        }
+      - name: Install RPM development tools
+        run: sudo apt-get update && sudo apt-get install -y rpm
 
-        if (-not (Test-Path $source -PathType Leaf)) {
-         Write-Error "Executable not found: $source"
-         Write-Host "Contents of publish directory:"
-         Get-ChildItem "./publish" | Format-Table Name, Length
-         exit 1
-        }
+      - name: Rename Windows Executable
+        shell: bash
+        run: |
+          # Rename executable
+          mv "./publish/windows/FileTagger.exe" "./publish/windows/$Package_Name.exe"
+          chmod 755 "./publish/windows/$Package_Name.exe"
 
-        Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
+          # Create zip archive
+          cd ./publish/windows/
+          zip "$Package_Name-$Package_Version-Portable.zip" "$Package_Name.exe"
+          cd ../..
+      
 
-        Write-Host "Created: $destination"
+      - name: Build RPM
+        shell: bash
+        run: |        
+          # Remove the debug artifacts
+          rm "./publish/$Package_Name-$Package_Version"/*.pdb
+          
+          #Rename the executable
+          mv "./publish/$Package_Name-$Package_Version/FileTagger" "./publish/$Package_Name-$Package_Version/$Package_Name"
+          chmod 755 "./publish/$Package_Name-$Package_Version/$Package_Name"
+          
+          # Copy the desktop file and icons
+          mkdir -p "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/"
+          cp ./FileTagger/Assets/icon/tag-edit-blue.svg "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/$Package_Name.svg"
+          chmod 644 "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/$Package_Name.svg"
+          cp "$Package_Name.desktop" "./publish/$Package_Name-$Package_Version/"
+          chmod 644 "./publish/$Package_Name-$Package_Version/$Package_Name.desktop"
+          
+          # Create the tarball
+          mkdir -p ./publish/tar/
+          cd ./publish/
+          tar -cvzf "./tar/$Package_Name-$Package_Version.tar.gz" "./$Package_Name-$Package_Version"
+          cd ..
+          
+          # Increment the release number and set the version number in the spec file
+          RELEASE=$(awk '/^Release:/ { print $2 + 1; exit }' nettag.spec)
+          sed -i -E "s/^Version:.*/Version:    $Package_Version/; s/^Release:.*/Release:    $RELEASE/" nettag.spec
+          
+          # Copy the tarball to the SOURCES directory and build the RPM
+          # Manually building these directories because the runner doesn't have the rpmbuild tools installed
+          mkdir -p ~/rpmbuild/SOURCES
+          mkdir -p ~/rpmbuild/BUILD
+          mkdir -p ~/rpmbuild/RPMS
+          mkdir -p ~/rpmbuild/SPECS
+          mkdir -p ~/rpmbuild/SRPMS
+          cp ./publish/tar/* ~/rpmbuild/SOURCES/
+          rpmbuild -bb nettag.spec
+          
+          # Move the RPM to the publish directory
+          mkdir -p ./publish/rpm/
+          mv ~/rpmbuild/RPMS/x86_64/* ./publish/rpm/
 
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v7.0.1
-      with:
-        name: NetTag-${{ matrix.runtimes }}
-        path: ./publish/NetTag-${{ matrix.runtimes }}*
+      - name: Commit spec file changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add nettag.spec
+          git diff --staged --quiet || git commit -m "chore: increment RPM release and version number [skip ci]"
+          git push
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: nettag-windows-portable
+          path: ./publish/windows/*.zip
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: nettag-rpm
+          path: ./publish/rpm/*.rpm
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: nettag-tar-gz
+          path: ./publish/tar/*.tar.gz
 
   release:
-    if: github.event.pull_request.merged == true
+    if: needs.check_package_version.outputs.changed == 'true'
     name: Create GitHub Release
-    needs: build
-    runs-on: windows-latest
+    needs: [check_package_version, build_releases]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download build artifacts
@@ -97,29 +198,10 @@ jobs:
           path: ./artifacts
           merge-multiple: true
 
-      - name: Get next release number
-        id: release
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          $count = gh release list --repo "${{ github.repository }}" --limit 1000 --json name --jq 'length'
-          $next = [int]$count + 1
-          
-          Write-Host "Previous releases: $count"
-          Write-Host "Next release number: $next"
-          
-          "number=$next" >> $env:GITHUB_OUTPUT
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*
-          tag_name: AutomatedRelease${{ steps.release.outputs.number }}
-          name: NetTag ${{ steps.release.outputs.number }}
-          body: |
-            ## ${{ github.event.pull_request.title }}
-
-            ${{ github.event.pull_request.body }}
-
-            [View full changelog](https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/commits)
+          tag_name: v${{ needs.check_package_version.outputs.package_version }}
+          name: NetTag ${{ needs.check_package_version.outputs.package_version }}
+          generate_release_notes: true
