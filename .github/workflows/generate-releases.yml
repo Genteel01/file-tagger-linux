@@ -11,77 +11,9 @@ permissions:
   contents: write
 
 jobs:
-  build_windows:
+  build_releases:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
-    name: Build Portable ${{ matrix.runtimes }}
-
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
-    env:
-      Solution_Name: FileTagger.sln
-      Project_Path: FileTagger/FileTagger.csproj
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v7.0.1
-      with:
-        ref: ${{ github.event_name == 'push' && 'building' || github.event.pull_request.merge_commit_sha }}
-
-    # Install the .NET Core workload
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v6.0.0
-      with:
-        dotnet-version: 10.0.x
-
-    # Restore the application to populate the obj folder
-    - name: Restore the application
-      run: dotnet build $env:Solution_Name -c Release
-
-    - name: Publish
-      run: >-
-        dotnet publish $env:Project_Path
-        -c Release
-        -r win-x64
-        -o ./publish
-      env:
-        Runtimes: ${{ matrix.runtimes }}
-
-    - name: Rename executable
-      shell: pwsh
-      run: |
-        $runtime = "${{ matrix.runtimes }}"
-        
-        $source = "./publish/FileTagger.exe"
-        $destination = "./publish/NetTag-Portable.exe"
-        $zip = "./publish/NetTag-Portable-Windows.zip"
-        
-        if (-not (Test-Path $source -PathType Leaf)) {
-         Write-Error "Executable not found: $source"
-         exit 1
-        }
-        
-        Rename-Item -Path $source -NewName (Split-Path $destination -Leaf)
-        
-        $compress = @{
-        Path = $destination
-        DestinationPath = $zip
-        }
-        Compress-Archive @compress
-        
-        Write-Host "Contents of publish directory:"
-        Get-ChildItem "./publish" | Format-Table Name, Length
-        Write-Host "Created: $destination"
-
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v7.0.1
-      with:
-        name: NetTag-Portable-Windows
-        path: ./publish/NetTag-Portable-Windows.zip
-
-  build_linux:
-    if: github.event_name == 'push' || github.event.pull_request.merged == true
-    name: Build Linux .tar.gz and .rpm
+    name: Build Windows Executable and Linux .tar.gz and .rpm
 
     runs-on: ubuntu-latest  # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -112,7 +44,14 @@ jobs:
         shell: bash
         run: echo "Package_Version=$(dotnet msbuild FileTagger/FileTagger.csproj -getProperty:PackageVersion)" >> "$GITHUB_ENV"
 
-      - name: Publish
+      - name: Publish Windows
+        run: >-
+          dotnet publish $env:Project_Path
+          -c Release
+          -r win-x64
+          -o ./publish/windows
+
+      - name: Publish Linux
         run: >-
           dotnet publish "$Project_Path"
           -c Release
@@ -122,6 +61,19 @@ jobs:
       - name: Install RPM development tools
         run: sudo apt-get update && sudo apt-get install -y rpm
 
+      - name: Rename Windows Executable
+        shell: bash
+        run: |
+          # Rename executable
+          mv "./publish/windows/FileTagger" "./publish/windows/$Package_Name"
+          chmod 755 "./publish/windows/$Package_Name"
+
+          # Create zip archive
+          cd ./publish/windows/
+          zip "$Package_Name-$Package_Version-Portable.zip" "$Package_Name"
+          cd ../..
+      
+
       - name: Build RPM
         shell: bash
         run: |        
@@ -130,6 +82,7 @@ jobs:
           
           #Rename the executable
           mv "./publish/$Package_Name-$Package_Version/FileTagger" "./publish/$Package_Name-$Package_Version/$Package_Name"
+          chmod 755 "./publish/$Package_Name-$Package_Version/$Package_Name"
           
           # Copy the desktop file and icons
           mkdir -p "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/"
@@ -173,6 +126,12 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v7.0.1
         with:
+          name: nettag-windows-portable
+          path: ./publish/windows/*.zip
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
           name: nettag-rpm
           path: ./publish/rpm/*.rpm
 
@@ -180,13 +139,13 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: nettag-tar-gz
-          path: ./publish/rpm/*.rpm
+          path: ./publish/tar/*.tar.gz
 
   release:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     name: Create GitHub Release
-    needs: [build_windows, build_linux]
-    runs-on: windows-latest
+    needs: build_releases
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download build artifacts
@@ -195,26 +154,12 @@ jobs:
           path: ./artifacts
           merge-multiple: true
 
-      - name: Get next release number
-        id: release
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          $count = gh release list --repo "${{ github.repository }}" --limit 1000 --json name --jq 'length'
-          $next = [int]$count + 1
-          
-          Write-Host "Previous releases: $count"
-          Write-Host "Next release number: $next"
-          
-          "number=0.$next" >> $env:GITHUB_OUTPUT
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*
-          tag_name: AutomatedRelease${{ steps.release.outputs.number }}
-          name: NetTag ${{ steps.release.outputs.number }}
+          tag_name: AutomatedRelease ${{ needs.build_releases.outputs.Package_Version }}
+          name: NetTag ${{ needs.build_releases.outputs.Package_Version }}
           body: |
             ## ${{ github.event.pull_request.title }}
 
