@@ -184,8 +184,7 @@ jobs:
   release:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     name: Create GitHub Release
-    needs: build_portable
-    needs: build_rpm
+    needs: [build_portable, build_rpm]
     runs-on: windows-latest
 
     steps:
