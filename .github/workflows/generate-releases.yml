@@ -59,12 +59,12 @@ jobs:
         
         if ($runtime -eq "linux-x64") {
          $source = "./publish/FileTagger"
-         $destination = "./publish/NetTag-Portable-Linux"
+         $destination = "./publish/NetTag-Portable"
          $zip = "./publish/NetTag-Portable-Linux.zip"
         }
         elseif ($runtime -eq "win-x64") {
          $source = "./publish/FileTagger.exe"
-         $destination = "./publish/NetTag-Portable-Windows.exe"
+         $destination = "./publish/NetTag-Portable.exe"
          $zip = "./publish/NetTag-Portable-Windows.zip"
         }
         else {
