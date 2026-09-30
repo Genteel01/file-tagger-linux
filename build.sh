@@ -33,6 +33,7 @@ sed -i -E "s/^Version:.*/Version:    $Package_Version/; s/^Release:.*/Release:  
 
 # Copy the tarball to the SOURCES directory and build the RPM
 # Manually building these directories because the runner doesn't have the rpmbuild tools installed
+#rpmdev-setuptree
 mkdir -p ~/rpmbuild/SOURCES
 mkdir -p ~/rpmbuild/BUILD
 mkdir -p ~/rpmbuild/RPMS
