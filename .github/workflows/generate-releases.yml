@@ -47,7 +47,6 @@ jobs:
         dotnet publish $env:Project_Path
         -c Release
         -r $env:Runtimes
-        -p:IncludeNativeLibrariesForSelfExtract=true
         -o ./publish
       env:
         Runtimes: ${{ matrix.runtimes }}
@@ -95,10 +94,98 @@ jobs:
         name: NetTag-Portable-${{ matrix.runtimes }}
         path: ./publish/NetTag-Portable-*.zip
 
+  build_rpm:
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    name: Build RPM
+
+    runs-on: ubuntu-latest  # For a list of available runner types, refer to
+    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: FileTagger.sln
+      Project_Path: FileTagger/FileTagger.csproj
+      Package_Name: nettag
+      Package_Version: 0.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event_name == 'push' && 'building' || github.event.pull_request.merge_commit_sha }}
+
+      # Install the .NET Core workload
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      # Restore the application to populate the obj folder
+      - name: Restore the application
+        run: dotnet build $env:Solution_Name -c Release
+
+      - name: Install RPM development tools
+        run: sudo apt-get update && sudo apt-get install -y rpm rpmbuild
+
+      - name: Set package version
+        shell: bash
+        run: echo "Package_Version=$(dotnet msbuild FileTagger/FileTagger.csproj -getProperty:PackageVersion)" >> "$GITHUB_ENV"
+
+      - name: Build RPM
+        shell: bash
+        run: |
+          # Publish the project
+          dotnet publish $Project_Path -c Release -r linux-x64 -o "./publish/$Package_Name-$Package_Version"
+          
+          # Remove the debug artifacts
+          rm "./publish/$Package_Name-$Package_Version"/*.pdb
+          
+          #Rename the executable
+          mv "./publish/$Package_Name-$Package_Version/FileTagger" "./publish/$Package_Name-$Package_Version/$Package_Name"
+          
+          # Copy the desktop file and icons
+          mkdir -p "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/"
+          cp ./FileTagger/Assets/icon/tag-edit-blue.svg "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/$Package_Name.svg"
+          chmod 644 "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/$Package_Name.svg"
+          cp "$Package_Name.desktop" "./publish/$Package_Name-$Package_Version/"
+          chmod 644 "./publish/$Package_Name-$Package_Version/$Package_Name.desktop"
+          
+          # Create the tarball
+          mkdir -p ./publish/tar/
+          cd ./publish/
+          tar -cvzf "./tar/$Package_Name-$Package_Version.tar.gz" "./$Package_Name-$Package_Version"
+          cd ..
+          
+          # Increment the release number and set the version number in the spec file
+          RELEASE=$(awk '/^Release:/ { print $2 + 1; exit }' nettag.spec)
+          sed -i -E "s/^Version:.*/Version:    $Package_Version/; s/^Release:.*/Release:    $RELEASE/" nettag.spec
+          
+          # Copy the tarball to the SOURCES directory and build the RPM
+          rpmdev-setuptree
+          cp ./publish/tar/* ~/rpmbuild/SOURCES/
+          rpmbuild -bb nettag.spec
+          
+          # Move the RPM to the publish directory
+          mv ~/rpmbuild/RPMS/x86_64/* ./publish/rpm/
+
+      - name: Commit spec file changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add nettag.spec
+          git diff --staged --quiet || git commit -m "chore: increment RPM release and version number [skip ci]"
+          git push
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: NetTag-RPM
+          path: ./publish/rpm/*.rpm
+
   release:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     name: Create GitHub Release
     needs: build_portable
+    needs: build_rpm
     runs-on: windows-latest
 
     steps:
