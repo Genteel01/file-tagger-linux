@@ -42,11 +42,11 @@ jobs:
 
       - name: Set package version
         shell: bash
-        run: echo "Package_Version=$(dotnet msbuild FileTagger/FileTagger.csproj -getProperty:PackageVersion)" >> "$GITHUB_ENV"
+        run: echo "Package_Version=$(dotnet msbuild $Project_Path -getProperty:PackageVersion)" >> "$GITHUB_ENV"
 
       - name: Publish Windows
         run: >-
-          dotnet publish $env:Project_Path
+          dotnet publish "$Project_Path"
           -c Release
           -r win-x64
           -o ./publish/windows
