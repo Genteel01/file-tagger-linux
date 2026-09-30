@@ -135,7 +135,7 @@ jobs:
           -o "./publish/$Package_Name-$Package_Version"
 
       - name: Install RPM development tools
-        run: sudo apt-get update && sudo apt-get install -y rpm
+        run: sudo apt-get update && sudo apt-get install -y rpm && sudo apt-get install -y rpmdev
 
       - name: Build RPM
         shell: bash
