@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build_portable:
-    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    if: github.event_name == 'pull_request' || github.event.pull_request.merged == true
     name: Build Portable ${{ matrix.runtimes }}
 
     strategy:
@@ -173,6 +173,7 @@ jobs:
           rpmbuild -bb nettag.spec
           
           # Move the RPM to the publish directory
+          mkdir -p ./publish/rpm/
           mv ~/rpmbuild/RPMS/x86_64/* ./publish/rpm/
 
       - name: Commit spec file changes
