@@ -114,7 +114,7 @@ jobs:
 
           # Create zip archive
           cd ./publish/windows/
-          zip "$Package_Name-$Package_Version-Portable.zip" "$Package_Name.exe"
+          zip "$Package_Name-$Package_Version-Windows-Portable.zip" "$Package_Name.exe"
           cd ../..
       
 
