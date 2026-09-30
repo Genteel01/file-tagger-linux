@@ -120,7 +120,7 @@ jobs:
           Write-Host "Previous releases: $count"
           Write-Host "Next release number: $next"
           
-          "number=$next" >> $env:GITHUB_OUTPUT
+          "number=0.$next" >> $env:GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
