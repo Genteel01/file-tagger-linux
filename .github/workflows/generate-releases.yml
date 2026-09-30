@@ -9,14 +9,9 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build_windows:
     if: github.event.pull_request.merged == true
-    name: Build ${{ matrix.runtimes }}
-
-    strategy:
-      matrix:
-        configuration: [Release]
-        runtimes: [linux-x64, win-x64]
+    name: Build Windows
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -37,39 +32,23 @@ jobs:
       with:
         dotnet-version: 10.0.x
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    # Restore the application to populate the obj folder
     - name: Restore the application
-      run: dotnet build $env:Solution_Name -c $env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+      run: dotnet build $env:Solution_Name -c Release
 
     - name: Publish
       run: >-
         dotnet publish $env:Project_Path
-        -c $env:Configuration
-        -r $env:Runtimes
+        -c Release
+        -r win-x64
+        -p:IncludeNativeLibrariesForSelfExtract=true
         -o ./publish
-      env:
-        Configuration: ${{ matrix.configuration }}
-        Runtimes: ${{ matrix.runtimes }}
 
     - name: Rename executable
       shell: pwsh
       run: |
-        $runtime = "${{ matrix.runtimes }}"
-
-        if ($runtime -eq "linux-x64") {
-         $source = "./publish/FileTagger"
-         $destination = "./publish/NetTag-linux-x64"
-        }
-        elseif ($runtime -eq "win-x64") {
-         $source = "./publish/FileTagger.exe"
-         $destination = "./publish/NetTag-win-x64.exe"
-        }
-        else {
-         Write-Error "Unsupported runtime: $runtime"
-         exit 1
-        }
+        $source = "./publish/FileTagger.exe"
+        $destination = "./publish/NetTag-Windows-Portable.exe"
 
         if (-not (Test-Path $source -PathType Leaf)) {
          Write-Error "Executable not found: $source"
@@ -85,8 +64,8 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v7.0.1
       with:
-        name: NetTag-${{ matrix.runtimes }}
-        path: ./publish/NetTag-${{ matrix.runtimes }}*
+        name: NetTag-Windows-Portable
+        path: ./publish/NetTag-Windows*
 
   release:
     if: github.event.pull_request.merged == true
