@@ -121,21 +121,21 @@ jobs:
 
       # Restore the application to populate the obj folder
       - name: Restore the application
-        run: dotnet build $env:Solution_Name -c Release
-
-      - name: Publish
-        run: >-
-          dotnet publish $env:Project_Path
-          -c Release
-          -r linux-x64
-          -o ./publish/$Package_Name-$Package_Version"
-
-      - name: Install RPM development tools
-        run: sudo apt-get update && sudo apt-get install -y rpm rpmbuild
+        run: dotnet build "$Solution_Name" -c Release
 
       - name: Set package version
         shell: bash
         run: echo "Package_Version=$(dotnet msbuild FileTagger/FileTagger.csproj -getProperty:PackageVersion)" >> "$GITHUB_ENV"
+
+      - name: Publish
+        run: >-
+          dotnet publish "$Project_Path"
+          -c Release
+          -r linux-x64
+          -o "./publish/$Package_Name-$Package_Version"
+
+      - name: Install RPM development tools
+        run: sudo apt-get update && sudo apt-get install -y rpm rpmbuild
 
       - name: Build RPM
         shell: bash
