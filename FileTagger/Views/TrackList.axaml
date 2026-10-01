@@ -28,7 +28,7 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
-        <Style Selector="ListBoxItem:nth-child(even) views|TrackListItem">
+        <Style Selector="ListBoxItem:nth-child(even)">
             <Setter Property="Background" Value="{DynamicResource AlternateListItemBrush}" />
         </Style>
         <Style Selector="controls|ListColumnHeader">

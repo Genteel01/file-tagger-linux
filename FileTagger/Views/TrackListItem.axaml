@@ -63,7 +63,7 @@
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Grid Name="{Binding Path}" ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
+        <Grid ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
@@ -143,33 +143,33 @@
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
                      KeyDown="TextBoxEnterPressed" Name="CommentBox"/>
             <!--Path-->
-            <TextBlock Grid.Column="10" Text="{Binding Path}" Name="PathBlock"
+            <TextBlock Grid.Column="10" Text="{Binding Path, Mode=OneTime}" Name="PathBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="10" Text="{Binding Path, UpdateSourceTrigger=LostFocus}"
+            <TextBox Grid.Column="10" Text="{Binding Path, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="PathBox"/>
-            <!--Path-->
-            <TextBlock Grid.Column="11" Text="{Binding Duration}" Name="DurationBlock"
+            <!--Duration-->
+            <TextBlock Grid.Column="11" Text="{Binding Duration, Mode=OneTime}" Name="DurationBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="11" Text="{Binding Duration, UpdateSourceTrigger=LostFocus}"
+            <TextBox Grid.Column="11" Text="{Binding Duration, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="DurationBox"/>
-            <!--Path-->
-            <TextBlock Grid.Column="12" Text="{Binding Bitrate}" Name="BitrateBlock"
+            <!--Bitrate-->
+            <TextBlock Grid.Column="12" Text="{Binding Bitrate, Mode=OneTime}" Name="BitrateBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="12" Text="{Binding Bitrate, UpdateSourceTrigger=LostFocus}"
+            <TextBox Grid.Column="12" Text="{Binding Bitrate, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="BitrateBox"/>
-            <!--Path-->
-            <TextBlock Grid.Column="13" Text="{Binding SampleRate}" Name="SampleRateBlock"
+            <!--SampleRate-->
+            <TextBlock Grid.Column="13" Text="{Binding SampleRate, Mode=OneTime}" Name="SampleRateBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="13" Text="{Binding SampleRate, UpdateSourceTrigger=LostFocus}"
+            <TextBox Grid.Column="13" Text="{Binding SampleRate, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="SampleRateBox"/>
-            <!--Path-->
-            <TextBlock Grid.Column="14" Text="{Binding AudioFormat}" Name="AudioFormatBlock"
+            <!--AudioFormat-->
+            <TextBlock Grid.Column="14" Text="{Binding AudioFormat, Mode=OneTime}" Name="AudioFormatBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="14" Text="{Binding AudioFormat, UpdateSourceTrigger=LostFocus}"
+            <TextBox Grid.Column="14" Text="{Binding AudioFormat, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="AudioFormatBox"/>
             <Panel Grid.Column="15" Classes="buffer"/>

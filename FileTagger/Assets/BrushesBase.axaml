@@ -80,6 +80,8 @@
 
             <SolidColorBrush x:Key='WarningBrush' Color="{StaticResource WarningColor}"/>
             <SolidColorBrush x:Key='SuccessBrush' Color="{StaticResource SuccessColor}"/>
+
+            <BoxShadows x:Key="PictureBoxShadow">4 4 10 0 #20000000</BoxShadows>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

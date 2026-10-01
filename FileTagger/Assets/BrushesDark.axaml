@@ -43,6 +43,8 @@
             <SolidColorBrush x:Key='MenuBorderBrush' Color="{StaticResource MenuBorderColor}"/>
             <SolidColorBrush x:Key='SectionBorderBrush' Color="{StaticResource SectionBorderColor}"/>
             <SolidColorBrush x:Key='SortArrowBrush' Color="{StaticResource SortArrowColor}"/>
+
+            <BoxShadows x:Key="PictureBoxShadow">4 4 10 0 #20FFFFFF</BoxShadows>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 #if DEBUG
+using Avalonia.Rendering;
 using Avalonia.Input;
 using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
@@ -13,6 +14,9 @@ public partial class MainWindow : Window
 {
     public MainWindow()
     {
+        #if DEBUG
+        //RendererDiagnostics.DebugOverlays = RendererDebugOverlays.RenderTimeGraph;
+        #endif
         InitializeComponent();
     }
 

@@ -4,10 +4,13 @@ Release:    2
 Summary:    Software for editing metadata tags on audio files
 License:    FIXME
 
-Source0:    https://www.example.com/%{name}/releases/%{name}-%{version}.tar.gz
+URL:        https://github.com/Genteel01/file-tagger-linux
+Source0:    https://github.com/Genteel01/file-tagger-linux/releases/download/v%{version}/%{name}-%{version}.tar.gz
 ExclusiveArch: x86_64
 
+#Was failing to build due to debug list being empty
 %undefine _debugsource_packages
+# Fixes broken builds when build in github action, local builds were always fine
 %global __strip /bin/true
 
 %description
@@ -30,7 +33,11 @@ cp -r %{name}.desktop %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_bindir}/%{name}
 %{_iconsdir}/hicolor/scalable/apps/nettag.svg
 %{_datadir}/applications/%{name}.desktop
+%license LICENSE
 
 %changelog
 * Wed Sep 30 2026 George Shepherd <georgeshepherd3@gmail.com> - 0.1-1
 - First nettag package creation
+
+* Thur Oct 1 2026 George Shepherd <georgeshepherd3@gmail.com> - 0.10.2-2
+- Added URL and proper Source0 to spec
