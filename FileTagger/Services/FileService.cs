@@ -96,7 +96,7 @@ public class FileService(Func<TopLevel?> getTarget) : IFileService
 
             return files;
         }
-        catch (Exception e)
+        catch
         {
             return [];
         }
