@@ -33,6 +33,7 @@ cp -r %{name}.desktop %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_bindir}/%{name}
 %{_iconsdir}/hicolor/scalable/apps/nettag.svg
 %{_datadir}/applications/%{name}.desktop
+%license LICENSE
 
 %changelog
 * Wed Sep 30 2026 George Shepherd <georgeshepherd3@gmail.com> - 0.1-1

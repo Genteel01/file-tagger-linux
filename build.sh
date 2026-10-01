@@ -20,6 +20,8 @@ cp ./FileTagger/Assets/icon/tag-edit-blue.svg "./publish/$Package_Name-$Package_
 chmod 644 "./publish/$Package_Name-$Package_Version/icons/hicolor/scalable/apps/$Package_Name.svg"
 cp "$Package_Name.desktop" "./publish/$Package_Name-$Package_Version/"
 chmod 644 "./publish/$Package_Name-$Package_Version/$Package_Name.desktop"
+#Copy the license
+cp ./LICENSE "./publish/$Package_Name-$Package_Version/"
 
 # Create the tarball
 mkdir -p ./publish/tar/
