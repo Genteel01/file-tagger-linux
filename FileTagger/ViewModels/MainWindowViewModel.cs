@@ -74,12 +74,6 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     private readonly IPreferenceService _preferenceService;
 
     /// <summary>
-    /// <see cref="IImageService"/> received through Dependency Injection
-    /// used for loading the app icon
-    /// </summary>
-    private readonly IImageService _imageService;
-
-    /// <summary>
     /// List of supported file extensions to fetch from folders
     /// </summary>
     private readonly List<string> _supportedFileExtensions;
@@ -155,9 +149,6 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     [ObservableProperty]
     public partial ThemeVariant SelectedTheme { get; private set; } = ThemeVariant.Default;
 
-    [ObservableProperty]
-    public partial WindowIcon? AppIcon { get; set; }
-
     [RelayCommand]
     public void ChangeSelectedTheme(ThemeVariant value) => SelectedTheme = value;
 
@@ -166,7 +157,6 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         if (Application.Current is { } app)
         {
             app.RequestedThemeVariant = value;
-            AppIcon = _imageService.LoadAppIcon(MyThemes.ThemeIcon(value));
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
@@ -183,15 +173,13 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// </summary>
     private readonly Func<TopLevel?> _getDialogTarget;
 
-    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, IImageService imageService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget, preferenceService)
+    public MainWindowViewModel(IFileService fileService, IPreferenceService preferenceService, EditPanelViewModel editPanelViewModel, Func<TopLevel?> getDialogTarget) : base(getDialogTarget, preferenceService)
     {
         MyEditPanel = editPanelViewModel ?? throw new ArgumentNullException(nameof(editPanelViewModel));
         _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         _preferenceService = preferenceService ?? throw new ArgumentNullException(nameof(preferenceService));
-        _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         _getDialogTarget = getDialogTarget;
         _supportedFileExtensions = [];
-        AppIcon = _imageService.LoadAppIcon(MyThemes.ThemeIcon(SelectedTheme));
         foreach (AudioFormat f in AudioDataIOFactory.GetInstance().getFormats())
         {
             if (f.Readable)
@@ -247,7 +235,6 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         MyEditPanel = new EditPanelViewModel();
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
-        _imageService = new ImageService();
         _supportedFileExtensions = [];
         CurrentSort = Sorts.PathSort;
         ListColumnWidths = new AvaloniaDictionary<string, double>();

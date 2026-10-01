@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using ATL;
 using ATL.AudioData;
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 
 namespace FileTagger.Services;
 
@@ -16,11 +13,6 @@ public class ImageService : IImageService
     /// so we don't have to re-decode the same image multiple times
     /// </summary>
     private readonly Dictionary<uint, Bitmap> _cachedImages = new Dictionary<uint, Bitmap>();
-
-    public WindowIcon LoadAppIcon(Uri iconUri)
-    {
-        return new WindowIcon(AssetLoader.Open(iconUri));
-    }
 
     public PictureInfo CreatePictureInfoFromBitmap(Bitmap bitmap, PictureInfo.PIC_TYPE pictureType)
     {
