@@ -20,6 +20,7 @@ public static class MyThemes
         _ => ThemeVariant.Default
     };
 
+    #if DEBUG
     public static ThemeVariant GetOppositeTheme(ThemeVariant theme) => GetOppositeTheme(theme.ToString());
 
     private static ThemeVariant GetOppositeTheme(string themeName) => themeName switch
@@ -28,6 +29,7 @@ public static class MyThemes
         nameof(ThemeVariant.Dark) => ThemeVariant.Light,
         _ => ThemeVariant.Dark
     };
+    #endif
 }
 
 public static class Consts
