@@ -22,82 +22,92 @@ public static class ColourScheme
         Violet,
     }
 
+    private const Colours DefaultColour = Colours.Blue;
+    private const double HighlightMultiplier = 0.5;
+    private const byte AccentOpacity0 = 0xFF;
+    private const byte AccentOpacity1 = 0xCC;
+    private const byte AccentOpacity2 = 0x99;
+    private const byte AccentOpacity3 = 0x66;
+    private const byte AccentOpacity4 = 0x33;
+    private static readonly Color LightBackgroundColour = Colors.White;
+    private static readonly Color DarkBackgroundColour = Color.FromRgb(0x0F, 0x0F, 0x0F);
+
     private static readonly Dictionary<Colours, Color> ThemeAccentColor0 = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, Color.FromArgb(0xFF, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(0xFF, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(0xFF, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(0xFF, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(0xFF, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(0xFF, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(0xFF, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(0xFF, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(0xFF, 0xB8, 0x75, 0xDC) }
+        { Colours.Pink, Color.FromArgb(AccentOpacity0, 0xE9, 0x3A, 0x9A) },
+        { Colours.Red, Color.FromArgb(AccentOpacity0, 0xE9, 0x3D, 0x58) },
+        { Colours.Orange, Color.FromArgb(AccentOpacity0, 0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, Color.FromArgb(AccentOpacity0, 0xE8, 0xCB, 0x2D) },
+        { Colours.Green, Color.FromArgb(AccentOpacity0, 0x3D, 0xD4, 0x25) },
+        { Colours.Teal, Color.FromArgb(AccentOpacity0, 0x00, 0xD3, 0xB8) },
+        { Colours.Blue, Color.FromArgb(AccentOpacity0, 0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, Color.FromArgb(AccentOpacity0, 0x92, 0x6E, 0xE4) },
+        { Colours.Violet, Color.FromArgb(AccentOpacity0, 0xB8, 0x75, 0xDC) }
     };
 
     private static readonly Dictionary<Colours, Color> ThemeAccentColor1 = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, Color.FromArgb(0xCC, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(0xCC, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(0xCC, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(0xCC, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(0xCC, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(0xCC, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(0xCC, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(0xCC, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(0xCC, 0xB8, 0x75, 0xDC) }
+        { Colours.Pink, Color.FromArgb(AccentOpacity1, 0xE9, 0x3A, 0x9A) },
+        { Colours.Red, Color.FromArgb(AccentOpacity1, 0xE9, 0x3D, 0x58) },
+        { Colours.Orange, Color.FromArgb(AccentOpacity1, 0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, Color.FromArgb(AccentOpacity1, 0xE8, 0xCB, 0x2D) },
+        { Colours.Green, Color.FromArgb(AccentOpacity1, 0x3D, 0xD4, 0x25) },
+        { Colours.Teal, Color.FromArgb(AccentOpacity1, 0x00, 0xD3, 0xB8) },
+        { Colours.Blue, Color.FromArgb(AccentOpacity1, 0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, Color.FromArgb(AccentOpacity1, 0x92, 0x6E, 0xE4) },
+        { Colours.Violet, Color.FromArgb(AccentOpacity1, 0xB8, 0x75, 0xDC) }
     };
 
     private static readonly Dictionary<Colours, Color> ThemeAccentColor2 = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, Color.FromArgb(0x99, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(0x99, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(0x99, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(0x99, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(0x99, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(0x99, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(0x99, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(0x99, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(0x99, 0xB8, 0x75, 0xDC) }
+        { Colours.Pink, Color.FromArgb(AccentOpacity2, 0xE9, 0x3A, 0x9A) },
+        { Colours.Red, Color.FromArgb(AccentOpacity2, 0xE9, 0x3D, 0x58) },
+        { Colours.Orange, Color.FromArgb(AccentOpacity2, 0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, Color.FromArgb(AccentOpacity2, 0xE8, 0xCB, 0x2D) },
+        { Colours.Green, Color.FromArgb(AccentOpacity2, 0x3D, 0xD4, 0x25) },
+        { Colours.Teal, Color.FromArgb(AccentOpacity2, 0x00, 0xD3, 0xB8) },
+        { Colours.Blue, Color.FromArgb(AccentOpacity2, 0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, Color.FromArgb(AccentOpacity2, 0x92, 0x6E, 0xE4) },
+        { Colours.Violet, Color.FromArgb(AccentOpacity2, 0xB8, 0x75, 0xDC) }
     };
 
     private static readonly Dictionary<Colours, Color> ThemeAccentColor3 = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, Color.FromArgb(0x66, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(0x66, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(0x66, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(0x66, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(0x66, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(0x66, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(0x66, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(0x66, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(0x66, 0xB8, 0x75, 0xDC) }
+        { Colours.Pink, Color.FromArgb(AccentOpacity3, 0xE9, 0x3A, 0x9A) },
+        { Colours.Red, Color.FromArgb(AccentOpacity3, 0xE9, 0x3D, 0x58) },
+        { Colours.Orange, Color.FromArgb(AccentOpacity3, 0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, Color.FromArgb(AccentOpacity3, 0xE8, 0xCB, 0x2D) },
+        { Colours.Green, Color.FromArgb(AccentOpacity3, 0x3D, 0xD4, 0x25) },
+        { Colours.Teal, Color.FromArgb(AccentOpacity3, 0x00, 0xD3, 0xB8) },
+        { Colours.Blue, Color.FromArgb(AccentOpacity3, 0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, Color.FromArgb(AccentOpacity3, 0x92, 0x6E, 0xE4) },
+        { Colours.Violet, Color.FromArgb(AccentOpacity3, 0xB8, 0x75, 0xDC) }
     };
 
     private static readonly Dictionary<Colours, Color> ThemeAccentColor4 = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, Color.FromArgb(0x33, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(0x33, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(0x33, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(0x33, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(0x33, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(0x33, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(0x33, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(0x33, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(0x33, 0xB8, 0x75, 0xDC) }
+        { Colours.Pink, Color.FromArgb(AccentOpacity4, 0xE9, 0x3A, 0x9A) },
+        { Colours.Red, Color.FromArgb(AccentOpacity4, 0xE9, 0x3D, 0x58) },
+        { Colours.Orange, Color.FromArgb(AccentOpacity4, 0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, Color.FromArgb(AccentOpacity4, 0xE8, 0xCB, 0x2D) },
+        { Colours.Green, Color.FromArgb(AccentOpacity4, 0x3D, 0xD4, 0x25) },
+        { Colours.Teal, Color.FromArgb(AccentOpacity4, 0x00, 0xD3, 0xB8) },
+        { Colours.Blue, Color.FromArgb(AccentOpacity4, 0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, Color.FromArgb(AccentOpacity4, 0x92, 0x6E, 0xE4) },
+        { Colours.Violet, Color.FromArgb(AccentOpacity4, 0xB8, 0x75, 0xDC) }
     };
 
     private static readonly Dictionary<Colours, Color> HighlightColor = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, AdjustValue(ThemeAccentColor0[Colours.Pink], 0.5) },
-        { Colours.Red, AdjustValue(ThemeAccentColor0[Colours.Red], 0.5) },
-        { Colours.Orange, AdjustValue(ThemeAccentColor0[Colours.Orange], 0.5) },
-        { Colours.Yellow, AdjustValue(ThemeAccentColor0[Colours.Yellow], 0.5) },
-        { Colours.Green, AdjustValue(ThemeAccentColor0[Colours.Green], 0.5) },
-        { Colours.Teal, AdjustValue(ThemeAccentColor0[Colours.Teal], 0.5) },
-        { Colours.Blue, AdjustValue(ThemeAccentColor0[Colours.Blue], 0.5) },
-        { Colours.Indigo, AdjustValue(ThemeAccentColor0[Colours.Indigo], 0.5) },
-        { Colours.Violet, AdjustValue(ThemeAccentColor0[Colours.Violet], 0.5) },
+        { Colours.Pink, AdjustValue(ThemeAccentColor0[Colours.Pink], HighlightMultiplier) },
+        { Colours.Red, AdjustValue(ThemeAccentColor0[Colours.Red], HighlightMultiplier) },
+        { Colours.Orange, AdjustValue(ThemeAccentColor0[Colours.Orange], HighlightMultiplier) },
+        { Colours.Yellow, AdjustValue(ThemeAccentColor0[Colours.Yellow], HighlightMultiplier) },
+        { Colours.Green, AdjustValue(ThemeAccentColor0[Colours.Green], HighlightMultiplier) },
+        { Colours.Teal, AdjustValue(ThemeAccentColor0[Colours.Teal], HighlightMultiplier) },
+        { Colours.Blue, AdjustValue(ThemeAccentColor0[Colours.Blue], HighlightMultiplier) },
+        { Colours.Indigo, AdjustValue(ThemeAccentColor0[Colours.Indigo], HighlightMultiplier) },
+        { Colours.Violet, AdjustValue(ThemeAccentColor0[Colours.Violet], HighlightMultiplier) },
     };
 
     private static readonly Dictionary<Colours, Color> HighlightColorDark = new Dictionary<Colours, Color>
@@ -116,28 +126,28 @@ public static class ColourScheme
     //The background colour here is the ThemeBackgroundColour for light theme
     private static readonly Dictionary<Colours, Color> FocusedTextBoxTrackColor = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, CombineOverlayAndBase(ThemeAccentColor4[Colours.Pink], Colors.White) },
-        { Colours.Red, CombineOverlayAndBase(ThemeAccentColor4[Colours.Red], Colors.White) },
-        { Colours.Orange, CombineOverlayAndBase(ThemeAccentColor4[Colours.Orange], Colors.White) },
-        { Colours.Yellow, CombineOverlayAndBase(ThemeAccentColor4[Colours.Yellow], Colors.White) },
-        { Colours.Green, CombineOverlayAndBase(ThemeAccentColor4[Colours.Green], Colors.White) },
-        { Colours.Teal, CombineOverlayAndBase(ThemeAccentColor4[Colours.Teal], Colors.White) },
-        { Colours.Blue, CombineOverlayAndBase(ThemeAccentColor4[Colours.Blue], Colors.White) },
-        { Colours.Indigo, CombineOverlayAndBase(ThemeAccentColor4[Colours.Indigo], Colors.White) },
-        { Colours.Violet, CombineOverlayAndBase(ThemeAccentColor4[Colours.Violet], Colors.White) },
+        { Colours.Pink, CombineOverlayAndBase(ThemeAccentColor4[Colours.Pink], LightBackgroundColour) },
+        { Colours.Red, CombineOverlayAndBase(ThemeAccentColor4[Colours.Red], LightBackgroundColour) },
+        { Colours.Orange, CombineOverlayAndBase(ThemeAccentColor4[Colours.Orange], LightBackgroundColour) },
+        { Colours.Yellow, CombineOverlayAndBase(ThemeAccentColor4[Colours.Yellow], LightBackgroundColour) },
+        { Colours.Green, CombineOverlayAndBase(ThemeAccentColor4[Colours.Green], LightBackgroundColour) },
+        { Colours.Teal, CombineOverlayAndBase(ThemeAccentColor4[Colours.Teal], LightBackgroundColour) },
+        { Colours.Blue, CombineOverlayAndBase(ThemeAccentColor4[Colours.Blue], LightBackgroundColour) },
+        { Colours.Indigo, CombineOverlayAndBase(ThemeAccentColor4[Colours.Indigo], LightBackgroundColour) },
+        { Colours.Violet, CombineOverlayAndBase(ThemeAccentColor4[Colours.Violet], LightBackgroundColour) },
     };
     //The background colour here is the ThemeBackgroundColour for dark theme
     private static readonly Dictionary<Colours, Color> FocusedTextBoxTrackColorDark = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, CombineOverlayAndBase(ThemeAccentColor4[Colours.Pink], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Red, CombineOverlayAndBase(ThemeAccentColor4[Colours.Red], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Orange, CombineOverlayAndBase(ThemeAccentColor4[Colours.Orange], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Yellow, CombineOverlayAndBase(ThemeAccentColor4[Colours.Yellow], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Green, CombineOverlayAndBase(ThemeAccentColor4[Colours.Green], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Teal, CombineOverlayAndBase(ThemeAccentColor4[Colours.Teal], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Blue, CombineOverlayAndBase(ThemeAccentColor4[Colours.Blue], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Indigo, CombineOverlayAndBase(ThemeAccentColor4[Colours.Indigo], Color.FromRgb(0x0F, 0x0F, 0x0F)) },
-        { Colours.Violet, CombineOverlayAndBase(ThemeAccentColor4[Colours.Violet], Color.FromRgb(0x0F, 0x0F, 0x0F)) }
+        { Colours.Pink, CombineOverlayAndBase(ThemeAccentColor4[Colours.Pink], DarkBackgroundColour) },
+        { Colours.Red, CombineOverlayAndBase(ThemeAccentColor4[Colours.Red], DarkBackgroundColour) },
+        { Colours.Orange, CombineOverlayAndBase(ThemeAccentColor4[Colours.Orange], DarkBackgroundColour) },
+        { Colours.Yellow, CombineOverlayAndBase(ThemeAccentColor4[Colours.Yellow], DarkBackgroundColour) },
+        { Colours.Green, CombineOverlayAndBase(ThemeAccentColor4[Colours.Green], DarkBackgroundColour) },
+        { Colours.Teal, CombineOverlayAndBase(ThemeAccentColor4[Colours.Teal], DarkBackgroundColour) },
+        { Colours.Blue, CombineOverlayAndBase(ThemeAccentColor4[Colours.Blue], DarkBackgroundColour) },
+        { Colours.Indigo, CombineOverlayAndBase(ThemeAccentColor4[Colours.Indigo], DarkBackgroundColour) },
+        { Colours.Violet, CombineOverlayAndBase(ThemeAccentColor4[Colours.Violet], DarkBackgroundColour) },
     };
 
     /// <summary>
