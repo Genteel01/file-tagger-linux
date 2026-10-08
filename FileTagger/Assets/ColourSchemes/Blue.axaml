@@ -1,17 +1,16 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:statics="clr-namespace:FileTagger.Statics">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="{x:Static statics:MyThemes.DarkGreen}">
-            <Color x:Key="ThemeAccentColor0">#FF00e645</Color>
-            <Color x:Key="ThemeAccentColor">#CC00e645</Color>
-            <Color x:Key="ThemeAccentColor2">#9900e645</Color>
-            <Color x:Key="ThemeAccentColor3">#6600e645</Color>
-            <Color x:Key="ThemeAccentColor4">#3300e645</Color>
+        <ResourceDictionary x:Key="Default">
+            <Color x:Key="ThemeAccentColor0">#FF00bfff</Color>
+            <Color x:Key="ThemeAccentColor">#CC00bfff</Color>
+            <Color x:Key="ThemeAccentColor2">#9900bfff</Color>
+            <Color x:Key="ThemeAccentColor3">#6600bfff</Color>
+            <Color x:Key="ThemeAccentColor4">#3300bfff</Color>
 
-            <Color x:Key='HighlightColor'>#FF00e645</Color>
+            <Color x:Key='HighlightColor'>#FF005f7f</Color>
 
-            <Color x:Key="FocusedTextBoxTrackColor">#FF0c3a1a</Color>
+            <Color x:Key="FocusedTextBoxTrackColor">#FFccf2ff</Color>
 
             <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
             <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{StaticResource ThemeAccentColor}"/>
@@ -33,6 +32,15 @@
             <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
 
             <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <Color x:Key='HighlightColor'>#FF00bfff</Color>
+            <Color x:Key="FocusedTextBoxTrackColor">#FF0c323f</Color>
+
+            <!--Text Highlight-->
+            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
+            <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
+
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

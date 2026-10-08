@@ -2,10 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
-            <Color x:Key='HighlightColor'>#FF00bfff</Color>
             <Color x:Key="HighlightForegroundColor">#FF0F0F0F</Color>
-
-            <Color x:Key="FocusedTextBoxTrackColor">#FF0c323f</Color>
 
             <Color x:Key='ThemeBackgroundColor'>#0F0F0F</Color>
             <Color x:Key='ThemeForegroundColor'>#DEDEDE</Color>
@@ -32,10 +29,7 @@
             <SolidColorBrush x:Key='ThemeBorderHighBrush' Color="{StaticResource ThemeBorderHighColor}"/>
 
             <!--Text Highlight-->
-            <SolidColorBrush x:Key='HighlightBrush' Color="{StaticResource HighlightColor}"/>
             <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{StaticResource HighlightForegroundColor}" />
-
-            <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{StaticResource FocusedTextBoxTrackColor}"/>
 
             <SolidColorBrush x:Key='EditPanelBackgroundBrush' Color="{StaticResource EditPanelBackgroundColor}"/>
             <SolidColorBrush x:Key='ListSeparatorBrush' Color="{StaticResource ListSeparatorColor}"/>
