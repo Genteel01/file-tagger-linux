@@ -1,0 +1,33 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        <Color x:Key="ThemeAccentColor0">#FF00bfff</Color>
+        <Color x:Key="ThemeAccentColor">#CC00bfff</Color>
+        <Color x:Key="ThemeAccentColor2">#9900bfff</Color>
+        <Color x:Key="ThemeAccentColor3">#6600bfff</Color>
+        <Color x:Key="ThemeAccentColor4">#3300bfff</Color>
+
+        <Color x:Key='HighlightColor'>#FF005f7f</Color>
+
+        <Color x:Key="FocusedTextBoxTrackColor">#FFccf2ff</Color>
+
+        <!--ListBoxItem:focus:selected:pointerover, ComboBoxItem:focus:selected:pointerover-->
+        <SolidColorBrush x:Key='ThemeAccentBrush2' Color="{DynamicResource ThemeAccentColor}"/>
+        <!--ListBoxItem:focus:selected, ListBoxItem:selected:pointerover, ComboBoxItem:focus:selected, ComboBoxItem:selected:pointerover-->
+        <SolidColorBrush x:Key='ThemeAccentBrush3' Color="{DynamicResource ThemeAccentColor2}"/>
+        <!--ListBoxItem:selected, ComboBoxItem:selected-->
+        <SolidColorBrush x:Key='ThemeAccentBrush4' Color="{DynamicResource ThemeAccentColor3}"/>
+        <!--pointerover on selection-->
+        <SolidColorBrush x:Key='ThemeControlHighlightMidBrush' Color="{DynamicResource ThemeAccentColor4}"/>
+
+        <!--ScrollBar:pointerover, Button:pressed-->
+        <SolidColorBrush x:Key='ThemeControlHighBrush' Color="{DynamicResource ThemeAccentColor2}"/>
+        <!--ScrollBar:pressed-->
+        <SolidColorBrush x:Key='ThemeControlVeryHighBrush' Color="{DynamicResource ThemeAccentColor}"/>
+        <!--ScrollBar arrow pressed-->
+        <SolidColorBrush x:Key='ThemeAccentBrush' Color="{DynamicResource ThemeAccentColor0}"/>
+
+        <!--Text Highlight-->
+        <SolidColorBrush x:Key='HighlightBrush' Color="{DynamicResource HighlightColor}"/>
+
+        <SolidColorBrush x:Key='FocusedTextBoxTrackBrush' Color="{DynamicResource FocusedTextBoxTrackColor}"/>
+</ResourceDictionary>

@@ -4,10 +4,9 @@
     <option name="projectPerEditor">
       <map>
         <entry key="FileTagger/App.axaml" value="FileTagger/FileTagger.csproj" />
-        <entry key="FileTagger/Assets/BrushesBase.axaml" value="FileTagger/FileTagger.csproj" />
-        <entry key="FileTagger/Assets/BrushesDark.axaml" value="FileTagger/FileTagger.csproj" />
-        <entry key="FileTagger/Assets/ColourSchemes/Blue.axaml" value="FileTagger/FileTagger.csproj" />
-        <entry key="FileTagger/Assets/ColourSchemes/Green.axaml" value="FileTagger/FileTagger.csproj" />
+        <entry key="FileTagger/Assets/Themes/BrushesBase.axaml" value="FileTagger/FileTagger.csproj" />
+        <entry key="FileTagger/Assets/Themes/BrushesDark.axaml" value="FileTagger/FileTagger.csproj" />
+        <entry key="FileTagger/Assets/Themes/AccentColours.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Assets/Dimensions.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Assets/Icons.axaml" value="FileTagger/FileTagger.csproj" />
         <entry key="FileTagger/Controls/DialogControls.axaml" value="FileTagger/FileTagger.csproj" />

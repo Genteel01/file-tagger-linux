@@ -16,8 +16,7 @@
              <ResourceDictionary.MergedDictionaries>
                  <MergeResourceInclude Source="/Assets/Themes/BrushesBase.axaml" />
                  <MergeResourceInclude Source="/Assets/Themes/BrushesDark.axaml" />
-                 <MergeResourceInclude Source="/Assets/ColourSchemes/Blue.axaml" />
-                 <MergeResourceInclude Source="/Assets/ColourSchemes/Green.axaml" />
+                 <MergeResourceInclude Source="/Assets/Themes/AccentColours.axaml" />
                  <MergeResourceInclude Source="/Assets/Icons.axaml" />
                  <MergeResourceInclude Source="/Assets/Dimensions.axaml" />
                  <MergeResourceInclude Source="/Controls/ListColumnHeader.axaml" />

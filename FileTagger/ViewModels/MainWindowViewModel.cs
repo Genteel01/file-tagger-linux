@@ -114,9 +114,41 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     }
 
     /// <summary>
+    /// List of <see cref="ColourScheme.Colours"/> to choose from in options
+    /// </summary>
+    public ColourScheme.Colours[] Colours { get; } = Enum.GetValues<ColourScheme.Colours>();
+
+    /// <summary>
+    /// The selected <see cref="ColourScheme.Colours"/>
+    /// </summary>
+    [ObservableProperty]
+    public partial ColourScheme.Colours SelectedColour { get; set; }
+
+    [RelayCommand]
+    public void ChangeColour(ColourScheme.Colours value) => SelectedColour = value;
+
+    /// <summary>
+    /// When the selected colour changes, apply the new accent colours to the app
+    /// </summary>
+    partial void OnSelectedColourChanged(ColourScheme.Colours value)
+    {
+        if (Application.Current is { } app)
+        {
+            ColourScheme.ApplyColoursToApp(app, value);
+            PropertyInfo colourProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedAccentColour))!;
+            _preferenceService.StorePreferenceItem(colourProperty, value);
+        }
+    }
+
+    /// <summary>
     /// List of <see cref="ThemeVariant"/> values to select from
     /// </summary>
-    public ThemeVariant[] Themes { get; } = [ThemeVariant.Default, ThemeVariant.Light, MyThemes.LightGreen, ThemeVariant.Dark, MyThemes.DarkGreen];
+    public ThemeVariant[] Themes { get; } =
+    [
+        ThemeVariant.Default,
+        ThemeVariant.Light,
+        ThemeVariant.Dark,
+    ];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanPasteTags))]
@@ -157,6 +189,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         if (Application.Current is { } app)
         {
             app.RequestedThemeVariant = value;
+            ColourScheme.ApplyColoursToApp(app, SelectedColour);
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
@@ -223,6 +256,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         CurrentSort = newPreferences.SortOrder.Item1;
         SortDescending = newPreferences.SortOrder.Item2;
         SelectedTheme = newPreferences.RequestedTheme;
+        SelectedColour = newPreferences.RequestedAccentColour;
         SelectedLayoutSize = newPreferences.RequestedLayoutSize;
     }
 

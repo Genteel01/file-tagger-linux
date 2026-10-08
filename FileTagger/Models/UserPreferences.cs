@@ -17,6 +17,8 @@ public class UserPreferences
     {
         SortOrder = (Sorts.PathSort, false);
         _storedTheme = ThemeVariant.Default.ToString();
+        //TODO change to default value that gets system colour
+        RequestedAccentColour = ColourScheme.Colours.Blue;
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
         RequestedLayoutSize = MyThemes.LayoutSize.Automatic;
@@ -41,6 +43,11 @@ public class UserPreferences
         get => MyThemes.StringToTheme(_storedTheme);
         set => _storedTheme = value.ToString();
     }
+
+    /// <summary>
+    /// The accent colour that the user has requested
+    /// </summary>
+    public ColourScheme.Colours RequestedAccentColour { get; set; }
 
     /// <summary>
     /// Widths of each column in the track list
