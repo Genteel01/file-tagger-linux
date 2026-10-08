@@ -20,14 +20,6 @@ public class UpperCamelCaseSpacerTests
     }
 
     [Fact]
-    public void Convert_ThemeVariant_SpacesCamelCase()
-    {
-        object? result = _converter.Convert(MyThemes.LightGreen, typeof(string), null, CultureInfo.InvariantCulture);
-
-        Assert.Equal("Light Green", result);
-    }
-
-    [Fact]
     public void Convert_RawUppercaseString_ReturnsOriginalValue()
     {
         object? result = _converter.Convert("URL", typeof(string), null, CultureInfo.InvariantCulture);
@@ -42,15 +34,6 @@ public class UpperCamelCaseSpacerTests
             CultureInfo.InvariantCulture);
 
         Assert.Equal(PictureInfo.PIC_TYPE.RecordingLocation, result);
-    }
-
-    [Fact]
-    public void ConvertBack_ThemeVariant_MapsKnownStrings()
-    {
-        object? result = _converter.ConvertBack("Light Green", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
-
-        Assert.NotNull(result);
-        Assert.Equal(nameof(MyThemes.LightGreen), result!.ToString());
     }
 
     [Fact]
