@@ -165,16 +165,7 @@ public static class ColourScheme
             PlatformColorValues? systemColours = app.PlatformSettings?.GetColorValues();
             if (systemColours != null)
             {
-                Color baseColour = systemColours.AccentColor1;
-                ThemeAccentColor0[newColour] = new Color(AccentOpacity0, baseColour.R, baseColour.G, baseColour.B);
-                ThemeAccentColor1[newColour] = new Color(AccentOpacity1, baseColour.R, baseColour.G, baseColour.B);
-                ThemeAccentColor2[newColour] = new Color(AccentOpacity2, baseColour.R, baseColour.G, baseColour.B);
-                ThemeAccentColor3[newColour] = new Color(AccentOpacity3, baseColour.R, baseColour.G, baseColour.B);
-                ThemeAccentColor4[newColour] = new Color(AccentOpacity4, baseColour.R, baseColour.G, baseColour.B);
-                HighlightColor[newColour] = AdjustValue(ThemeAccentColor0[newColour], HighlightMultiplier);
-                HighlightColorDark[newColour] = ThemeAccentColor0[newColour];
-                FocusedTextBoxTrackColor[newColour] = CombineOverlayAndBase(ThemeAccentColor4[newColour], LightBackgroundColour);
-                FocusedTextBoxTrackColorDark[newColour] = CombineOverlayAndBase(ThemeAccentColor4[newColour], DarkBackgroundColour);
+                BuildSystemColours(systemColours);
             }
             else
             {
@@ -187,16 +178,47 @@ public static class ColourScheme
         app.Resources["ThemeAccentColor3"] = ThemeAccentColor3[newColour];
         app.Resources["ThemeAccentColor4"] = ThemeAccentColor4[newColour];
 
+        ApplyThemeColoursToApp(app, colour);
+    }
+
+    /// <summary>
+    /// Applies the colours that are dependent on the <see cref="ThemeVariant"/>
+    /// </summary>
+    public static void ApplyThemeColoursToApp(Application app, Colours colour)
+    {
+        //If colour is System and we haven't built the colours for it, don't continue. Occurs once on startup via
+        //app.ActualThemeVariantChanged if RequestedThemeVariant is 'default', system theme is dark, and the requested
+        //colour is 'System'. Immediately afterwards it runs ApplyColoursToApp via app.PlatformSettings?.ColorValuesChanged,
+        //which builds the system colours and runs ApplyThemeColoursToApp again.
+        if (colour == Colours.System && !ThemeAccentColor0.ContainsKey(colour))
+        {
+            return;
+        }
+
         if (app.ActualThemeVariant == ThemeVariant.Dark)
         {
-            app.Resources["HighlightColor"] = HighlightColorDark[newColour];
-            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColorDark[newColour];
+            app.Resources["HighlightColor"] = HighlightColorDark[colour];
+            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColorDark[colour];
         }
         else
         {
-            app.Resources["HighlightColor"] = HighlightColor[newColour];
-            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColor[newColour];
+            app.Resources["HighlightColor"] = HighlightColor[colour];
+            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColor[colour];
         }
+    }
+
+    private static void BuildSystemColours(PlatformColorValues systemColours)
+    {
+        Color baseColour = systemColours.AccentColor1;
+        ThemeAccentColor0[Colours.System] = new Color(AccentOpacity0, baseColour.R, baseColour.G, baseColour.B);
+        ThemeAccentColor1[Colours.System] = new Color(AccentOpacity1, baseColour.R, baseColour.G, baseColour.B);
+        ThemeAccentColor2[Colours.System] = new Color(AccentOpacity2, baseColour.R, baseColour.G, baseColour.B);
+        ThemeAccentColor3[Colours.System] = new Color(AccentOpacity3, baseColour.R, baseColour.G, baseColour.B);
+        ThemeAccentColor4[Colours.System] = new Color(AccentOpacity4, baseColour.R, baseColour.G, baseColour.B);
+        HighlightColor[Colours.System] = AdjustValue(ThemeAccentColor0[Colours.System], HighlightMultiplier);
+        HighlightColorDark[Colours.System] = ThemeAccentColor0[Colours.System];
+        FocusedTextBoxTrackColor[Colours.System] = CombineOverlayAndBase(ThemeAccentColor4[Colours.System], LightBackgroundColour);
+        FocusedTextBoxTrackColorDark[Colours.System] = CombineOverlayAndBase(ThemeAccentColor4[Colours.System], DarkBackgroundColour);
     }
 
     /// <summary>

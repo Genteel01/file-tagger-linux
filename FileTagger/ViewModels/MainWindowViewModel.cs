@@ -233,7 +233,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         {
             //Listen for changes to theme and colour value to make sure colours are correct
             app.PlatformSettings?.ColorValuesChanged += (_, _) => ColourScheme.ApplyColoursToApp(app, SelectedColour);
-            app.ActualThemeVariantChanged += (_, _) => ColourScheme.ApplyColoursToApp(app, SelectedColour);
+            app.ActualThemeVariantChanged += (_, _) => ColourScheme.ApplyThemeColoursToApp(app, SelectedColour);
         }
         //Set up event handler to update preferences whenever column widths change
         ListColumnWidths.CollectionChanged += (_, args) =>
