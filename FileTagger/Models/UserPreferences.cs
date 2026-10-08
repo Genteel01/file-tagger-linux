@@ -17,8 +17,7 @@ public class UserPreferences
     {
         SortOrder = (Sorts.PathSort, false);
         _storedTheme = ThemeVariant.Default.ToString();
-        //TODO change to default value that gets system colour
-        RequestedAccentColour = ColourScheme.Colours.Blue;
+        RequestedAccentColour = ColourScheme.Colours.System;
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
         RequestedLayoutSize = MyThemes.LayoutSize.Automatic;

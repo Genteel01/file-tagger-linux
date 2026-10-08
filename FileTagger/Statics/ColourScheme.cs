@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Avalonia;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Styling;
 
 namespace FileTagger.Statics;
@@ -11,6 +12,7 @@ public static class ColourScheme
 {
     public enum Colours
     {
+        System,
         Pink,
         Red,
         Orange,
@@ -151,25 +153,49 @@ public static class ColourScheme
     };
 
     /// <summary>
-    /// Sets all accent colour resources to the value for the given colour
+    /// Sets all accent colour resources to the value for the given colour.
+    /// If set to <see cref="Colours.System"/>, builds the correct values for the system accent colour.
     /// </summary>
     public static void ApplyColoursToApp(Application app, Colours colour)
     {
-        app.Resources["ThemeAccentColor0"] = ThemeAccentColor0[colour];
-        app.Resources["ThemeAccentColor"] = ThemeAccentColor1[colour];
-        app.Resources["ThemeAccentColor2"] = ThemeAccentColor2[colour];
-        app.Resources["ThemeAccentColor3"] = ThemeAccentColor3[colour];
-        app.Resources["ThemeAccentColor4"] = ThemeAccentColor4[colour];
+        Colours newColour = colour;
+        //If colour is system, build the correct values for the system accent colour
+        if (colour == Colours.System)
+        {
+            PlatformColorValues? systemColours = app.PlatformSettings?.GetColorValues();
+            if (systemColours != null)
+            {
+                Color baseColour = systemColours.AccentColor1;
+                ThemeAccentColor0[newColour] = new Color(AccentOpacity0, baseColour.R, baseColour.G, baseColour.B);
+                ThemeAccentColor1[newColour] = new Color(AccentOpacity1, baseColour.R, baseColour.G, baseColour.B);
+                ThemeAccentColor2[newColour] = new Color(AccentOpacity2, baseColour.R, baseColour.G, baseColour.B);
+                ThemeAccentColor3[newColour] = new Color(AccentOpacity3, baseColour.R, baseColour.G, baseColour.B);
+                ThemeAccentColor4[newColour] = new Color(AccentOpacity4, baseColour.R, baseColour.G, baseColour.B);
+                HighlightColor[newColour] = AdjustValue(ThemeAccentColor0[newColour], HighlightMultiplier);
+                HighlightColorDark[newColour] = ThemeAccentColor0[newColour];
+                FocusedTextBoxTrackColor[newColour] = CombineOverlayAndBase(ThemeAccentColor4[newColour], LightBackgroundColour);
+                FocusedTextBoxTrackColorDark[newColour] = CombineOverlayAndBase(ThemeAccentColor4[newColour], DarkBackgroundColour);
+            }
+            else
+            {
+                newColour = DefaultColour;
+            }
+        }
+        app.Resources["ThemeAccentColor0"] = ThemeAccentColor0[newColour];
+        app.Resources["ThemeAccentColor"] = ThemeAccentColor1[newColour];
+        app.Resources["ThemeAccentColor2"] = ThemeAccentColor2[newColour];
+        app.Resources["ThemeAccentColor3"] = ThemeAccentColor3[newColour];
+        app.Resources["ThemeAccentColor4"] = ThemeAccentColor4[newColour];
 
         if (app.ActualThemeVariant == ThemeVariant.Dark)
         {
-            app.Resources["HighlightColor"] = HighlightColorDark[colour];
-            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColorDark[colour];
+            app.Resources["HighlightColor"] = HighlightColorDark[newColour];
+            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColorDark[newColour];
         }
         else
         {
-            app.Resources["HighlightColor"] = HighlightColor[colour];
-            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColor[colour];
+            app.Resources["HighlightColor"] = HighlightColor[newColour];
+            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColor[newColour];
         }
     }
 

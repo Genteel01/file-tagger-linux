@@ -189,7 +189,6 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         if (Application.Current is { } app)
         {
             app.RequestedThemeVariant = value;
-            ColourScheme.ApplyColoursToApp(app, SelectedColour);
             PropertyInfo themeProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedTheme))!;
             _preferenceService.StorePreferenceItem(themeProperty, value);
         }
@@ -229,6 +228,13 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             }
         }
         SetUpUserPreferences();
+
+        if (Application.Current is { } app)
+        {
+            //Listen for changes to theme and colour value to make sure colours are correct
+            app.PlatformSettings?.ColorValuesChanged += (_, _) => ColourScheme.ApplyColoursToApp(app, SelectedColour);
+            app.ActualThemeVariantChanged += (_, _) => ColourScheme.ApplyColoursToApp(app, SelectedColour);
+        }
         //Set up event handler to update preferences whenever column widths change
         ListColumnWidths.CollectionChanged += (_, args) =>
         {
