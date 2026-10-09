@@ -116,7 +116,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// <summary>
     /// List of <see cref="ColourScheme.Colours"/> to choose from in options
     /// </summary>
-    public ColourScheme.Colours[] Colours { get; } = Enum.GetValues<ColourScheme.Colours>();
+    public ColourScheme.Colours[] Colours { get; } = ColourScheme.SelectableColours;
 
     /// <summary>
     /// The selected <see cref="ColourScheme.Colours"/>

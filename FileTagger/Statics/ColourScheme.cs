@@ -24,6 +24,19 @@ public static class ColourScheme
         Violet,
     }
 
+    /// <summary>
+    /// List of <see cref="Colours"/> that can be selected
+    /// </summary>
+    public static Colours[] SelectableColours = [
+        Colours.System,
+        Colours.Red,
+        Colours.Orange,
+        Colours.Yellow,
+        Colours.Green,
+        Colours.Blue,
+        Colours.Indigo,
+        Colours.Violet];
+
     private const Colours DefaultColour = Colours.Blue;
     private const double HighlightMultiplier = 0.5;
     private const byte AccentOpacity0 = 0xFF;
