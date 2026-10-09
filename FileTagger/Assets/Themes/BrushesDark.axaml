@@ -16,7 +16,7 @@
             <Color x:Key='EditPanelBackgroundColor'>#232527</Color>
 
             <Color x:Key='MenuBorderColor'>#2C2C2C</Color>
-            <Color x:Key='SectionBorderColor'>#787878</Color>
+            <Color x:Key='SectionBorderColor'>#4A4A4A</Color>
             <Color x:Key='SortArrowColor'>#30FFFFFF</Color>
 
             <!--Most of the background-->

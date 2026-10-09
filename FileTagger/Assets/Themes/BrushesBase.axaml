@@ -13,7 +13,7 @@
             <Color x:Key='EditPanelBackgroundColor'>#F0F0F0</Color>
 
             <Color x:Key='MenuBorderColor'>#D3D3D3</Color>
-            <Color x:Key='SectionBorderColor'>#888888</Color>
+            <Color x:Key='SectionBorderColor'>#B5B5B5</Color>
             <Color x:Key='SortArrowColor'>#30000000</Color>
 
             <Color x:Key="TrackChangedBorderColor">Red</Color>
