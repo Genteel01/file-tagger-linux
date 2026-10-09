@@ -24,6 +24,15 @@ public static class ColourScheme
         Violet,
     }
 
+    private enum AccentOpacity : byte
+    {
+        Accent0 = 0xFF,
+        Accent1 = 0xCC,
+        Accent2 = 0x99,
+        Accent3 = 0x66,
+        Accent4 = 0x33,
+    }
+
     /// <summary>
     /// List of <see cref="Colours"/> that can be selected
     /// </summary>
@@ -39,131 +48,41 @@ public static class ColourScheme
 
     private const Colours DefaultColour = Colours.Blue;
     private const double HighlightMultiplier = 0.5;
-    private const byte AccentOpacity0 = 0xFF;
-    private const byte AccentOpacity1 = 0xCC;
-    private const byte AccentOpacity2 = 0x99;
-    private const byte AccentOpacity3 = 0x66;
-    private const byte AccentOpacity4 = 0x33;
+
+    //ThemeBackgroundColour for light theme
     private static readonly Color LightBackgroundColour = Colors.White;
+    //ThemeBackgroundColour for dark theme
     private static readonly Color DarkBackgroundColour = Color.FromRgb(0x0F, 0x0F, 0x0F);
 
-    private static readonly Dictionary<Colours, Color> ThemeAccentColor0 = new Dictionary<Colours, Color>
+    private static readonly Dictionary<Colours, (byte r, byte g, byte b)> AccentColours = new Dictionary<Colours, (byte r, byte g, byte b)>
     {
-        { Colours.Pink, Color.FromArgb(AccentOpacity0, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(AccentOpacity0, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(AccentOpacity0, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(AccentOpacity0, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(AccentOpacity0, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(AccentOpacity0, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(AccentOpacity0, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(AccentOpacity0, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(AccentOpacity0, 0xB8, 0x75, 0xDC) }
+        { Colours.Pink, (0xE9, 0x3A, 0x9A) },
+        { Colours.Red, (0xE9, 0x3D, 0x58) },
+        { Colours.Orange, (0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, (0xE8, 0xCB, 0x2D) },
+        { Colours.Green, (0x3D, 0xD4, 0x25) },
+        { Colours.Teal, (0x00, 0xD3, 0xB8) },
+        { Colours.Blue, (0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, (0x92, 0x6E, 0xE4) },
+        { Colours.Violet, (0xB8, 0x75, 0xDC) },
     };
 
-    private static readonly Dictionary<Colours, Color> ThemeAccentColor1 = new Dictionary<Colours, Color>
+    private static Color ThemeAccentColor(AccentOpacity opacity, Colours colour)
     {
-        { Colours.Pink, Color.FromArgb(AccentOpacity1, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(AccentOpacity1, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(AccentOpacity1, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(AccentOpacity1, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(AccentOpacity1, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(AccentOpacity1, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(AccentOpacity1, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(AccentOpacity1, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(AccentOpacity1, 0xB8, 0x75, 0xDC) }
-    };
+        return Color.FromArgb((byte)opacity, AccentColours[colour].r, AccentColours[colour].g, AccentColours[colour].b);
+    }
 
-    private static readonly Dictionary<Colours, Color> ThemeAccentColor2 = new Dictionary<Colours, Color>
+    private static Color HighlightColor(Colours colour, ThemeVariant theme)
     {
-        { Colours.Pink, Color.FromArgb(AccentOpacity2, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(AccentOpacity2, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(AccentOpacity2, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(AccentOpacity2, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(AccentOpacity2, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(AccentOpacity2, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(AccentOpacity2, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(AccentOpacity2, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(AccentOpacity2, 0xB8, 0x75, 0xDC) }
-    };
+        if (theme == ThemeVariant.Dark) return ThemeAccentColor(AccentOpacity.Accent0, colour);
+        return AdjustValue(ThemeAccentColor(AccentOpacity.Accent0, colour), HighlightMultiplier);
+    }
 
-    private static readonly Dictionary<Colours, Color> ThemeAccentColor3 = new Dictionary<Colours, Color>
+    public static Color FocusedTextBoxTrackColor(Colours colour, ThemeVariant theme)
     {
-        { Colours.Pink, Color.FromArgb(AccentOpacity3, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(AccentOpacity3, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(AccentOpacity3, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(AccentOpacity3, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(AccentOpacity3, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(AccentOpacity3, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(AccentOpacity3, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(AccentOpacity3, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(AccentOpacity3, 0xB8, 0x75, 0xDC) }
-    };
-
-    private static readonly Dictionary<Colours, Color> ThemeAccentColor4 = new Dictionary<Colours, Color>
-    {
-        { Colours.Pink, Color.FromArgb(AccentOpacity4, 0xE9, 0x3A, 0x9A) },
-        { Colours.Red, Color.FromArgb(AccentOpacity4, 0xE9, 0x3D, 0x58) },
-        { Colours.Orange, Color.FromArgb(AccentOpacity4, 0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, Color.FromArgb(AccentOpacity4, 0xE8, 0xCB, 0x2D) },
-        { Colours.Green, Color.FromArgb(AccentOpacity4, 0x3D, 0xD4, 0x25) },
-        { Colours.Teal, Color.FromArgb(AccentOpacity4, 0x00, 0xD3, 0xB8) },
-        { Colours.Blue, Color.FromArgb(AccentOpacity4, 0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, Color.FromArgb(AccentOpacity4, 0x92, 0x6E, 0xE4) },
-        { Colours.Violet, Color.FromArgb(AccentOpacity4, 0xB8, 0x75, 0xDC) }
-    };
-
-    private static readonly Dictionary<Colours, Color> HighlightColor = new Dictionary<Colours, Color>
-    {
-        { Colours.Pink, AdjustValue(ThemeAccentColor0[Colours.Pink], HighlightMultiplier) },
-        { Colours.Red, AdjustValue(ThemeAccentColor0[Colours.Red], HighlightMultiplier) },
-        { Colours.Orange, AdjustValue(ThemeAccentColor0[Colours.Orange], HighlightMultiplier) },
-        { Colours.Yellow, AdjustValue(ThemeAccentColor0[Colours.Yellow], HighlightMultiplier) },
-        { Colours.Green, AdjustValue(ThemeAccentColor0[Colours.Green], HighlightMultiplier) },
-        { Colours.Teal, AdjustValue(ThemeAccentColor0[Colours.Teal], HighlightMultiplier) },
-        { Colours.Blue, AdjustValue(ThemeAccentColor0[Colours.Blue], HighlightMultiplier) },
-        { Colours.Indigo, AdjustValue(ThemeAccentColor0[Colours.Indigo], HighlightMultiplier) },
-        { Colours.Violet, AdjustValue(ThemeAccentColor0[Colours.Violet], HighlightMultiplier) },
-    };
-
-    private static readonly Dictionary<Colours, Color> HighlightColorDark = new Dictionary<Colours, Color>
-    {
-        { Colours.Pink, ThemeAccentColor0[Colours.Pink] },
-        { Colours.Red, ThemeAccentColor0[Colours.Red] },
-        { Colours.Orange, ThemeAccentColor0[Colours.Orange] },
-        { Colours.Yellow, ThemeAccentColor0[Colours.Yellow] },
-        { Colours.Green, ThemeAccentColor0[Colours.Green] },
-        { Colours.Teal, ThemeAccentColor0[Colours.Teal] },
-        { Colours.Blue, ThemeAccentColor0[Colours.Blue] },
-        { Colours.Indigo, ThemeAccentColor0[Colours.Indigo] },
-        { Colours.Violet, ThemeAccentColor0[Colours.Violet] }
-    };
-
-    //The background colour here is the ThemeBackgroundColour for light theme
-    private static readonly Dictionary<Colours, Color> FocusedTextBoxTrackColor = new Dictionary<Colours, Color>
-    {
-        { Colours.Pink, CombineOverlayAndBase(ThemeAccentColor4[Colours.Pink], LightBackgroundColour) },
-        { Colours.Red, CombineOverlayAndBase(ThemeAccentColor4[Colours.Red], LightBackgroundColour) },
-        { Colours.Orange, CombineOverlayAndBase(ThemeAccentColor4[Colours.Orange], LightBackgroundColour) },
-        { Colours.Yellow, CombineOverlayAndBase(ThemeAccentColor4[Colours.Yellow], LightBackgroundColour) },
-        { Colours.Green, CombineOverlayAndBase(ThemeAccentColor4[Colours.Green], LightBackgroundColour) },
-        { Colours.Teal, CombineOverlayAndBase(ThemeAccentColor4[Colours.Teal], LightBackgroundColour) },
-        { Colours.Blue, CombineOverlayAndBase(ThemeAccentColor4[Colours.Blue], LightBackgroundColour) },
-        { Colours.Indigo, CombineOverlayAndBase(ThemeAccentColor4[Colours.Indigo], LightBackgroundColour) },
-        { Colours.Violet, CombineOverlayAndBase(ThemeAccentColor4[Colours.Violet], LightBackgroundColour) },
-    };
-    //The background colour here is the ThemeBackgroundColour for dark theme
-    private static readonly Dictionary<Colours, Color> FocusedTextBoxTrackColorDark = new Dictionary<Colours, Color>
-    {
-        { Colours.Pink, CombineOverlayAndBase(ThemeAccentColor4[Colours.Pink], DarkBackgroundColour) },
-        { Colours.Red, CombineOverlayAndBase(ThemeAccentColor4[Colours.Red], DarkBackgroundColour) },
-        { Colours.Orange, CombineOverlayAndBase(ThemeAccentColor4[Colours.Orange], DarkBackgroundColour) },
-        { Colours.Yellow, CombineOverlayAndBase(ThemeAccentColor4[Colours.Yellow], DarkBackgroundColour) },
-        { Colours.Green, CombineOverlayAndBase(ThemeAccentColor4[Colours.Green], DarkBackgroundColour) },
-        { Colours.Teal, CombineOverlayAndBase(ThemeAccentColor4[Colours.Teal], DarkBackgroundColour) },
-        { Colours.Blue, CombineOverlayAndBase(ThemeAccentColor4[Colours.Blue], DarkBackgroundColour) },
-        { Colours.Indigo, CombineOverlayAndBase(ThemeAccentColor4[Colours.Indigo], DarkBackgroundColour) },
-        { Colours.Violet, CombineOverlayAndBase(ThemeAccentColor4[Colours.Violet], DarkBackgroundColour) },
-    };
+        Color backgroundColour = theme == ThemeVariant.Dark ? DarkBackgroundColour : LightBackgroundColour;
+        return CombineOverlayAndBase(ThemeAccentColor(AccentOpacity.Accent4, colour), backgroundColour);
+    }
 
     /// <summary>
     /// Sets all accent colour resources to the value for the given colour.
@@ -185,11 +104,11 @@ public static class ColourScheme
                 newColour = DefaultColour;
             }
         }
-        app.Resources["ThemeAccentColor0"] = ThemeAccentColor0[newColour];
-        app.Resources["ThemeAccentColor"] = ThemeAccentColor1[newColour];
-        app.Resources["ThemeAccentColor2"] = ThemeAccentColor2[newColour];
-        app.Resources["ThemeAccentColor3"] = ThemeAccentColor3[newColour];
-        app.Resources["ThemeAccentColor4"] = ThemeAccentColor4[newColour];
+        app.Resources["ThemeAccentColor0"] = ThemeAccentColor(AccentOpacity.Accent0, newColour);
+        app.Resources["ThemeAccentColor"] = ThemeAccentColor(AccentOpacity.Accent1, newColour);
+        app.Resources["ThemeAccentColor2"] = ThemeAccentColor(AccentOpacity.Accent2, newColour);
+        app.Resources["ThemeAccentColor3"] = ThemeAccentColor(AccentOpacity.Accent3, newColour);
+        app.Resources["ThemeAccentColor4"] = ThemeAccentColor(AccentOpacity.Accent4, newColour);
 
         ApplyThemeColoursToApp(app, colour);
     }
@@ -203,35 +122,19 @@ public static class ColourScheme
         //app.ActualThemeVariantChanged if RequestedThemeVariant is 'default', system theme is dark, and the requested
         //colour is 'System'. Immediately afterwards it runs ApplyColoursToApp via app.PlatformSettings?.ColorValuesChanged,
         //which builds the system colours and runs ApplyThemeColoursToApp again.
-        if (colour == Colours.System && !ThemeAccentColor0.ContainsKey(colour))
+        if (colour == Colours.System && !AccentColours.ContainsKey(colour))
         {
             return;
         }
 
-        if (app.ActualThemeVariant == ThemeVariant.Dark)
-        {
-            app.Resources["HighlightColor"] = HighlightColorDark[colour];
-            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColorDark[colour];
-        }
-        else
-        {
-            app.Resources["HighlightColor"] = HighlightColor[colour];
-            app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColor[colour];
-        }
+        app.Resources["HighlightColor"] = HighlightColor(colour, app.ActualThemeVariant);
+        app.Resources["FocusedTextBoxTrackColor"] = FocusedTextBoxTrackColor(colour, app.ActualThemeVariant);
     }
 
     private static void BuildSystemColours(PlatformColorValues systemColours)
     {
         Color baseColour = systemColours.AccentColor1;
-        ThemeAccentColor0[Colours.System] = new Color(AccentOpacity0, baseColour.R, baseColour.G, baseColour.B);
-        ThemeAccentColor1[Colours.System] = new Color(AccentOpacity1, baseColour.R, baseColour.G, baseColour.B);
-        ThemeAccentColor2[Colours.System] = new Color(AccentOpacity2, baseColour.R, baseColour.G, baseColour.B);
-        ThemeAccentColor3[Colours.System] = new Color(AccentOpacity3, baseColour.R, baseColour.G, baseColour.B);
-        ThemeAccentColor4[Colours.System] = new Color(AccentOpacity4, baseColour.R, baseColour.G, baseColour.B);
-        HighlightColor[Colours.System] = AdjustValue(ThemeAccentColor0[Colours.System], HighlightMultiplier);
-        HighlightColorDark[Colours.System] = ThemeAccentColor0[Colours.System];
-        FocusedTextBoxTrackColor[Colours.System] = CombineOverlayAndBase(ThemeAccentColor4[Colours.System], LightBackgroundColour);
-        FocusedTextBoxTrackColorDark[Colours.System] = CombineOverlayAndBase(ThemeAccentColor4[Colours.System], DarkBackgroundColour);
+        AccentColours[Colours.System] = (baseColour.R, baseColour.G, baseColour.B);
     }
 
     /// <summary>
