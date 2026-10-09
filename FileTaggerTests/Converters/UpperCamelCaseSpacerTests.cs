@@ -1,7 +1,6 @@
 using System.Globalization;
 using ATL;
 using Avalonia.Styling;
-using FileTagger.Statics;
 using FileTagger.Converters;
 
 namespace FileTaggerTests.Converters;
@@ -20,6 +19,14 @@ public class UpperCamelCaseSpacerTests
     }
 
     [Fact]
+    public void Convert_ThemeVariant_SpacesCamelCase()
+    {
+        object? result = _converter.Convert(ThemeVariant.Light, typeof(string), null, CultureInfo.InvariantCulture);
+
+        Assert.Equal("Light", result);
+    }
+
+    [Fact]
     public void Convert_RawUppercaseString_ReturnsOriginalValue()
     {
         object? result = _converter.Convert("URL", typeof(string), null, CultureInfo.InvariantCulture);
@@ -34,6 +41,15 @@ public class UpperCamelCaseSpacerTests
             CultureInfo.InvariantCulture);
 
         Assert.Equal(PictureInfo.PIC_TYPE.RecordingLocation, result);
+    }
+
+    [Fact]
+    public void ConvertBack_ThemeVariant_MapsKnownStrings()
+    {
+        object? result = _converter.ConvertBack("Light", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+
+        Assert.NotNull(result);
+        Assert.Equal(nameof(ThemeVariant.Light), result.ToString());
     }
 
     [Fact]
