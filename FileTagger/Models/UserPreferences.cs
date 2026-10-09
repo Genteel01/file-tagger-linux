@@ -20,7 +20,7 @@ public class UserPreferences
         RequestedAccentColour = ColourScheme.Colours.System;
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
-        RequestedLayoutSize = MyThemes.LayoutSize.Automatic;
+        RequestedLayoutSize = Themes.LayoutSize.Automatic;
         FormatString = $"{TextToTagViewModel.PlaceholderChar}{nameof(TrackViewModel.Title)}{TextToTagViewModel.PlaceholderChar}";
     }
     /// <summary>
@@ -39,7 +39,7 @@ public class UserPreferences
     /// The theme that the user has requested, parsed from the stored string at <see cref="_storedTheme"/>
     /// </summary>
     public ThemeVariant RequestedTheme {
-        get => MyThemes.StringToTheme(_storedTheme);
+        get => Themes.StringToTheme(_storedTheme);
         set => _storedTheme = value.ToString();
     }
 
@@ -59,7 +59,7 @@ public class UserPreferences
     /// </summary>
     public double EditPanelWidth { get; set; }
 
-    public MyThemes.LayoutSize RequestedLayoutSize { get; set; }
+    public Themes.LayoutSize RequestedLayoutSize { get; set; }
 
     public string FormatString { get; set; }
 

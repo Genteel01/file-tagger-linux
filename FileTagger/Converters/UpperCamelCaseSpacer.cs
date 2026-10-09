@@ -92,6 +92,6 @@ public class UpperCamelCaseSpacer : IValueConverter
     private ThemeVariant StringToThemeVariant(string stringValue)
     {
         string gaplessString = stringValue.Replace(" ", "");
-        return MyThemes.StringToTheme(gaplessString);
+        return Themes.StringToTheme(gaplessString);
     }
 }
