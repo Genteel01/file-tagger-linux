@@ -1,7 +1,6 @@
 using System.Globalization;
 using ATL;
 using Avalonia.Styling;
-using FileTagger.Statics;
 using FileTagger.Converters;
 
 namespace FileTaggerTests.Converters;
@@ -22,9 +21,9 @@ public class UpperCamelCaseSpacerTests
     [Fact]
     public void Convert_ThemeVariant_SpacesCamelCase()
     {
-        object? result = _converter.Convert(MyThemes.LightGreen, typeof(string), null, CultureInfo.InvariantCulture);
+        object? result = _converter.Convert(ThemeVariant.Light, typeof(string), null, CultureInfo.InvariantCulture);
 
-        Assert.Equal("Light Green", result);
+        Assert.Equal("Light", result);
     }
 
     [Fact]
@@ -47,10 +46,10 @@ public class UpperCamelCaseSpacerTests
     [Fact]
     public void ConvertBack_ThemeVariant_MapsKnownStrings()
     {
-        object? result = _converter.ConvertBack("Light Green", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+        object? result = _converter.ConvertBack("Light", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
 
         Assert.NotNull(result);
-        Assert.Equal(nameof(MyThemes.LightGreen), result!.ToString());
+        Assert.Equal(nameof(ThemeVariant.Light), result.ToString());
     }
 
     [Fact]

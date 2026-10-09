@@ -32,7 +32,7 @@ public partial class MainWindow : Window
             if(sender is not Grid grid) return;
             if(grid.DataContext is not MainWindowViewModel vm) return;
 
-            ThemeVariant newTheme = MyThemes.GetOppositeTheme(vm.SelectedTheme);
+            ThemeVariant newTheme = Themes.GetOppositeTheme(vm.SelectedTheme);
             vm.ChangeSelectedTheme(newTheme);
         };
     }

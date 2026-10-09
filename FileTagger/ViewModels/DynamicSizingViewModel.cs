@@ -16,9 +16,9 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     public partial bool IsCompact { get; set; }
 
     [ObservableProperty]
-    public partial MyThemes.LayoutSize SelectedLayoutSize { get; set; }
+    public partial Themes.LayoutSize SelectedLayoutSize { get; set; }
 
-    partial void OnSelectedLayoutSizeChanged(MyThemes.LayoutSize value)
+    partial void OnSelectedLayoutSizeChanged(Themes.LayoutSize value)
     {
         CheckScreenHeight();
         PropertyInfo compactLayoutProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.RequestedLayoutSize))!;
@@ -26,7 +26,7 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     }
 
     [ObservableProperty]
-    public partial MyThemes.LayoutSize[] Layouts { get; set; } = Enum.GetValues<MyThemes.LayoutSize>();
+    public partial Themes.LayoutSize[] Layouts { get; set; } = Enum.GetValues<Themes.LayoutSize>();
 
 
     private const int HeightThreshold = 1080;
@@ -35,13 +35,13 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     {
         switch (SelectedLayoutSize)
         {
-            case MyThemes.LayoutSize.Compact:
+            case Themes.LayoutSize.Compact:
                 IsCompact = true;
                 return;
-            case MyThemes.LayoutSize.Standard:
+            case Themes.LayoutSize.Standard:
                 IsCompact = false;
                 return;
-            case MyThemes.LayoutSize.Automatic:
+            case Themes.LayoutSize.Automatic:
             default:
             {
                 TopLevel? topLevel = getTopLevel();
@@ -56,5 +56,5 @@ public abstract partial class DynamicSizingViewModel(Func<TopLevel?> getTopLevel
     }
 
     [RelayCommand]
-    private void ChangeLayout(MyThemes.LayoutSize value) => SelectedLayoutSize = value;
+    private void ChangeLayout(Themes.LayoutSize value) => SelectedLayoutSize = value;
 }
