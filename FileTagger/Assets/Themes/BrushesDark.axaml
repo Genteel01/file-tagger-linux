@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
-            <Color x:Key="HighlightForegroundColor">#FF0F0F0F</Color>
+            <Color x:Key="HighlightForegroundColor">#141618</Color>
 
-            <Color x:Key='ThemeBackgroundColor'>#0F0F0F</Color>
+            <Color x:Key='ThemeBackgroundColor'>#141618</Color>
             <Color x:Key='ThemeForegroundColor'>#DEDEDE</Color>
 
             <Color x:Key='ThemeBorderLowColor'>#808080</Color>
@@ -13,7 +13,7 @@
 
             <Color x:Key='ListSeparatorColor'>#16FFFFFF</Color>
             <Color x:Key='AlternateListItemColor'>#0BFFFFFF</Color>
-            <Color x:Key='EditPanelBackgroundColor'>#1E1E1E</Color>
+            <Color x:Key='EditPanelBackgroundColor'>#232527</Color>
 
             <Color x:Key='MenuBorderColor'>#2C2C2C</Color>
             <Color x:Key='SectionBorderColor'>#787878</Color>
