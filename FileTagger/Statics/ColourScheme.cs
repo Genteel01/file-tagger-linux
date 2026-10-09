@@ -36,7 +36,7 @@ public static class ColourScheme
     /// <summary>
     /// List of <see cref="Colours"/> that can be selected
     /// </summary>
-    public static Colours[] SelectableColours = [
+    public static readonly Colours[] SelectableColours = [
         Colours.System,
         Colours.Red,
         Colours.Orange,
