@@ -111,9 +111,9 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Path], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Path" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[CreatedDate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="CreatedDate" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[CreatedDateFormatted], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="CreatedDate" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[ModifiedDate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="ModifiedDate" MinWidth="19"/>
+                    <ColumnDefinition Width="{Binding ListColumnWidths[ModifiedDateFormatted], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="ModifiedDate" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Duration], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Duration" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
