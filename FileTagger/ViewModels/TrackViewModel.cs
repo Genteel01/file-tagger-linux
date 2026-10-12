@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using ATL;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FileTagger.Extensions;
 
@@ -55,6 +56,18 @@ public partial class TrackViewModel : ViewModelBase
     /// Gets the path
     /// </summary>
     public string FileName { get; }
+
+    /// <summary>
+    /// Date the file was created
+    /// </summary>
+    public DateTimeOffset? CreatedDate { get; }
+    public string? CreatedDateFormatted => CreatedDate?.ToLocalTime().ToString("G");
+
+    /// <summary>
+    /// Date the file was modified
+    /// </summary>
+    public DateTimeOffset? ModifiedDate { get; }
+    public string? ModifiedDateFormatted => ModifiedDate?.ToLocalTime().ToString("G");
 
     #endregion
 
@@ -199,11 +212,20 @@ public partial class TrackViewModel : ViewModelBase
         }
     }
 
+    public TrackViewModel(Track track, StorageItemProperties? properties = null) : this(track)
+    {
+        if (properties != null)
+        {
+            ModifiedDate = properties.DateModified;
+            CreatedDate = properties.DateCreated;
+        }
+    }
+
     /// <summary>
     /// Creates a new TrackViewModel for the given <see cref="ATL.Track"/>
     /// </summary>
     /// <param name="track">The Track to load</param>
-    public TrackViewModel(Track track)
+    private TrackViewModel(Track track)
     {
         _originalTrack = track;
         string? directory = System.IO.Path.GetDirectoryName(track.Path);

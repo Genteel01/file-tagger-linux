@@ -382,22 +382,23 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
 
         foreach (IStorageFile file in files)
         {
-            Task task = Task.Run(() =>
+            Task task = Task.Run(async () =>
             {
                 //WMA files can hit an error if you try to make two tracks at the same time, so run an extra Lock on them
                 string extension = Path.GetExtension(file.Name);
+                StorageItemProperties properties = await file.GetBasicPropertiesAsync();
                 if (_concurrentFileExtensions.Contains(extension))
                 {
                     Track track;
                     lock (wmaLocker) { track = new Track(file.Path.LocalPath); }
-                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    TrackViewModel trackViewModel = new TrackViewModel(track, properties);
                     trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
                 else
                 {
                     Track track = new Track(file.Path.LocalPath);
-                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    TrackViewModel trackViewModel = new TrackViewModel(track, properties);
                     trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }

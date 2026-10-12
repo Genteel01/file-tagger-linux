@@ -111,6 +111,10 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Path], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Path" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding ListColumnWidths[CreatedDate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="CreatedDate" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{Binding ListColumnWidths[ModifiedDate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="ModifiedDate" MinWidth="19"/>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Duration], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Duration" MinWidth="19"/>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="{Binding ListColumnWidths[Bitrate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Bitrate" MinWidth="19"/>
@@ -124,48 +128,71 @@
                 <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.TitleSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.TitleSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AlbumSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AlbumSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="4" Text="Artist" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.ArtistSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.ArtistSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="6" Text="Album Artist" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AlbumArtistSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AlbumArtistSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="8" Text="Track" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.TrackNumberSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.TrackNumberSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="10" Text="Disc" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.DiscNumberSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.DiscNumberSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="12" Text="Year" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.YearSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.YearSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="14" Text="Genre" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.GenreSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.GenreSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="16" Text="Composer" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.ComposerSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.ComposerSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="18" Text="Comment" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.CommentSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.CommentSort}}"/>
+
                 <controls:ListColumnHeader Grid.Column="20" Text="Path" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.PathSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.PathSort}}"/>
-                <controls:ListColumnHeader Grid.Column="22" Text="Duration" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.DurationSort}"
+                                           ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.PathSort}}"/>
+
+                <controls:ListColumnHeader Grid.Column="22" Text="Created Date" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.CreatedSort}"
+                                           ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
+                                           ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.CreatedSort}}"/>
+
+                <controls:ListColumnHeader Grid.Column="24" Text="Modified Date" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.ModifiedSort}"
+                                           ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
+                                           ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.ModifiedSort}}"/>
+
+                <controls:ListColumnHeader Grid.Column="26" Text="Duration" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.DurationSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.DurationSort}}"/>
-                <controls:ListColumnHeader Grid.Column="24" Text="Bitrate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.BitrateSort}"
+
+                <controls:ListColumnHeader Grid.Column="28" Text="Bitrate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.BitrateSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.BitrateSort}}"/>
-                <controls:ListColumnHeader Grid.Column="26" Text="Sample Rate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.SampleRateSort}"
+
+                <controls:ListColumnHeader Grid.Column="30" Text="Sample Rate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.SampleRateSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.SampleRateSort}}"/>
-                <controls:ListColumnHeader Grid.Column="28" Text="Audio Format" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AudioFormatSort}"
+
+                <controls:ListColumnHeader Grid.Column="32" Text="Audio Format" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AudioFormatSort}"
                     ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
                     ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AudioFormatSort}}"/>
+
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
@@ -181,7 +208,9 @@
                 <GridSplitter Grid.Column="25" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="27" ResizeDirection="Columns"/>
                 <GridSplitter Grid.Column="29" ResizeDirection="Columns"/>
-                <Panel Grid.Column="30" Background="Transparent"/>
+                <GridSplitter Grid.Column="31" ResizeDirection="Columns"/>
+                <GridSplitter Grid.Column="33" ResizeDirection="Columns"/>
+                <Panel Grid.Column="34" Background="Transparent"/>
             </Grid>
         </Panel>
     </ScrollViewer>

@@ -76,6 +76,8 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="CreatedDate" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="ModifiedDate" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Duration" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Bitrate" MinWidth="19" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="SampleRate" MinWidth="19" />
@@ -148,31 +150,43 @@
             <TextBox Grid.Column="10" Text="{Binding Path, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="PathBox"/>
-            <!--Duration-->
-            <TextBlock Grid.Column="11" Text="{Binding Duration, Mode=OneTime}" Name="DurationBlock"
+            <!--CreatedDate-->
+            <TextBlock Grid.Column="11" Text="{Binding CreatedDateFormatted, Mode=OneTime}" Name="CreatedDateBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="11" Text="{Binding Duration, Mode=OneTime}"
+            <TextBox Grid.Column="11" Text="{Binding CreatedDateFormatted, Mode=OneTime}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="CreatedDateBox"/>
+            <!--ModifiedDate-->
+            <TextBlock Grid.Column="12" Text="{Binding ModifiedDateFormatted, Mode=OneTime}" Name="ModifiedDateBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="12" Text="{Binding ModifiedDateFormatted, Mode=OneTime}"
+                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
+                     KeyDown="TextBoxEnterPressed" Name="ModifiedDateBox"/>
+            <!--Duration-->
+            <TextBlock Grid.Column="13" Text="{Binding Duration, Mode=OneTime}" Name="DurationBlock"
+                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
+            <TextBox Grid.Column="13" Text="{Binding Duration, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="DurationBox"/>
             <!--Bitrate-->
-            <TextBlock Grid.Column="12" Text="{Binding Bitrate, Mode=OneTime}" Name="BitrateBlock"
+            <TextBlock Grid.Column="14" Text="{Binding Bitrate, Mode=OneTime}" Name="BitrateBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="12" Text="{Binding Bitrate, Mode=OneTime}"
+            <TextBox Grid.Column="14" Text="{Binding Bitrate, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="BitrateBox"/>
             <!--SampleRate-->
-            <TextBlock Grid.Column="13" Text="{Binding SampleRate, Mode=OneTime}" Name="SampleRateBlock"
+            <TextBlock Grid.Column="15" Text="{Binding SampleRate, Mode=OneTime}" Name="SampleRateBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="13" Text="{Binding SampleRate, Mode=OneTime}"
+            <TextBox Grid.Column="15" Text="{Binding SampleRate, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="SampleRateBox"/>
             <!--AudioFormat-->
-            <TextBlock Grid.Column="14" Text="{Binding AudioFormat, Mode=OneTime}" Name="AudioFormatBlock"
+            <TextBlock Grid.Column="16" Text="{Binding AudioFormat, Mode=OneTime}" Name="AudioFormatBlock"
                        DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="14" Text="{Binding AudioFormat, Mode=OneTime}"
+            <TextBox Grid.Column="16" Text="{Binding AudioFormat, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="AudioFormatBox"/>
-            <Panel Grid.Column="15" Classes="buffer"/>
+            <Panel Grid.Column="17" Classes="buffer"/>
         </Grid>
     </Border>
 </UserControl>

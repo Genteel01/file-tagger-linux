@@ -32,6 +32,8 @@ public static class Sorts
     public const string BitrateSort = $"{nameof(TrackViewModel.Bitrate)}_{PathSort}";
     public const string SampleRateSort = $"{nameof(TrackViewModel.SampleRate)}_{PathSort}";
     public const string AudioFormatSort = $"{nameof(TrackViewModel.AudioFormat)}_{PathSort}";
+    public const string CreatedSort = $"{nameof(TrackViewModel.CreatedDate)}_{PathSort}";
+    public const string ModifiedSort = $"{nameof(TrackViewModel.ModifiedDate)}_{PathSort}";
 
 }
 
