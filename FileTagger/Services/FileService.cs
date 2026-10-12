@@ -16,9 +16,16 @@ namespace FileTagger.Services;
 
 public class FileService(Func<TopLevel?> getTarget) : IFileService
 {
+    #if DEBUG
     private readonly string _folderPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify),
-            $"Genteel01.{Consts.AppName}");
+            $"Genteel01.FileTagger");
+    #else
+    private readonly string _folderPath =
+    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify),
+        $"Genteel01.{Consts.AppName}");
+    #endif
+
 
     private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { IncludeFields = true, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals };
 
