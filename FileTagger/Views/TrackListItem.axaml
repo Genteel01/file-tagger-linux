@@ -32,7 +32,7 @@
         </Style>
         <!--End Sizing-->
         <Style Selector="TextBlock">
-            <Setter Property="Padding" Value="4 0"/>
+            <Setter Property="Padding" Value="4 0 0 0"/>
             <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="TextBox">
@@ -60,10 +60,13 @@
         <Style Selector="Border#SelectionGroupBorder.changeStart.changeEnd">
             <Setter Property="BorderThickness" Value="1" />
         </Style>
+        <Style Selector="Panel.SplitterBuffer">
+            <Setter Property="Width" Value="{StaticResource GridSplitterWidth}" />
+        </Style>
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Grid ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
+        <Grid ColumnSpacing="{StaticResource ListItemSpacing}" Tapped="GridTapped" Classes="TrackGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Title" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Album" />
@@ -186,7 +189,7 @@
             <TextBox Grid.Column="16" Text="{Binding AudioFormat, Mode=OneTime}"
                      LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
                      KeyDown="TextBoxEnterPressed" Name="AudioFormatBox"/>
-            <Panel Grid.Column="17" Classes="buffer"/>
+            <Panel Grid.Column="17" Classes="SplitterBuffer"/>
         </Grid>
     </Border>
 </UserControl>

@@ -41,10 +41,7 @@
         </Style>
         <Style Selector="GridSplitter">
             <Setter Property="Background" Value="{DynamicResource ListSeparatorBrush}" />
-            <Setter Property="Width" Value="3" />
-        </Style>
-        <Style Selector="Panel.buffer">
-            <Setter Property="Width" Value="3" />
+            <Setter Property="Width" Value="{StaticResource GridSplitterWidth}" />
         </Style>
     </UserControl.Styles>
     <UserControl.KeyBindings>

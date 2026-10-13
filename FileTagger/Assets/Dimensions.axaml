@@ -9,6 +9,9 @@
     <x:Double x:Key="RowLineHeight">22</x:Double>
     <x:Double x:Key="SmallRowHeight">28</x:Double>
     <x:Double x:Key="SmallRowLineHeight">20</x:Double>
+    <x:Double x:Key="GridSplitterWidth">3</x:Double>
+    <!--GridSplitterWidth + 2-->
+    <x:Double x:Key="ListItemSpacing">5</x:Double>
     <!--Edit Panel-->
     <x:Double x:Key="SmallEditControlHeight">28</x:Double>
     <x:Double x:Key="EditControlHeight">32</x:Double>
