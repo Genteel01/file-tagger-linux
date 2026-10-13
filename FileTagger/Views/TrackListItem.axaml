@@ -65,23 +65,23 @@
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
         <Grid ColumnSpacing="4" Tapped="GridTapped" Classes="TrackGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Title" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Album" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Track" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Year" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Path" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="CreatedDate" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ModifiedDate" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Duration" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Bitrate" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="SampleRate" MinWidth="19" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="AudioFormat" MinWidth="19" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Title" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Album" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Track" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Year" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Path" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="CreatedDate" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="ModifiedDate" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Duration" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Bitrate" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="SampleRate" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="AudioFormat" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <!--Title-->
