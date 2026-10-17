@@ -96,6 +96,12 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     public partial bool SortDescending { get; private set; }
 
     /// <summary>
+    /// Visibility for each column in the track list
+    /// </summary>
+    [ObservableProperty]
+    public partial Dictionary<string, bool> ListColumnVisibilities { get; private set; } = new Dictionary<string, bool>();
+
+    /// <summary>
     /// Widths for each column in the track list
     /// </summary>
     public AvaloniaDictionary<string, double> ListColumnWidths { get; private set; } = new AvaloniaDictionary<string, double>();
@@ -257,13 +263,15 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     private void SetUpUserPreferences()
     {
         UserPreferences newPreferences = _preferenceService.UserPreferenceData;
-        ListColumnWidths = new AvaloniaDictionary<string, double>(newPreferences.ListColumnWidths);
         EditPanelWidth = double.IsPositiveInfinity(newPreferences.EditPanelWidth) ? GridLength.Star : new GridLength(newPreferences.EditPanelWidth);
         CurrentSort = newPreferences.SortOrder.Item1;
         SortDescending = newPreferences.SortOrder.Item2;
         SelectedTheme = newPreferences.RequestedTheme;
         SelectedColour = newPreferences.RequestedAccentColour;
         SelectedLayoutSize = newPreferences.RequestedLayoutSize;
+
+        ListColumnWidths = new AvaloniaDictionary<string, double>(newPreferences.ListColumnWidths);
+        ListColumnVisibilities = new Dictionary<string, bool>(newPreferences.ListColumnVisibilities);
     }
 
     #if DEBUG
@@ -276,8 +284,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
         _supportedFileExtensions = [];
-        CurrentSort = Sorts.PathSort;
-        ListColumnWidths = new AvaloniaDictionary<string, double>();
+        CurrentSort = TrackListData.DefaultSort;
         SelectedTheme = ThemeVariant.Default;
         _getDialogTarget = () => null;
     }
@@ -440,7 +447,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// <summary>
     /// Sorts Tracks by the fields in the order given
     /// </summary>
-    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="TrackListData"/></param>
     /// <param name="swapDirection">Whether to swap the direction between ascending and descending</param>
     public void SortTracks(string fields, bool swapDirection)
     {
@@ -466,7 +473,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// Returns the given tracks sorted by the fields in the order given
     /// </summary>
     /// <param name="tracks">The tracks to sort</param>
-    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="TrackListData"/></param>
     /// <param name="sortDescending">Whether to sort in descending order</param>
     private List<TrackViewModel> SortGivenTracks(List<TrackViewModel> tracks, string fields, bool sortDescending)
     {

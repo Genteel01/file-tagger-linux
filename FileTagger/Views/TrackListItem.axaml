@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
-             xmlns:sharedEventHandlers="clr-namespace:FileTagger.Statics"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FileTagger.Views.TrackListItem" x:DataType="viewModels:TrackViewModel">
     <UserControl.Styles>
@@ -61,135 +60,12 @@
             <Setter Property="BorderThickness" Value="1" />
         </Style>
         <Style Selector="Panel.SplitterBuffer">
-            <Setter Property="Width" Value="{StaticResource GridSplitterWidth}" />
+            <Setter Property="Width" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         </Style>
     </UserControl.Styles>
     <Border Name="SelectionGroupBorder" Classes.IsCutting="{Binding IsCutting}" Classes.isChanged="{Binding Changed}"
             Classes.changeStart="{Binding IsChangeStart}" Classes.changeEnd="{Binding IsChangeEnd}">
-        <Grid ColumnSpacing="{StaticResource ListItemSpacing}" Tapped="GridTapped" Classes="TrackGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Title" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Album" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Artist" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="AlbumArtist" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Track" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Disc" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Year" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Genre" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Composer" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Comment" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Path" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="CreatedDate" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ModifiedDate" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Duration" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Bitrate" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="SampleRate" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="AudioFormat" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <!--Title-->
-            <TextBlock Grid.Column="0" Text="{Binding Title}" Name="TitleBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="0" Text="{Binding Title, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="TitleBox"/>
-            <!--Album-->
-            <TextBlock Grid.Column="1" Text="{Binding Album}" Name="AlbumBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="1" Text="{Binding Album, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="AlbumBox"/>
-             <!--Artist-->
-            <TextBlock Grid.Column="2" Text="{Binding Artist}" Name="ArtistBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="2" Text="{Binding Artist, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="ArtistBox"/>
-             <!--AlbumArtist-->
-            <TextBlock Grid.Column="3" Text="{Binding AlbumArtist}" Name="AlbumArtistBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="3" Text="{Binding AlbumArtist, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="AlbumArtistBox"/>
-             <!--TrackNumber-->
-            <TextBlock Grid.Column="4" Text="{Binding TrackNumber}" Name="TrackNumberBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="4" Text="{Binding TrackNumber, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}" Name="TrackNumberBox"/>
-             <!--DiscNumber-->
-            <TextBlock Grid.Column="5" Text="{Binding DiscNumber}" Name="DiscNumberBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="5" Text="{Binding DiscNumber, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}" Name="DiscNumberBox"/>
-             <!--Year-->
-            <TextBlock Grid.Column="6" Text="{Binding Year}" Name="YearBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="6" Text="{Binding Year, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" TextChanged="{x:Static sharedEventHandlers:TextValidation.OnlyAllowNumberInput}" Name="YearBox"/>
-             <!--Genre-->
-            <TextBlock Grid.Column="7" Text="{Binding Genre}" Name="GenreBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="7" Text="{Binding Genre, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="GenreBox"/>
-             <!--Composer-->
-            <TextBlock Grid.Column="8" Text="{Binding Composer}" Name="ComposerBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="8" Text="{Binding Composer, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="ComposerBox"/>
-             <!--Comment-->
-            <TextBlock Grid.Column="9" Text="{Binding Comment}" Name="CommentBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="9" Text="{Binding Comment, UpdateSourceTrigger=LostFocus}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False"
-                     KeyDown="TextBoxEnterPressed" Name="CommentBox"/>
-            <!--Path-->
-            <TextBlock Grid.Column="10" Text="{Binding Path, Mode=OneTime}" Name="PathBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="10" Text="{Binding Path, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="PathBox"/>
-            <!--CreatedDate-->
-            <TextBlock Grid.Column="11" Text="{Binding CreatedDateFormatted, Mode=OneTime}" Name="CreatedDateBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="11" Text="{Binding CreatedDateFormatted, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="CreatedDateBox"/>
-            <!--ModifiedDate-->
-            <TextBlock Grid.Column="12" Text="{Binding ModifiedDateFormatted, Mode=OneTime}" Name="ModifiedDateBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="12" Text="{Binding ModifiedDateFormatted, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="ModifiedDateBox"/>
-            <!--Duration-->
-            <TextBlock Grid.Column="13" Text="{Binding Duration, Mode=OneTime}" Name="DurationBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="13" Text="{Binding Duration, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="DurationBox"/>
-            <!--Bitrate-->
-            <TextBlock Grid.Column="14" Text="{Binding Bitrate, Mode=OneTime}" Name="BitrateBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="14" Text="{Binding Bitrate, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="BitrateBox"/>
-            <!--SampleRate-->
-            <TextBlock Grid.Column="15" Text="{Binding SampleRate, Mode=OneTime}" Name="SampleRateBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="15" Text="{Binding SampleRate, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="SampleRateBox"/>
-            <!--AudioFormat-->
-            <TextBlock Grid.Column="16" Text="{Binding AudioFormat, Mode=OneTime}" Name="AudioFormatBlock"
-                       DoubleTapped="TextBlockDoubleTapped" IsVisible="True"/>
-            <TextBox Grid.Column="16" Text="{Binding AudioFormat, Mode=OneTime}"
-                     LostFocus="TextBoxFocusLost" IsVisible="False" IsEnabled="False" IsReadOnly="True"
-                     KeyDown="TextBoxEnterPressed" Name="AudioFormatBox"/>
-            <Panel Grid.Column="17" Classes="SplitterBuffer"/>
-        </Grid>
+        <Grid Tapped="GridTapped" Classes="TrackGrid" Name="TrackGrid" UseLayoutRounding="False"/>
     </Border>
 </UserControl>
