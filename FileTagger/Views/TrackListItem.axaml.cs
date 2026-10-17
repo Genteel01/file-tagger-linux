@@ -157,22 +157,7 @@ public partial class TrackListItem : UserControl
 
             CompiledBinding binding = TrackListData.PossibleListColumns[key].PropertyBinding;
 
-            Panel columnPanel = new Panel();
-            TextBlock columnTextBlock = new TextBlock
-            {
-                [!TextBlock.TextProperty] = binding,
-            };
-            columnTextBlock.DoubleTapped += TextBlockDoubleTapped;
-            columnPanel.Children.Add(columnTextBlock);
-            TextBox columnTextBox = new TextBox
-            {
-                IsVisible = false,
-                IsEnabled = false,
-                [!TextBox.TextProperty] = binding
-            };
-            columnTextBox.LostFocus += TextBoxFocusLost;
-            columnTextBox.KeyDown += TextBoxEnterPressed;
-            columnPanel.Children.Add(columnTextBox);
+            Panel columnPanel = CreateColumnPanel(binding);
 
             Grid.SetColumn(columnPanel, columnIndex);
             TrackGrid.Children.Add(columnPanel);
@@ -194,5 +179,26 @@ public partial class TrackListItem : UserControl
         };
         TrackGrid.Children.Add(dummyPanel);
         Grid.SetColumn(dummyPanel, columnIndex);
+    }
+
+    private Panel CreateColumnPanel(CompiledBinding textBinding)
+    {
+        Panel columnPanel = new Panel();
+        TextBlock columnTextBlock = new TextBlock
+        {
+            [!TextBlock.TextProperty] = textBinding,
+        };
+        columnTextBlock.DoubleTapped += TextBlockDoubleTapped;
+        columnPanel.Children.Add(columnTextBlock);
+        TextBox columnTextBox = new TextBox
+        {
+            IsVisible = false,
+            IsEnabled = false,
+            [!TextBox.TextProperty] = textBinding
+        };
+        columnTextBox.LostFocus += TextBoxFocusLost;
+        columnTextBox.KeyDown += TextBoxEnterPressed;
+        columnPanel.Children.Add(columnTextBox);
+        return columnPanel;
     }
 }
