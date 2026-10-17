@@ -73,7 +73,7 @@ public class UserPreferences
     /// </summary>
     private void AddMissingColumnWidths()
     {
-        foreach ((string name, string _, string _) in TrackListData.PossibleListColumns)
+        foreach (string name in TrackListData.PossibleListColumns.Keys)
         {
             if (!ListColumnWidths.ContainsKey(name))
             {
@@ -92,7 +92,7 @@ public class UserPreferences
 
     private void AddMissingColumnVisibilities()
     {
-        foreach ((string name, string _, string _) in TrackListData.PossibleListColumns)
+        foreach (string name in TrackListData.PossibleListColumns.Keys)
         {
             ListColumnVisibilities.TryAdd(name, true);
                 //TODO temp to test only showing some columns. Should default to true on all columns

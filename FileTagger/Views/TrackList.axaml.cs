@@ -33,17 +33,18 @@ public partial class TrackList : UserControl
     public TrackList()
     {
         InitializeComponent();
-        foreach ((string name, string sort, string label) in TrackListData.PossibleListColumns)
+
+        foreach (KeyValuePair<string, TrackListData.ListColumnData> possibleListColumn in TrackListData.PossibleListColumns)
         {
             ListColumnHeader columnHeader = new ListColumnHeader
             {
-                Text = label,
+                Text = possibleListColumn.Value.Label,
                 [!ListColumnHeader.ShowUpArrowProperty] = CompiledBinding.Create<MainWindowViewModel, bool>(vm => !vm.SortDescending),
                 [!ListColumnHeader.ShowDownArrowProperty] = CompiledBinding.Create<MainWindowViewModel, bool>(vm => vm.SortDescending),
                 [!ListColumnHeader.ShowArrowsProperty] = CompiledBinding.Create<MainWindowViewModel, string>(vm => vm.CurrentSort,
                     converter: new SortArrowsConverter(),
-                    converterParameter: sort),
-                Name = sort,
+                    converterParameter: possibleListColumn.Value.Sort),
+                Name = possibleListColumn.Value.Sort,
             };
 
             columnHeader.Tapped += ColumnHeaderTapped;
@@ -53,7 +54,7 @@ public partial class TrackList : UserControl
                 ResizeDirection = GridResizeDirection.Columns,
             };
 
-            _columnHeaders.Add(name, (columnHeader, splitter));
+            _columnHeaders.Add(possibleListColumn.Key, (columnHeader, splitter));
         }
     }
 

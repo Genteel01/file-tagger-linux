@@ -155,66 +155,7 @@ public partial class TrackListItem : UserControl
             };
             TrackGrid.ColumnDefinitions.Add(splitterColumn);
 
-            CompiledBinding binding;
-
-            switch (key)
-            {
-                case nameof(TrackViewModel.Title):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Title);
-                    break;
-                case nameof(TrackViewModel.Album):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Album);
-                    break;
-                case nameof(TrackViewModel.Artist):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Artist);
-                    break;
-                case nameof(TrackViewModel.AlbumArtist):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.AlbumArtist);
-                    break;
-                case nameof(TrackViewModel.TrackNumber):
-                    binding = CompiledBinding.Create<TrackViewModel, int?>(track => track.TrackNumber);
-                    break;
-                case nameof(TrackViewModel.DiscNumber):
-                    binding = CompiledBinding.Create<TrackViewModel, int?>(track => track.DiscNumber);
-                    break;
-                case nameof(TrackViewModel.Year):
-                    binding = CompiledBinding.Create<TrackViewModel, int?>(track => track.Year);
-                    break;
-                case nameof(TrackViewModel.Genre):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Genre);
-                    break;
-                case nameof(TrackViewModel.Composer):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Composer);
-                    break;
-                case nameof(TrackViewModel.Comment):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Comment);
-                    break;
-                case nameof(TrackViewModel.Path):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Path);
-                    break;
-                case nameof(TrackViewModel.CreatedDateFormatted):
-                    binding = CompiledBinding.Create<TrackViewModel, string?>(track => track.CreatedDateFormatted);
-                    break;
-                case nameof(TrackViewModel.ModifiedDateFormatted):
-                    binding = CompiledBinding.Create<TrackViewModel, string?>(track => track.ModifiedDateFormatted);
-                    break;
-                case nameof(TrackViewModel.Duration):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Duration);
-                    break;
-                case nameof(TrackViewModel.Bitrate):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.Bitrate);
-                    break;
-                case nameof(TrackViewModel.SampleRate):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.SampleRate);
-                    break;
-                case nameof(TrackViewModel.AudioFormat):
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => track.AudioFormat);
-                    break;
-                default:
-                    binding = CompiledBinding.Create<TrackViewModel, string>(track => "");
-                    break;
-            }
-
+            CompiledBinding binding = TrackListData.PossibleListColumns[key].PropertyBinding;
 
             Panel columnPanel = new Panel();
             TextBlock columnTextBlock = new TextBlock
