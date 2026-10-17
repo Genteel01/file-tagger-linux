@@ -82,8 +82,7 @@ public partial class TrackList : UserControl
                     mode: BindingMode.TwoWay)
             };
             HeaderGrid.ColumnDefinitions.Add(newColumn);
-            GridLength splitterColumnWidth = GridLength.Auto;
-            ColumnDefinition splitterColumn = new ColumnDefinition(splitterColumnWidth)
+            ColumnDefinition splitterColumn = new ColumnDefinition(GridLength.Auto)
             {
                 SharedSizeGroup = key + TrackListData.SplitterSizeGroupSuffix
             };

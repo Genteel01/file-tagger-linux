@@ -148,8 +148,7 @@ public partial class TrackListItem : UserControl
                 SharedSizeGroup = key,
             };
             TrackGrid.ColumnDefinitions.Add(newColumn);
-            GridLength splitterColumnWidth = GridLength.Auto;
-            ColumnDefinition splitterColumn = new ColumnDefinition(splitterColumnWidth)
+            ColumnDefinition splitterColumn = new ColumnDefinition(GridLength.Auto)
             {
                 SharedSizeGroup = key + TrackListData.SplitterSizeGroupSuffix
             };
