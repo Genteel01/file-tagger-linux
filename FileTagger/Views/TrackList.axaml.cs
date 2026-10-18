@@ -33,29 +33,6 @@ public partial class TrackList : UserControl
     public TrackList()
     {
         InitializeComponent();
-
-        foreach (KeyValuePair<string, TrackListData.ListColumnData> possibleListColumn in TrackListData.PossibleListColumns)
-        {
-            ListColumnHeader columnHeader = new ListColumnHeader
-            {
-                Text = possibleListColumn.Value.Label,
-                [!ListColumnHeader.ShowUpArrowProperty] = CompiledBinding.Create<MainWindowViewModel, bool>(vm => !vm.SortDescending),
-                [!ListColumnHeader.ShowDownArrowProperty] = CompiledBinding.Create<MainWindowViewModel, bool>(vm => vm.SortDescending),
-                [!ListColumnHeader.ShowArrowsProperty] = CompiledBinding.Create<MainWindowViewModel, string>(vm => vm.CurrentSort,
-                    converter: new SortArrowsConverter(),
-                    converterParameter: possibleListColumn.Value.Sort),
-                Name = possibleListColumn.Value.Sort,
-            };
-
-            columnHeader.Tapped += ColumnHeaderTapped;
-
-            GridSplitter splitter = new GridSplitter
-            {
-                ResizeDirection = GridResizeDirection.Columns,
-            };
-
-            _columnHeaders.Add(possibleListColumn.Key, (columnHeader, splitter));
-        }
     }
 
     private void SetUpGrid()
@@ -127,8 +104,43 @@ public partial class TrackList : UserControl
             _verticalScrollBar?.GettingFocus += ScrollBarGettingFocus;
         };
 
-        SetUpGrid();
         if (DataContext is not MainWindowViewModel vm) return;
+
+        //Create all the headers that can appear in the list
+        foreach (KeyValuePair<string, TrackListData.ListColumnData> possibleListColumn in TrackListData.PossibleListColumns)
+        {
+            ListColumnHeader columnHeader = new ListColumnHeader
+            {
+                Text = possibleListColumn.Value.Label,
+                [!ListColumnHeader.ShowUpArrowProperty] = CompiledBinding.Create<MainWindowViewModel, bool>(mainWindowViewModel => !mainWindowViewModel.SortDescending),
+                [!ListColumnHeader.ShowDownArrowProperty] = CompiledBinding.Create<MainWindowViewModel, bool>(mainWindowViewModel => mainWindowViewModel.SortDescending),
+                [!ListColumnHeader.ShowArrowsProperty] = CompiledBinding.Create<MainWindowViewModel, string>(mainWindowViewModel => mainWindowViewModel.CurrentSort,
+                    converter: new SortArrowsConverter(),
+                    converterParameter: possibleListColumn.Value.Sort),
+                Name = possibleListColumn.Value.Sort,
+            };
+
+            columnHeader.Tapped += ColumnHeaderTapped;
+
+            GridSplitter splitter = new GridSplitter
+            {
+                ResizeDirection = GridResizeDirection.Columns,
+            };
+
+            _columnHeaders.Add(possibleListColumn.Key, (columnHeader, splitter));
+
+            ContextMenu headerMenu = new ContextMenu();
+            MenuItem hideColumnMenuItem = new MenuItem
+            {
+                Header = "_Hide Column",
+                Command = vm.HideColumnCommand,
+                CommandParameter = possibleListColumn.Key,
+            };
+            headerMenu.Items.Add(hideColumnMenuItem);
+            columnHeader.ContextMenu = headerMenu;
+        }
+
+        SetUpGrid();
         vm.PropertyChanged += SetUpOnVisibilityChanged;
     }
 

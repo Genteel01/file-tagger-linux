@@ -644,4 +644,16 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             _preferenceService.StorePreferenceItem(formatProperty, finalFormat);
         }
     }
+
+    [RelayCommand]
+    private void HideColumn(string key)
+    {
+        Dictionary<string, bool> newVisibilities = new Dictionary<string, bool>(ListColumnVisibilities)
+        {
+            [key] = false
+        };
+        ListColumnVisibilities = newVisibilities;
+        PropertyInfo visibilityProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnVisibilities))!;
+        _preferenceService.StorePreferenceItem(visibilityProperty, ListColumnVisibilities);
+    }
 }

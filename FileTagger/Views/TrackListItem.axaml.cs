@@ -137,6 +137,7 @@ public partial class TrackListItem : UserControl
         if (Parent?.Parent?.DataContext is not MainWindowViewModel vm) return;
 
         TrackGrid.ColumnDefinitions.Clear();
+        TrackGrid.Children.Clear();
 
         int columnIndex = 0;
         foreach (string key in vm.ListColumnVisibilities.Keys)
