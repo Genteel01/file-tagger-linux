@@ -137,6 +137,14 @@ public partial class TrackList : UserControl
                 CommandParameter = possibleListColumn.Key,
             };
             headerMenu.Items.Add(hideColumnMenuItem);
+
+            MenuItem editColumnsMenuItem = new MenuItem
+            {
+                Header = "_Edit Columns",
+                Command = vm.OpenColumnSelectorCommand,
+            };
+
+            headerMenu.Items.Add(editColumnsMenuItem);
             columnHeader.ContextMenu = headerMenu;
         }
 

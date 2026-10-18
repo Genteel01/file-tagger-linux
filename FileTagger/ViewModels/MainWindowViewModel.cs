@@ -664,4 +664,23 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         PropertyInfo visibilityProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnVisibilities))!;
         _preferenceService.StorePreferenceItem(visibilityProperty, ListColumnVisibilities);
     }
+
+    [RelayCommand]
+    private async Task OpenColumnSelector()
+    {
+        if (_getDialogTarget.Invoke() is not Window target) return;
+
+        ColumnSelectorDialog dialog = new ColumnSelectorDialog();
+
+        ColumnSelectorViewModel vm = new ColumnSelectorViewModel(dialog, ListColumnVisibilities);
+        dialog.DataContext = vm;
+
+        Dictionary<string, bool>? newVisibilities = await dialog.ShowDialog<Dictionary<string, bool>?>(target);
+        if (newVisibilities != null)
+        {
+            ListColumnVisibilities = newVisibilities;
+            PropertyInfo visibilityProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnVisibilities))!;
+            _preferenceService.StorePreferenceItem(visibilityProperty, ListColumnVisibilities);
+        }
+    }
 }
