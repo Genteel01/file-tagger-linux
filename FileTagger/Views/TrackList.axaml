@@ -73,6 +73,13 @@
                             <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
                                 <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                             </MenuItem>
+                            <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
+                            <MenuItem Header="_Filename To Tags" Command="{Binding OpenFilenameToTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource MusicFileIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Te_xt To Tags" Command="{Binding OpenTextToTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource TextFileIcon}"/></MenuItem.Icon>
+                            </MenuItem>
                         </ContextMenu>
                     </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>
