@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FileTagger.Statics;
@@ -12,14 +11,14 @@ public partial class ColumnSelectorViewModel : ViewModelBase
 {
     public class ListVisibilityData(string name, string label, bool isVisible)
     {
-        public string Name { get; set; } = name;
+        public string Name { get; } = name;
         public string Label { get; set; } = label;
         public bool IsVisible { get; set; } = isVisible;
     }
 
-    private Window _dialog;
+    private readonly Window _dialog;
 
-    public ObservableCollection<ListVisibilityData> ColumnsVisibility { get; } = new ObservableCollection<ListVisibilityData>();
+    public ObservableCollection<ListVisibilityData> ColumnsVisibility { get; } = [];
 
     public ColumnSelectorViewModel(Window dialog, Dictionary<string, bool> startingColumns)
     {
