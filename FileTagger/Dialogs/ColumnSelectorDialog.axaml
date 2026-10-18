@@ -32,8 +32,10 @@
         <ListBox ItemsSource="{Binding ColumnsVisibility}" Name="ColumnControl">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Label}" IsChecked="{Binding IsVisible}"
-                              Margin="4"/>
+                    <Panel Background="Transparent" Tapped="ListItemTapped">
+                        <CheckBox Content="{Binding Label}" IsChecked="{Binding IsVisible}"
+                                  Margin="4"/>
+                    </Panel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
