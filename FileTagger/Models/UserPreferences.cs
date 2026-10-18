@@ -95,9 +95,6 @@ public class UserPreferences
         foreach (string name in TrackListData.PossibleListColumns.Keys)
         {
             ListColumnVisibilities.TryAdd(name, true);
-                //TODO temp to test only showing some columns. Should default to true on all columns
-                if (name == "AlbumArtist" || name == "Album" || name == "AudioFormat")
-                    ListColumnVisibilities[name] = true;
         }
     }
 }
