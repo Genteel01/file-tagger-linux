@@ -376,6 +376,12 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
     }
 
+    [RelayCommand]
+    private async Task ReloadFiles()
+    {
+        await OpenInitialFiles();
+    }
+
     /// <summary>
     /// Loads all tracks in the given list of files
     /// </summary>
