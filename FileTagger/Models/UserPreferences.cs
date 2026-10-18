@@ -73,28 +73,17 @@ public class UserPreferences
     /// </summary>
     private void AddMissingColumnWidths()
     {
-        foreach (string name in TrackListData.PossibleListColumns.Keys)
+        foreach (KeyValuePair<string, TrackListData.ListColumnData> columnData in TrackListData.PossibleListColumns)
         {
-            if (!ListColumnWidths.ContainsKey(name))
-            {
-                double columnWidth = name switch
-                {
-                    nameof(TrackViewModel.TrackNumber) or nameof(TrackViewModel.DiscNumber)
-                        or nameof(TrackViewModel.Year) => 60,
-                    nameof(TrackViewModel.Genre) or nameof(TrackViewModel.Duration) or nameof(TrackViewModel.Bitrate)
-                        or nameof(TrackViewModel.SampleRate) => 100,
-                    _ => 200
-                };
-                ListColumnWidths[name] = columnWidth;
-            }
+            ListColumnWidths.TryAdd(columnData.Key, columnData.Value.DefaultWidth);
         }
     }
 
     private void AddMissingColumnVisibilities()
     {
-        foreach (string name in TrackListData.PossibleListColumns.Keys)
+        foreach (KeyValuePair<string, TrackListData.ListColumnData> columnData in TrackListData.PossibleListColumns)
         {
-            ListColumnVisibilities.TryAdd(name, true);
+            ListColumnVisibilities.TryAdd(columnData.Key, columnData.Value.DefaultVisible);
         }
     }
 }

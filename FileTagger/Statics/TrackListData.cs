@@ -16,26 +16,28 @@ public static class TrackListData
         public string Sort;
         public string Label;
         public CompiledBinding PropertyBinding;
+        public bool DefaultVisible;
+        public double DefaultWidth;
     }
 
     public static readonly Dictionary<string, ListColumnData> PossibleListColumns = new Dictionary<string, ListColumnData> {
-        { nameof(TrackViewModel.Title), new ListColumnData { Sort = TitleSort, Label = "Title", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Title) } },
-        { nameof(TrackViewModel.Album), new ListColumnData { Sort = AlbumSort, Label = "Album", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Album) } },
-        { nameof(TrackViewModel.Artist), new ListColumnData { Sort = ArtistSort, Label = "Artist", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Artist) } },
-        { nameof(TrackViewModel.AlbumArtist), new ListColumnData { Sort = AlbumArtistSort, Label = "Album Artist", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.AlbumArtist) } },
-        { nameof(TrackViewModel.TrackNumber), new ListColumnData { Sort = TrackNumberSort, Label = "Track", PropertyBinding = CompiledBinding.Create<TrackViewModel, int?>(track => track.TrackNumber) } },
-        { nameof(TrackViewModel.DiscNumber), new ListColumnData { Sort = DiscNumberSort, Label = "Disc", PropertyBinding = CompiledBinding.Create<TrackViewModel, int?>(track => track.DiscNumber) } },
-        { nameof(TrackViewModel.Year), new ListColumnData { Sort = YearSort, Label = "Year", PropertyBinding = CompiledBinding.Create<TrackViewModel, int?>(track => track.Year) } },
-        { nameof(TrackViewModel.Genre), new ListColumnData { Sort = GenreSort, Label = "Genre", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Genre) } },
-        { nameof(TrackViewModel.Composer), new ListColumnData { Sort = ComposerSort, Label = "Composer", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Composer) } },
-        { nameof(TrackViewModel.Comment), new ListColumnData { Sort = CommentSort, Label = "Comment", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Comment) } },
-        { nameof(TrackViewModel.Path), new ListColumnData { Sort = PathSort, Label = "Path", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Path) } },
-        { nameof(TrackViewModel.CreatedDateFormatted), new ListColumnData { Sort = CreatedSort, Label = "Created Date", PropertyBinding = CompiledBinding.Create<TrackViewModel, string?>(track => track.CreatedDateFormatted) } },
-        { nameof(TrackViewModel.ModifiedDateFormatted), new ListColumnData { Sort = ModifiedSort, Label = "Modified Date", PropertyBinding = CompiledBinding.Create<TrackViewModel, string?>(track => track.ModifiedDateFormatted) } },
-        { nameof(TrackViewModel.Duration), new ListColumnData { Sort = DurationSort, Label = "Length", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Duration) } },
-        { nameof(TrackViewModel.Bitrate), new ListColumnData { Sort = BitrateSort, Label = "Bitrate", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Bitrate) } },
-        { nameof(TrackViewModel.SampleRate), new ListColumnData { Sort = SampleRateSort, Label = "Sample Rate", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.SampleRate) } },
-        { nameof(TrackViewModel.AudioFormat), new ListColumnData { Sort = AudioFormatSort, Label = "Audio Format", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.AudioFormat) } },
+        { nameof(TrackViewModel.Title), new ListColumnData { Sort = TitleSort, Label = "Title", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Title), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.Album), new ListColumnData { Sort = AlbumSort, Label = "Album", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Album), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.Artist), new ListColumnData { Sort = ArtistSort, Label = "Artist", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Artist), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.AlbumArtist), new ListColumnData { Sort = AlbumArtistSort, Label = "Album Artist", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.AlbumArtist), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.TrackNumber), new ListColumnData { Sort = TrackNumberSort, Label = "Track", PropertyBinding = CompiledBinding.Create<TrackViewModel, int?>(track => track.TrackNumber), DefaultVisible = true, DefaultWidth = 60 } },
+        { nameof(TrackViewModel.DiscNumber), new ListColumnData { Sort = DiscNumberSort, Label = "Disc", PropertyBinding = CompiledBinding.Create<TrackViewModel, int?>(track => track.DiscNumber), DefaultVisible = true, DefaultWidth = 60 } },
+        { nameof(TrackViewModel.Year), new ListColumnData { Sort = YearSort, Label = "Year", PropertyBinding = CompiledBinding.Create<TrackViewModel, int?>(track => track.Year), DefaultVisible = true, DefaultWidth = 60 } },
+        { nameof(TrackViewModel.Genre), new ListColumnData { Sort = GenreSort, Label = "Genre", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Genre), DefaultVisible = true, DefaultWidth = 100 } },
+        { nameof(TrackViewModel.Composer), new ListColumnData { Sort = ComposerSort, Label = "Composer", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Composer), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.Comment), new ListColumnData { Sort = CommentSort, Label = "Comment", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Comment), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.Path), new ListColumnData { Sort = PathSort, Label = "Path", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Path), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.CreatedDateFormatted), new ListColumnData { Sort = CreatedSort, Label = "Created Date", PropertyBinding = CompiledBinding.Create<TrackViewModel, string?>(track => track.CreatedDateFormatted), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.ModifiedDateFormatted), new ListColumnData { Sort = ModifiedSort, Label = "Modified Date", PropertyBinding = CompiledBinding.Create<TrackViewModel, string?>(track => track.ModifiedDateFormatted), DefaultVisible = true, DefaultWidth = 200 } },
+        { nameof(TrackViewModel.Duration), new ListColumnData { Sort = DurationSort, Label = "Length", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Duration), DefaultVisible = true, DefaultWidth = 100 } },
+        { nameof(TrackViewModel.Bitrate), new ListColumnData { Sort = BitrateSort, Label = "Bitrate", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.Bitrate), DefaultVisible = true, DefaultWidth = 100 } },
+        { nameof(TrackViewModel.SampleRate), new ListColumnData { Sort = SampleRateSort, Label = "Sample Rate", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.SampleRate), DefaultVisible = true, DefaultWidth = 100 } },
+        { nameof(TrackViewModel.AudioFormat), new ListColumnData { Sort = AudioFormatSort, Label = "Audio Format", PropertyBinding = CompiledBinding.Create<TrackViewModel, string>(track => track.AudioFormat), DefaultVisible = true, DefaultWidth = 200 } },
     };
 
     private const string PathSort = $"{nameof(TrackViewModel.Directory)}_{nameof(TrackViewModel.FileName)}";
