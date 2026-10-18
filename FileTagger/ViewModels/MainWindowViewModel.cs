@@ -553,6 +553,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         dialog.DataContext = vm;
 
         await dialog.ShowDialog(target);
+        SelectionChanged();
     }
 
     [RelayCommand(CanExecute = nameof(SelectedTracksHaveChanges))]
@@ -649,6 +650,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
             PropertyInfo formatProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.FormatString))!;
             _preferenceService.StorePreferenceItem(formatProperty, finalFormat);
         }
+        SelectionChanged();
     }
 
     [RelayCommand]
