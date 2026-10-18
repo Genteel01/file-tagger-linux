@@ -12,21 +12,30 @@
         Title="Column Selection"
         WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False">
     <Window.Styles>
-        <Style Selector="Path#checkMark">
-            <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush}"/>
+        <Style Selector="ListBoxItem">
+            <Setter Property="(Interaction.Behaviors)">
+                <BehaviorCollectionTemplate>
+                    <BehaviorCollection>
+                        <ListReorderDragBehavior Orientation="Vertical" />
+                    </BehaviorCollection>
+                </BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter, ListBoxItem:selected:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
     </Window.Styles>
     <DockPanel>
         <controls:DialogControls DockPanel.Dock="Bottom"
                                  ConfirmCommand="{Binding ApplyChangesCommand}" ConfirmContent="Save"
                                  CancelCommand="{Binding CancelCommand}" CancelContent="Cancel"/>
-        <ItemsControl ItemsSource="{Binding ColumnsVisibility}" Name="ColumnControl">
-            <ItemsControl.ItemTemplate>
+        <ListBox ItemsSource="{Binding ColumnsVisibility}" Name="ColumnControl">
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox Content="{Binding Label}" IsChecked="{Binding IsVisible}"
                               Margin="4"/>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </DockPanel>
 </Window>
