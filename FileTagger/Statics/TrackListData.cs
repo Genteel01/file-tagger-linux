@@ -56,11 +56,11 @@ public static class TrackListData
         { nameof(TrackViewModel.Composer), new ListColumnData(ComposerSort, "Composer", CompiledBinding.Create<TrackViewModel, string>(track => track.Composer), DefaultWideWidth) },
         { nameof(TrackViewModel.Comment), new ListColumnData(CommentSort, "Comment", CompiledBinding.Create<TrackViewModel, string>(track => track.Comment), DefaultWideWidth) },
         { nameof(TrackViewModel.Path), new ListColumnData(PathSort, "Path", CompiledBinding.Create<TrackViewModel, string>(track => track.Path), DefaultWideWidth) },
-        { nameof(TrackViewModel.CreatedDateFormatted), new ListColumnData(CreatedSort, "Created Date", CompiledBinding.Create<TrackViewModel, string?>(track => track.CreatedDateFormatted), DefaultWideWidth) },
+        { nameof(TrackViewModel.CreatedDateFormatted), new ListColumnData(CreatedSort, "Created Date", CompiledBinding.Create<TrackViewModel, string?>(track => track.CreatedDateFormatted), DefaultWideWidth, false) },
         { nameof(TrackViewModel.ModifiedDateFormatted), new ListColumnData(ModifiedSort, "Modified Date", CompiledBinding.Create<TrackViewModel, string?>(track => track.ModifiedDateFormatted), DefaultWideWidth) },
         { nameof(TrackViewModel.Duration), new ListColumnData(DurationSort, "Length", CompiledBinding.Create<TrackViewModel, string>(track => track.Duration), DefaultStandardWidth) },
-        { nameof(TrackViewModel.Bitrate), new ListColumnData(BitrateSort, "Bitrate", CompiledBinding.Create<TrackViewModel, string>(track => track.Bitrate), DefaultStandardWidth) },
-        { nameof(TrackViewModel.SampleRate), new ListColumnData(SampleRateSort, "Sample Rate", CompiledBinding.Create<TrackViewModel, string>(track => track.SampleRate), DefaultStandardWidth) },
-        { nameof(TrackViewModel.AudioFormat), new ListColumnData(AudioFormatSort, "Audio Format", CompiledBinding.Create<TrackViewModel, string>(track => track.AudioFormat), DefaultWideWidth) },
+        { nameof(TrackViewModel.Bitrate), new ListColumnData(BitrateSort, "Bitrate", CompiledBinding.Create<TrackViewModel, string>(track => track.Bitrate), DefaultStandardWidth, false) },
+        { nameof(TrackViewModel.SampleRate), new ListColumnData(SampleRateSort, "Sample Rate", CompiledBinding.Create<TrackViewModel, string>(track => track.SampleRate), DefaultStandardWidth, false) },
+        { nameof(TrackViewModel.AudioFormat), new ListColumnData(AudioFormatSort, "Audio Format", CompiledBinding.Create<TrackViewModel, string>(track => track.AudioFormat), DefaultWideWidth, false) },
     };
 }
