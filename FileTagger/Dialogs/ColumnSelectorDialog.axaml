@@ -24,6 +24,10 @@
         <Style Selector="ListBoxItem:selected /template/ ContentPresenter, ListBoxItem:selected:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
         </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorBrush}" />
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+        </Style>
     </Window.Styles>
     <DockPanel>
         <controls:DialogControls DockPanel.Dock="Bottom"
@@ -34,7 +38,7 @@
                 <DataTemplate>
                     <Panel>
                         <CheckBox Content="{Binding Label}" IsChecked="{Binding IsVisible}"
-                                  Margin="4"/>
+                                  Margin="4 2"/>
                         <Panel Background="Transparent" Tapped="ListItemTapped"/>
                     </Panel>
                 </DataTemplate>
