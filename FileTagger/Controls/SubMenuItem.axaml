@@ -9,14 +9,16 @@
         <Setter Property="Icon">
             <Setter.Value>
                 <Template>
-                    <PathIcon Classes="Horizontal" Data="{StaticResource TickIcon}">
-                        <PathIcon.IsVisible>
-                            <MultiBinding Converter="{StaticResource AreEqualConverter}">
-                                <Binding Path="." />
-                                <Binding Path="$parent[MenuItem;1].Tag" />
-                            </MultiBinding>
-                        </PathIcon.IsVisible>
-                    </PathIcon>
+                    <Border CornerRadius="4" Background="{Binding ., Converter={StaticResource ColourBrushConverter}}">
+                        <PathIcon Width="10" Data="{StaticResource TickIcon}">
+                            <PathIcon.IsVisible>
+                                <MultiBinding Converter="{StaticResource AreEqualConverter}">
+                                    <Binding Path="." />
+                                    <Binding Path="$parent[MenuItem;1].Tag" />
+                                </MultiBinding>
+                            </PathIcon.IsVisible>
+                        </PathIcon>
+                    </Border>
                 </Template>
             </Setter.Value>
         </Setter>

@@ -54,22 +54,22 @@ public static class ColourScheme
     //ThemeBackgroundColour for dark theme
     private static readonly Color DarkBackgroundColour = Color.FromRgb(0x0F, 0x0F, 0x0F);
 
-    private static readonly Dictionary<Colours, (byte r, byte g, byte b)> AccentColours = new Dictionary<Colours, (byte r, byte g, byte b)>
+    public static readonly Dictionary<Colours, Color> AccentColours = new Dictionary<Colours, Color>
     {
-        { Colours.Pink, (0xE9, 0x3A, 0x9A) },
-        { Colours.Red, (0xE9, 0x3D, 0x58) },
-        { Colours.Orange, (0xE9, 0x64, 0x3A) },
-        { Colours.Yellow, (0xE8, 0xCB, 0x2D) },
-        { Colours.Green, (0x3D, 0xD4, 0x25) },
-        { Colours.Teal, (0x00, 0xD3, 0xB8) },
-        { Colours.Blue, (0x3D, 0xAE, 0xE9) },
-        { Colours.Indigo, (0x92, 0x6E, 0xE4) },
-        { Colours.Violet, (0xB8, 0x75, 0xDC) },
+        { Colours.Pink, Color.FromRgb(0xE9, 0x3A, 0x9A) },
+        { Colours.Red, Color.FromRgb(0xE9, 0x3D, 0x58) },
+        { Colours.Orange, Color.FromRgb(0xE9, 0x64, 0x3A) },
+        { Colours.Yellow, Color.FromRgb(0xE8, 0xCB, 0x2D) },
+        { Colours.Green, Color.FromRgb(0x3D, 0xD4, 0x25) },
+        { Colours.Teal, Color.FromRgb(0x00, 0xD3, 0xB8) },
+        { Colours.Blue, Color.FromRgb(0x3D, 0xAE, 0xE9) },
+        { Colours.Indigo, Color.FromRgb(0x92, 0x6E, 0xE4) },
+        { Colours.Violet, Color.FromRgb(0xB8, 0x75, 0xDC) },
     };
 
     private static Color ThemeAccentColor(AccentOpacity opacity, Colours colour)
     {
-        return Color.FromArgb((byte)opacity, AccentColours[colour].r, AccentColours[colour].g, AccentColours[colour].b);
+        return Color.FromArgb((byte)opacity, AccentColours[colour].R, AccentColours[colour].G, AccentColours[colour].B);
     }
 
     private static Color HighlightColor(Colours colour, ThemeVariant theme)
@@ -134,7 +134,7 @@ public static class ColourScheme
     private static void BuildSystemColours(PlatformColorValues systemColours)
     {
         Color baseColour = systemColours.AccentColor1;
-        AccentColours[Colours.System] = (baseColour.R, baseColour.G, baseColour.B);
+        AccentColours[Colours.System] = Color.FromRgb(baseColour.R, baseColour.G, baseColour.B);
     }
 
     /// <summary>
