@@ -29,6 +29,7 @@
              <converters:GridSizeConverter x:Key="GridSizeConverter"/>
              <converters:SortArrowsConverter x:Key="SortArrowsConverter"/>
              <converters:NumberPercentageConverter x:Key="NumberPercentageConverter" />
+             <converters:ColourBrushConverter x:Key="ColourBrushConverter" />
          </ResourceDictionary>
      </Application.Resources>
 
