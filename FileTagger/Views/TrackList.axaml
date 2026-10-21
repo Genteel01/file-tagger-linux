@@ -5,7 +5,6 @@
              xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
              xmlns:controls="clr-namespace:FileTagger.Controls"
              xmlns:views="clr-namespace:FileTagger.Views"
-             xmlns:statics="clr-namespace:FileTagger.Statics"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:MainWindowViewModel"
              x:Class="FileTagger.Views.TrackList">
@@ -41,10 +40,7 @@
         </Style>
         <Style Selector="GridSplitter">
             <Setter Property="Background" Value="{DynamicResource ListSeparatorBrush}" />
-            <Setter Property="Width" Value="3" />
-        </Style>
-        <Style Selector="Panel.buffer">
-            <Setter Property="Width" Value="3" />
+            <Setter Property="Width" Value="{StaticResource GridSplitterWidth}" />
         </Style>
     </UserControl.Styles>
     <UserControl.KeyBindings>
@@ -77,6 +73,13 @@
                             <MenuItem Header="C_lear Tags" Command="{Binding ClearTagsCommand}">
                                 <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                             </MenuItem>
+                            <Separator Background="{DynamicResource ThemeForegroundBrush}"/>
+                            <MenuItem Header="_Filename To Tags" Command="{Binding OpenFilenameToTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource MusicFileIcon}"/></MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Te_xt To Tags" Command="{Binding OpenTextToTagsCommand}">
+                                <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource TextFileIcon}"/></MenuItem.Icon>
+                            </MenuItem>
                         </ContextMenu>
                     </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>
@@ -86,103 +89,8 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <!--Title row of list-->
-            <Grid Name="ListGridTitle">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Title], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Title" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Album], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Album" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Artist], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Artist" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[AlbumArtist], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="AlbumArtist" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[TrackNumber], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Track" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[DiscNumber], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Disc" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Year], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Year" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Genre], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Genre" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Composer], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Composer" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Comment], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Comment" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Path], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Path" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Duration], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Duration" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[Bitrate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="Bitrate" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[SampleRate], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="SampleRate" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="{Binding ListColumnWidths[AudioFormat], Mode=TwoWay, Converter={StaticResource GridSizeConverter}}" SharedSizeGroup="AudioFormat" MinWidth="19"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <controls:ListColumnHeader Grid.Column="0" Text="Title" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.TitleSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.TitleSort}}"/>
-                <controls:ListColumnHeader Grid.Column="2" Text="Album" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AlbumSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AlbumSort}}"/>
-                <controls:ListColumnHeader Grid.Column="4" Text="Artist" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.ArtistSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.ArtistSort}}"/>
-                <controls:ListColumnHeader Grid.Column="6" Text="Album Artist" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AlbumArtistSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AlbumArtistSort}}"/>
-                <controls:ListColumnHeader Grid.Column="8" Text="Track" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.TrackNumberSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.TrackNumberSort}}"/>
-                <controls:ListColumnHeader Grid.Column="10" Text="Disc" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.DiscNumberSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.DiscNumberSort}}"/>
-                <controls:ListColumnHeader Grid.Column="12" Text="Year" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.YearSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.YearSort}}"/>
-                <controls:ListColumnHeader Grid.Column="14" Text="Genre" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.GenreSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.GenreSort}}"/>
-                <controls:ListColumnHeader Grid.Column="16" Text="Composer" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.ComposerSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.ComposerSort}}"/>
-                <controls:ListColumnHeader Grid.Column="18" Text="Comment" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.CommentSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.CommentSort}}"/>
-                <controls:ListColumnHeader Grid.Column="20" Text="Path" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.PathSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.PathSort}}"/>
-                <controls:ListColumnHeader Grid.Column="22" Text="Duration" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.DurationSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.DurationSort}}"/>
-                <controls:ListColumnHeader Grid.Column="24" Text="Bitrate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.BitrateSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.BitrateSort}}"/>
-                <controls:ListColumnHeader Grid.Column="26" Text="Sample Rate" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.SampleRateSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.SampleRateSort}}"/>
-                <controls:ListColumnHeader Grid.Column="28" Text="Audio Format" Tapped="ColumnHeaderTapped" Name="{x:Static statics:Sorts.AudioFormatSort}"
-                    ShowUpArrow="{Binding !SortDescending}" ShowDownArrow="{Binding SortDescending}"
-                    ShowArrows="{Binding CurrentSort, Converter={StaticResource SortArrowsConverter}, ConverterParameter={x:Static statics:Sorts.AudioFormatSort}}"/>
-                <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="5" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="7" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="9" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="11" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="13" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="15" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="17" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="19" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="21" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="23" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="25" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="27" ResizeDirection="Columns"/>
-                <GridSplitter Grid.Column="29" ResizeDirection="Columns"/>
-                <Panel Grid.Column="30" Background="Transparent"/>
-            </Grid>
+            <!--Title row of list, content set dynamically in code-behind-->
+            <Grid Name="HeaderGrid" UseLayoutRounding="False"/>
         </Panel>
     </ScrollViewer>
 </UserControl>

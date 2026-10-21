@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:FileTagger.ViewModels"
+        xmlns:controls="clr-namespace:FileTagger.Controls"
+        mc:Ignorable="d"
+        Width="400" SizeToContent="Height"
+        d:DesignWidth="400" d:DesignHeight="200"
+        x:Class="FileTagger.Dialogs.ColumnSelectorDialog"
+        x:DataType="viewModels:ColumnSelectorViewModel" CanMinimize="False"
+        Title="Column Selection"
+        WindowStartupLocation="CenterOwner" CanResize="False" ShowInTaskbar="False">
+    <Window.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="(Interaction.Behaviors)">
+                <BehaviorCollectionTemplate>
+                    <BehaviorCollection>
+                        <ListReorderDragBehavior Orientation="Vertical" />
+                    </BehaviorCollection>
+                </BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter, ListBoxItem:selected:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="BorderBrush" Value="{DynamicResource ListSeparatorBrush}" />
+            <Setter Property="BorderThickness" Value="0 0 0 1" />
+        </Style>
+    </Window.Styles>
+    <DockPanel>
+        <controls:DialogControls DockPanel.Dock="Bottom"
+                                 ConfirmCommand="{Binding ApplyChangesCommand}" ConfirmContent="Save"
+                                 CancelCommand="{Binding CancelCommand}" CancelContent="Cancel"/>
+        <ListBox ItemsSource="{Binding ColumnsVisibility}" Name="ColumnControl">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Panel>
+                        <CheckBox Content="{Binding Label}" IsChecked="{Binding IsVisible}"
+                                  Margin="4 2"/>
+                        <Panel Background="Transparent" Tapped="ListItemTapped"/>
+                    </Panel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</Window>

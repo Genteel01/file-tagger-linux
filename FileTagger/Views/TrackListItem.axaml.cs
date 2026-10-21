@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using FileTagger.Extensions;
+using FileTagger.Statics;
 using FileTagger.ViewModels;
 
 namespace FileTagger.Views;
@@ -36,9 +41,7 @@ public partial class TrackListItem : UserControl
         bool newFocusIsRightClickMenu = e.NewFocusedElement is MenuItem;
         if (sender is TextBox textBox && !newFocusIsRightClickMenu)
         {
-            string searchName = textBox.Name?.Replace("Box", "Block") ?? "";
-
-            TextBlock? siblingBlock = textBox.GetFirstSibling<TextBlock>(box => box.Name == searchName);
+            TextBlock? siblingBlock = textBox.GetFirstSibling<TextBlock>();
 
             if (siblingBlock == null) return;
 
@@ -63,8 +66,7 @@ public partial class TrackListItem : UserControl
     {
         if (sender is not TextBlock textBlock) return;
 
-        string searchName = textBlock.Name?.Replace("Block", "Box") ?? "";
-        TextBox? siblingBox = textBlock.GetFirstSibling<TextBox>(box => box.Name == searchName);
+        TextBox? siblingBox = textBlock.GetFirstSibling<TextBox>();
 
         if (siblingBox == null) return;
 
@@ -105,5 +107,98 @@ public partial class TrackListItem : UserControl
         if (sender is not TextBox box) return;
         box.IsVisible = false;
         box.SizeChanged -= TextBoxSizeChanged;
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        SetUpGrid();
+        if (Parent?.Parent?.DataContext is not MainWindowViewModel vm) return;
+        vm.PropertyChanged += SetUpOnVisibilityChanged;
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+        if (Parent?.Parent?.DataContext is not MainWindowViewModel vm) return;
+        vm.PropertyChanged -= SetUpOnVisibilityChanged;
+    }
+
+    private void SetUpOnVisibilityChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName == nameof(MainWindowViewModel.ListColumnVisibilities))
+        {
+            SetUpGrid();
+        }
+    }
+
+    private void SetUpGrid()
+    {
+        if (Parent?.Parent?.DataContext is not MainWindowViewModel vm) return;
+
+        TrackGrid.ColumnDefinitions.Clear();
+        TrackGrid.Children.Clear();
+
+        int columnIndex = 0;
+        foreach (string key in vm.ListColumnVisibilities.Keys)
+        {
+            if (!vm.ListColumnVisibilities[key]) continue;
+
+            ColumnDefinition newColumn = new ColumnDefinition(GridLength.Auto)
+            {
+                SharedSizeGroup = key,
+            };
+            TrackGrid.ColumnDefinitions.Add(newColumn);
+            ColumnDefinition splitterColumn = new ColumnDefinition(GridLength.Auto)
+            {
+                SharedSizeGroup = key + TrackListData.SplitterSizeGroupSuffix
+            };
+            TrackGrid.ColumnDefinitions.Add(splitterColumn);
+
+            CompiledBinding binding = TrackListData.PossibleListColumns[key].PropertyBinding;
+
+            Panel columnPanel = CreateColumnPanel(binding);
+
+            Grid.SetColumn(columnPanel, columnIndex);
+            TrackGrid.Children.Add(columnPanel);
+            columnIndex += 2;
+        }
+
+        TrackGrid.ColumnDefinitions[^1].Width = new GridLength(0, GridUnitType.Pixel);
+        TrackGrid.ColumnDefinitions[^1].SharedSizeGroup = null;
+
+        ColumnDefinition dummyColumn = new ColumnDefinition(GridLength.Auto)
+        {
+            SharedSizeGroup = TrackListData.DummyPanelSizeGroup,
+        };
+        TrackGrid.ColumnDefinitions.Add(dummyColumn);
+
+        Panel dummyPanel = new Panel
+        {
+            Classes = { TrackListData.DummyPanelClass }
+        };
+        TrackGrid.Children.Add(dummyPanel);
+        Grid.SetColumn(dummyPanel, columnIndex);
+    }
+
+    private Panel CreateColumnPanel(CompiledBinding textBinding)
+    {
+        Panel columnPanel = new Panel();
+        TextBlock columnTextBlock = new TextBlock
+        {
+            [!TextBlock.TextProperty] = textBinding,
+        };
+        columnTextBlock.DoubleTapped += TextBlockDoubleTapped;
+        columnPanel.Children.Add(columnTextBlock);
+        TextBox columnTextBox = new TextBox
+        {
+            IsVisible = false,
+            IsEnabled = false,
+            [!TextBox.TextProperty] = textBinding
+        };
+        columnTextBox.LostFocus += TextBoxFocusLost;
+        columnTextBox.KeyDown += TextBoxEnterPressed;
+        columnPanel.Children.Add(columnTextBox);
+        return columnPanel;
     }
 }

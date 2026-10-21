@@ -96,6 +96,12 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     public partial bool SortDescending { get; private set; }
 
     /// <summary>
+    /// Visibility for each column in the track list
+    /// </summary>
+    [ObservableProperty]
+    public partial Dictionary<string, bool> ListColumnVisibilities { get; private set; } = new Dictionary<string, bool>();
+
+    /// <summary>
     /// Widths for each column in the track list
     /// </summary>
     public AvaloniaDictionary<string, double> ListColumnWidths { get; private set; } = new AvaloniaDictionary<string, double>();
@@ -257,13 +263,15 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     private void SetUpUserPreferences()
     {
         UserPreferences newPreferences = _preferenceService.UserPreferenceData;
-        ListColumnWidths = new AvaloniaDictionary<string, double>(newPreferences.ListColumnWidths);
         EditPanelWidth = double.IsPositiveInfinity(newPreferences.EditPanelWidth) ? GridLength.Star : new GridLength(newPreferences.EditPanelWidth);
         CurrentSort = newPreferences.SortOrder.Item1;
         SortDescending = newPreferences.SortOrder.Item2;
         SelectedTheme = newPreferences.RequestedTheme;
         SelectedColour = newPreferences.RequestedAccentColour;
         SelectedLayoutSize = newPreferences.RequestedLayoutSize;
+
+        ListColumnWidths = new AvaloniaDictionary<string, double>(newPreferences.ListColumnWidths);
+        ListColumnVisibilities = new Dictionary<string, bool>(newPreferences.ListColumnVisibilities);
     }
 
     #if DEBUG
@@ -276,8 +284,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         _fileService = new FileService(() => null);
         _preferenceService = new PreferenceService(_fileService);
         _supportedFileExtensions = [];
-        CurrentSort = Sorts.PathSort;
-        ListColumnWidths = new AvaloniaDictionary<string, double>();
+        CurrentSort = TrackListData.DefaultSort;
         SelectedTheme = ThemeVariant.Default;
         _getDialogTarget = () => null;
     }
@@ -369,6 +376,12 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         }
     }
 
+    [RelayCommand]
+    private async Task ReloadFiles()
+    {
+        await OpenInitialFiles();
+    }
+
     /// <summary>
     /// Loads all tracks in the given list of files
     /// </summary>
@@ -382,22 +395,23 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
 
         foreach (IStorageFile file in files)
         {
-            Task task = Task.Run(() =>
+            Task task = Task.Run(async () =>
             {
                 //WMA files can hit an error if you try to make two tracks at the same time, so run an extra Lock on them
                 string extension = Path.GetExtension(file.Name);
+                StorageItemProperties properties = await file.GetBasicPropertiesAsync();
                 if (_concurrentFileExtensions.Contains(extension))
                 {
                     Track track;
                     lock (wmaLocker) { track = new Track(file.Path.LocalPath); }
-                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    TrackViewModel trackViewModel = new TrackViewModel(track, properties);
                     trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
                 else
                 {
                     Track track = new Track(file.Path.LocalPath);
-                    TrackViewModel trackViewModel = new TrackViewModel(track);
+                    TrackViewModel trackViewModel = new TrackViewModel(track, properties);
                     trackViewModel.PropertyChanged += TrackChanged;
                     lock (trackLocker) { newTracks.Add(trackViewModel); }
                 }
@@ -439,7 +453,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// <summary>
     /// Sorts Tracks by the fields in the order given
     /// </summary>
-    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="TrackListData"/></param>
     /// <param name="swapDirection">Whether to swap the direction between ascending and descending</param>
     public void SortTracks(string fields, bool swapDirection)
     {
@@ -465,7 +479,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
     /// Returns the given tracks sorted by the fields in the order given
     /// </summary>
     /// <param name="tracks">The tracks to sort</param>
-    /// <param name="fields">String of fields separated by "_", defined in <see cref="Sorts"/></param>
+    /// <param name="fields">String of fields separated by "_", defined in <see cref="TrackListData"/></param>
     /// <param name="sortDescending">Whether to sort in descending order</param>
     private List<TrackViewModel> SortGivenTracks(List<TrackViewModel> tracks, string fields, bool sortDescending)
     {
@@ -539,6 +553,7 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         dialog.DataContext = vm;
 
         await dialog.ShowDialog(target);
+        SelectionChanged();
     }
 
     [RelayCommand(CanExecute = nameof(SelectedTracksHaveChanges))]
@@ -634,6 +649,38 @@ public partial class MainWindowViewModel : DynamicSizingViewModel
         {
             PropertyInfo formatProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.FormatString))!;
             _preferenceService.StorePreferenceItem(formatProperty, finalFormat);
+        }
+        SelectionChanged();
+    }
+
+    [RelayCommand]
+    private void HideColumn(string key)
+    {
+        Dictionary<string, bool> newVisibilities = new Dictionary<string, bool>(ListColumnVisibilities)
+        {
+            [key] = false
+        };
+        ListColumnVisibilities = newVisibilities;
+        PropertyInfo visibilityProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnVisibilities))!;
+        _preferenceService.StorePreferenceItem(visibilityProperty, ListColumnVisibilities);
+    }
+
+    [RelayCommand]
+    private async Task OpenColumnSelector()
+    {
+        if (_getDialogTarget.Invoke() is not Window target) return;
+
+        ColumnSelectorDialog dialog = new ColumnSelectorDialog();
+
+        ColumnSelectorViewModel vm = new ColumnSelectorViewModel(dialog, ListColumnVisibilities);
+        dialog.DataContext = vm;
+
+        Dictionary<string, bool>? newVisibilities = await dialog.ShowDialog<Dictionary<string, bool>?>(target);
+        if (newVisibilities != null)
+        {
+            ListColumnVisibilities = newVisibilities;
+            PropertyInfo visibilityProperty = typeof(UserPreferences).GetProperty(nameof(UserPreferences.ListColumnVisibilities))!;
+            _preferenceService.StorePreferenceItem(visibilityProperty, ListColumnVisibilities);
         }
     }
 }

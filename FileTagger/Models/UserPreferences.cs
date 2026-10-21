@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Styling;
 using FileTagger.Statics;
@@ -15,11 +13,12 @@ public class UserPreferences
 {
     public UserPreferences()
     {
-        SortOrder = (Sorts.PathSort, false);
+        SortOrder = (TrackListData.DefaultSort, false);
         _storedTheme = ThemeVariant.Default.ToString();
         RequestedAccentColour = ColourScheme.Colours.System;
         EditPanelWidth = double.PositiveInfinity;
         ListColumnWidths = new Dictionary<string, double>();
+        ListColumnVisibilities = new Dictionary<string, bool>();
         RequestedLayoutSize = Themes.LayoutSize.Automatic;
         FormatString = $"{TextToTagViewModel.PlaceholderChar}{nameof(TrackViewModel.Title)}{TextToTagViewModel.PlaceholderChar}";
     }
@@ -55,6 +54,12 @@ public class UserPreferences
         { field = value; AddMissingColumnWidths(); } }
 
     /// <summary>
+    /// Visibility of each column in the track list
+    /// </summary>
+    public Dictionary<string, bool> ListColumnVisibilities { get; set
+        { field = value; AddMissingColumnVisibilities(); } }
+
+    /// <summary>
     /// Width of the Edit Panel. Using <see cref="double.PositiveInfinity"/> to represent <see cref="GridLength.Star"/>
     /// </summary>
     public double EditPanelWidth { get; set; }
@@ -68,18 +73,17 @@ public class UserPreferences
     /// </summary>
     private void AddMissingColumnWidths()
     {
-        List<PropertyInfo> trackProperties = [.. typeof(TrackViewModel).GetProperties().Where(property => property.PropertyType == typeof(string) ||  property.PropertyType == typeof(int?) )];
-        foreach (PropertyInfo trackProperty in trackProperties)
+        foreach (KeyValuePair<string, TrackListData.ListColumnData> columnData in TrackListData.PossibleListColumns)
         {
-            if (!ListColumnWidths.ContainsKey(trackProperty.Name))
-            {
-                double columnWidth = trackProperty.PropertyType == typeof(string) ? 200 : 60;
-                if (trackProperty.Name is nameof(TrackViewModel.Genre) or nameof(TrackViewModel.Duration) or nameof(TrackViewModel.Bitrate) or nameof(TrackViewModel.SampleRate))
-                {
-                    columnWidth = 100;
-                }
-                ListColumnWidths[trackProperty.Name] = columnWidth;
-            }
+            ListColumnWidths.TryAdd(columnData.Key, columnData.Value.DefaultWidth);
+        }
+    }
+
+    private void AddMissingColumnVisibilities()
+    {
+        foreach (KeyValuePair<string, TrackListData.ListColumnData> columnData in TrackListData.PossibleListColumns)
+        {
+            ListColumnVisibilities.TryAdd(columnData.Key, columnData.Value.DefaultVisible);
         }
     }
 }

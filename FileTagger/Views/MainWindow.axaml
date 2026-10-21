@@ -23,6 +23,9 @@
                 <MenuItem Header="_Open Files" Command="{Binding OpenMusicFilesCommand}" InputGesture="Ctrl+O">
                     <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource OpenIcon}"/></MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="_Reload Files" Command="{Binding ReloadFilesCommand}">
+                    <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource ReloadIcon}"/></MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_Save Changed Files" Command="{Binding SaveMusicFilesCommand}" InputGesture="Ctrl+S">
                     <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource SaveIcon}"/></MenuItem.Icon>
                 </MenuItem>
@@ -62,6 +65,7 @@
                           ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedColour}" Command="{Binding ChangeColourCommand}"/>
                 <MenuItem Header="_Layout" ItemsSource="{Binding Layouts}"
                           ItemContainerTheme="{StaticResource SubMenuItem}" Tag="{Binding SelectedLayoutSize}" Command="{Binding ChangeLayoutCommand}"/>
+                <MenuItem Header="_Edit Columns" Command="{Binding OpenColumnSelectorCommand}"/>
                 <MenuItem Header="Clear Preferences" ToolTip.Tip="Clears all stored preference data" Command="{Binding ClearPreferencesCommand}">
                     <MenuItem.Icon><PathIcon Classes="Horizontal" Data="{StaticResource BinIcon}"/></MenuItem.Icon>
                 </MenuItem>
@@ -79,6 +83,9 @@
                 </StackPanel.Styles>
                 <Button ToolTip.Tip="Open Files (Ctrl+O)" Command="{Binding OpenMusicFilesCommand}">
                     <PathIcon Classes="Horizontal" Data="{StaticResource OpenIcon}"/>
+                </Button>
+                <Button ToolTip.Tip="Reload Files" Command="{Binding ReloadFilesCommand}">
+                    <PathIcon Classes="Horizontal" Data="{StaticResource ReloadIcon}"/>
                 </Button>
                 <Button ToolTip.Tip="Save Changed Files (Ctrl+S)" Command="{Binding SaveMusicFilesCommand}">
                     <PathIcon Classes="Horizontal" Data="{StaticResource SaveIcon}"/>
